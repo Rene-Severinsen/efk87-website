@@ -70,3 +70,19 @@ The principle of separation between `dev`, `qa`, and `prod` environments is main
 1. Using environment variables for `DATABASE_URL`.
 2. Managing connection strings via `prisma.config.ts`.
 3. Ensuring seeds are idempotent and safe to run in any environment.
+
+## Database workflow
+
+### Scripts
+
+- `npm run db:migrate`: Use for local schema changes. This command should be used during development to create and apply migrations to your local database.
+- `npm run db:deploy`: Use for QA/prod deployment. This command applies pending migrations to the database without needing the `prisma` CLI or interactive prompts.
+- `npm run db:seed`: Use for idempotent seed data. Safe to run multiple times; it will only create records if they don't already exist.
+- `npm run db:push`: **Only for local prototyping.** This command synchronizes the schema with the database without creating a migration file. It must **not** be used for QA or production environments.
+- `npm run db:generate`: Generates the Prisma Client based on the current schema.
+
+### Workflow Principles
+
+- **Migrations as Source of Truth**: Migrations are the definitive source of truth for the database schema history. All schema changes must be captured in migration files before being deployed to shared environments.
+- **Environment Isolation**: QA may later import sanitized production data for testing, but it must never use production secrets or trigger real notifications (e.g., emails) to actual users.
+- **Idempotency**: All database tasks, especially seeding, must be idempotent to ensure they can be safely re-run without causing data corruption or duplication.
