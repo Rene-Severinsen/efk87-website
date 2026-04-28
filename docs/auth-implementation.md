@@ -35,7 +35,7 @@ The existing `User` model was updated and new models were added to `prisma/schem
 
 ## Viewer Resolution Foundation
 
-A reusable server-side viewer resolution is implemented in `src/lib/auth/viewer.ts`.
+A reusable server-side viewer resolution is implemented in `src/lib/auth/viewer.ts` and access guards in `src/lib/auth/accessGuards.ts`.
 
 ### ServerViewerContext
 
@@ -59,6 +59,15 @@ The `ServerViewerContext` includes:
 4. If an `ACTIVE` membership exists, `isMember` is set to `true`.
 5. If the membership is `ACTIVE` and the role is `ADMIN` or `OWNER`, `isAdmin` is set to `true`.
 
+### Access Guards
+
+`requireActiveMemberForClub(clubId: string, clubSlug: string)`:
+1. Calls `getServerViewerForClub(clubId)`.
+2. If `viewer.isMember` is `true`, returns the viewer context.
+3. Otherwise, redirects to `/{clubSlug}/login?reason=member-required`.
+
+This guard is used to protect member-only routes at the page level.
+
 ### Visibility Conversion
 
 `toViewerVisibilityContext(viewer: ServerViewerContext)`:
@@ -69,5 +78,6 @@ Converts the full server-side context to the minimal `ViewerVisibilityContext` u
 - **No Final Provider**: Auth.js foundation is installed, but no final sign-in provider is implemented for production use yet.
 - **Conditional GitHub**: A GitHub provider is configured but only enabled if `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET` are provided.
 - **Verified Endpoint**: The current verified endpoint is `/api/auth/session`.
-- **No Route Protection**: Middleware and route-level protection are not yet implemented. Authenticated users without membership still only see public content.
+- **Route Protection**: Member routes are protected by server-side resolution at the page level. Middleware-based protection is not yet implemented.
+- **Login Placeholder**: The login page (`/[clubSlug]/login`) is still a placeholder and does not yet contain a real login form or OAuth buttons.
 - **No Auto-Creation**: Users are not automatically created in this phase.

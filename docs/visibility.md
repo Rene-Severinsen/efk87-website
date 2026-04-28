@@ -45,13 +45,15 @@ Public navigation and topbar actions support visibility rules. This ensures that
 
 ### Member-only Area Placeholders
 
-The following routes are reserved for future member-only functionality:
+The following routes are reserved for member-only functionality:
 
-- `/[clubSlug]/profil`: Future "Min profil" page.
-- `/[clubSlug]/forum`: Future member forum.
-- `/[clubSlug]/jeg-flyver`: Future flight registration for members.
+- `/[clubSlug]/profil`: Member profile page.
+- `/[clubSlug]/forum`: Member forum.
+- `/[clubSlug]/jeg-flyver`: Flight registration for members.
 
-These routes currently exist as **placeholders only**. Authentication is not yet implemented, and these routes are explicitly intended to be restricted to members in the future. In the current phase, they are hidden from anonymous navigation but accessible via direct URL for structural verification.
+These routes are protected by server-side viewer resolution. Anonymous visitors or authenticated users who are not active members of the current club are redirected to the login placeholder page (`/[clubSlug]/login?reason=member-required`).
+
+Real login providers and the "Jeg flyver" submission flow are still future scope.
 
 ## Implementation
 

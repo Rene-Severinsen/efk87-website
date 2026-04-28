@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../lib/tenancy/tenantService";
 import PublicClubShell from "../../../components/publicSite/PublicClubShell";
+import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 
 interface ForumPageProps {
   params: Promise<{
@@ -10,8 +11,7 @@ interface ForumPageProps {
 
 /**
  * Placeholder for the future member forum.
- * This route is intended to be MEMBERS_ONLY in the future.
- * Authentication and forum backend are not implemented yet.
+ * This route is now protected to require an ACTIVE member.
  */
 export default async function ForumPage({ params }: ForumPageProps) {
   const { clubSlug } = await params;
@@ -26,6 +26,9 @@ export default async function ForumPage({ params }: ForumPageProps) {
     throw error;
   }
 
+  // Ensure user is an active member
+  await requireActiveMemberForClub(club.id, club.slug);
+
   return (
     <PublicClubShell club={club}>
       <div className="flex flex-col items-center justify-center p-6 text-slate-900 mt-12">
@@ -34,7 +37,7 @@ export default async function ForumPage({ params }: ForumPageProps) {
             Forum
           </h1>
           <p className="text-lg text-slate-600">
-            Forum bliver et medlemsområde senere. Det er ikke offentligt tilgængeligt endnu.
+            Forum bliver tilføjet senere.
           </p>
         </div>
       </div>

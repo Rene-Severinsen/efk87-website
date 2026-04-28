@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../lib/tenancy/tenantService";
 import PublicClubShell from "../../../components/publicSite/PublicClubShell";
+import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 
 interface ProfilePageProps {
   params: Promise<{
@@ -10,8 +11,7 @@ interface ProfilePageProps {
 
 /**
  * Placeholder for the future member profile page.
- * This route is intended to be MEMBERS_ONLY in the future.
- * Authentication and session handling are not implemented yet.
+ * This route is now protected to require an ACTIVE member.
  */
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const { clubSlug } = await params;
@@ -26,6 +26,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     throw error;
   }
 
+  // Ensure user is an active member
+  await requireActiveMemberForClub(club.id, club.slug);
+
   return (
     <PublicClubShell club={club}>
       <div className="flex flex-col items-center justify-center p-6 text-slate-900 mt-12">
@@ -34,7 +37,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
             Min profil
           </h1>
           <p className="text-lg text-slate-600">
-            Medlemsprofil bliver tilføjet senere. Login og adgangsstyring er ikke implementeret endnu.
+            Medlemsprofil bliver tilføjet senere.
           </p>
         </div>
       </div>

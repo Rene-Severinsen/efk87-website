@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../lib/tenancy/tenantService";
 import PublicClubShell from "../../../components/publicSite/PublicClubShell";
+import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 
 interface JegFlyverPageProps {
   params: Promise<{
@@ -10,8 +11,7 @@ interface JegFlyverPageProps {
 
 /**
  * Placeholder for the future "Jeg flyver" submission page.
- * This route is intended to be MEMBERS_ONLY in the future.
- * The submission flow and backend are not implemented yet.
+ * This route is now protected to require an ACTIVE member.
  */
 export default async function JegFlyverPage({ params }: JegFlyverPageProps) {
   const { clubSlug } = await params;
@@ -26,6 +26,9 @@ export default async function JegFlyverPage({ params }: JegFlyverPageProps) {
     throw error;
   }
 
+  // Ensure user is an active member
+  await requireActiveMemberForClub(club.id, club.slug);
+
   return (
     <PublicClubShell club={club}>
       <div className="flex flex-col items-center justify-center p-6 text-slate-900 mt-12">
@@ -34,10 +37,10 @@ export default async function JegFlyverPage({ params }: JegFlyverPageProps) {
             Jeg flyver
           </h1>
           <p className="text-lg text-slate-600 mb-4">
-            Her kan medlemmer senere melde, at de tager ud på pladsen i dag eller en fremtidig dag.
+            Her kan medlemmer melde, at de tager ud på pladsen.
           </p>
           <div className="bg-slate-50 border-l-4 border-slate-300 p-4 rounded text-sm text-slate-500">
-            Dagens offentlige aktivitetsliste vises på forsiden, men oprettelse kræver senere login.
+            Funktionaliteten bliver tilføjet senere.
           </div>
         </div>
       </div>
