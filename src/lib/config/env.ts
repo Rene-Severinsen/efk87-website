@@ -12,6 +12,7 @@ export type AppEnv = 'development' | 'qa' | 'production';
 interface EnvConfig {
   APP_ENV: AppEnv;
   DATABASE_URL: string;
+  AUTH_SECRET: string;
   isDevelopment: boolean;
   isQa: boolean;
   isProduction: boolean;
@@ -27,6 +28,7 @@ interface EnvConfig {
 function validateEnv(): EnvConfig {
   const APP_ENV = process.env.APP_ENV as AppEnv;
   const DATABASE_URL = process.env.DATABASE_URL;
+  const AUTH_SECRET = process.env.AUTH_SECRET;
 
   if (!APP_ENV) {
     throw new Error('APP_ENV is not defined. Must be one of: development, qa, production');
@@ -40,6 +42,10 @@ function validateEnv(): EnvConfig {
     throw new Error('DATABASE_URL is not defined');
   }
 
+  if (!AUTH_SECRET) {
+    throw new Error('AUTH_SECRET is not defined. For local development, add it to your .env file.');
+  }
+
   const isDevelopment = APP_ENV === 'development';
   const isQa = APP_ENV === 'qa';
   const isProduction = APP_ENV === 'production';
@@ -47,6 +53,7 @@ function validateEnv(): EnvConfig {
   return {
     APP_ENV,
     DATABASE_URL,
+    AUTH_SECRET,
     isDevelopment,
     isQa,
     isProduction,

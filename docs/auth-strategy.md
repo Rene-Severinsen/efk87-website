@@ -114,15 +114,20 @@ The "Jeg flyver" feature allows members to announce their flight intentions.
 - **Data Retention**: Statistics and historical overviews must use retained data, not just currently visible rows.
 - **Persistence**: Data must be preserved even after the flight date.
 
-## Auth Provider Candidates
+## Auth Provider Candidate: Auth.js (Selected)
 
-No final decision has been made. The following candidates should be evaluated:
+Auth.js (formerly NextAuth.js) has been selected as the authentication foundation for the EFK87 platform.
 
 | Candidate | Pros | Cons |
 | :--- | :--- | :--- |
-| **Auth.js (NextAuth)** | Deep Next.js integration, supports many providers, Prisma adapter available. | Can be complex to customize beyond standard flows. |
-| **Custom Magic Link** | Simple, no passwords, high security, full control. | Requires implementing own session management and email delivery logic. |
-| **External IDP (e.g., Clerk, Kinde)** | Lowest implementation effort, feature-rich. | Potential vendor lock-in, higher cost at scale, may complicate self-hosting. |
+| **Auth.js** | Deep Next.js integration, supports many providers, Prisma adapter available. | Can be complex to customize beyond standard flows. |
+
+### Implementation Foundation (Current Phase)
+The platform now has the Auth.js foundation installed and configured:
+- **Package**: `next-auth` and `@auth/prisma-adapter`.
+- **Database**: Prisma integration using the standard Auth.js adapter models (`Account`, `Session`, `VerificationToken`) and updating the existing `User` model.
+- **Route Handler**: `src/app/api/auth/[...nextauth]/route.ts` handles Auth.js requests using Next.js App Router.
+- **Configuration**: `src/auth.ts` provides the central configuration and exports `auth`, `handlers`, `signIn`, and `signOut`.
 
 ### Selection Criteria
 - **Simplicity**: Low maintenance and easy to understand.
@@ -131,15 +136,13 @@ No final decision has been made. The following candidates should be evaluated:
 - **Multi-club Membership**: Must support a single user being a member of multiple clubs.
 - **Operational Complexity**: Minimal external dependencies preferred.
 
-## Recommended Implementation Sequence
+## Implementation Sequence
 
-1.  **Decide Auth Provider**: Evaluate candidates against criteria.
-2.  **Implement Session/User Lookup**: Set up the auth provider and session handling.
-3.  **Map Session User to User**: Ensure authenticated users are matched/created in the `User` table.
-4.  **Resolve ClubMembership**: For every request to a club-specific route, resolve the user's membership for that specific club.
-5.  **Replace anonymousViewer**: Update the viewer context resolution to use real session and membership data.
-6.  **Protect Member Routes**: Implement middleware or layout-level checks for protected routes.
-7.  **Enable “Jeg flyver” Submit Flow**: Connect the UI to a protected API action that verifies the viewer context.
+1.  **Auth.js Foundation**: Install and configure Auth.js with Prisma. (Completed ✓)
+2.  **Implementation Documentation**: Document the auth setup. (Completed ✓)
+3.  **Replace anonymousViewer**: Update the viewer context resolution to use real session and membership data. (Next Phase)
+4.  **Protect Member Routes**: Implement middleware or layout-level checks for protected routes.
+5.  **Enable “Jeg flyver” Submit Flow**: Connect the UI to a protected API action that verifies the viewer context.
 
 ## Future Considerations
 - **Calendar**: A future simple calendar/overview for club activities (not a complex event system).

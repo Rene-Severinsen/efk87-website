@@ -29,12 +29,12 @@ export default async function ClubPage({ params }: ClubPageProps) {
   try {
     club = await requireClubBySlug(clubSlug);
 
-  //  console.log("[ClubPage] RESOLVED CLUB:", {
-      id: club.id,
-      name: club.name,
-      slug: club.slug,
-      settings: club.settings,
-    });
+    // console.log("[ClubPage] RESOLVED CLUB:", {
+    //   id: club.id,
+    //   name: club.name,
+    //   slug: club.slug,
+    //   settings: club.settings,
+    // });
   } catch (error) {
     console.error("[ClubPage] FAILED TO RESOLVE CLUB:", {
       clubSlug,
