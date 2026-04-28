@@ -22,15 +22,17 @@ The `PublicPage` model represents content pages that are visible to the public. 
 - All public content is scoped by `clubId`.
 - A unique constraint exists on `(clubId, slug)` to ensure slugs are unique within a club but can be reused across different clubs.
 
-## Content Service
+## Content Services
 
-A shared `publicPageService.ts` is used to fetch public content.
-
-- `getPublishedPublicPage(clubId, slug)`: Returns only `PUBLISHED` pages. Returns `null` if the page is missing or not published.
+- **Generic Public Pages**: `publicPageService.ts` is used for generic public pages (e.g., about, members).
+  - `getPublishedPublicPage(clubId, slug)`: Returns only `PUBLISHED` pages.
+- **Homepage**: `publicHomePageService.ts` is used exclusively for the club homepage.
+  - `getPublicHomePage(clubId)`: Returns the published homepage record.
 
 ## Implementation Details
 
-- **No Hardcoding**: Routes should not hardcode content. They should use `publicPageService` to fetch content from the database.
+- **Structural Separation**: The homepage is structurally separate from generic pages.
+- **No Querying Prisma Directly from Routes**: Routes must use services to fetch content.
 - **Fallbacks**: Routes keep a fallback placeholder if no published page exists in the database.
 - **Admin UI**: Not implemented yet. Initial content is provided via database seeds.
 

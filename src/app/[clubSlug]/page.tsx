@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../lib/tenancy/tenantService";
 import PublicClubHomePage from "../../components/publicSite/PublicClubHomePage";
-import { getPublicHomePage } from "../../lib/publicSite/publicPageService";
+import { getPublicHomePage } from "../../lib/publicSite/publicHomePageService";
 
 interface ClubPageProps {
   params: Promise<{
