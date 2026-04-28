@@ -43,6 +43,16 @@ Public navigation and topbar actions support visibility rules. This ensures that
 - **Filtering**: Items are filtered using `getVisiblePublicNavigation` and `getVisiblePublicActions` which utilize the `canViewSurface` helper.
 - **Anonymous View**: The public homepage uses `anonymousViewer`, so only `PUBLIC` items like "Bliv medlem" and "Log ind" are visible, while "Min profil" and "Forum" are hidden until authentication is implemented.
 
+### Member-only Area Placeholders
+
+The following routes are reserved for future member-only functionality:
+
+- `/[clubSlug]/profil`: Future "Min profil" page.
+- `/[clubSlug]/forum`: Future member forum.
+- `/[clubSlug]/jeg-flyver`: Future flight registration for members.
+
+These routes currently exist as **placeholders only**. Authentication is not yet implemented, and these routes are explicitly intended to be restricted to members in the future. In the current phase, they are hidden from anonymous navigation but accessible via direct URL for structural verification.
+
 ## Implementation
 
 ### Services

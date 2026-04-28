@@ -19,9 +19,19 @@ Currently, the public club navigation is defined statically in `src/lib/publicSi
 - **Bliv medlem**: `/{clubSlug}/bliv-medlem` (PUBLIC)
 - **Log ind**: `/{clubSlug}/login` (PUBLIC)
 
+### Member-only Areas
+- **Min profil**: `/{clubSlug}/profil` (MEMBERS_ONLY) - Placeholder only.
+- **Forum**: `/{clubSlug}/forum` (MEMBERS_ONLY) - Placeholder only.
+- **Jeg flyver**: `/{clubSlug}/jeg-flyver` (MEMBERS_ONLY) - Placeholder only.
+
+These routes are reserved for future member-only functionality. Currently, they render a placeholder title and text stating that login and access control are not yet implemented. They are hidden from navigation for anonymous viewers.
+
 ### Future Evolution
 - Navigation must later become managed via CMS or Admin UI.
 - The navigation structure will be persisted in the database (likely associated with `ClubSettings`).
+- "Jeg flyver" submit flow must later support both today and future flight dates.
+- Authentication and session handling will be integrated to protect member-only areas.
+- No event or calendar model is introduced for these placeholders.
 
 ## Homepage Content
 
