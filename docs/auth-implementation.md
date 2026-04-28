@@ -81,6 +81,22 @@ Converts the full server-side context to the minimal `ViewerVisibilityContext` u
 
 ## Operational Requirements
 
+### Local Test Member
+
+For development and verification of protected member routes, a local test member is seeded when `APP_ENV=development`.
+
+- **Email**: `test.member@efk87.local`
+- **Name**: `Test Member`
+- **Club Access**: `ACTIVE` membership with `MEMBER` role for EFK87.
+- **Purpose**: Used to verify viewer resolution and protected member routes without needing real member data.
+- **Safety**: 
+  - This is a local development test identity only. 
+  - It must not be treated as a real member.
+  - It is guarded in the seed file and only created when `APP_ENV` is `development`.
+  - It must not be seeded in production long term.
+  - Magic link testing still requires `AUTH_EMAIL_LOGIN_ENABLED=true` and safe SMTP/mail capture.
+  - Authentication alone is not enough; matching User email and `ACTIVE` `ClubMembership` are required.
+
 ### Email Delivery
 - **Provider**: Uses Auth.js Email/Nodemailer provider.
 - **Packages**: `nodemailer` is installed as a separate dependency.

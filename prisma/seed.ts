@@ -108,6 +108,42 @@ async function main() {
     });
   }
 
+  // Seed local development test member
+  // ONLY for development environment
+  if (process.env.APP_ENV === "development") {
+    console.log("Seeding development test member...");
+    const testMember = await prisma.user.upsert({
+      where: { email: "test.member@efk87.local" },
+      update: {},
+      create: {
+        email: "test.member@efk87.local",
+        name: "Test Member",
+      },
+    });
+
+    await prisma.clubMembership.upsert({
+      where: {
+        clubId_userId: {
+          clubId: efk87.id,
+          userId: testMember.id,
+        },
+      },
+      update: {
+        status: "ACTIVE",
+        role: "MEMBER",
+      },
+      create: {
+        clubId: efk87.id,
+        userId: testMember.id,
+        status: "ACTIVE",
+        role: "MEMBER",
+      },
+    });
+    console.log("Development test member seeded.");
+  } else {
+    console.log(`Skipping development test member seed (APP_ENV: ${process.env.APP_ENV || 'not set'})`);
+  }
+
   // Seed feature tiles for EFK87
   const featureTiles = [
     {

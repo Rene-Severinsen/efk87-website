@@ -42,6 +42,7 @@ The database seed logic is idempotent and ensures that the initial platform data
 - **Path**: `prisma/seed.ts`
 - **Command**: `npm run db:seed` (or `npx prisma db seed`)
 - **Behavior**: Uses `upsert` to ensure that records like the initial club are created if they don't exist or remain unchanged if they do.
+- **Dev/Test Data**: When `APP_ENV=development`, the seed script adds a test member (`test.member@efk87.local`) with `ACTIVE` membership in EFK87 for local testing. See `docs/auth-implementation.md` for details.
 
 ### Multi-tenancy (Clubs)
 
