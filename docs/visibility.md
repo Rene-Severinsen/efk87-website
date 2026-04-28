@@ -80,10 +80,15 @@ export async function getActiveHomeFeatureTiles(clubId: string, viewer: ViewerVi
 
 ### Homepage
 
-The main homepage route (`src/app/[clubSlug]/page.tsx`) currently uses the `anonymousViewer`. 
-This ensures that only `PUBLIC` content is rendered for the general public.
+The main homepage route (`src/app/[clubSlug]/page.tsx`) resolves the `ViewerVisibilityContext` server-side from the Auth.js session and the club-specific `ClubMembership`.
 
-Future authentication integration will resolve the `ViewerVisibilityContext` from the user session.
+This ensures that:
+- Anonymous visitors see only `PUBLIC` content.
+- Authenticated users without membership in the current club see only `PUBLIC` content.
+- Authenticated members with `ACTIVE` status see `MEMBERS_ONLY` content.
+- Authenticated admins/owners with `ACTIVE` status see `MEMBERS_ONLY` content.
+
+The resolution is handled by `getServerViewerForClub(clubId)` and converted via `toViewerVisibilityContext(serverViewer)`.
 
 ## Domain Specifics
 

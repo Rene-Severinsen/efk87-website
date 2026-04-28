@@ -30,20 +30,44 @@ The existing `User` model was updated and new models were added to `prisma/schem
 ## User Identity and Tenancy
 
 - **Identity**: Auth.js identifies a `User` by their email. The `User` record is shared across all clubs.
-- **Tenancy**: Club membership is still handled by the `ClubMembership` model. An authenticated user does not automatically have access to any club.
-- **Access Control**: Membership lookups for a specific club must still be performed after the user is authenticated.
+- **Tenancy**: Club membership is handled by the `ClubMembership` model. An authenticated user does not automatically have access to any club.
+- **Access Control**: Membership lookups for a specific club are performed server-side during viewer resolution.
+
+## Viewer Resolution Foundation
+
+A reusable server-side viewer resolution is implemented in `src/lib/auth/viewer.ts`.
+
+### ServerViewerContext
+
+The `ServerViewerContext` includes:
+- `isAuthenticated`: `boolean`
+- `isMember`: `boolean` (True if authenticated AND has `ACTIVE` membership in the current club)
+- `isAdmin`: `boolean` (True if authenticated AND has `ACTIVE` membership AND role is `ADMIN` or `OWNER`)
+- `userId?`: `string`
+- `email?`: `string`
+- `clubId?`: `string`
+- `membershipStatus?`: `MembershipStatus`
+- `clubRole?`: `ClubRole`
+- `isPlatformAdmin?`: `boolean` (Always `false` for now)
+
+### Resolution Logic
+
+`getServerViewerForClub(clubId: string)`:
+1. Calls Auth.js `auth()` server-side.
+2. If no session/user/email, returns an anonymous viewer.
+3. Finds the `User` by email and checks for `ClubMembership` in the specified `clubId`.
+4. If an `ACTIVE` membership exists, `isMember` is set to `true`.
+5. If the membership is `ACTIVE` and the role is `ADMIN` or `OWNER`, `isAdmin` is set to `true`.
+
+### Visibility Conversion
+
+`toViewerVisibilityContext(viewer: ServerViewerContext)`:
+Converts the full server-side context to the minimal `ViewerVisibilityContext` used for public site filtering.
 
 ## Current Limitations
 
 - **No Final Provider**: Auth.js foundation is installed, but no final sign-in provider is implemented for production use yet.
-- **Conditional GitHub**: A GitHub provider is configured but only enabled if `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET` are provided. It is intended for development/testing only until a final strategy is selected.
+- **Conditional GitHub**: A GitHub provider is configured but only enabled if `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET` are provided.
 - **Verified Endpoint**: The current verified endpoint is `/api/auth/session`.
-- **No Protection**: No routes are protected by authentication in this phase.
-- **Viewer Context**: The `anonymousViewer` is still used throughout the application. Authenticated identity still requires `ClubMembership` lookup for club access.
-
-## Next Phase: Viewer Resolution
-
-The next phase of implementation will involve:
-1. Resolving the Auth.js session on the server.
-2. Looking up the `ClubMembership` for the authenticated user and the current `clubSlug`.
-3. Replacing `anonymousViewer` with a dynamic viewer context based on the resolved session and membership.
+- **No Route Protection**: Middleware and route-level protection are not yet implemented. Authenticated users without membership still only see public content.
+- **No Auto-Creation**: Users are not automatically created in this phase.

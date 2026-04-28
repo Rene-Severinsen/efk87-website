@@ -7,7 +7,10 @@ import { getActiveHomeFeatureTiles } from "../../lib/publicSite/publicHomeFeatur
 import { getActiveHomeInfoCards } from "../../lib/publicSite/publicHomeInfoCardService";
 import { getTodayFlightIntents } from "../../lib/publicSite/publicFlightIntentService";
 import { getPublicFooterData } from "../../lib/publicSite/publicFooterService";
-import { anonymousViewer } from "../../lib/publicSite/publicVisibility";
+import {
+  getServerViewerForClub,
+  toViewerVisibilityContext,
+} from "../../lib/auth/viewer";
 import {
   getVisiblePublicNavigation,
   getVisiblePublicActions,
@@ -53,7 +56,8 @@ export default async function ClubPage({ params }: ClubPageProps) {
     throw error;
   }
 
-  const viewer = anonymousViewer;
+  const serverViewer = await getServerViewerForClub(club.id);
+  const viewer = toViewerVisibilityContext(serverViewer);
 
   console.log("[ClubPage] VIEWER:", viewer);
 
