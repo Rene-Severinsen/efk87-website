@@ -159,14 +159,17 @@ The platform has the Auth.js foundation installed and configured:
 2.  **Strategy Documentation**: Define Email Magic Link strategy and requirements. (Completed ✓)
 3.  **Email Provider Setup**: 
     - Configure environment variables for the selected SMTP provider (`AUTH_EMAIL_SERVER`, `AUTH_EMAIL_FROM`). (Completed ✓)
-4.  **Auth.js Email Configuration**: 
+5.  **Auth.js Email Configuration**: 
     - Enable and configure the Email provider in `src/auth.ts` using `nodemailer`. (Completed ✓)
-5.  **Login UI**: 
+6.  **Hardened Login Safety**:
+    - Implement `AUTH_EMAIL_LOGIN_ENABLED` flag to prevent accidental email sending in dev/qa. (Completed ✓)
+    - SMTP config alone is not enough to enable login. (Completed ✓)
+7.  **Login UI**: 
     - Create a minimal login page with email input and magic link trigger. (Completed ✓)
-6.  **Viewer & Guards**: 
+8.  **Viewer & Guards**: 
     - Replace `anonymousViewer` with real session resolution.
     - Verify member route access still depends on `ACTIVE` `ClubMembership`.
-7.  **Enable “Jeg flyver” Submit Flow**: Connect the UI to a protected API action that verifies the viewer context.
+9.  **Enable “Jeg flyver” Submit Flow**: Connect the UI to a protected API action that verifies the viewer context.
 
 ## Future Considerations
 - **Calendar**: A future simple calendar/overview for club activities (not a complex event system).

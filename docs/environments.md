@@ -31,6 +31,11 @@ All environment variables must be accessed through the centralized utility at `s
     - Real emails or external notifications must **never** be sent from `development` or `qa` environments.
     - This is controlled by the `canSendExternalNotifications` helper in `src/lib/config/env.ts`.
     - Only `production` is allowed to send external notifications.
+4.  **Email Login Safety**:
+    - `AUTH_EMAIL_LOGIN_ENABLED` controls whether magic link emails can be sent.
+    - Default is `false` for all environments.
+    - SMTP configuration (`AUTH_EMAIL_SERVER`, `AUTH_EMAIL_FROM`) must also be present to enable login.
+    - QA must not send login links to real members unless explicitly configured with safe test mail.
 
 ## Usage
 

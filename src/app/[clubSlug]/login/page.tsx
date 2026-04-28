@@ -33,6 +33,7 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
 
   const isMemberRequired = reason === "member-required";
   const isEmailConfigured = !!(env.AUTH_EMAIL_SERVER && env.AUTH_EMAIL_FROM);
+  const isEmailEnabled = env.AUTH_EMAIL_LOGIN_ENABLED;
 
   return (
     <PublicClubShell club={club}>
@@ -45,14 +46,22 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
             </div>
           )}
 
-          {!isEmailConfigured ? (
+          {!isEmailEnabled ? (
             <p className="text-lg text-slate-600 text-center">
               Login er ikke aktiveret endnu.
+            </p>
+          ) : !isEmailConfigured ? (
+            <p className="text-lg text-slate-600 text-center">
+              Login kræver mailopsætning, som ikke er konfigureret endnu.
             </p>
           ) : (
             <form
               action={async (formData) => {
                 "use server";
+                if (!env.AUTH_EMAIL_LOGIN_ENABLED || !env.AUTH_EMAIL_SERVER || !env.AUTH_EMAIL_FROM) {
+                  // Fallback for security - though UI should hide it
+                  return;
+                }
                 const email = formData.get("email") as string;
                 await signIn("nodemailer", { email, redirectTo: `/${clubSlug}` });
               }}

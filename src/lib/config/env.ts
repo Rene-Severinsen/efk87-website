@@ -19,6 +19,11 @@ interface EnvConfig {
   isQa: boolean;
   isProduction: boolean;
   /**
+   * Explicit flag to enable email magic link login.
+   * Default: false in all environments.
+   */
+  AUTH_EMAIL_LOGIN_ENABLED: boolean;
+  /**
    * Safety helper to control whether external notifications (emails, etc.) can be sent.
    * development: false
    * qa: false
@@ -33,6 +38,7 @@ function validateEnv(): EnvConfig {
   const AUTH_SECRET = process.env.AUTH_SECRET;
   const AUTH_EMAIL_SERVER = process.env.AUTH_EMAIL_SERVER;
   const AUTH_EMAIL_FROM = process.env.AUTH_EMAIL_FROM;
+  const AUTH_EMAIL_LOGIN_ENABLED = process.env.AUTH_EMAIL_LOGIN_ENABLED === 'true';
 
   if (!APP_ENV) {
     throw new Error('APP_ENV is not defined. Must be one of: development, qa, production');
@@ -63,6 +69,7 @@ function validateEnv(): EnvConfig {
     isDevelopment,
     isQa,
     isProduction,
+    AUTH_EMAIL_LOGIN_ENABLED,
     canSendExternalNotifications: isProduction,
   };
 }

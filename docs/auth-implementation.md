@@ -19,9 +19,10 @@ This document details the Auth.js foundation implemented for the EFK87 platform.
 - `AUTH_GITHUB_SECRET`: (Optional) GitHub OAuth client secret for dev/testing.
 - `AUTH_EMAIL_SERVER`: (Optional) SMTP connection string (e.g., `smtp://user:pass@smtp.example.com:587`).
 - `AUTH_EMAIL_FROM`: (Optional) The "From" address for magic link emails.
+- `AUTH_EMAIL_LOGIN_ENABLED`: Explicit flag to enable email magic link login. MUST be `true` for any environment to send magic links.
 
 #### Email Provider Activation
-The Email (Nodemailer) provider is enabled only if both `AUTH_EMAIL_SERVER` and `AUTH_EMAIL_FROM` are present. If either is missing, the provider is disabled and the login page shows an informational message.
+The Email (Nodemailer) provider is enabled only if `AUTH_EMAIL_LOGIN_ENABLED` is `true` AND both `AUTH_EMAIL_SERVER` and `AUTH_EMAIL_FROM` are present. If `AUTH_EMAIL_LOGIN_ENABLED` is missing or `false`, the login page shows an informational message. If enabled but SMTP is missing, it shows a configuration warning.
 
 ## Data Model
 
@@ -88,8 +89,9 @@ Converts the full server-side context to the minimal `ViewerVisibilityContext` u
 
 ### QA and Testing Safety
 - **Outbound Guard**: `canSendExternalNotifications` in `src/lib/config/env.ts` is `false` for development and qa.
-- **Safe Addresses**: QA must use safe test addresses (e.g., `@example.com` or internal domains) or have outbound email disabled/redirected to a tool like Mailpit.
-- **Real SMTP**: Production must use real, authenticated mail provider credentials.
+- **Login Guard**: `AUTH_EMAIL_LOGIN_ENABLED` must be `false` by default for all environments.
+- **QA Restriction**: QA MUST NOT send login links to real members unless explicitly configured with a safe test mail flag (or when `AUTH_EMAIL_LOGIN_ENABLED=true` is used with a safe SMTP mock like Mailpit).
+- **Real SMTP**: Production requires `AUTH_EMAIL_LOGIN_ENABLED=true` and valid SMTP config.
 
 ### Production Readiness
 - **Credentials**: Production must use real, authenticated mail provider credentials.
