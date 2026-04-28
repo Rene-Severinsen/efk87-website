@@ -22,12 +22,15 @@ Access to the `/[clubSlug]/admin` route must be strictly controlled:
 The following models and fields are defined as editable surfaces from the club admin:
 
 ### PublicHomePage
-Content is managed via a `PublicPage` record with the slug `home`.
-- `heroTitle` (mapped from `title`)
-- `heroSubtitle` (mapped from `excerpt`)
-- `introTitle` (planned field or part of `body`)
-- `introBody` (mapped from `body`)
-- **Future**: CTA labels and hrefs.
+Dedicated homepage content model.
+- `heroTitle`
+- `heroSubtitle`
+- `introTitle`
+- `introBody`
+- `primaryCtaLabel`
+- `primaryCtaHref`
+- `secondaryCtaLabel`
+- `secondaryCtaHref`
 
 ### ClubTheme
 Controls the visual branding of the club site.
@@ -63,7 +66,8 @@ Small information cards displayed in the hero sidebar.
 - `visibility` (PUBLIC or MEMBERS_ONLY)
 
 ### PublicPage
-Generic content pages.
+Generic tenant-scoped content pages.
+Examples: `about`, `members`, `galleri`, `artikler`, `flyveskole`, `bliv-medlem`.
 - `slug`
 - `title`
 - `excerpt`
@@ -105,6 +109,11 @@ The admin interface should be organized into the following sections:
 - **No Hardcoding**: The admin interface must never hardcode specific club identifiers (like `EFK87`). It must always operate on the `currentClubId` resolved from the route.
 - **Visibility Rules**: Admin edits must respect and not bypass defined visibility rules (e.g., draft status, members-only visibility).
 - **Service Reuse**: Admin forms should reuse shared services and server actions to avoid duplication of update logic.
+- **Model Separation**: 
+    - Homepage editor must use `PublicHomePage` service/model.
+    - Generic page editor must use `PublicPage` service/model.
+    - Do not mix homepage and generic pages in admin implementation.
+- **Visual Design**: The approved homepage mockup remains the locked visual reference. Admin editing changes content, not layout.
 - **Public Preview**: Future implementation should allow admins to preview the site as both an anonymous viewer and a logged-in member.
 - **Theme Safety**: Theme editing is limited to safe token values (colors, shadows, radii). Layout redesign is not permitted via the theme editor.
 - **Calendar Logic**: Describe the calendar as a "simple calendar/overview" rather than a complex "event system".
