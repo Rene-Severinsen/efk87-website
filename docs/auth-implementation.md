@@ -15,6 +15,8 @@ This document details the Auth.js foundation implemented for the EFK87 platform.
 
 ### Environment Variables
 - `AUTH_SECRET`: Used to sign cookies and tokens.
+- `AUTH_GITHUB_ID`: (Optional) GitHub OAuth client ID.
+- `AUTH_GITHUB_SECRET`: (Optional) GitHub OAuth client secret.
 
 ## Data Model
 
@@ -33,9 +35,11 @@ The existing `User` model was updated and new models were added to `prisma/schem
 
 ## Current Limitations
 
-- **No Providers**: No OAuth or Email providers are configured yet.
+- **No Final Provider**: Auth.js foundation is installed, but no final sign-in provider is implemented for production use yet.
+- **Conditional GitHub**: A GitHub provider is configured but only enabled if `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET` are provided. It is intended for development/testing only until a final strategy is selected.
+- **Verified Endpoint**: The current verified endpoint is `/api/auth/session`.
 - **No Protection**: No routes are protected by authentication in this phase.
-- **Viewer Context**: The `anonymousViewer` is still used throughout the application.
+- **Viewer Context**: The `anonymousViewer` is still used throughout the application. Authenticated identity still requires `ClubMembership` lookup for club access.
 
 ## Next Phase: Viewer Resolution
 

@@ -124,6 +124,9 @@ Auth.js (formerly NextAuth.js) has been selected as the authentication foundatio
 
 ### Implementation Foundation (Current Phase)
 The platform now has the Auth.js foundation installed and configured:
+- **Status**: Foundation is installed, but no final sign-in provider is implemented yet.
+- **Providers**: GitHub provider is conditionally available for development/testing only (requires `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`).
+- **Verified Endpoint**: `/api/auth/session` is the current verified endpoint.
 - **Package**: `next-auth` and `@auth/prisma-adapter`.
 - **Database**: Prisma integration using the standard Auth.js adapter models (`Account`, `Session`, `VerificationToken`) and updating the existing `User` model.
 - **Route Handler**: `src/app/api/auth/[...nextauth]/route.ts` handles Auth.js requests using Next.js App Router.
