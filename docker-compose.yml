@@ -12,5 +12,13 @@ services:
     volumes:
       - efk87_postgres_dev_data:/var/lib/postgresql/data
 
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: efk87-mailpit-dev
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    restart: unless-stopped
+
 volumes:
   efk87_postgres_dev_data:

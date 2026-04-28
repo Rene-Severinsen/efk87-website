@@ -7,10 +7,20 @@ This document describes how to test Auth.js email magic link login locally witho
 Local testing must use a safe SMTP capture tool to intercept outgoing emails. This ensures no real emails are sent during development.
 
 ### Recommended Tools
-- **Mailpit**: Modern, fast, and includes a web UI.
-- **MailHog**: Classic SMTP testing tool.
+- **Mailpit**: Included in the project's `docker-compose.yml`.
 
-Both tools typically run an SMTP server on port `1025` and a web UI on port `8025`.
+## Docker Setup (Recommended)
+
+To start the local database and Mailpit capture service:
+
+```bash
+docker compose up -d
+```
+
+- **Mailpit SMTP**: `localhost:1025`
+- **Mailpit UI**: [http://localhost:8025](http://localhost:8025)
+
+*Note: This is local-only and must not be used in production.*
 
 ## Environment Configuration
 
@@ -38,7 +48,10 @@ A test member is provided in the seed data for development:
 
 ## Step-by-Step Testing Workflow
 
-1.  **Start Mail Capture**: Ensure Mailpit or MailHog is running and listening on port `1025`.
+1.  **Start Services**:
+    ```bash
+    docker compose up -d
+    ```
 2.  **Prepare Database**:
     ```bash
     npm run db:seed
@@ -51,7 +64,7 @@ A test member is provided in the seed data for development:
     - Open: [http://localhost:3000/efk87/login](http://localhost:3000/efk87/login)
     - Submit email: `test.member@efk87.local`
 5.  **Capture Magic Link**:
-    - Open Mailpit/MailHog UI: [http://localhost:8025](http://localhost:8025)
+    - Open Mailpit UI: [http://localhost:8025](http://localhost:8025)
     - Locate the "Sign in to efk87.local" email.
     - Click the **Sign in** button/link.
 6.  **Verify Session**:
@@ -73,9 +86,10 @@ Successful authentication is only the first step. Protected access still require
 ## Troubleshooting
 
 ### No email received
+- Check that the Docker containers are running: `docker compose ps`.
 - Check `AUTH_EMAIL_LOGIN_ENABLED=true` is set.
 - Check `AUTH_EMAIL_SERVER=smtp://localhost:1025` matches your mail capture tool.
-- Ensure the mail capture service (Mailpit/MailHog) is actually running.
+- Ensure the mail capture service (Mailpit) is actually running.
 
 ### Login succeeds but member routes redirect
 - Check the `User` record exists in the database for that email.
