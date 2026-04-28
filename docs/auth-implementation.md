@@ -15,8 +15,13 @@ This document details the Auth.js foundation implemented for the EFK87 platform.
 
 ### Environment Variables
 - `AUTH_SECRET`: Used to sign cookies and tokens.
-- `AUTH_GITHUB_ID`: (Optional) GitHub OAuth client ID.
-- `AUTH_GITHUB_SECRET`: (Optional) GitHub OAuth client secret.
+- `AUTH_GITHUB_ID`: (Optional) GitHub OAuth client ID for dev/testing.
+- `AUTH_GITHUB_SECRET`: (Optional) GitHub OAuth client secret for dev/testing.
+
+#### Conceptual Email Provider Variables (Future)
+- `AUTH_EMAIL_SERVER`: SMTP connection string (e.g., `smtp://user:pass@smtp.example.com:587`).
+- `AUTH_EMAIL_FROM`: The "From" address for magic link emails.
+- `AUTH_EMAIL_QA_SAFE`: (Conceptual flag) If set, prevents sending emails to real member domains during testing.
 
 ## Data Model
 
@@ -72,6 +77,35 @@ This guard is used to protect member-only routes at the page level.
 
 `toViewerVisibilityContext(viewer: ServerViewerContext)`:
 Converts the full server-side context to the minimal `ViewerVisibilityContext` used for public site filtering.
+
+## Operational Requirements
+
+### Email Delivery
+- **Provider Selection**: A reliable email sending provider (or SMTP service) must be chosen before implementation.
+- **Environment Specificity**: SMTP/provider credentials must be environment-specific (Dev, QA, Production).
+- **Template Design**: Email templates should be simple, branded, and designed to be tenant-aware later (e.g., including the club's name).
+
+### QA and Testing Safety
+- **Outbound Guard**: QA environments must never send login emails to real members.
+- **Safe Addresses**: QA must use safe test addresses (e.g., `@example.com` or internal domains) or have outbound email disabled/redirected to a tool like Mailpit.
+
+### Production Readiness
+- **Credentials**: Production must use real, authenticated mail provider credentials.
+- **Monitoring**: Email delivery success should be monitored to ensure members can always log in.
+
+## Magic Link Flow
+
+1.  **Request**: User enters their email on the login page.
+2.  **Verification**: Auth.js creates a `VerificationToken` in the database.
+3.  **Delivery**: An email is sent to the user containing a unique, time-limited magic link.
+4.  **Callback**: Clicking the link hits the Auth.js callback route.
+5.  **Identity Mapping**: The callback verifies the token and maps the email to a `User` record in the database.
+6.  **Session**: A persistent `Session` is created for the user.
+
+### Access Control Post-Login
+- **Identity != Membership**: Authenticated user identity does not grant club access.
+- **Membership Check**: Access to member routes still requires an `ACTIVE` `ClubMembership` record for the specific club being accessed.
+- **Graceful Failure**: An authenticated user without a membership can log in but will be redirected or shown an "Access Denied" message when attempting to access member-only routes.
 
 ## Current Limitations
 

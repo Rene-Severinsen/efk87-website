@@ -116,16 +116,30 @@ The "Jeg flyver" feature allows members to announce their flight intentions.
 
 ## Auth Provider Candidate: Auth.js (Selected)
 
-Auth.js (formerly NextAuth.js) has been selected as the authentication foundation for the EFK87 platform.
+Auth.js (formerly NextAuth.js) is the authentication foundation for the EFK87 platform.
 
-| Candidate | Pros | Cons |
-| :--- | :--- | :--- |
-| **Auth.js** | Deep Next.js integration, supports many providers, Prisma adapter available. | Can be complex to customize beyond standard flows. |
+### Preferred Login Method: Email Magic Link
+
+The primary and preferred authentication method for club members is **Email Magic Link**.
+
+#### Rationale
+- **Member Identification**: Club members naturally identify by their email addresses already present in club records.
+- **Low Friction**: Simplest experience for non-technical members; no passwords to remember or manage.
+- **Security**: No password storage or password reset complexity. Authentication relies on the security of the user's email account.
+- **Generic Identity**: Keeps identity generic across future clubs and tenants.
+- **Infrastructure Fit**: Fits perfectly with the self-hosted PostgreSQL/Prisma/Auth.js setup.
+
+#### Developer/Testing Method: GitHub OAuth
+- GitHub remains an **optional, developer-only** login method.
+- It is only available if conditionally configured via environment variables.
+- It is **not** the default or intended login method for regular club members.
 
 ### Implementation Foundation (Current Phase)
-The platform now has the Auth.js foundation installed and configured:
-- **Status**: Foundation is installed, but no final sign-in provider is implemented yet.
-- **Providers**: GitHub provider is conditionally available for development/testing only (requires `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`).
+The platform has the Auth.js foundation installed and configured:
+- **Status**: Foundation is installed. Email Magic Link is defined as the primary strategy.
+- **Providers**: 
+    - **Email Provider**: (Planned) Will handle magic link generation and delivery.
+    - **GitHub Provider**: Conditionally available for development/testing only.
 - **Verified Endpoint**: `/api/auth/session` is the current verified endpoint.
 - **Package**: `next-auth` and `@auth/prisma-adapter`.
 - **Database**: Prisma integration using the standard Auth.js adapter models (`Account`, `Session`, `VerificationToken`) and updating the existing `User` model.
@@ -142,10 +156,16 @@ The platform now has the Auth.js foundation installed and configured:
 ## Implementation Sequence
 
 1.  **Auth.js Foundation**: Install and configure Auth.js with Prisma. (Completed ✓)
-2.  **Implementation Documentation**: Document the auth setup. (Completed ✓)
-3.  **Replace anonymousViewer**: Update the viewer context resolution to use real session and membership data. (Next Phase)
-4.  **Protect Member Routes**: Implement middleware or layout-level checks for protected routes.
-5.  **Enable “Jeg flyver” Submit Flow**: Connect the UI to a protected API action that verifies the viewer context.
+2.  **Strategy Documentation**: Define Email Magic Link strategy and requirements. (Completed ✓)
+3.  **Email Provider Setup**: 
+    - Choose email sending provider/SMTP.
+    - Configure environment variables for the selected provider.
+4.  **Auth.js Email Configuration**: Enable and configure the Email provider in `src/auth.ts`.
+5.  **Login UI**: Create a minimal login page with email input and magic link trigger.
+6.  **Viewer & Guards**: 
+    - Replace `anonymousViewer` with real session resolution.
+    - Verify member route access still depends on `ACTIVE` `ClubMembership`.
+7.  **Enable “Jeg flyver” Submit Flow**: Connect the UI to a protected API action that verifies the viewer context.
 
 ## Future Considerations
 - **Calendar**: A future simple calendar/overview for club activities (not a complex event system).
