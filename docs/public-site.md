@@ -6,11 +6,18 @@ This document describes the foundation for the public-facing club websites withi
 
 Currently, the public club navigation is defined statically in `src/lib/publicSite/publicNavigation.ts`.
 
-### Current Navigation Structure
-- **Home**: `/{clubSlug}`
-- **About**: `/{clubSlug}/about`
-- **Events**: `/{clubSlug}/events`
-- **Members**: `/{clubSlug}/members`
+### Current Navigation Structure (Visibility Aware)
+- **Forside**: `/{clubSlug}` (PUBLIC)
+- **Forum**: `/{clubSlug}/forum` (MEMBERS_ONLY)
+- **Galleri**: `/{clubSlug}/galleri` (PUBLIC)
+- **Artikler**: `/{clubSlug}/artikler` (PUBLIC)
+- **Flyveskole**: `/{clubSlug}/flyveskole` (PUBLIC)
+- **Om [Club]**: `/{clubSlug}/about` (PUBLIC)
+
+### Current Topbar Actions (Visibility Aware)
+- **Min profil**: `/{clubSlug}/profil` (MEMBERS_ONLY)
+- **Bliv medlem**: `/{clubSlug}/bliv-medlem` (PUBLIC)
+- **Log ind**: `/{clubSlug}/login` (PUBLIC)
 
 ### Future Evolution
 - Navigation must later become managed via CMS or Admin UI.

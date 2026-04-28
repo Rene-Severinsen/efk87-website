@@ -1,6 +1,7 @@
 import React from 'react';
 import './PublicClubHomePage.css';
 import { ClubTheme, PublicHomeFeatureTile, ClubFlightIntent, PublicHomeInfoCard, PublicClubFooter, PublicSponsor } from "../../generated/prisma";
+import { PublicNavigationItem } from "../../lib/publicSite/publicNavigation";
 
 interface PublicFooterData {
   footer: PublicClubFooter | null;
@@ -23,6 +24,8 @@ interface PublicClubHomePageProps {
   infoCards?: PublicHomeInfoCard[];
   flightIntents?: ClubFlightIntent[];
   footerData?: PublicFooterData;
+  navigationItems?: PublicNavigationItem[];
+  actionItems?: PublicNavigationItem[];
 }
 
 /**
@@ -31,7 +34,18 @@ interface PublicClubHomePageProps {
  * This component preserves the visual hierarchy, section order, and layout
  * of the approved HTML/CSS mockup.
  */
-export default function PublicClubHomePage({ clubName, clubDisplayName, content, theme, featureTiles, infoCards, flightIntents, footerData }: PublicClubHomePageProps) {
+export default function PublicClubHomePage({ 
+  clubName, 
+  clubDisplayName, 
+  content, 
+  theme, 
+  featureTiles, 
+  infoCards, 
+  flightIntents, 
+  footerData,
+  navigationItems = [],
+  actionItems = []
+}: PublicClubHomePageProps) {
   // Use existing dynamic data where it fits, otherwise use mockup defaults
   const heroTitle = content.heroTitle || "En klubside med mere liv og bedre overblik.";
   const heroSubtitle = content.heroSubtitle || "Den nye forside er tænkt som en mere visuel indgang til klubben: aktivitet, indhold, hurtige valg og tydelige områder for både gæster, medlemmer og kommende medlemmer.";
@@ -89,18 +103,27 @@ export default function PublicClubHomePage({ clubName, clubDisplayName, content,
           </div>
 
           <nav className="nav">
-            <a className="active" href="#">Forside</a>
-            <a href="#">Forum</a>
-            <a href="#">Galleri</a>
-            <a href="#">Artikler</a>
-            <a href="#">Flyveskole</a>
-            <a href="#">Om {clubName}</a>
+            {navigationItems.map((item) => (
+              <a 
+                key={item.key} 
+                href={item.href}
+                className={item.key === 'home' ? 'active' : ''}
+              >
+                {item.label}
+              </a>
+            ))}
           </nav>
 
           <div className="actions">
-            <a className="btn chip-btn" href="#">Min profil</a>
-            <a className="btn chip-btn primary" href="#">Bliv medlem</a>
-            <a className="btn chip-btn" href="#">Log ind</a>
+            {actionItems.map((item) => (
+              <a 
+                key={item.key} 
+                href={item.href}
+                className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
+              >
+                {item.label}
+              </a>
+            ))}
           </div>
         </header>
 

@@ -8,6 +8,7 @@ import { getActiveHomeInfoCards } from "../../lib/publicSite/publicHomeInfoCardS
 import { getTodayFlightIntents } from "../../lib/publicSite/publicFlightIntentService";
 import { getPublicFooterData } from "../../lib/publicSite/publicFooterService";
 import { anonymousViewer } from "../../lib/publicSite/publicVisibility";
+import { getVisiblePublicNavigation, getVisiblePublicActions } from "../../lib/publicSite/publicNavigation";
 
 interface ClubPageProps {
   params: Promise<{
@@ -38,6 +39,8 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const infoCards = await getActiveHomeInfoCards(club.id, viewer);
   const flightIntents = await getTodayFlightIntents(club.id, viewer);
   const footerData = await getPublicFooterData(club.id);
+  const navigationItems = getVisiblePublicNavigation(clubSlug, viewer);
+  const actionItems = getVisiblePublicActions(clubSlug, viewer);
   
   // Prepare content from homePage or use empty object
   // Based on PublicPage model: title, body, excerpt
@@ -57,6 +60,8 @@ export default async function ClubPage({ params }: ClubPageProps) {
       infoCards={infoCards}
       flightIntents={flightIntents}
       footerData={footerData}
+      navigationItems={navigationItems}
+      actionItems={actionItems}
     />
   );
 }
