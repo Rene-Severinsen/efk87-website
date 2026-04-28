@@ -214,6 +214,7 @@ export default function PublicClubHomePage({ clubName, clubDisplayName, content,
                 <p className="small">{(flightIntents?.length || 0) > 0 ? `${flightIntents?.length} medlemmer har meldt “jeg flyver” i dag.` : "Der er endnu ingen der har meldt deres ankomst i dag."} Når første medlem melder sig, skifter gribben status og beskeden sendes til den valgte mailingliste.</p>
                 <div className="hero-actions" style={{ marginTop: '14px' }}>
                   {/* Submit flow requires future auth/member implementation */}
+                  {/* Future submit flow must allow selecting today or a future date */}
                   <a className="pill primary" href="#">Skriv “jeg flyver”</a>
                   <a className="pill" href="#">Se dagens liste</a>
                 </div>

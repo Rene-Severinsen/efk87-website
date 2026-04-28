@@ -36,6 +36,7 @@ model ClubFlightIntent {
   status       ClubFlightIntentStatus @default(ACTIVE)
   source       ClubFlightIntentSource @default(MANUAL)
   visibility   ClubFlightIntentVisibility @default(PUBLIC)
+  flightDate   DateTime
   plannedAt    DateTime?
   expiresAt    DateTime?
   cancelledAt  DateTime?
@@ -45,6 +46,8 @@ model ClubFlightIntent {
   club Club @relation(fields: [clubId], references: [id])
 
   @@index([clubId, status, createdAt])
+  @@index([clubId, flightDate, status])
+  @@index([clubId, flightDate, visibility])
   @@index([clubId, plannedAt])
   @@index([clubId, activityType, createdAt])
   @@index([clubId, source, createdAt])

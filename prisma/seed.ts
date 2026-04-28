@@ -141,6 +141,7 @@ async function main() {
 
   // Seed mockup-style active flight intents for EFK87
   // These are demo/homepage seed data
+  // Current local date in this context is 2026-04-29
   const flightIntents = [
     {
       displayName: "René Severinsen",
@@ -149,9 +150,10 @@ async function main() {
       status: ClubFlightIntentStatus.ACTIVE,
       source: ClubFlightIntentSource.ADMIN_SEED,
       visibility: ClubFlightIntentVisibility.PUBLIC,
-      createdAt: new Date("2026-04-28T09:07:00Z"),
-      plannedAt: new Date("2026-04-28T11:15:00Z"),
-      expiresAt: new Date("2026-04-28T20:00:00Z"),
+      flightDate: new Date("2026-04-29T00:00:00Z"),
+      createdAt: new Date("2026-04-29T09:07:00Z"),
+      plannedAt: new Date("2026-04-29T11:15:00Z"),
+      expiresAt: new Date("2026-04-29T20:00:00Z"),
     },
     {
       displayName: "Lars Mikkelsen",
@@ -160,9 +162,10 @@ async function main() {
       status: ClubFlightIntentStatus.ACTIVE,
       source: ClubFlightIntentSource.ADMIN_SEED,
       visibility: ClubFlightIntentVisibility.PUBLIC,
-      createdAt: new Date("2026-04-28T08:48:00Z"),
-      plannedAt: new Date("2026-04-28T10:30:00Z"),
-      expiresAt: new Date("2026-04-28T20:00:00Z"),
+      flightDate: new Date("2026-04-29T00:00:00Z"),
+      createdAt: new Date("2026-04-29T08:48:00Z"),
+      plannedAt: new Date("2026-04-29T10:30:00Z"),
+      expiresAt: new Date("2026-04-29T20:00:00Z"),
     },
     {
       displayName: "Søren Østergaard",
@@ -171,9 +174,22 @@ async function main() {
       status: ClubFlightIntentStatus.ACTIVE,
       source: ClubFlightIntentSource.ADMIN_SEED,
       visibility: ClubFlightIntentVisibility.PUBLIC,
-      createdAt: new Date("2026-04-28T08:12:00Z"),
-      plannedAt: new Date("2026-04-28T10:00:00Z"),
-      expiresAt: new Date("2026-04-28T20:00:00Z"),
+      flightDate: new Date("2026-04-29T00:00:00Z"),
+      createdAt: new Date("2026-04-29T08:12:00Z"),
+      plannedAt: new Date("2026-04-29T10:00:00Z"),
+      expiresAt: new Date("2026-04-29T20:00:00Z"),
+    },
+    {
+      displayName: "Erik Jensen",
+      message: "Planlægger flyvning i morgen tidlig.",
+      activityType: ClubFlightIntentType.FLYING,
+      status: ClubFlightIntentStatus.ACTIVE,
+      source: ClubFlightIntentSource.ADMIN_SEED,
+      visibility: ClubFlightIntentVisibility.PUBLIC,
+      flightDate: new Date("2026-04-30T00:00:00Z"),
+      createdAt: new Date("2026-04-29T14:00:00Z"),
+      plannedAt: new Date("2026-04-30T09:00:00Z"),
+      expiresAt: new Date("2026-04-30T18:00:00Z"),
     },
   ];
 
@@ -182,11 +198,16 @@ async function main() {
       where: {
         clubId: efk87.id,
         displayName: intent.displayName,
-        createdAt: intent.createdAt,
+        flightDate: intent.flightDate,
       },
     });
 
-    if (!existingIntent) {
+    if (existingIntent) {
+      await prisma.clubFlightIntent.update({
+        where: { id: existingIntent.id },
+        data: intent,
+      });
+    } else {
       await prisma.clubFlightIntent.create({
         data: {
           clubId: efk87.id,
