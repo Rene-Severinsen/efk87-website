@@ -13,29 +13,53 @@ datasource db {
 }
 
 model Club {
-  id        String   @id
-  name      String
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String           @id
+  name         String
+  slug         String           @unique
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  settings     ClubSettings?
+  memberships  ClubMembership[]
+  pages        Page[]
+}
 
-  users     User[]
-  pages     Page[]
+model ClubSettings {
+  id            String  @id @default(cuid())
+  clubId        String  @unique
+  displayName   String
+  shortName     String
+  primaryDomain String?
+  publicEmail   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id          String           @id @default(cuid())
+  email       String           @unique
+  name        String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  memberships ClubMembership[]
+}
+
+model ClubMembership {
+  id        String           @id @default(cuid())
   clubId    String
-  email     String
-  name      String?
-  role      UserRole @default(MEMBER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  userId    String
+  role      ClubRole         @default(MEMBER)
+  status    MembershipStatus @default(ACTIVE)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 
-  club      Club     @relation(fields: [clubId], references: [id])
+  club Club @relation(fields: [clubId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
-  @@unique([clubId, email])
+  @@unique([clubId, userId])
   @@index([clubId])
+  @@index([userId])
 }
 
 model Page {
@@ -48,15 +72,20 @@ model Page {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  club      Club     @relation(fields: [clubId], references: [id])
+  club Club @relation(fields: [clubId], references: [id])
 
   @@unique([clubId, slug])
   @@index([clubId])
 }
 
-enum UserRole {
-  PLATFORM_ADMIN
-  CLUB_ADMIN
-  BOARD_MEMBER
+enum ClubRole {
+  OWNER
+  ADMIN
   MEMBER
+}
+
+enum MembershipStatus {
+  ACTIVE
+  INVITED
+  DISABLED
 }

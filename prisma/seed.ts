@@ -13,6 +13,18 @@ async function main() {
     },
   });
 
+  await prisma.clubSettings.upsert({
+    where: { clubId: efk87.id },
+    update: {},
+    create: {
+      clubId: efk87.id,
+      displayName: "EFK87",
+      shortName: "EFK87",
+      primaryDomain: null,
+      publicEmail: null,
+    },
+  });
+
   console.log({ efk87 });
   console.log("Seed finished.");
 }
