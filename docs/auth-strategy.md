@@ -35,6 +35,7 @@ Authentication will connect directly to the existing Prisma models:
     - `DISABLED`: Access revoked.
 
 ### Viewer Context
+
 The existing `ViewerVisibilityContext` in `src/lib/publicSite/publicVisibility.ts` serves as the foundation for visibility checks:
 
 ```typescript
@@ -50,6 +51,37 @@ export type ViewerVisibilityContext = {
 - `isAuthenticated` will be true if a valid session exists.
 - `isMember` will be true if the user has an `ACTIVE` membership for the current `clubSlug`.
 - `isAdmin` will be true if the user has an `ADMIN` or `OWNER` role for the current `clubSlug`.
+
+## Viewer Context Evolution
+
+The current `ViewerVisibilityContext` is intentionally minimal, primarily supporting public vs. member visibility decisions today. As the platform grows, the authentication strategy must evolve to handle more granular permissions without overloading a single `isAdmin` flag for every privileged use case.
+
+- **Explicit Role Resolution**: Club admin, club owner, and platform admin roles must be resolved explicitly.
+- **Separation of Concerns**: A platform admin is not the same as a club admin. While platform admins may manage clubs globally in the future, they should not automatically become members of every club unless explicitly designed.
+- **Role Inheritance**: 
+    - Club Owner inherits Club Admin and Member permissions.
+    - Club Admin inherits Member permissions.
+
+### Recommended Future Viewer Shape
+
+Conceptually, the future viewer context should provide more detail:
+
+- `isAuthenticated`: (boolean) Whether the user is logged in.
+- `userId`: (optional string) The unique ID of the authenticated user.
+- `clubId`: (optional string) The ID of the club currently being accessed.
+- `membershipStatus`: (optional `MembershipStatus`) The status of the user's membership in the current club (e.g., `ACTIVE`).
+- `clubRole`: (optional `ClubRole`) The specific role the user has in the current club (e.g., `MEMBER`, `ADMIN`, `OWNER`).
+- `isPlatformAdmin`: (optional boolean) Whether the user has global platform management permissions.
+
+### Recommended Future Access Helpers
+
+To simplify authorization logic throughout the app, the following helpers should be implemented:
+
+- `canAccessPublicContent(viewer)`
+- `canAccessMemberArea(viewer, clubId)`
+- `canAccessClubAdmin(viewer, clubId)`
+- `canAccessClubOwnerFeatures(viewer, clubId)`
+- `canAccessPlatformAdmin(viewer)`
 
 ## Routing Strategy
 
@@ -69,14 +101,18 @@ Access to these routes requires the user to be authenticated AND have an `ACTIVE
 - `/[clubSlug]/jeg-flyver` (Flight logging)
 
 ### Admin Routes (Auth + Admin/Owner Role Required)
-- `/[clubSlug]/admin`: Club-level administration.
-- `/admin` (or similar): Future platform-level administration.
+- `/[clubSlug]/admin`: Club-level administration. Requires `ACTIVE` membership plus `ADMIN` or `OWNER` role.
+- `/[clubSlug]/owner-tools`: (Conceptual) Features requiring `ACTIVE` membership plus `OWNER` role.
+- `/admin` (or similar): Future platform-level administration. Requires platform-level permission (`isPlatformAdmin`), not merely a `ClubRole`.
 
 ## "Jeg flyver" (I'm Flying) Logic
 The "Jeg flyver" feature allows members to announce their flight intentions.
-- **Requirement**: Must be an authenticated `ACTIVE` member.
-- **Data**: Must support current or future `flightDate`.
-- **Persistence**: Data must be preserved even after the flight date for statistics and historical overview.
+- **Requirement**: Submit requires an authenticated `ACTIVE` membership.
+- **Visibility**: 
+    - Public display may show limited rows (marked as `PUBLIC`).
+    - Member view may later show `MEMBERS_ONLY` rows.
+- **Data Retention**: Statistics and historical overviews must use retained data, not just currently visible rows.
+- **Persistence**: Data must be preserved even after the flight date.
 
 ## Auth Provider Candidates
 
