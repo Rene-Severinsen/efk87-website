@@ -26,6 +26,39 @@ model Club {
   featureTiles PublicHomeFeatureTile[]
   homeInfoCards PublicHomeInfoCard[]
   flightIntents ClubFlightIntent[]
+  publicFooter  PublicClubFooter?
+  publicSponsors PublicSponsor[]
+}
+
+model PublicClubFooter {
+  id           String   @id @default(cuid())
+  clubId       String   @unique
+  description  String?
+  addressLine1 String?
+  addressLine2 String?
+  email        String?
+  phone        String?
+  cvr          String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+}
+
+model PublicSponsor {
+  id        String   @id @default(cuid())
+  clubId    String
+  name      String
+  href      String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+
+  @@index([clubId, sortOrder])
+  @@index([clubId, isActive])
 }
 
 model PublicHomeInfoCard {

@@ -25,6 +25,7 @@ The homepage content is structurally separate from generic public pages.
 - **Homepage Info Cards**: `publicHomeInfoCardService.ts` handles fetching active info cards (side cards).
 - **Branding & Theme**: `publicThemeService.ts` handles fetching tenant-scoped visual settings.
 - **Flight Intents (“Jeg flyver”)**: `publicFlightIntentService.ts` handles fetching active social presence indicators.
+- **Public Footer**: `publicFooterService.ts` handles fetching club footer description, contact info, and active sponsors.
 - **Model Storage**: Currently uses the `PublicPage` model with the reserved slug `'home'`.
 - **Feature Tile Model**: `PublicHomeFeatureTile` handles the four main call-to-action tiles.
   - Tenant-scoped by `clubId`.
@@ -38,6 +39,16 @@ The homepage content is structurally separate from generic public pages.
   - Supports up to 3 optional badges.
   - Currently seeded, but designed to be admin-manageable later.
   - Not an event or calendar record.
+- **Public Club Footer Model**: `PublicClubFooter` handles club-specific footer content.
+  - Tenant-scoped by `clubId` (unique).
+  - Includes description, address, email, phone, and CVR.
+  - Currently seeded, but designed to be admin-manageable later.
+- **Public Sponsor Model**: `PublicSponsor` handles simple public labels/links.
+  - Tenant-scoped by `clubId`.
+  - Ordered by `sortOrder`.
+  - Only `isActive` sponsors are shown.
+  - Logo/media handling is not yet implemented.
+  - Currently seeded, but designed to be admin-manageable later.
 - **Approved Design**: The homepage layout and design remain a locked visual reference.
 
 ## Visual Themes
@@ -52,7 +63,8 @@ Visual settings are managed per club through the `ClubTheme` model.
 ## Data Management
 - **Dynamic Content**: Hero title and subtitle are sourced from the `PublicPage` model via `publicHomePageService`.
 - **Flight Intents**: "Jeg flyver" data is fetched via `publicFlightIntentService` and rendered on the homepage.
-- **Static Placeholders**: Content for forum activity, social highlights, and sponsors are currently static placeholders and will be modeled in future tasks.
+- **Footer & Sponsors**: Data is fetched via `publicFooterService` and rendered on the homepage footer.
+- **Static Placeholders**: Content for forum activity and social highlights are currently static placeholders and will be modeled in future tasks.
 - **"Jeg flyver" Domain**: This is a social presence feature, not a standard event model. See [Flight Intents documentation](flight-intents.md) for details.
 
 ## Components

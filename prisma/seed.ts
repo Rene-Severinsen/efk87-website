@@ -262,6 +262,70 @@ async function main() {
     }
   }
 
+  // Seed public club footer for EFK87
+  const footerData = {
+    description: "Ny forside mockup med mere visuel struktur og tydeligere indgange til de vigtigste områder: aktivitet, forum, galleri, flyveskole og klubinformation.",
+    addressLine1: "EFK87",
+    addressLine2: "Flyvestation Værløse, Shelter 331, 3500 Værløse",
+    email: "kontakt@efk87.dk",
+    phone: null,
+    cvr: "12345678",
+  };
+
+  await prisma.publicClubFooter.upsert({
+    where: { clubId: efk87.id },
+    update: footerData,
+    create: {
+      clubId: efk87.id,
+      ...footerData,
+    },
+  });
+
+  // Seed public sponsors for EFK87
+  const sponsors = [
+    {
+      name: "Ellehammerfonden",
+      href: null,
+      sortOrder: 10,
+      isActive: true,
+    },
+    {
+      name: "Friluftsrådet",
+      href: null,
+      sortOrder: 20,
+      isActive: true,
+    },
+    {
+      name: "Dane-RC",
+      href: null,
+      sortOrder: 30,
+      isActive: true,
+    },
+  ];
+
+  for (const sponsor of sponsors) {
+    const existingSponsor = await prisma.publicSponsor.findFirst({
+      where: {
+        clubId: efk87.id,
+        name: sponsor.name,
+      },
+    });
+
+    if (existingSponsor) {
+      await prisma.publicSponsor.update({
+        where: { id: existingSponsor.id },
+        data: sponsor,
+      });
+    } else {
+      await prisma.publicSponsor.create({
+        data: {
+          clubId: efk87.id,
+          ...sponsor,
+        },
+      });
+    }
+  }
+
   console.log({ efk87 });
   console.log("Seed finished.");
 }

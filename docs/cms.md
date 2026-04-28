@@ -28,6 +28,8 @@ The `PublicPage` model represents content pages that are visible to the public. 
   - `getPublishedPublicPage(clubId, slug)`: Returns only `PUBLISHED` pages.
 - **Homepage**: `publicHomePageService.ts` is used exclusively for the club homepage.
   - `getPublicHomePage(clubId)`: Returns the published homepage record.
+- **Footer Content**: `publicFooterService.ts` is used for club-specific footer and sponsor data.
+  - `getPublicFooterData(clubId)`: Returns footer content and active sponsors.
 
 ## Implementation Details
 
