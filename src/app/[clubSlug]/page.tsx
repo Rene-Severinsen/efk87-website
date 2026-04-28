@@ -8,7 +8,10 @@ import { getActiveHomeInfoCards } from "../../lib/publicSite/publicHomeInfoCardS
 import { getTodayFlightIntents } from "../../lib/publicSite/publicFlightIntentService";
 import { getPublicFooterData } from "../../lib/publicSite/publicFooterService";
 import { anonymousViewer } from "../../lib/publicSite/publicVisibility";
-import { getVisiblePublicNavigation, getVisiblePublicActions } from "../../lib/publicSite/publicNavigation";
+import {
+  getVisiblePublicNavigation,
+  getVisiblePublicActions,
+} from "../../lib/publicSite/publicNavigation";
 
 interface ClubPageProps {
   params: Promise<{
@@ -19,19 +22,40 @@ interface ClubPageProps {
 export default async function ClubPage({ params }: ClubPageProps) {
   const { clubSlug } = await params;
 
+  // console.log("[ClubPage] PAGE PARAM clubSlug:", clubSlug);
+
   let club;
+
   try {
     club = await requireClubBySlug(clubSlug);
+
+  //  console.log("[ClubPage] RESOLVED CLUB:", {
+      id: club.id,
+      name: club.name,
+      slug: club.slug,
+      settings: club.settings,
+    });
   } catch (error) {
+    console.error("[ClubPage] FAILED TO RESOLVE CLUB:", {
+      clubSlug,
+      error,
+    });
+
     if (error instanceof TenancyError) {
+      console.error("[ClubPage] TenancyError -> returning notFound()", {
+        clubSlug,
+        message: error.message,
+      });
+
       notFound();
     }
+
     throw error;
   }
 
-  // Currently authentication is not implemented, so we use the anonymous viewer.
-  // In the future, this will be resolved from the session.
   const viewer = anonymousViewer;
+
+  console.log("[ClubPage] VIEWER:", viewer);
 
   const homePage = await getPublicHomePage(club.id);
   const theme = await getClubTheme(club.id);
@@ -41,27 +65,54 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const footerData = await getPublicFooterData(club.id);
   const navigationItems = getVisiblePublicNavigation(clubSlug, viewer);
   const actionItems = getVisiblePublicActions(clubSlug, viewer);
-  
-  // Prepare content from homePage or use empty object
-  // Based on PublicPage model: title, body, excerpt
-  const content = homePage ? {
-    heroTitle: homePage.title,
-    heroSubtitle: homePage.excerpt || undefined,
-    introBody: homePage.body,
-  } : {};
+
+  console.log("[ClubPage] DATA SUMMARY:", {
+    clubId: club.id,
+    hasHomePage: Boolean(homePage),
+    homePage,
+    hasTheme: Boolean(theme),
+    featureTilesCount: featureTiles.length,
+    infoCardsCount: infoCards.length,
+    flightIntentsCount: flightIntents.length,
+    hasFooterData: Boolean(footerData),
+    navigationItems: navigationItems.map((item) => ({
+      key: item.key,
+      label: item.label,
+      href: item.href,
+      visibility: item.visibility,
+    })),
+    actionItems: actionItems.map((item) => ({
+      key: item.key,
+      label: item.label,
+      href: item.href,
+      visibility: item.visibility,
+    })),
+  });
+
+  // Temporary mapping because getPublicHomePage currently returns PublicPage,
+  // not the dedicated PublicHomePage model.
+  const content = homePage
+      ? {
+        heroTitle: homePage.title,
+        heroSubtitle: homePage.excerpt || undefined,
+        introBody: homePage.body,
+      }
+      : {};
+
+  console.log("[ClubPage] CONTENT:", content);
 
   return (
-    <PublicClubHomePage 
-      clubName={club.settings?.shortName || club.name} 
-      clubDisplayName={club.settings?.displayName || club.name}
-      content={content}
-      theme={theme || undefined}
-      featureTiles={featureTiles}
-      infoCards={infoCards}
-      flightIntents={flightIntents}
-      footerData={footerData}
-      navigationItems={navigationItems}
-      actionItems={actionItems}
-    />
+      <PublicClubHomePage
+          clubName={club.settings?.shortName || club.name}
+          clubDisplayName={club.settings?.displayName || club.name}
+          content={content}
+          theme={theme || undefined}
+          featureTiles={featureTiles}
+          infoCards={infoCards}
+          flightIntents={flightIntents}
+          footerData={footerData}
+          navigationItems={navigationItems}
+          actionItems={actionItems}
+      />
   );
 }
