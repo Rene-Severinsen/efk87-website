@@ -4,6 +4,7 @@ import PublicClubHomePage from "../../components/publicSite/PublicClubHomePage";
 import { getPublicHomePage } from "../../lib/publicSite/publicHomePageService";
 import { getClubTheme } from "../../lib/publicSite/publicThemeService";
 import { getActiveHomeFeatureTiles } from "../../lib/publicSite/publicHomeFeatureTileService";
+import { getActiveHomeInfoCards } from "../../lib/publicSite/publicHomeInfoCardService";
 import { getTodayFlightIntents } from "../../lib/publicSite/publicFlightIntentService";
 
 interface ClubPageProps {
@@ -28,6 +29,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const homePage = await getPublicHomePage(club.id);
   const theme = await getClubTheme(club.id);
   const featureTiles = await getActiveHomeFeatureTiles(club.id);
+  const infoCards = await getActiveHomeInfoCards(club.id);
   const flightIntents = await getTodayFlightIntents(club.id);
   
   // Prepare content from homePage or use empty object
@@ -45,6 +47,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
       content={content}
       theme={theme || undefined}
       featureTiles={featureTiles}
+      infoCards={infoCards}
       flightIntents={flightIntents}
     />
   );

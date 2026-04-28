@@ -24,7 +24,27 @@ model Club {
   pages        Page[]
   publicPages  PublicPage[]
   featureTiles PublicHomeFeatureTile[]
+  homeInfoCards PublicHomeInfoCard[]
   flightIntents ClubFlightIntent[]
+}
+
+model PublicHomeInfoCard {
+  id        String   @id @default(cuid())
+  clubId    String
+  title     String
+  body      String
+  badge1    String?
+  badge2    String?
+  badge3    String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+
+  @@index([clubId, sortOrder])
+  @@index([clubId, isActive])
 }
 
 model ClubFlightIntent {

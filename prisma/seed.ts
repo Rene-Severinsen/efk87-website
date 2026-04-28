@@ -217,6 +217,51 @@ async function main() {
     }
   }
 
+  // Seed public home info cards for EFK87
+  const homeInfoCards = [
+    {
+      title: "Skoleflyvning i dag",
+      body: "Skoleflyvningen er aktiv fra kl. 11:00. Brug bane 2 til elevstarter frem til middag. Poul Andersen og Lars Mortensen er på pladsen.",
+      badge1: "4 elever tilmeldt",
+      badge2: "2 instruktører",
+      badge3: null,
+      sortOrder: 10,
+      isActive: true,
+    },
+    {
+      title: "Næste aktiviteter",
+      body: "Klubåbning og kaffe kl. 10:30 · Skoleflyvning kl. 11:00 · Bestyrelsesmøde onsdag kl. 19:00 · Forårsoprydning lørdag kl. 09:30.",
+      badge1: "Kalender",
+      badge2: "Live fra admin",
+      badge3: null,
+      sortOrder: 20,
+      isActive: true,
+    },
+  ];
+
+  for (const card of homeInfoCards) {
+    const existingCard = await prisma.publicHomeInfoCard.findFirst({
+      where: {
+        clubId: efk87.id,
+        title: card.title,
+      },
+    });
+
+    if (existingCard) {
+      await prisma.publicHomeInfoCard.update({
+        where: { id: existingCard.id },
+        data: card,
+      });
+    } else {
+      await prisma.publicHomeInfoCard.create({
+        data: {
+          clubId: efk87.id,
+          ...card,
+        },
+      });
+    }
+  }
+
   console.log({ efk87 });
   console.log("Seed finished.");
 }

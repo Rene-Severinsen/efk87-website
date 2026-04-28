@@ -22,6 +22,7 @@ The homepage content is structurally separate from generic public pages.
 
 - **Dedicated Service**: `publicHomePageService.ts` handles fetching the homepage record.
 - **Feature Tiles**: `publicHomeFeatureTileService.ts` handles fetching active feature tiles.
+- **Homepage Info Cards**: `publicHomeInfoCardService.ts` handles fetching active info cards (side cards).
 - **Branding & Theme**: `publicThemeService.ts` handles fetching tenant-scoped visual settings.
 - **Flight Intents (“Jeg flyver”)**: `publicFlightIntentService.ts` handles fetching active social presence indicators.
 - **Model Storage**: Currently uses the `PublicPage` model with the reserved slug `'home'`.
@@ -30,6 +31,13 @@ The homepage content is structurally separate from generic public pages.
   - Ordered by `sortOrder`.
   - Only `isActive` tiles are shown.
   - Image URLs are currently temporary placeholders.
+- **Homepage Info Card Model**: `PublicHomeInfoCard` handles lightweight homepage highlights (right-side hero cards).
+  - Tenant-scoped by `clubId`.
+  - Ordered by `sortOrder`.
+  - Only `isActive` cards are shown publicly.
+  - Supports up to 3 optional badges.
+  - Currently seeded, but designed to be admin-manageable later.
+  - Not an event or calendar record.
 - **Approved Design**: The homepage layout and design remain a locked visual reference.
 
 ## Visual Themes

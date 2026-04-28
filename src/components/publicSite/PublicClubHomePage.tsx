@@ -1,6 +1,6 @@
 import React from 'react';
 import './PublicClubHomePage.css';
-import { ClubTheme, PublicHomeFeatureTile, ClubFlightIntent } from "../../generated/prisma";
+import { ClubTheme, PublicHomeFeatureTile, ClubFlightIntent, PublicHomeInfoCard } from "../../generated/prisma";
 
 interface PublicHomePageData {
   heroTitle?: string;
@@ -15,6 +15,7 @@ interface PublicClubHomePageProps {
   content: PublicHomePageData;
   theme?: ClubTheme;
   featureTiles?: PublicHomeFeatureTile[];
+  infoCards?: PublicHomeInfoCard[];
   flightIntents?: ClubFlightIntent[];
 }
 
@@ -24,7 +25,7 @@ interface PublicClubHomePageProps {
  * This component preserves the visual hierarchy, section order, and layout
  * of the approved HTML/CSS mockup.
  */
-export default function PublicClubHomePage({ clubName, clubDisplayName, content, theme, featureTiles, flightIntents }: PublicClubHomePageProps) {
+export default function PublicClubHomePage({ clubName, clubDisplayName, content, theme, featureTiles, infoCards, flightIntents }: PublicClubHomePageProps) {
   // Use existing dynamic data where it fits, otherwise use mockup defaults
   const heroTitle = content.heroTitle || "En klubside med mere liv og bedre overblik.";
   const heroSubtitle = content.heroSubtitle || "Den nye forside er tænkt som en mere visuel indgang til klubben: aktivitet, indhold, hurtige valg og tydelige områder for både gæster, medlemmer og kommende medlemmer.";
@@ -111,24 +112,40 @@ export default function PublicClubHomePage({ clubName, clubDisplayName, content,
           </article>
 
           <div className="side-stack">
-            {/* Placeholder data - Static mockup data */}
-            <article className="card mini-card">
-              <h3>Skoleflyvning i dag</h3>
-              <p className="small">Skoleflyvningen er aktiv fra kl. 11:00. Brug bane 2 til elevstarter frem til middag. Poul Andersen og Lars Mortensen er på pladsen.</p>
-              <div className="meta-row">
-                <span className="meta-chip">4 elever tilmeldt</span>
-                <span className="meta-chip">2 instruktører</span>
-              </div>
-            </article>
+            {(infoCards && infoCards.length > 0) ? (
+              infoCards.map((card) => (
+                <article className="card mini-card" key={card.id}>
+                  <h3>{card.title}</h3>
+                  <p className="small">{card.body}</p>
+                  <div className="meta-row">
+                    {card.badge1 && <span className="meta-chip">{card.badge1}</span>}
+                    {card.badge2 && <span className="meta-chip">{card.badge2}</span>}
+                    {card.badge3 && <span className="meta-chip">{card.badge3}</span>}
+                  </div>
+                </article>
+              ))
+            ) : (
+              <>
+                {/* Placeholder data - Static mockup data */}
+                <article className="card mini-card">
+                  <h3>Skoleflyvning i dag</h3>
+                  <p className="small">Skoleflyvningen er aktiv fra kl. 11:00. Brug bane 2 til elevstarter frem til middag. Poul Andersen og Lars Mortensen er på pladsen.</p>
+                  <div className="meta-row">
+                    <span className="meta-chip">4 elever tilmeldt</span>
+                    <span className="meta-chip">2 instruktører</span>
+                  </div>
+                </article>
 
-            <article className="card mini-card">
-              <h3>Næste aktiviteter</h3>
-              <p className="small">Klubåbning og kaffe kl. 10:30 · Skoleflyvning kl. 11:00 · Bestyrelsesmøde onsdag kl. 19:00 · Forårsoprydning lørdag kl. 09:30.</p>
-              <div className="meta-row">
-                <span className="meta-chip">Kalender</span>
-                <span className="meta-chip">Live fra admin</span>
-              </div>
-            </article>
+                <article className="card mini-card">
+                  <h3>Næste aktiviteter</h3>
+                  <p className="small">Klubåbning og kaffe kl. 10:30 · Skoleflyvning kl. 11:00 · Bestyrelsesmøde onsdag kl. 19:00 · Forårsoprydning lørdag kl. 09:30.</p>
+                  <div className="meta-row">
+                    <span className="meta-chip">Kalender</span>
+                    <span className="meta-chip">Live fra admin</span>
+                  </div>
+                </article>
+              </>
+            )}
           </div>
         </section>
 
