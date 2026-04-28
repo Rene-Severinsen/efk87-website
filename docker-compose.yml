@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: efk87-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: efk87
+      POSTGRES_PASSWORD: efk87_dev_password
+      POSTGRES_DB: efk87_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - efk87_postgres_dev_data:/var/lib/postgresql/data
+
+volumes:
+  efk87_postgres_dev_data:
