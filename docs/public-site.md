@@ -32,6 +32,7 @@ The homepage content is structurally separate from generic public pages.
   - Ordered by `sortOrder`.
   - Only `isActive` tiles are shown.
   - Image URLs are currently temporary placeholders.
+  - **Visibility**: Supports `PUBLIC` and `MEMBERS_ONLY` visibility rules.
 - **Homepage Info Card Model**: `PublicHomeInfoCard` handles lightweight homepage highlights (right-side hero cards).
   - Tenant-scoped by `clubId`.
   - Ordered by `sortOrder`.
@@ -39,17 +40,31 @@ The homepage content is structurally separate from generic public pages.
   - Supports up to 3 optional badges.
   - Currently seeded, but designed to be admin-manageable later.
   - Not an event or calendar record.
+  - **Visibility**: Supports `PUBLIC` and `MEMBERS_ONLY` visibility rules.
 - **Public Club Footer Model**: `PublicClubFooter` handles club-specific footer content.
   - Tenant-scoped by `clubId` (unique).
   - Includes description, address, email, phone, and CVR.
   - Currently seeded, but designed to be admin-manageable later.
+  - **Visibility**: Currently remains `PUBLIC` for all visitors.
 - **Public Sponsor Model**: `PublicSponsor` handles simple public labels/links.
   - Tenant-scoped by `clubId`.
   - Ordered by `sortOrder`.
   - Only `isActive` sponsors are shown.
   - Logo/media handling is not yet implemented.
   - Currently seeded, but designed to be admin-manageable later.
+  - **Visibility**: Currently remains `PUBLIC` for all visitors.
 - **Approved Design**: The homepage layout and design remain a locked visual reference.
+
+## Visibility
+
+The platform implements a visibility foundation to distinguish between public and member-only content.
+
+- **Viewer Context**: Access is governed by `ViewerVisibilityContext` (anonymous, member, admin).
+- **Public View**: The current public homepage renders as an anonymous visitor.
+- **Rules**: `PUBLIC` content is seen by everyone; `MEMBERS_ONLY` requires authentication.
+- **Implementation**: Services filter data based on visibility; routes provide the viewer context.
+
+For more details, see [Visibility documentation](visibility.md).
 
 ## Visual Themes
 

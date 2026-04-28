@@ -7,6 +7,7 @@ import { getActiveHomeFeatureTiles } from "../../lib/publicSite/publicHomeFeatur
 import { getActiveHomeInfoCards } from "../../lib/publicSite/publicHomeInfoCardService";
 import { getTodayFlightIntents } from "../../lib/publicSite/publicFlightIntentService";
 import { getPublicFooterData } from "../../lib/publicSite/publicFooterService";
+import { anonymousViewer } from "../../lib/publicSite/publicVisibility";
 
 interface ClubPageProps {
   params: Promise<{
@@ -27,11 +28,15 @@ export default async function ClubPage({ params }: ClubPageProps) {
     throw error;
   }
 
+  // Currently authentication is not implemented, so we use the anonymous viewer.
+  // In the future, this will be resolved from the session.
+  const viewer = anonymousViewer;
+
   const homePage = await getPublicHomePage(club.id);
   const theme = await getClubTheme(club.id);
-  const featureTiles = await getActiveHomeFeatureTiles(club.id);
-  const infoCards = await getActiveHomeInfoCards(club.id);
-  const flightIntents = await getTodayFlightIntents(club.id);
+  const featureTiles = await getActiveHomeFeatureTiles(club.id, viewer);
+  const infoCards = await getActiveHomeInfoCards(club.id, viewer);
+  const flightIntents = await getTodayFlightIntents(club.id, viewer);
   const footerData = await getPublicFooterData(club.id);
   
   // Prepare content from homePage or use empty object

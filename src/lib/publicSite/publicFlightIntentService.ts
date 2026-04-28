@@ -1,21 +1,32 @@
 import prisma from "../db/prisma";
 import { ClubFlightIntentStatus, ClubFlightIntentVisibility } from "../../generated/prisma";
+import { ViewerVisibilityContext } from "./publicVisibility";
 
 /**
  * Service for public-facing flight intent data.
- * All queries are scoped by clubId and restricted to ACTIVE + PUBLIC rows.
+ * All queries are scoped by clubId and restricted by visibility.
  */
 
 /**
- * Returns all active public flight intents for a club.
+ * Returns all active flight intents for a club, filtered by visibility.
  * Note: This includes future intents. Use getTodayFlightIntents for the daily presence list.
  */
-export async function getActiveFlightIntents(clubId: string) {
+export async function getActiveFlightIntents(
+  clubId: string,
+  viewer: ViewerVisibilityContext
+) {
+  const allowedVisibilities: ClubFlightIntentVisibility[] = ["PUBLIC"];
+  if (viewer.isAuthenticated && (viewer.isMember || viewer.isAdmin)) {
+    allowedVisibilities.push("MEMBERS_ONLY");
+  }
+
   return prisma.clubFlightIntent.findMany({
     where: {
       clubId,
       status: ClubFlightIntentStatus.ACTIVE,
-      visibility: ClubFlightIntentVisibility.PUBLIC,
+      visibility: {
+        in: allowedVisibilities,
+      },
     },
     orderBy: {
       createdAt: 'desc',
@@ -25,9 +36,17 @@ export async function getActiveFlightIntents(clubId: string) {
 }
 
 /**
- * Returns active public flight intents for today's daily presence list.
+ * Returns active flight intents for today's daily presence list, filtered by visibility.
  */
-export async function getTodayFlightIntents(clubId: string) {
+export async function getTodayFlightIntents(
+  clubId: string,
+  viewer: ViewerVisibilityContext
+) {
+  const allowedVisibilities: ClubFlightIntentVisibility[] = ["PUBLIC"];
+  if (viewer.isAuthenticated && (viewer.isMember || viewer.isAdmin)) {
+    allowedVisibilities.push("MEMBERS_ONLY");
+  }
+
   const now = new Date();
   const startOfToday = new Date(now);
   startOfToday.setHours(0, 0, 0, 0);
@@ -39,7 +58,9 @@ export async function getTodayFlightIntents(clubId: string) {
     where: {
       clubId,
       status: ClubFlightIntentStatus.ACTIVE,
-      visibility: ClubFlightIntentVisibility.PUBLIC,
+      visibility: {
+        in: allowedVisibilities,
+      },
       flightDate: {
         gte: startOfToday,
         lte: endOfToday,

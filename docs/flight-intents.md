@@ -29,22 +29,30 @@ The `ClubFlightIntent` model includes:
 
 - **Intended Date:** `flightDate` represents the calendar day the member intends to be active. 
 - **Timezone:** Timezone handling must respect `Europe/Copenhagen`.
-- **Homepage Visibility:** The public homepage currently shows today's list only. It filters for rows where:
-    - `status` is `ACTIVE`
-    - `visibility` is `PUBLIC`
-    - `flightDate` is the current date
-    - `expiresAt` is null or in the future
+- **Homepage Visibility**: The public homepage currently shows today's list only. It filters based on the viewer's visibility context. 
+    - For anonymous visitors, it only shows rows where `visibility` is `PUBLIC`.
+    - It also filters for `status` is `ACTIVE`, `flightDate` is the current date, and `expiresAt` is null or in the future.
 - **Retention:** Past rows remain stored for future statistics. Do not delete old rows.
 - **Future intents:** Future-dated flight intents are supported at the data level but are not displayed on today's homepage.
-- **Submit Flow (Future):** Future UI must support selecting today or a future date.
+- **Submit Flow (Future):** "Jeg flyver" submission will be a `MEMBERS_ONLY` action. Future UI must support selecting today or a future date.
 
 ## Shared Service
 
 All public flight intent queries must go through `src/lib/publicSite/publicFlightIntentService.ts`.
-- `getTodayFlightIntents(clubId)`: Used for the daily presence list on the homepage.
-- `getActiveFlightIntents(clubId)`: Returns all active intents, including future ones.
+- `getTodayFlightIntents(clubId, viewer)`: Used for the daily presence list on the homepage, respecting visibility.
+- `getActiveFlightIntents(clubId, viewer)`: Returns all active intents, including future ones, respecting visibility.
 
 Direct Prisma queries in route pages are discouraged.
+
+## Visibility
+
+- **Foundation**: `ClubFlightIntent` uses the `ClubFlightIntentVisibility` enum.
+- **PUBLIC**: Visible to everyone (anonymous visitors).
+- **MEMBERS_ONLY**: Visible only to logged-in members or admins.
+- **Anonymous Route**: The current homepage route uses `anonymousViewer` and only exposes `PUBLIC` intents.
+- **Future Actions**: The submission of new intents will require future login/member flow and will likely default to `MEMBERS_ONLY` for real activity, while demo data remains `PUBLIC` for now.
+
+For more details on visibility, see [Visibility documentation](visibility.md).
 
 ## Analytics & Statistics
 

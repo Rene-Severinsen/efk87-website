@@ -61,6 +61,11 @@ model PublicSponsor {
   @@index([clubId, isActive])
 }
 
+enum PublicSurfaceVisibility {
+  PUBLIC
+  MEMBERS_ONLY
+}
+
 model PublicHomeInfoCard {
   id        String   @id @default(cuid())
   clubId    String
@@ -71,6 +76,7 @@ model PublicHomeInfoCard {
   badge3    String?
   sortOrder Int      @default(0)
   isActive  Boolean  @default(true)
+  visibility PublicSurfaceVisibility @default(PUBLIC)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -78,6 +84,8 @@ model PublicHomeInfoCard {
 
   @@index([clubId, sortOrder])
   @@index([clubId, isActive])
+  @@index([clubId, visibility, isActive])
+  @@index([clubId, visibility, sortOrder])
 }
 
 model ClubFlightIntent {
@@ -141,6 +149,7 @@ model PublicHomeFeatureTile {
   imageUrl    String?
   sortOrder   Int      @default(0)
   isActive    Boolean  @default(true)
+  visibility  PublicSurfaceVisibility @default(PUBLIC)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -148,6 +157,8 @@ model PublicHomeFeatureTile {
 
   @@index([clubId, sortOrder])
   @@index([clubId, isActive])
+  @@index([clubId, visibility, isActive])
+  @@index([clubId, visibility, sortOrder])
 }
 
 model ClubTheme {

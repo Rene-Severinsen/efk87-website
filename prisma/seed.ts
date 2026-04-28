@@ -1,5 +1,12 @@
 import prisma from "../src/lib/db/prisma";
-import { PublicPageStatus, ClubFlightIntentType, ClubFlightIntentStatus, ClubFlightIntentSource, ClubFlightIntentVisibility } from "../src/generated/prisma";
+import { 
+  PublicPageStatus, 
+  ClubFlightIntentType, 
+  ClubFlightIntentStatus, 
+  ClubFlightIntentSource, 
+  ClubFlightIntentVisibility,
+  PublicSurfaceVisibility 
+} from "../src/generated/prisma";
 
 async function main() {
   console.log("Seeding database...");
@@ -86,6 +93,7 @@ async function main() {
       imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
       sortOrder: 10,
       isActive: true,
+      visibility: PublicSurfaceVisibility.PUBLIC,
     },
     {
       title: "Galleri",
@@ -94,6 +102,7 @@ async function main() {
       imageUrl: "https://images.unsplash.com/photo-1508615070457-7baeba4003ab?auto=format&fit=crop&w=1200&q=80",
       sortOrder: 20,
       isActive: true,
+      visibility: PublicSurfaceVisibility.PUBLIC,
     },
     {
       title: "Flyveskole",
@@ -102,6 +111,7 @@ async function main() {
       imageUrl: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
       sortOrder: 30,
       isActive: true,
+      visibility: PublicSurfaceVisibility.PUBLIC,
     },
     {
       title: "Om EFK87",
@@ -110,6 +120,7 @@ async function main() {
       imageUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80",
       sortOrder: 40,
       isActive: true,
+      visibility: PublicSurfaceVisibility.PUBLIC,
     },
   ];
 
@@ -142,6 +153,7 @@ async function main() {
   // Seed mockup-style active flight intents for EFK87
   // These are demo/homepage seed data
   // Current local date in this context is 2026-04-29
+  // Note: "Jeg flyver" submit action is members-only later, but for now we seed demo data as PUBLIC.
   const flightIntents = [
     {
       displayName: "René Severinsen",
@@ -227,6 +239,7 @@ async function main() {
       badge3: null,
       sortOrder: 10,
       isActive: true,
+      visibility: PublicSurfaceVisibility.PUBLIC,
     },
     {
       title: "Næste aktiviteter",
@@ -236,6 +249,7 @@ async function main() {
       badge3: null,
       sortOrder: 20,
       isActive: true,
+      visibility: PublicSurfaceVisibility.PUBLIC,
     },
   ];
 
