@@ -24,6 +24,56 @@ model Club {
   pages        Page[]
   publicPages  PublicPage[]
   featureTiles PublicHomeFeatureTile[]
+  flightIntents ClubFlightIntent[]
+}
+
+model ClubFlightIntent {
+  id           String                 @id @default(cuid())
+  clubId       String
+  displayName  String
+  message      String?
+  activityType ClubFlightIntentType
+  status       ClubFlightIntentStatus @default(ACTIVE)
+  source       ClubFlightIntentSource @default(MANUAL)
+  visibility   ClubFlightIntentVisibility @default(PUBLIC)
+  plannedAt    DateTime?
+  expiresAt    DateTime?
+  cancelledAt  DateTime?
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+
+  @@index([clubId, status, createdAt])
+  @@index([clubId, plannedAt])
+  @@index([clubId, activityType, createdAt])
+  @@index([clubId, source, createdAt])
+}
+
+enum ClubFlightIntentType {
+  FLYING
+  MAINTENANCE
+  WEATHER_DEPENDENT
+  TRAINING
+  SOCIAL
+  OTHER
+}
+
+enum ClubFlightIntentStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+}
+
+enum ClubFlightIntentSource {
+  MANUAL
+  ADMIN_SEED
+  FUTURE_MEMBER_APP
+}
+
+enum ClubFlightIntentVisibility {
+  PUBLIC
+  MEMBERS_ONLY
 }
 
 model PublicHomeFeatureTile {

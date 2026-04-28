@@ -1,6 +1,6 @@
 import React from 'react';
 import './PublicClubHomePage.css';
-import { ClubTheme, PublicHomeFeatureTile } from "../../generated/prisma";
+import { ClubTheme, PublicHomeFeatureTile, ClubFlightIntent } from "../../generated/prisma";
 
 interface PublicHomePageData {
   heroTitle?: string;
@@ -15,6 +15,7 @@ interface PublicClubHomePageProps {
   content: PublicHomePageData;
   theme?: ClubTheme;
   featureTiles?: PublicHomeFeatureTile[];
+  flightIntents?: ClubFlightIntent[];
 }
 
 /**
@@ -23,7 +24,7 @@ interface PublicClubHomePageProps {
  * This component preserves the visual hierarchy, section order, and layout
  * of the approved HTML/CSS mockup.
  */
-export default function PublicClubHomePage({ clubName, clubDisplayName, content, theme, featureTiles }: PublicClubHomePageProps) {
+export default function PublicClubHomePage({ clubName, clubDisplayName, content, theme, featureTiles, flightIntents }: PublicClubHomePageProps) {
   // Use existing dynamic data where it fits, otherwise use mockup defaults
   const heroTitle = content.heroTitle || "En klubside med mere liv og bedre overblik.";
   const heroSubtitle = content.heroSubtitle || "Den nye forside er tænkt som en mere visuel indgang til klubben: aktivitet, indhold, hurtige valg og tydelige områder for både gæster, medlemmer og kommende medlemmer.";
@@ -49,6 +50,23 @@ export default function PublicClubHomePage({ clubName, clubDisplayName, content,
     gallery: 'https://images.unsplash.com/photo-1508615070457-7baeba4003ab?auto=format&fit=crop&w=1200&q=80',
     flyveskole: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
     about: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80',
+  };
+
+  const activityIcons: Record<string, string> = {
+    FLYING: '✈️',
+    MAINTENANCE: '🛠️',
+    WEATHER_DEPENDENT: '🌬️',
+    TRAINING: '🎓',
+    SOCIAL: '☕',
+    OTHER: '•',
+  };
+
+  const formatTime = (date: Date) => {
+    return new Intl.DateTimeFormat('da-DK', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(new Date(date));
   };
 
   return (
@@ -193,8 +211,9 @@ export default function PublicClubHomePage({ clubName, clubDisplayName, content,
               <div className="griffin">🦅</div>
               <div>
                 <h3>Gribben basker – der er aktivitet i dag</h3>
-                <p className="small">7 medlemmer har meldt “jeg flyver” i dag. Når første medlem melder sig, skifter gribben status og beskeden sendes til den valgte mailingliste.</p>
+                <p className="small">{(flightIntents?.length || 0) > 0 ? `${flightIntents?.length} medlemmer har meldt “jeg flyver” i dag.` : "Der er endnu ingen der har meldt deres ankomst i dag."} Når første medlem melder sig, skifter gribben status og beskeden sendes til den valgte mailingliste.</p>
                 <div className="hero-actions" style={{ marginTop: '14px' }}>
+                  {/* Submit flow requires future auth/member implementation */}
                   <a className="pill primary" href="#">Skriv “jeg flyver”</a>
                   <a className="pill" href="#">Se dagens liste</a>
                 </div>
@@ -202,33 +221,48 @@ export default function PublicClubHomePage({ clubName, clubDisplayName, content,
             </div>
 
             <div className="list">
-              {/* Placeholder: "Jeg flyver" rows */}
-              <div className="row-item">
-                <div className="row-icon">✈️</div>
-                <div>
-                  <div className="row-title">René Severinsen</div>
-                  <div className="row-sub">“Kommer ca. 11:15 med DG-800.”</div>
-                </div>
-                <span className="status-badge info">09:07</span>
-              </div>
+              {flightIntents && flightIntents.length > 0 ? (
+                flightIntents.map((intent) => (
+                  <div className="row-item" key={intent.id}>
+                    <div className="row-icon">{activityIcons[intent.activityType] || '•'}</div>
+                    <div>
+                      <div className="row-title">{intent.displayName}</div>
+                      {intent.message && <div className="row-sub">“{intent.message}”</div>}
+                    </div>
+                    <span className="status-badge info">{formatTime(intent.createdAt)}</span>
+                  </div>
+                ))
+              ) : (
+                <>
+                  {/* Placeholder fallback if no flight intents exist */}
+                  <div className="row-item">
+                    <div className="row-icon">✈️</div>
+                    <div>
+                      <div className="row-title">René Severinsen</div>
+                      <div className="row-sub">“Kommer ca. 11:15 med DG-800.”</div>
+                    </div>
+                    <span className="status-badge info">09:07</span>
+                  </div>
 
-              <div className="row-item">
-                <div className="row-icon">🛠️</div>
-                <div>
-                  <div className="row-title">Lars Mikkelsen</div>
-                  <div className="row-sub">“Er på pladsen fra 10:30. Tager lader med til 6S hvis nogen mangler.”</div>
-                </div>
-                <span className="status-badge info">08:48</span>
-              </div>
+                  <div className="row-item">
+                    <div className="row-icon">🛠️</div>
+                    <div>
+                      <div className="row-title">Lars Mikkelsen</div>
+                      <div className="row-sub">“Er på pladsen fra 10:30. Tager lader med til 6S hvis nogen mangler.”</div>
+                    </div>
+                    <span className="status-badge info">08:48</span>
+                  </div>
 
-              <div className="row-item">
-                <div className="row-icon">🌬️</div>
-                <div>
-                  <div className="row-title">Søren Østergaard</div>
-                  <div className="row-sub">“Ser vinden an – hvis den holder sig under 6 m/s kommer jeg med skræntkassen.”</div>
-                </div>
-                <span className="status-badge info">08:12</span>
-              </div>
+                  <div className="row-item">
+                    <div className="row-icon">🌬️</div>
+                    <div>
+                      <div className="row-title">Søren Østergaard</div>
+                      <div className="row-sub">“Ser vinden an – hvis den holder sig under 6 m/s kommer jeg med skræntkassen.”</div>
+                    </div>
+                    <span className="status-badge info">08:12</span>
+                  </div>
+                </>
+              )}
             </div>
           </article>
 

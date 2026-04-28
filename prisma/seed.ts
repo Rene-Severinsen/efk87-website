@@ -1,5 +1,5 @@
 import prisma from "../src/lib/db/prisma";
-import { PublicPageStatus } from "../src/generated/prisma";
+import { PublicPageStatus, ClubFlightIntentType, ClubFlightIntentStatus, ClubFlightIntentSource, ClubFlightIntentVisibility } from "../src/generated/prisma";
 
 async function main() {
   console.log("Seeding database...");
@@ -134,6 +134,63 @@ async function main() {
         data: {
           clubId: efk87.id,
           ...tile,
+        },
+      });
+    }
+  }
+
+  // Seed mockup-style active flight intents for EFK87
+  // These are demo/homepage seed data
+  const flightIntents = [
+    {
+      displayName: "René Severinsen",
+      message: "Kommer ca. 11:15 med DG-800.",
+      activityType: ClubFlightIntentType.FLYING,
+      status: ClubFlightIntentStatus.ACTIVE,
+      source: ClubFlightIntentSource.ADMIN_SEED,
+      visibility: ClubFlightIntentVisibility.PUBLIC,
+      createdAt: new Date("2026-04-28T09:07:00Z"),
+      plannedAt: new Date("2026-04-28T11:15:00Z"),
+      expiresAt: new Date("2026-04-28T20:00:00Z"),
+    },
+    {
+      displayName: "Lars Mikkelsen",
+      message: "Er på pladsen fra 10:30. Tager lader med til 6S hvis nogen mangler.",
+      activityType: ClubFlightIntentType.MAINTENANCE,
+      status: ClubFlightIntentStatus.ACTIVE,
+      source: ClubFlightIntentSource.ADMIN_SEED,
+      visibility: ClubFlightIntentVisibility.PUBLIC,
+      createdAt: new Date("2026-04-28T08:48:00Z"),
+      plannedAt: new Date("2026-04-28T10:30:00Z"),
+      expiresAt: new Date("2026-04-28T20:00:00Z"),
+    },
+    {
+      displayName: "Søren Østergaard",
+      message: "Ser vinden an – hvis den holder sig under 6 m/s kommer jeg med skræntkassen.",
+      activityType: ClubFlightIntentType.WEATHER_DEPENDENT,
+      status: ClubFlightIntentStatus.ACTIVE,
+      source: ClubFlightIntentSource.ADMIN_SEED,
+      visibility: ClubFlightIntentVisibility.PUBLIC,
+      createdAt: new Date("2026-04-28T08:12:00Z"),
+      plannedAt: new Date("2026-04-28T10:00:00Z"),
+      expiresAt: new Date("2026-04-28T20:00:00Z"),
+    },
+  ];
+
+  for (const intent of flightIntents) {
+    const existingIntent = await prisma.clubFlightIntent.findFirst({
+      where: {
+        clubId: efk87.id,
+        displayName: intent.displayName,
+        createdAt: intent.createdAt,
+      },
+    });
+
+    if (!existingIntent) {
+      await prisma.clubFlightIntent.create({
+        data: {
+          clubId: efk87.id,
+          ...intent,
         },
       });
     }

@@ -23,6 +23,7 @@ The homepage content is structurally separate from generic public pages.
 - **Dedicated Service**: `publicHomePageService.ts` handles fetching the homepage record.
 - **Feature Tiles**: `publicHomeFeatureTileService.ts` handles fetching active feature tiles.
 - **Branding & Theme**: `publicThemeService.ts` handles fetching tenant-scoped visual settings.
+- **Flight Intents (“Jeg flyver”)**: `publicFlightIntentService.ts` handles fetching active social presence indicators.
 - **Model Storage**: Currently uses the `PublicPage` model with the reserved slug `'home'`.
 - **Feature Tile Model**: `PublicHomeFeatureTile` handles the four main call-to-action tiles.
   - Tenant-scoped by `clubId`.
@@ -42,8 +43,9 @@ Visual settings are managed per club through the `ClubTheme` model.
 
 ## Data Management
 - **Dynamic Content**: Hero title and subtitle are sourced from the `PublicPage` model via `publicHomePageService`.
-- **Static Placeholders**: Content for "Jeg flyver", forum activity, social highlights, and sponsors are currently static placeholders and will be modeled in future tasks.
-- **"Jeg flyver"**: This is a future social presence feature, not a standard event model.
+- **Flight Intents**: "Jeg flyver" data is fetched via `publicFlightIntentService` and rendered on the homepage.
+- **Static Placeholders**: Content for forum activity, social highlights, and sponsors are currently static placeholders and will be modeled in future tasks.
+- **"Jeg flyver" Domain**: This is a social presence feature, not a standard event model. See [Flight Intents documentation](flight-intents.md) for details.
 
 ## Components
 
