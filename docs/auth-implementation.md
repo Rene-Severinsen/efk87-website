@@ -94,7 +94,7 @@ For development and verification of protected member routes, a local test member
   - It must not be treated as a real member.
   - It is guarded in the seed file and only created when `APP_ENV` is `development`.
   - It must not be seeded in production long term.
-  - Magic link testing still requires `AUTH_EMAIL_LOGIN_ENABLED=true` and safe SMTP/mail capture.
+  - Magic link testing still requires `AUTH_EMAIL_LOGIN_ENABLED=true` and safe SMTP/mail capture. See [Local Magic Link Testing Workflow](./auth-local-testing.md) for details.
   - Authentication alone is not enough; matching User email and `ACTIVE` `ClubMembership` are required.
 
 ### Email Delivery
