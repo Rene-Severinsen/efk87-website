@@ -1,4 +1,5 @@
-import { auth } from "../../auth";
+import { getServerSession } from "next-auth";
+import { authConfig } from "../../auth";
 import prisma from "../db/prisma";
 import { 
   MembershipStatus, 
@@ -19,7 +20,7 @@ export type ServerViewerContext = {
 };
 
 export async function getServerViewerForClub(clubId: string): Promise<ServerViewerContext> {
-  const session = await auth();
+  const session = await getServerSession(authConfig);
 
   const anonymousViewer: ServerViewerContext = {
     isAuthenticated: false,
