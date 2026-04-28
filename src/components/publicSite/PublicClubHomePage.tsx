@@ -1,6 +1,6 @@
 import React from 'react';
 import './PublicClubHomePage.css';
-import { ClubTheme } from "../../generated/prisma";
+import { ClubTheme, PublicHomeFeatureTile } from "../../generated/prisma";
 
 interface PublicHomePageData {
   heroTitle?: string;
@@ -14,6 +14,7 @@ interface PublicClubHomePageProps {
   clubDisplayName: string;
   content: PublicHomePageData;
   theme?: ClubTheme;
+  featureTiles?: PublicHomeFeatureTile[];
 }
 
 /**
@@ -22,7 +23,7 @@ interface PublicClubHomePageProps {
  * This component preserves the visual hierarchy, section order, and layout
  * of the approved HTML/CSS mockup.
  */
-export default function PublicClubHomePage({ clubName, clubDisplayName, content, theme }: PublicClubHomePageProps) {
+export default function PublicClubHomePage({ clubName, clubDisplayName, content, theme, featureTiles }: PublicClubHomePageProps) {
   // Use existing dynamic data where it fits, otherwise use mockup defaults
   const heroTitle = content.heroTitle || "En klubside med mere liv og bedre overblik.";
   const heroSubtitle = content.heroSubtitle || "Den nye forside er tænkt som en mere visuel indgang til klubben: aktivitet, indhold, hurtige valg og tydelige områder for både gæster, medlemmer og kommende medlemmer.";
@@ -114,49 +115,71 @@ export default function PublicClubHomePage({ clubName, clubDisplayName, content,
         </section>
 
         <section className="tile-grid">
-          {/* Tile: Forum */}
-          <article className="tile">
-            <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.forum}')` }}>
-              <h3>Forum</h3>
-            </div>
-            <div className="tile-body">
-              <p>Følg dialogen i klubben, se nye tråde og del erfaringer om udstyr, ture og flyvning.</p>
-              <a className="tile-link" href="#">Åbn forum</a>
-            </div>
-          </article>
+          {(featureTiles && featureTiles.length > 0) ? (
+            featureTiles.map((tile) => (
+              <article className="tile" key={tile.id}>
+                <div className="tile-hero" style={{ backgroundImage: `url('${tile.imageUrl || IMAGES.heroMain}')` }}>
+                  <h3>{tile.title}</h3>
+                </div>
+                <div className="tile-body">
+                  <p>{tile.description}</p>
+                  <a className="tile-link" href={tile.href}>
+                    {tile.title === "Forum" && "Åbn forum"}
+                    {tile.title === "Galleri" && "Åbn galleri"}
+                    {tile.title === "Flyveskole" && "Se flyveskolen"}
+                    {tile.title.startsWith("Om ") && "Læs om klubben"}
+                    {!(tile.title === "Forum" || tile.title === "Galleri" || tile.title === "Flyveskole" || tile.title.startsWith("Om ")) && "Læs mere"}
+                  </a>
+                </div>
+              </article>
+            ))
+          ) : (
+            <>
+              {/* Tile: Forum */}
+              <article className="tile">
+                <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.forum}')` }}>
+                  <h3>Forum</h3>
+                </div>
+                <div className="tile-body">
+                  <p>Følg dialogen i klubben, se nye tråde og del erfaringer om udstyr, ture og flyvning.</p>
+                  <a className="tile-link" href="#">Åbn forum</a>
+                </div>
+              </article>
 
-          {/* Tile: Galleri */}
-          <article className="tile">
-            <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.gallery}')` }}>
-              <h3>Galleri</h3>
-            </div>
-            <div className="tile-body">
-              <p>Se klubbens albums, seneste uploads og udvalgt aktivitet fra Facebook og Instagram.</p>
-              <a className="tile-link" href="#">Åbn galleri</a>
-            </div>
-          </article>
+              {/* Tile: Galleri */}
+              <article className="tile">
+                <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.gallery}')` }}>
+                  <h3>Galleri</h3>
+                </div>
+                <div className="tile-body">
+                  <p>Se klubbens albums, seneste uploads og udvalgt aktivitet fra Facebook og Instagram.</p>
+                  <a className="tile-link" href="#">Åbn galleri</a>
+                </div>
+              </article>
 
-          {/* Tile: Flyveskole */}
-          <article className="tile">
-            <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.flyveskole}')` }}>
-              <h3>Flyveskole</h3>
-            </div>
-            <div className="tile-body">
-              <p>Find vej ind i sporten med instruktører, skolekalender og en enkel introduktion til forløbet.</p>
-              <a className="tile-link" href="#">Se flyveskolen</a>
-            </div>
-          </article>
+              {/* Tile: Flyveskole */}
+              <article className="tile">
+                <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.flyveskole}')` }}>
+                  <h3>Flyveskole</h3>
+                </div>
+                <div className="tile-body">
+                  <p>Find vej ind i sporten med instruktører, skolekalender og en enkel introduktion til forløbet.</p>
+                  <a className="tile-link" href="#">Se flyveskolen</a>
+                </div>
+              </article>
 
-          {/* Tile: Om EFK87 */}
-          <article className="tile">
-            <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.about}')` }}>
-              <h3>Om {clubName}</h3>
-            </div>
-            <div className="tile-body">
-              <p>Bestyrelse, regler, kontakt, vejvisning og de områder der kræver login som medlem.</p>
-              <a className="tile-link" href="#">Læs om klubben</a>
-            </div>
-          </article>
+              {/* Tile: Om EFK87 */}
+              <article className="tile">
+                <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.about}')` }}>
+                  <h3>Om {clubName}</h3>
+                </div>
+                <div className="tile-body">
+                  <p>Bestyrelse, regler, kontakt, vejvisning og de områder der kræver login som medlem.</p>
+                  <a className="tile-link" href="#">Læs om klubben</a>
+                </div>
+              </article>
+            </>
+          )}
         </section>
 
         <section className="activity-layout">

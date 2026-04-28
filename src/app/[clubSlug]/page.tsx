@@ -3,6 +3,7 @@ import { requireClubBySlug, TenancyError } from "../../lib/tenancy/tenantService
 import PublicClubHomePage from "../../components/publicSite/PublicClubHomePage";
 import { getPublicHomePage } from "../../lib/publicSite/publicHomePageService";
 import { getClubTheme } from "../../lib/publicSite/publicThemeService";
+import { getActiveHomeFeatureTiles } from "../../lib/publicSite/publicHomeFeatureTileService";
 
 interface ClubPageProps {
   params: Promise<{
@@ -25,6 +26,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
 
   const homePage = await getPublicHomePage(club.id);
   const theme = await getClubTheme(club.id);
+  const featureTiles = await getActiveHomeFeatureTiles(club.id);
   
   // Prepare content from homePage or use empty object
   // Based on PublicPage model: title, body, excerpt
@@ -40,6 +42,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
       clubDisplayName={club.settings?.displayName || club.name}
       content={content}
       theme={theme || undefined}
+      featureTiles={featureTiles}
     />
   );
 }

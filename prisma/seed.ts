@@ -77,6 +77,68 @@ async function main() {
     });
   }
 
+  // Seed feature tiles for EFK87
+  const featureTiles = [
+    {
+      title: "Forum",
+      description: "Følg dialogen i klubben, se nye tråde og del erfaringer om udstyr, ture og flyvning.",
+      href: "/efk87/forum",
+      imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
+      sortOrder: 10,
+      isActive: true,
+    },
+    {
+      title: "Galleri",
+      description: "Se klubbens albums, seneste uploads og udvalgt aktivitet fra Facebook og Instagram.",
+      href: "/efk87/galleri",
+      imageUrl: "https://images.unsplash.com/photo-1508615070457-7baeba4003ab?auto=format&fit=crop&w=1200&q=80",
+      sortOrder: 20,
+      isActive: true,
+    },
+    {
+      title: "Flyveskole",
+      description: "Find vej ind i sporten med instruktører, skolekalender og en enkel introduktion til forløbet.",
+      href: "/efk87/flyveskole",
+      imageUrl: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
+      sortOrder: 30,
+      isActive: true,
+    },
+    {
+      title: "Om EFK87",
+      description: "Bestyrelse, regler, kontakt, vejvisning og de områder der kræver login som medlem.",
+      href: "/efk87/about",
+      imageUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80",
+      sortOrder: 40,
+      isActive: true,
+    },
+  ];
+
+  for (const tile of featureTiles) {
+    // We use title as a simple way to identify tiles for idempotency in this seed
+    // In a real scenario, we might want a slug or a stable ID if we had one.
+    // For now, checking by clubId and title/href is enough for seed idempotency.
+    const existingTile = await prisma.publicHomeFeatureTile.findFirst({
+      where: {
+        clubId: efk87.id,
+        href: tile.href,
+      },
+    });
+
+    if (existingTile) {
+      await prisma.publicHomeFeatureTile.update({
+        where: { id: existingTile.id },
+        data: tile,
+      });
+    } else {
+      await prisma.publicHomeFeatureTile.create({
+        data: {
+          clubId: efk87.id,
+          ...tile,
+        },
+      });
+    }
+  }
+
   console.log({ efk87 });
   console.log("Seed finished.");
 }

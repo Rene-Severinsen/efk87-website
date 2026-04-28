@@ -21,8 +21,14 @@ Currently, the public club navigation is defined statically in `src/lib/publicSi
 The homepage content is structurally separate from generic public pages.
 
 - **Dedicated Service**: `publicHomePageService.ts` handles fetching the homepage record.
+- **Feature Tiles**: `publicHomeFeatureTileService.ts` handles fetching active feature tiles.
 - **Branding & Theme**: `publicThemeService.ts` handles fetching tenant-scoped visual settings.
 - **Model Storage**: Currently uses the `PublicPage` model with the reserved slug `'home'`.
+- **Feature Tile Model**: `PublicHomeFeatureTile` handles the four main call-to-action tiles.
+  - Tenant-scoped by `clubId`.
+  - Ordered by `sortOrder`.
+  - Only `isActive` tiles are shown.
+  - Image URLs are currently temporary placeholders.
 - **Approved Design**: The homepage layout and design remain a locked visual reference.
 
 ## Visual Themes
