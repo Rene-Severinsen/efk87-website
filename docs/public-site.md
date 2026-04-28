@@ -109,8 +109,21 @@ Visual settings are managed per club through the `ClubTheme` model.
 - **URL Generation**: All public site navigation URLs must be generated using the tenant slug to ensure they are correctly scoped to the current club.
 - **Server Rendering**: Keep public site components server-rendered where possible to optimize for SEO and performance. Avoid client-side state unless strictly required.
 - **Route List**:
-  - `/[clubSlug]`: Home
-  - `/[clubSlug]/about`: About
-  - `/[clubSlug]/events`: Events
-  - `/[clubSlug]/members`: Members (Placeholder, not authenticated/protected yet)
+  - `/[clubSlug]`: Forside (Home)
+  - `/[clubSlug]/about`: Om klubben (PublicPage content)
+  - `/[clubSlug]/galleri`: Galleri (PublicPage content stub)
+  - `/[clubSlug]/artikler`: Artikler (PublicPage content stub)
+  - `/[clubSlug]/flyveskole`: Flyveskole (PublicPage content stub)
+  - `/[clubSlug]/bliv-medlem`: Bliv medlem (PublicPage content stub)
+  - `/[clubSlug]/login`: Log ind (Placeholder only, no auth implementation)
+
+### Public Route Details
+- **Content Stubs**: Galleri, Artikler, Flyveskole, and Bliv medlem use the `PublicPage` model via `publicPageService`. They currently contain seed content for EFK87 and serve as visual/structural stubs.
+- **Login Placeholder**: The login page is a visual placeholder only. It does not implement real authentication, session handling, or form fields. A code comment indicates that auth/session handling is intentionally skipped in this scope.
+- **Member-only Areas**: Forum (`/[clubSlug]/forum`) and My Profile (`/[clubSlug]/profil`) are intended for members only and are hidden from anonymous visitors in the navigation.
+- **Scope Limitations**:
+  - Gallery and Articles do not have a backend feature or media library yet.
+  - Calendar and event logic are not implemented.
+  - Forum backend is not implemented.
+  - No CMS editor or Admin UI for managing these pages yet.
 - **Content Management**: Real content for these pages will later be CMS/admin-managed where relevant.

@@ -66,6 +66,30 @@ async function main() {
       body: "Member access foundation will be added later.",
       status: PublicPageStatus.PUBLISHED,
     },
+    {
+      slug: "galleri",
+      title: "Galleri",
+      body: "Her kommer klubbens billeder og visuelle liv senere.",
+      status: PublicPageStatus.PUBLISHED,
+    },
+    {
+      slug: "artikler",
+      title: "Artikler",
+      body: "Her kommer artikler, nyheder og klubindhold senere.",
+      status: PublicPageStatus.PUBLISHED,
+    },
+    {
+      slug: "flyveskole",
+      title: "Flyveskole",
+      body: "Her kommer information om flyveskole, instruktører og vejen ind i modelflyvning.",
+      status: PublicPageStatus.PUBLISHED,
+    },
+    {
+      slug: "bliv-medlem",
+      title: "Bliv medlem",
+      body: "Her kommer information om medlemskab, kontingent og hvordan man bliver en del af EFK87.",
+      status: PublicPageStatus.PUBLISHED,
+    },
   ];
 
   for (const page of publicPages) {
