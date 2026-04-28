@@ -29,6 +29,12 @@ Currently, the public club navigation is defined statically in `src/lib/publicSi
 ## Implementation Guidelines
 
 - **No Hardcoding**: Public site components must not hardcode `EFK87` or any other specific club data. Use the data provided by the `club` object.
-- **Tenant Resolution**: Public club pages must resolve the tenant via `tenantService` (specifically `requireClubBySlug` or `getClubBySlug`).
+- **Tenant Resolution**: Public club pages must resolve the tenant via `tenantService` (specifically `requireClubBySlug` or `getClubBySlug`). All pages MUST use `tenantService`.
 - **URL Generation**: All public site navigation URLs must be generated using the tenant slug to ensure they are correctly scoped to the current club.
 - **Server Rendering**: Keep public site components server-rendered where possible to optimize for SEO and performance. Avoid client-side state unless strictly required.
+- **Route List**:
+  - `/[clubSlug]`: Home
+  - `/[clubSlug]/about`: About
+  - `/[clubSlug]/events`: Events
+  - `/[clubSlug]/members`: Members (Placeholder, not authenticated/protected yet)
+- **Content Management**: Real content for these pages will later be CMS/admin-managed where relevant.
