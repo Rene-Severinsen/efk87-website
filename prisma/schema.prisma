@@ -21,6 +21,7 @@ model Club {
   settings     ClubSettings?
   memberships  ClubMembership[]
   pages        Page[]
+  publicPages  PublicPage[]
 }
 
 model ClubSettings {
@@ -76,6 +77,28 @@ model Page {
 
   @@unique([clubId, slug])
   @@index([clubId])
+}
+
+model PublicPage {
+  id        String           @id @default(cuid())
+  clubId    String
+  slug      String
+  title     String
+  excerpt   String?
+  body      String
+  status    PublicPageStatus @default(DRAFT)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+
+  @@unique([clubId, slug])
+  @@index([clubId])
+}
+
+enum PublicPageStatus {
+  DRAFT
+  PUBLISHED
 }
 
 enum ClubRole {
