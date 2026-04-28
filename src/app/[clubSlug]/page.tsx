@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../lib/tenancy/tenantService";
 import PublicClubHomePage from "../../components/publicSite/PublicClubHomePage";
 import { getPublicHomePage } from "../../lib/publicSite/publicHomePageService";
+import { getClubTheme } from "../../lib/publicSite/publicThemeService";
 
 interface ClubPageProps {
   params: Promise<{
@@ -23,6 +24,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
   }
 
   const homePage = await getPublicHomePage(club.id);
+  const theme = await getClubTheme(club.id);
   
   // Prepare content from homePage or use empty object
   // Based on PublicPage model: title, body, excerpt
@@ -37,6 +39,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
       clubName={club.settings?.shortName || club.name} 
       clubDisplayName={club.settings?.displayName || club.name}
       content={content}
+      theme={theme || undefined}
     />
   );
 }

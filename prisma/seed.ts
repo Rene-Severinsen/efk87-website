@@ -26,6 +26,25 @@ async function main() {
     },
   });
 
+  await prisma.clubTheme.upsert({
+    where: { clubId: efk87.id },
+    update: {},
+    create: {
+      clubId: efk87.id,
+      backgroundColor: "#0b1220",
+      panelColor: "rgba(18, 27, 46, 0.86)",
+      panelSoftColor: "rgba(255,255,255,0.035)",
+      lineColor: "rgba(255,255,255,0.08)",
+      textColor: "#edf2ff",
+      mutedTextColor: "#aab7d4",
+      accentColor: "#6ee7b7",
+      accentColor2: "#7dd3fc",
+      shadowValue: "0 20px 50px rgba(0,0,0,0.35)",
+      radiusValue: "22px",
+      heroImageUrl: null,
+    },
+  });
+
   // Seed public pages for EFK87
   const publicPages = [
     {

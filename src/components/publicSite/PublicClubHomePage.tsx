@@ -1,5 +1,6 @@
 import React from 'react';
 import './PublicClubHomePage.css';
+import { ClubTheme } from "../../generated/prisma";
 
 interface PublicHomePageData {
   heroTitle?: string;
@@ -12,6 +13,7 @@ interface PublicClubHomePageProps {
   clubName: string;
   clubDisplayName: string;
   content: PublicHomePageData;
+  theme?: ClubTheme;
 }
 
 /**
@@ -20,14 +22,28 @@ interface PublicClubHomePageProps {
  * This component preserves the visual hierarchy, section order, and layout
  * of the approved HTML/CSS mockup.
  */
-export default function PublicClubHomePage({ clubName, clubDisplayName, content }: PublicClubHomePageProps) {
+export default function PublicClubHomePage({ clubName, clubDisplayName, content, theme }: PublicClubHomePageProps) {
   // Use existing dynamic data where it fits, otherwise use mockup defaults
   const heroTitle = content.heroTitle || "En klubside med mere liv og bedre overblik.";
   const heroSubtitle = content.heroSubtitle || "Den nye forside er tænkt som en mere visuel indgang til klubben: aktivitet, indhold, hurtige valg og tydelige områder for både gæster, medlemmer og kommende medlemmer.";
   
+  // Theme CSS variables
+  const themeStyles = theme ? {
+    '--club-bg': theme.backgroundColor,
+    '--club-panel': theme.panelColor,
+    '--club-panel-soft': theme.panelSoftColor,
+    '--club-line': theme.lineColor,
+    '--club-text': theme.textColor,
+    '--club-muted': theme.mutedTextColor,
+    '--club-accent': theme.accentColor,
+    '--club-accent-2': theme.accentColor2,
+    '--club-shadow': theme.shadowValue,
+    '--club-radius': theme.radiusValue,
+  } as React.CSSProperties : {};
+
   // Placeholder images - to be replaced by admin-managed media later
   const IMAGES = {
-    heroMain: 'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?auto=format&fit=crop&w=1600&q=80',
+    heroMain: theme?.heroImageUrl || 'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?auto=format&fit=crop&w=1600&q=80',
     forum: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80',
     gallery: 'https://images.unsplash.com/photo-1508615070457-7baeba4003ab?auto=format&fit=crop&w=1200&q=80',
     flyveskole: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
@@ -35,7 +51,7 @@ export default function PublicClubHomePage({ clubName, clubDisplayName, content 
   };
 
   return (
-    <div className="public-home">
+    <div className="public-home" style={themeStyles}>
       <div className="shell">
         <header className="topbar">
           <div className="brand">

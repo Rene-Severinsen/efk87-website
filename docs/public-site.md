@@ -21,8 +21,18 @@ Currently, the public club navigation is defined statically in `src/lib/publicSi
 The homepage content is structurally separate from generic public pages.
 
 - **Dedicated Service**: `publicHomePageService.ts` handles fetching the homepage record.
+- **Branding & Theme**: `publicThemeService.ts` handles fetching tenant-scoped visual settings.
 - **Model Storage**: Currently uses the `PublicPage` model with the reserved slug `'home'`.
 - **Approved Design**: The homepage layout and design remain a locked visual reference.
+
+## Visual Themes
+
+Visual settings are managed per club through the `ClubTheme` model.
+
+- **Tenant Scoped**: All theme values are scoped by `clubId`.
+- **CSS Variables**: Theme values are applied to the public homepage as CSS variables on the root element.
+- **Locked Visuals**: The approved EFK87 mockup remains the locked visual reference. Theme controls must not be used to redesign the layout.
+- **Service**: `src/lib/publicSite/publicThemeService.ts` provides `getClubTheme(clubId)`.
 
 ## Data Management
 - **Dynamic Content**: Hero title and subtitle are sourced from the `PublicPage` model via `publicHomePageService`.

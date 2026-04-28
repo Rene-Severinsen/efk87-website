@@ -19,9 +19,30 @@ model Club {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   settings     ClubSettings?
+  theme        ClubTheme?
   memberships  ClubMembership[]
   pages        Page[]
   publicPages  PublicPage[]
+}
+
+model ClubTheme {
+  id              String   @id @default(cuid())
+  clubId          String   @unique
+  backgroundColor String
+  panelColor      String
+  panelSoftColor  String
+  lineColor       String
+  textColor       String
+  mutedTextColor  String
+  accentColor     String
+  accentColor2    String
+  shadowValue     String
+  radiusValue     String
+  heroImageUrl    String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
 }
 
 model ClubSettings {
