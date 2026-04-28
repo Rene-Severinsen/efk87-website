@@ -23,7 +23,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const displayName = club.settings?.displayName || club.name;
 
   return (
-    <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-slate-900">
+    <main className="flex flex-col items-center justify-center p-6 text-slate-900">
       <div className="max-w-2xl w-full bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
         <h1 className="text-4xl font-bold tracking-tight mb-4">
           {displayName}

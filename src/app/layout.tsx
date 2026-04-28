@@ -1,19 +1,24 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
+const inter = Inter({ subsets: ["latin"] });
+
 export const metadata: Metadata = {
-  title: "EFK87",
-  description: "EFK87 website",
+  title: "EFK87 Platform",
+  description: "Multi-club platform foundation",
 };
 
 export default function RootLayout({
-                                     children,
-                                   }: Readonly<{
+  children,
+}: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-      <html lang="da">
-      <body>{children}</body>
-      </html>
+    <html lang="en">
+      <body className={`${inter.className} antialiased min-h-screen bg-white text-slate-900`}>
+        {children}
+      </body>
+    </html>
   );
 }
