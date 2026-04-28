@@ -1,0 +1,454 @@
+.public-home {
+  --club-bg: #0b1220;
+  --club-panel: rgba(18, 27, 46, 0.86);
+  --club-panel-soft: rgba(255,255,255,0.035);
+  --club-line: rgba(255,255,255,0.08);
+  --club-text: #edf2ff;
+  --club-muted: #aab7d4;
+  --club-accent: #6ee7b7;
+  --club-accent-2: #7dd3fc;
+  --club-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  --club-radius: 22px;
+
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--club-text);
+  background:
+    radial-gradient(circle at top left, rgba(125,211,252,0.16), transparent 28%),
+    radial-gradient(circle at top right, rgba(110,231,183,0.12), transparent 24%),
+    linear-gradient(180deg, #08101c 0%, #0b1220 100%);
+  min-height: 100vh;
+}
+
+.public-home * { box-sizing: border-box; }
+
+.public-home a { color: inherit; text-decoration: none; }
+.public-home h1, .public-home h2, .public-home h3, .public-home h4, .public-home p { margin: 0; }
+
+.public-home .shell {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.public-home .topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  background: rgba(11,18,32,0.74);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--club-line);
+  border-radius: 999px;
+  position: sticky;
+  top: 16px;
+  z-index: 20;
+  box-shadow: var(--club-shadow);
+}
+
+.public-home .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.public-home .brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(110,231,183,0.22), rgba(125,211,252,0.28));
+  border: 1px solid rgba(255,255,255,0.1);
+  font-size: 14px;
+}
+
+.public-home .nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.public-home .nav a, .public-home .btn {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  color: var(--club-muted);
+  font-size: 14px;
+  transition: .2s ease;
+}
+
+.public-home .nav a:hover, .public-home .btn:hover { background: rgba(255,255,255,0.05); color: var(--club-text); }
+.public-home .nav a.active {
+  background: rgba(125,211,252,0.12);
+  border-color: rgba(125,211,252,0.25);
+  color: var(--club-text);
+}
+
+.public-home .actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.public-home .chip-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--club-line);
+  color: var(--club-text);
+}
+
+.public-home .chip-btn.primary {
+  background: linear-gradient(135deg, rgba(110,231,183,0.18), rgba(125,211,252,0.18));
+  border-color: rgba(110,231,183,0.22);
+}
+
+.public-home .hero-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: 20px;
+}
+
+.public-home .card {
+  background: var(--club-panel);
+  border: 1px solid var(--club-line);
+  border-radius: var(--club-radius);
+  box-shadow: var(--club-shadow);
+  overflow: hidden;
+}
+
+.public-home .hero-main {
+  min-height: 420px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.public-home .eyebrow {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(11,18,32,0.58);
+  border: 1px solid rgba(255,255,255,0.12);
+  width: fit-content;
+  color: #d8e3ff;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.public-home .hero-main h1 {
+  font-size: clamp(32px, 5vw, 54px);
+  line-height: 1.02;
+  max-width: 12ch;
+  margin-bottom: 14px;
+}
+
+.public-home .hero-copy {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #d7e2fb;
+  max-width: 68ch;
+  margin-bottom: 18px;
+}
+
+.public-home .hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.public-home .pill {
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--club-text);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.public-home .pill.primary {
+  background: linear-gradient(135deg, rgba(110,231,183,0.20), rgba(125,211,252,0.24));
+  border-color: rgba(110,231,183,0.28);
+}
+
+.public-home .side-stack { display: grid; gap: 20px; }
+
+.public-home .mini-card {
+  padding: 22px;
+  min-height: 180px;
+  background: linear-gradient(180deg, rgba(20,29,47,0.95), rgba(17,25,41,0.95));
+}
+
+.public-home .mini-card h3 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.public-home .small { font-size: 13px; line-height: 1.55; color: var(--club-muted); }
+
+.public-home .meta-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.public-home .meta-chip {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--club-line);
+  color: #dbe7ff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.public-home .tile-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.public-home .tile {
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid var(--club-line);
+  background: var(--club-panel-soft);
+}
+
+.public-home .tile-hero {
+  min-height: 150px;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  border-bottom: 1px solid var(--club-line);
+}
+
+.public-home .tile-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6,10,18,0.12), rgba(6,10,18,0.72));
+}
+
+.public-home .tile-hero h3 {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  z-index: 1;
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.public-home .tile-body { padding: 16px; }
+.public-home .tile-body p {
+  color: var(--club-muted);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.public-home .tile-link {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--club-accent-2);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.public-home .activity-layout {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 20px;
+}
+
+.public-home .section-card { padding: 22px; }
+
+.public-home .section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.public-home .section-head h2 {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.public-home .link-soft {
+  color: var(--club-accent-2);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.public-home .griffin-box {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 18px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(110,231,183,0.07), rgba(125,211,252,0.08));
+  border: 1px solid rgba(110,231,183,0.16);
+  margin-bottom: 16px;
+}
+
+.public-home .griffin {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  font-size: 48px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--club-line);
+}
+
+.public-home .list {
+  display: grid;
+  gap: 12px;
+}
+
+.public-home .row-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid var(--club-line);
+}
+
+.public-home .row-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(125,211,252,0.1);
+  border: 1px solid rgba(125,211,252,0.16);
+  font-size: 18px;
+}
+
+.public-home .row-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.public-home .row-sub {
+  font-size: 13px;
+  color: var(--club-muted);
+  line-height: 1.45;
+}
+
+.public-home .status-badge {
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.public-home .status-badge.ok { background: rgba(52,211,153,0.12); color: #86efac; border-color: rgba(52,211,153,0.2); }
+.public-home .status-badge.warn { background: rgba(251,191,36,0.12); color: #fde68a; border-color: rgba(251,191,36,0.2); }
+.public-home .status-badge.info { background: rgba(125,211,252,0.12); color: #bae6fd; border-color: rgba(125,211,252,0.2); }
+
+.public-home .side-panel {
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid var(--club-line);
+  margin-bottom: 16px;
+}
+
+.public-home .side-panel h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.public-home .side-panel p {
+  color: var(--club-muted);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.public-home .social-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.public-home .social-item {
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid var(--club-line);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.public-home .social-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  background: rgba(125,211,252,0.10);
+  border: 1px solid rgba(125,211,252,0.18);
+}
+
+.public-home .footer {
+  margin-top: 20px;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: 1.2fr .8fr .8fr;
+  gap: 20px;
+}
+
+.public-home .sponsors {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.public-home .sponsor {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--club-line);
+  color: #d8e5ff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+@media (max-width: 1180px) {
+  .public-home .hero-grid, .public-home .tile-grid, .public-home .activity-layout, .public-home .footer { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 860px) {
+  .public-home .shell { padding: 14px; }
+  .public-home .topbar { border-radius: 24px; align-items: flex-start; }
+  .public-home .topbar, .public-home .nav, .public-home .actions { flex-direction: column; align-items: stretch; }
+  .public-home .griffin-box, .public-home .row-item, .public-home .social-item { grid-template-columns: 1fr; }
+  .public-home .griffin { margin: 0 auto; }
+}

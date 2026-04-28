@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../lib/tenancy/tenantService";
-import PublicClubShell from "../../components/publicSite/PublicClubShell";
+import PublicClubHomePage from "../../components/publicSite/PublicClubHomePage";
+import { getPublicHomePage } from "../../lib/publicSite/publicPageService";
 
 interface ClubPageProps {
   params: Promise<{
@@ -21,20 +22,21 @@ export default async function ClubPage({ params }: ClubPageProps) {
     throw error;
   }
 
+  const homePage = await getPublicHomePage(club.id);
+  
+  // Prepare content from homePage or use empty object
+  // Based on PublicPage model: title, body, excerpt
+  const content = homePage ? {
+    heroTitle: homePage.title,
+    heroSubtitle: homePage.excerpt || undefined,
+    introBody: homePage.body,
+  } : {};
+
   return (
-    <PublicClubShell club={club}>
-      <div className="flex flex-col items-center justify-center p-6 text-slate-900 mt-12">
-        <div className="max-w-2xl w-full bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
-          <h1 className="text-4xl font-bold tracking-tight mb-4">
-            Club platform foundation is active.
-          </h1>
-          <div className="pt-8 border-t border-slate-100">
-            <code className="text-sm text-slate-400 font-mono">
-              Tenant slug: {clubSlug}
-            </code>
-          </div>
-        </div>
-      </div>
-    </PublicClubShell>
+    <PublicClubHomePage 
+      clubName={club.settings?.shortName || club.name} 
+      clubDisplayName={club.settings?.displayName || club.name}
+      content={content}
+    />
   );
 }
