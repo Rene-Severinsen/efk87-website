@@ -17,11 +17,11 @@ This document details the Auth.js foundation implemented for the EFK87 platform.
 - `AUTH_SECRET`: Used to sign cookies and tokens.
 - `AUTH_GITHUB_ID`: (Optional) GitHub OAuth client ID for dev/testing.
 - `AUTH_GITHUB_SECRET`: (Optional) GitHub OAuth client secret for dev/testing.
+- `AUTH_EMAIL_SERVER`: (Optional) SMTP connection string (e.g., `smtp://user:pass@smtp.example.com:587`).
+- `AUTH_EMAIL_FROM`: (Optional) The "From" address for magic link emails.
 
-#### Conceptual Email Provider Variables (Future)
-- `AUTH_EMAIL_SERVER`: SMTP connection string (e.g., `smtp://user:pass@smtp.example.com:587`).
-- `AUTH_EMAIL_FROM`: The "From" address for magic link emails.
-- `AUTH_EMAIL_QA_SAFE`: (Conceptual flag) If set, prevents sending emails to real member domains during testing.
+#### Email Provider Activation
+The Email (Nodemailer) provider is enabled only if both `AUTH_EMAIL_SERVER` and `AUTH_EMAIL_FROM` are present. If either is missing, the provider is disabled and the login page shows an informational message.
 
 ## Data Model
 
@@ -81,13 +81,15 @@ Converts the full server-side context to the minimal `ViewerVisibilityContext` u
 ## Operational Requirements
 
 ### Email Delivery
-- **Provider Selection**: A reliable email sending provider (or SMTP service) must be chosen before implementation.
+- **Provider**: Uses Auth.js Email/Nodemailer provider.
+- **Packages**: `nodemailer` is installed as a separate dependency.
 - **Environment Specificity**: SMTP/provider credentials must be environment-specific (Dev, QA, Production).
-- **Template Design**: Email templates should be simple, branded, and designed to be tenant-aware later (e.g., including the club's name).
+- **Template Design**: Email templates currently use Auth.js defaults.
 
 ### QA and Testing Safety
-- **Outbound Guard**: QA environments must never send login emails to real members.
+- **Outbound Guard**: `canSendExternalNotifications` in `src/lib/config/env.ts` is `false` for development and qa.
 - **Safe Addresses**: QA must use safe test addresses (e.g., `@example.com` or internal domains) or have outbound email disabled/redirected to a tool like Mailpit.
+- **Real SMTP**: Production must use real, authenticated mail provider credentials.
 
 ### Production Readiness
 - **Credentials**: Production must use real, authenticated mail provider credentials.

@@ -1,8 +1,10 @@
-import NextAuth, { type Session, type User } from "next-auth";
+import { type Session, type User } from "next-auth";
 import GitHub from "next-auth/providers/github";
+import Email from "next-auth/providers/email";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "./lib/db/prisma";
 import { env } from "./lib/config/env";
+import NextAuth from "next-auth";
 
 declare module "next-auth" {
   interface Session {
@@ -26,6 +28,15 @@ if (process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET) {
   );
 }
 
+if (env.AUTH_EMAIL_SERVER && env.AUTH_EMAIL_FROM) {
+  providers.push(
+    Email({
+      server: env.AUTH_EMAIL_SERVER,
+      from: env.AUTH_EMAIL_FROM,
+    })
+  );
+}
+
 export const authConfig = {
   adapter: PrismaAdapter(prisma),
   secret: env.AUTH_SECRET,
@@ -39,3 +50,9 @@ export const authConfig = {
     },
   },
 };
+
+export const authInstance = NextAuth(authConfig);
+export const auth = authInstance.auth;
+export const handlers = authInstance.handlers;
+export const signIn = authInstance.signIn;
+export const signOut = authInstance.signOut;

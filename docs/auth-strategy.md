@@ -158,10 +158,11 @@ The platform has the Auth.js foundation installed and configured:
 1.  **Auth.js Foundation**: Install and configure Auth.js with Prisma. (Completed ✓)
 2.  **Strategy Documentation**: Define Email Magic Link strategy and requirements. (Completed ✓)
 3.  **Email Provider Setup**: 
-    - Choose email sending provider/SMTP.
-    - Configure environment variables for the selected provider.
-4.  **Auth.js Email Configuration**: Enable and configure the Email provider in `src/auth.ts`.
-5.  **Login UI**: Create a minimal login page with email input and magic link trigger.
+    - Configure environment variables for the selected SMTP provider (`AUTH_EMAIL_SERVER`, `AUTH_EMAIL_FROM`). (Completed ✓)
+4.  **Auth.js Email Configuration**: 
+    - Enable and configure the Email provider in `src/auth.ts` using `nodemailer`. (Completed ✓)
+5.  **Login UI**: 
+    - Create a minimal login page with email input and magic link trigger. (Completed ✓)
 6.  **Viewer & Guards**: 
     - Replace `anonymousViewer` with real session resolution.
     - Verify member route access still depends on `ACTIVE` `ClubMembership`.

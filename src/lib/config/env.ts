@@ -13,6 +13,8 @@ interface EnvConfig {
   APP_ENV: AppEnv;
   DATABASE_URL: string;
   AUTH_SECRET: string;
+  AUTH_EMAIL_SERVER?: string;
+  AUTH_EMAIL_FROM?: string;
   isDevelopment: boolean;
   isQa: boolean;
   isProduction: boolean;
@@ -29,6 +31,8 @@ function validateEnv(): EnvConfig {
   const APP_ENV = process.env.APP_ENV as AppEnv;
   const DATABASE_URL = process.env.DATABASE_URL;
   const AUTH_SECRET = process.env.AUTH_SECRET;
+  const AUTH_EMAIL_SERVER = process.env.AUTH_EMAIL_SERVER;
+  const AUTH_EMAIL_FROM = process.env.AUTH_EMAIL_FROM;
 
   if (!APP_ENV) {
     throw new Error('APP_ENV is not defined. Must be one of: development, qa, production');
@@ -54,6 +58,8 @@ function validateEnv(): EnvConfig {
     APP_ENV,
     DATABASE_URL,
     AUTH_SECRET,
+    AUTH_EMAIL_SERVER,
+    AUTH_EMAIL_FROM,
     isDevelopment,
     isQa,
     isProduction,
