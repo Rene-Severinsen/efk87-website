@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../lib/tenancy/tenantService";
+import PublicClubShell from "../../components/publicSite/PublicClubShell";
 
 interface ClubPageProps {
   params: Promise<{
@@ -20,23 +21,20 @@ export default async function ClubPage({ params }: ClubPageProps) {
     throw error;
   }
 
-  const displayName = club.settings?.displayName || club.name;
-
   return (
-    <main className="flex flex-col items-center justify-center p-6 text-slate-900">
-      <div className="max-w-2xl w-full bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
-        <h1 className="text-4xl font-bold tracking-tight mb-4">
-          {displayName}
-        </h1>
-        <p className="text-lg text-slate-600 mb-8">
-          Club platform foundation is active.
-        </p>
-        <div className="pt-8 border-t border-slate-100">
-          <code className="text-sm text-slate-400 font-mono">
-            Tenant slug: {clubSlug}
-          </code>
+    <PublicClubShell club={club}>
+      <div className="flex flex-col items-center justify-center p-6 text-slate-900 mt-12">
+        <div className="max-w-2xl w-full bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
+          <h1 className="text-4xl font-bold tracking-tight mb-4">
+            Club platform foundation is active.
+          </h1>
+          <div className="pt-8 border-t border-slate-100">
+            <code className="text-sm text-slate-400 font-mono">
+              Tenant slug: {clubSlug}
+            </code>
+          </div>
         </div>
       </div>
-    </main>
+    </PublicClubShell>
   );
 }
