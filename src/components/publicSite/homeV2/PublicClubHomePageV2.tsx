@@ -118,33 +118,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
         </section>
 
         <section className="home-v2-stats-row">
-          <article className="home-v2-card home-v2-stat">
-            <div className="home-v2-top">
-              <small>Senest online</small>
-              <span className="home-v2-status-badge home-v2-info">I dag</span>
-            </div>
-            
-            <div className="home-v2-online-list">
-              {memberActivity.latestMembers.length > 0 ? (
-                memberActivity.latestMembers.map((member, idx) => (
-                  <div key={idx} className="home-v2-online-row">
-                    <span className="home-v2-online-time">
-                      {member.lastSeenAt.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                    <span className="home-v2-online-name">
-                      {member.displayName}
-                    </span>
-                  </div>
-                ))
-              ) : (
-                <div className="home-v2-compact-empty">Ingen aktivitet endnu</div>
-              )}
-            </div>
 
-            <div className="home-v2-stat-footer">
-              <small>{memberActivity.todayActiveCount} medlemmer aktive i dag</small>
-            </div>
-          </article>
           <article className="home-v2-card home-v2-stat">
             <div className="home-v2-top">
               <small>“Jeg flyver” i dag</small>
@@ -168,6 +142,34 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             </div>
             <div className="home-v2-value">18</div>
             <small>Seneste 24 timer på tværs af 5 tråde</small>
+          </article>
+
+          <article className="home-v2-card home-v2-stat">
+            <div className="home-v2-top">
+              <small>Senest online</small>
+              <span className="home-v2-status-badge home-v2-info">I dag</span>
+            </div>
+
+            <div className="home-v2-online-list">
+              {memberActivity.latestMembers.length > 0 ? (
+                  memberActivity.latestMembers.map((member, idx) => (
+                      <div key={idx} className="home-v2-online-row">
+                    <span className="home-v2-online-time">
+                      {member.lastSeenAt.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                        <span className="home-v2-online-name">
+                      {member.displayName}
+                    </span>
+                      </div>
+                  ))
+              ) : (
+                  <div className="home-v2-compact-empty">Ingen aktivitet endnu</div>
+              )}
+            </div>
+
+            <div className="home-v2-stat-footer">
+              <small>{memberActivity.todayActiveCount} medlemmer aktive i dag</small>
+            </div>
           </article>
         </section>
 

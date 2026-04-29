@@ -277,6 +277,72 @@
   border: 1px solid rgba(255,255,255,0.06);
 }
 
+/* New Members Highlight Card - Desktop/Base */
+.new-members-highlight-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  height: 100%;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(20,29,47,0.95), rgba(17,25,41,0.95));
+  color: var(--home-v2-text);
+  border-radius: var(--home-v2-radius);
+}
+
+.new-members-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.new-members-logo-slot {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.new-members-content p {
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.new-members-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.10rem;
+}
+
+.new-member-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem;
+  padding: 0.5rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.new-member-item .member-name {
+  font-weight: 700;
+  color: var(--home-v2-text);
+}
+
+.new-member-item .member-date {
+  font-size: 0.85rem;
+  color: var(--home-v2-muted);
+}
+
 .home-v2-marquee-track {
   display: flex;
   white-space: nowrap;
