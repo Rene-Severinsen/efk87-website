@@ -62,7 +62,8 @@ export default function ArticleForm({
               name="excerpt"
               rows={3}
               defaultValue={initialData?.excerpt ?? undefined}
-              style={{ width: '100%', padding: '8px 12px', borderRadius: '4px', border: '1px solid #d9d9d9' }}
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 resize-y"
+              placeholder="Giv en kort introduktion til artiklen..."
             />
           </div>
 
@@ -156,8 +157,10 @@ export default function ArticleForm({
               name="authorName"
               type="text"
               defaultValue={initialData?.authorName ?? undefined}
-              style={{ width: '100%', padding: '8px 12px', borderRadius: '4px', border: '1px solid #d9d9d9' }}
+              readOnly
+              className="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500 cursor-not-allowed"
             />
+            <p className="text-xs text-gray-500 mt-1">Forfatter er server-bestemt og kan ikke ændres her.</p>
           </div>
 
           <div style={{ marginBottom: '16px' }}>
