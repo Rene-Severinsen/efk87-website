@@ -19,7 +19,7 @@ export default async function ForumPage({ params }: ForumPageProps) {
   const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member
-  await requireActiveMemberForClub(club.id, club.slug);
+  await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/forum`);
 
   return (
     <ThemedClubPageShell

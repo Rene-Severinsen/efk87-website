@@ -31,7 +31,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
   const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member
-  const viewer = await requireActiveMemberForClub(club.id, club.slug);
+  const viewer = await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/jeg-flyver`);
 
   const recentIntents = await getMemberRecentFlightIntents(club.id, viewer);
 

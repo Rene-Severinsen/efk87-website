@@ -24,7 +24,7 @@ export default async function AdminPage({ params }: AdminPageProps) {
   }
 
   // Guard: requires authenticated admin/owner with active membership
-  const viewer = await requireClubAdminForClub(club.id, clubSlug);
+  const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin`);
 
   return (
     <AdminShell

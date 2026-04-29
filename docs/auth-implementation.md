@@ -69,12 +69,32 @@ The `ServerViewerContext` includes:
 
 ### Access Guards
 
-`requireActiveMemberForClub(clubId: string, clubSlug: string)`:
+`requireActiveMemberForClub(clubId: string, clubSlug: string, callbackUrl?: string)`:
 1. Calls `getServerViewerForClub(clubId)`.
 2. If `viewer.isMember` is `true`, returns the viewer context.
-3. Otherwise, redirects to `/{clubSlug}/login?reason=member-required`.
+3. Otherwise, redirects to `/{clubSlug}/login?reason=member-required&callbackUrl={callbackUrl}`.
 
 This guard is used to protect member-only routes at the page level.
+
+`requireClubAdminForClub(clubId: string, clubSlug: string, callbackUrl?: string)`:
+1. Calls `getServerViewerForClub(clubId)`.
+2. If `viewer.isAdmin` is `true`, returns the viewer context.
+3. Otherwise, redirects to `/{clubSlug}/login?reason=admin-required&callbackUrl={callbackUrl}`.
+
+This guard is used to protect admin-only routes at the page level.
+
+## Login Page (`/[clubSlug]/login`)
+
+The login page handles both email magic links and development quick login.
+
+### Callback URL Handling
+
+To provide a smooth user experience, the login flow preserves the originally requested protected path:
+- Protected routes include a `callbackUrl` parameter when redirecting to login.
+- The login page validates this URL to prevent open redirect vulnerabilities.
+- Validated `callbackUrl` must start with `/${clubSlug}`, must not be protocol-relative (`//`), and must not be an absolute external URL.
+- If invalid or missing, it falls back to `/${clubSlug}`.
+- This validated URL is passed to Auth.js `signIn` as the `redirectTo` option.
 
 ## Member Routes
 

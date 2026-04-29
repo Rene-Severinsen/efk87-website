@@ -19,7 +19,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member and get viewer data
-  const viewer = await requireActiveMemberForClub(club.id, club.slug);
+  const viewer = await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/profil`);
 
   return (
     <ThemedClubPageShell

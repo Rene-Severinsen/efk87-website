@@ -10,7 +10,30 @@ interface PageProps {
   }>;
   searchParams: Promise<{
     reason?: string;
+    callbackUrl?: string;
   }>;
+}
+
+/**
+ * Validates the callbackUrl to prevent open redirects.
+ * Only allows paths starting with /${clubSlug} and prevents protocol-relative URLs.
+ */
+function validateCallbackUrl(url: string | undefined, clubSlug: string): string {
+  if (!url) {
+    return `/${clubSlug}`;
+  }
+
+  // 1. Must start with /${clubSlug}
+  // 2. Must not start with // (to prevent protocol-relative redirects like //evil.com)
+  // 3. Must not be an absolute URL with a protocol
+  const prefix = `/${clubSlug}`;
+  
+  const isValid = 
+    url.startsWith(prefix) && 
+    !url.startsWith("//") && 
+    !url.includes("://");
+
+  return isValid ? url : `/${clubSlug}`;
 }
 
 /**
@@ -19,7 +42,9 @@ interface PageProps {
  */
 export default async function LoginPage({ params, searchParams }: PageProps) {
   const { clubSlug } = await params;
-  const { reason } = await searchParams;
+  const { reason, callbackUrl: rawCallbackUrl } = await searchParams;
+
+  const callbackUrl = validateCallbackUrl(rawCallbackUrl, clubSlug);
 
   const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
 
@@ -64,7 +89,7 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
                 return;
               }
               const email = formData.get("email") as string;
-              await signIn("email", { email, redirectTo: `/${clubSlug}` });
+              await signIn("email", { email, redirectTo: callbackUrl });
             }}
             className="space-y-6"
           >
@@ -97,7 +122,7 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
                 "use server";
                 if (!env.DEV_LOGIN_ENABLED) return;
                 try {
-                  await signIn("dev-login", { redirectTo: `/${clubSlug}` });
+                  await signIn("dev-login", { redirectTo: callbackUrl });
                 } catch (error) {
                   throw error;
                 }

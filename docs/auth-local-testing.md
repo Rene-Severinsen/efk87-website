@@ -82,10 +82,19 @@ For rapid development, you can use the "Snyde-login" feature which bypasses the 
     - Open Mailpit UI: [http://localhost:8025](http://localhost:8025)
     - Locate the "Sign in to efk87.local" email.
     - Click the **Sign in** button/link.
-6.  **Verify Session**:
-    - You should be redirected back to the site.
+6.  **Verify Redirect with callbackUrl**:
+    - Navigate to protected routes while logged out and ensure they redirect to login with the correct `callbackUrl`:
+        - `/efk87/profil` -> `/efk87/login?reason=member-required&callbackUrl=%2Fefk87%2Fprofil`
+        - `/efk87/admin` -> `/efk87/login?reason=admin-required&callbackUrl=%2Fefk87%2Fadmin`
+7.  **Verify Post-Login Redirect**:
+    - Complete the login (via Snyde-login or Magic Link).
+    - You should be redirected back to the path specified in `callbackUrl`.
+8.  **Verify Open Redirect Prevention**:
+    - Try navigating to `/efk87/login?callbackUrl=https://evil.example.com`.
+    - Login and verify you are redirected to the fallback `/efk87` instead of the external URL.
+9.  **Verify Session**:
     - Verify authentication by checking: [http://localhost:3000/api/auth/session](http://localhost:3000/api/auth/session) (should return a JSON session object).
-7.  **Verify Protected Access**:
+10. **Verify Protected Access**:
     - Navigate to protected routes and ensure they no longer redirect to login:
         - `/efk87/profil`
         - `/efk87/forum`

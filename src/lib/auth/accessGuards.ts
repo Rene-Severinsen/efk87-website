@@ -13,7 +13,8 @@ import { getServerViewerForClub, ServerViewerContext } from "./viewer";
  */
 export async function requireActiveMemberForClub(
   clubId: string, 
-  clubSlug: string
+  clubSlug: string,
+  callbackUrl?: string
 ): Promise<ServerViewerContext> {
   const viewer = await getServerViewerForClub(clubId);
 
@@ -22,5 +23,11 @@ export async function requireActiveMemberForClub(
   }
 
   // Not a member or not authenticated
-  redirect(`/${clubSlug}/login?reason=member-required`);
+  const loginUrl = new URL(`/${clubSlug}/login`, "http://localhost"); // Base URL doesn't matter for path only
+  loginUrl.searchParams.set("reason", "member-required");
+  if (callbackUrl) {
+    loginUrl.searchParams.set("callbackUrl", callbackUrl);
+  }
+
+  redirect(loginUrl.pathname + loginUrl.search);
 }

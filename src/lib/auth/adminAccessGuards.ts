@@ -17,7 +17,8 @@ import { getServerViewerForClub, ServerViewerContext } from "./viewer";
  */
 export async function requireClubAdminForClub(
   clubId: string, 
-  clubSlug: string
+  clubSlug: string,
+  callbackUrl?: string
 ): Promise<ServerViewerContext> {
   const viewer = await getServerViewerForClub(clubId);
 
@@ -27,5 +28,11 @@ export async function requireClubAdminForClub(
 
   // Not an admin or not authenticated
   // Using same redirect pattern as requireActiveMemberForClub but with admin-required reason
-  redirect(`/${clubSlug}/login?reason=admin-required`);
+  const loginUrl = new URL(`/${clubSlug}/login`, "http://localhost");
+  loginUrl.searchParams.set("reason", "admin-required");
+  if (callbackUrl) {
+    loginUrl.searchParams.set("callbackUrl", callbackUrl);
+  }
+
+  redirect(loginUrl.pathname + loginUrl.search);
 }
