@@ -68,7 +68,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           </div>
 
           <nav className="home-v2-nav">
-            <Link className="home-v2-active" href={`/${club.slug}/preview/home-v2`}>Forside</Link>
+            <Link className="home-v2-active" href={`/${club.slug}`}>Forside</Link>
             <a href="#">Forum</a>
             <a href="#">Galleri</a>
             <a href="#">Artikler</a>
@@ -87,7 +87,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 <Link className="home-v2-btn home-v2-chip-btn" href="/api/auth/signout">Log ud</Link>
               </>
             ) : (
-              <Link className="home-v2-btn home-v2-chip-btn home-v2-primary" href={`/api/auth/signin?callbackUrl=/${club.slug}/preview/home-v2`}>Log ind</Link>
+              <Link className="home-v2-btn home-v2-chip-btn home-v2-primary" href={`/api/auth/signin?callbackUrl=/${club.slug}`}>Log ind</Link>
             )}
           </div>
         </header>

@@ -103,21 +103,20 @@ Visual settings are managed per club through the `ClubTheme` model.
 ### Approved Design Master
 The homepage (`PublicClubHomePage.tsx`) is the approved visual master. All non-home pages must follow the same dark premium club-platform theme using the shared themed shell.
 
-## Homepage V2 (In Development)
+## Homepage V2
 
-A second version of the homepage is being built in isolation to improve the member experience and information density.
+Frontpage V2 is now the active live homepage for all clubs.
 
 - **Component**: `src/components/publicSite/homeV2/PublicClubHomePageV2.tsx`
 - **CSS**: `src/components/publicSite/homeV2/PublicClubHomePageV2.css` (Scoped with `.home-v2-` prefix)
-- **Status**: In development. Built in isolation. V2 preview now binds existing real data (club info, viewer context, today's flight intents) where available.
-- **Preview Route**: `/[clubSlug]/preview/home-v2`
+- **Status**: Live. 
+- **Active Route**: `/[clubSlug]`
+- **Preview Route**: `/[clubSlug]/preview/home-v2` (Remains available during transition)
+- **Fallback**: The old homepage component (`PublicClubHomePage.tsx`) remains in the codebase temporarily as a fallback/reference.
 - **Guidelines**:
-  - v2 must not replace the active homepage until manually approved.
-  - v2 CSS must be scoped and non-invasive to ensure it doesn't affect the rest of the site.
   - v2 uses real data for club, user profile, and "Jeg flyver" activity.
   - Chat, statistics, gallery, and next activities remain static placeholders.
-  - v2 is still not live; the live homepage remains unchanged.
-  - Underscore-prefixed route folders (`_preview`) must not be used for public-facing preview routes in Next.js App Router as they are treated as private.
+  - v2 CSS is scoped and non-invasive.
 
 ## Components
 

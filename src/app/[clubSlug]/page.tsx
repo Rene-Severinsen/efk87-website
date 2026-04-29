@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../lib/tenancy/tenantService";
-import PublicClubHomePage from "../../components/publicSite/PublicClubHomePage";
+import PublicClubHomePageV2 from "../../components/publicSite/homeV2/PublicClubHomePageV2";
 import { getPublicHomePage } from "../../lib/publicSite/publicHomePageService";
 import { getClubTheme } from "../../lib/publicSite/publicThemeService";
 import { getActiveHomeFeatureTiles } from "../../lib/publicSite/publicHomeFeatureTileService";
@@ -106,20 +106,11 @@ export default async function ClubPage({ params }: ClubPageProps) {
   console.log("[ClubPage] CONTENT:", content);
 
   return (
-      <PublicClubHomePage
-          clubSlug={clubSlug}
-          clubName={club.settings?.shortName || club.name}
-          clubDisplayName={club.settings?.displayName || club.name}
-          content={content}
-          theme={theme || undefined}
-          featureTiles={featureTiles}
-          infoCards={infoCards}
-          flightIntents={flightIntents}
-          footerData={footerData}
-          navigationItems={navigationItems}
-          actionItems={actionItems}
-          submitFlightIntentHref={`/${clubSlug}/jeg-flyver`}
-          viewAllFlightIntentsHref={`/${clubSlug}/jeg-flyver/liste`}
+      <PublicClubHomePageV2
+          club={club}
+          viewer={serverViewer}
+          theme={theme}
+          todayFlightIntents={flightIntents}
       />
   );
 }
