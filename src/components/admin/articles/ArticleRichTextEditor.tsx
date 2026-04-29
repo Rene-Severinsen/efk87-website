@@ -21,18 +21,35 @@ const ArticleRichTextEditor = ({ content, onChange }: ArticleRichTextEditorProps
   // Initialize editor
   const editor = useCreateBlockNote();
 
-  // Effect to load initial content
+  // Effect to load initial content or reset content
   useEffect(() => {
-    async function loadInitialContent() {
-      if (content && editor && isMounted) {
-        const blocks = await editor.tryParseHTMLToBlocks(content);
-        editor.replaceBlocks(editor.document, blocks);
+    async function updateContent() {
+      if (editor && isMounted) {
+        // If content is empty, clear the editor
+        if (!content || content === "" || content === "<p></p>") {
+          editor.replaceBlocks(editor.document, [editor.document[0]]);
+          // Optionally delete the first block if you want it completely empty, 
+          // but BlockNote usually requires at least one block.
+          // Let's just replace everything with a default empty block.
+          const blocks = await editor.tryParseHTMLToBlocks("");
+          editor.replaceBlocks(editor.document, blocks);
+          return;
+        }
+
+        // Only update if current editor content differs from prop content
+        // to avoid cursor jumping/loops. 
+        // Note: blocksToHTMLLossy is async, so we might need a better way to check.
+        const currentHtml = await editor.blocksToHTMLLossy(editor.document);
+        if (currentHtml !== content) {
+          const blocks = await editor.tryParseHTMLToBlocks(content);
+          editor.replaceBlocks(editor.document, blocks);
+        }
       }
     }
-    loadInitialContent();
-    // Only run once on mount or when editor is ready
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editor, isMounted]);
+    updateContent();
+    // We want to react to content changes specifically for resets
+    // but we must be careful not to cause loops when typing.
+  }, [editor, isMounted, content]);
 
   if (!editor || !isMounted) {
     return null;

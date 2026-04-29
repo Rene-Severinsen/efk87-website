@@ -12,6 +12,7 @@ export async function createForumCategory(clubSlug: string, formData: FormData) 
 
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
+  const notificationEmail = formData.get("notificationEmail") as string || null;
   const slug = formData.get("slug") as string;
   const sortOrder = parseInt(formData.get("sortOrder") as string) || 0;
   const isActive = formData.get("isActive") === "on";
@@ -20,11 +21,16 @@ export async function createForumCategory(clubSlug: string, formData: FormData) 
     throw new Error("Titel og slug er påkrævet");
   }
 
+  if (notificationEmail && !notificationEmail.includes("@")) {
+    throw new Error("Ugyldig e-mail adresse");
+  }
+
   await prisma.clubForumCategory.create({
     data: {
       clubId: club.id,
       title,
       description,
+      notificationEmail,
       slug,
       sortOrder,
       isActive,
@@ -41,6 +47,7 @@ export async function updateForumCategory(clubSlug: string, categoryId: string, 
 
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
+  const notificationEmail = formData.get("notificationEmail") as string || null;
   const slug = formData.get("slug") as string;
   const sortOrder = parseInt(formData.get("sortOrder") as string) || 0;
   const isActive = formData.get("isActive") === "on";
@@ -49,11 +56,16 @@ export async function updateForumCategory(clubSlug: string, categoryId: string, 
     throw new Error("Titel og slug er påkrævet");
   }
 
+  if (notificationEmail && !notificationEmail.includes("@")) {
+    throw new Error("Ugyldig e-mail adresse");
+  }
+
   await prisma.clubForumCategory.update({
     where: { id: categoryId },
     data: {
       title,
       description,
+      notificationEmail,
       slug,
       sortOrder,
       isActive,

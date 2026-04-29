@@ -105,6 +105,20 @@ export default function ForumCategoryForm({
             />
           </div>
 
+          <div>
+            <label className={labelClasses}>Notifikationsmail</label>
+            <input
+              name="notificationEmail"
+              type="email"
+              defaultValue={initialData?.notificationEmail || ""}
+              placeholder="fx bestyrelse@efk87.dk"
+              className={inputClasses}
+            />
+            <p className="mt-2 text-sm text-slate-500 italic">
+              Hvis feltet er udfyldt, sendes der mail ved nye tråde og svar i denne kategori.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className={labelClasses}>Sorteringsrækkefølge</label>

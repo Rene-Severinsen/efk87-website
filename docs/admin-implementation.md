@@ -126,6 +126,7 @@ Located in `src/components/admin/`:
 - **Service**: `src/lib/forum/forumService.ts`
 - **Capabilities**:
   - Full CRUD for forum categories (title, description, slug, sort order, active status).
+  - **Notifikationsmail**: Admin-managed email address per category. If set, an email is sent to this address on every new thread and reply in the category.
   - List all categories with thread counts.
   - Quick links to view categories on the public site.
 

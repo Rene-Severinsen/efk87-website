@@ -19,11 +19,13 @@ export default function ReplyForm({ action }: ReplyFormProps) {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsPending(true);
-    const formData = new FormData(e.currentTarget);
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
     formData.set("bodyHtml", bodyHtml);
     try {
       await action(formData);
       setBodyHtml("");
+      formElement.reset();
       setIsPending(false);
     } catch (error) {
       if (isRedirectError(error)) {

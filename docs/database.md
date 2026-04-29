@@ -90,9 +90,13 @@ Normalized storage for member certificates.
 #### Club Forum
 Tenant-scoped forum module for club members.
 - **ClubForumCategory**: Manageable headings for threads. Scoped by `clubId`. Unique `slug` per club.
+  - `notificationEmail` (String?): Optional admin-managed email address for notifications on new threads and replies.
 - **ClubForumThread**: Member-created discussions. Scoped by `clubId` and `categoryId`. Automatically assigned `iconKey` based on title/category. Unique `slug` per category.
 - **ClubForumReply**: Member replies to threads. Scoped by `clubId` and `threadId`.
 - **Logic**: Threads track `lastActivityAt` and `replyCount` for efficient listing and homepage activity feed.
+- **Notifications**: 
+  - Thread author receives email on new replies (unless they are the author of the reply).
+  - Category `notificationEmail` receives email on new threads and replies.
 - **Security**: Access is generally `MEMBERS_ONLY`.
 
 > **Note**: Authentication (login, password management, etc.) is not yet implemented. The `User` model currently only serves as a profile and membership anchor.

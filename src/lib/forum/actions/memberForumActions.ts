@@ -7,6 +7,7 @@ import { getServerViewerForClub } from "../../auth/viewer";
 import { requireClubBySlug } from "../../tenancy/tenantService";
 import { guessForumThreadIcon } from "../forumHelpers";
 import { requireActiveMemberForClub } from "../../auth/accessGuards";
+import { notifyCategoryEmailOfNewReply, notifyCategoryEmailOfNewThread, notifyThreadAuthorOfReply } from "../forumNotificationService";
 
 export async function createForumThread(clubSlug: string, categorySlug: string, formData: FormData) {
   const club = await requireClubBySlug(clubSlug);
@@ -67,6 +68,15 @@ export async function createForumThread(clubSlug: string, categorySlug: string, 
     }
   });
 
+  // Trigger notification (fire and forget, don't block redirect)
+  notifyCategoryEmailOfNewThread({
+    clubSlug,
+    categorySlug,
+    threadId: thread.id,
+    authorName: viewer.name || "En bruger",
+    bodyHtml: thread.bodyHtml
+  }).catch(err => console.error("Error in notifyCategoryEmailOfNewThread:", err));
+
   revalidatePath(`/${clubSlug}/forum/${categorySlug}`);
   redirect(`/${clubSlug}/forum/${categorySlug}/${thread.slug}`);
 }
@@ -105,6 +115,24 @@ export async function createForumReply(clubSlug: string, categorySlug: string, t
       }
     })
   ]);
+
+  // Trigger notifications (fire and forget)
+  notifyThreadAuthorOfReply({
+    clubSlug,
+    categorySlug,
+    threadId,
+    replyAuthorName: viewer.name || "En bruger",
+    replyAuthorId: viewer.userId,
+    replyBodyHtml: bodyHtml
+  }).catch(err => console.error("Error in notifyThreadAuthorOfReply:", err));
+
+  notifyCategoryEmailOfNewReply({
+    clubSlug,
+    categorySlug,
+    threadId,
+    replyAuthorName: viewer.name || "En bruger",
+    replyBodyHtml: bodyHtml
+  }).catch(err => console.error("Error in notifyCategoryEmailOfNewReply:", err));
 
   revalidatePath(`/${clubSlug}/forum/${categorySlug}/${threadSlug}`);
 }
