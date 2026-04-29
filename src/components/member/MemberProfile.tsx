@@ -54,6 +54,8 @@ export const MemberProfile: React.FC<ProfilePageContentProps> = ({
 
         <div className="profile-stack">
           <ProfileDetailsPanel 
+            clubId={clubId}
+            clubSlug={clubSlug}
             firstName={firstName}
             lastName={lastName}
             email={profile.email || viewer.email}
