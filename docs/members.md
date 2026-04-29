@@ -9,6 +9,15 @@ We have separated access/authorization from profile data:
 1.  **ClubMembership**: Controls system access (ACTIVE, PENDING, etc.) and system roles (MEMBER, ADMIN, OWNER).
 2.  **ClubMemberProfile**: Stores member stamdata (name, address, contact, club-specific roles, etc.).
 3.  **ClubMemberCertificate**: Stores member certificates (A-certifikat, S-kontrollant, etc.).
+4.  **Medlemsnummer**: Every member has a unique `memberNumber` within their club. This is used as a payment reference and is separate from the MDK number.
+
+## Medlemsnummer (Member Number)
+
+- **Uniqueness**: `memberNumber` is unique per club.
+- **Payment Reference**: It is primarily used as a reference for kontingent payments.
+- **Sequential Assignment**: For new members, the system follows a max+1 logic (see `getNextMemberNumber` in `memberNumberService.ts`).
+- **Legacy Preservation**: When importing members from legacy systems, their existing `memberNumber` must be preserved.
+- **Separate from MDK**: This field is NOT the same as the MDK number and both can exist simultaneously.
 
 ## Tenancy & Privacy
 

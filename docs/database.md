@@ -71,7 +71,8 @@ Tenant-scoped activity tracking. Each record represents one user's activity for 
 #### ClubMemberProfile
 Stores club-specific member stamdata (profile information).
 - **Constraints**: Unique combination of `clubId` + `userId`.
-- **Fields**: Name, address, phone, MDK number, profile image URL, membership type, club role, school status, member status.
+- **Fields**: Name, address, phone, Medlemsnummer (`memberNumber`), MDK number, profile image URL, membership type, club role, school status, member status.
+- **Uniqueness**: `memberNumber` is unique per `clubId`.
 - **Privacy**: Contains private member data, strictly tenant-scoped.
 
 #### ClubMemberCertificate

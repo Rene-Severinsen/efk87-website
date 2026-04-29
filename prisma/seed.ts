@@ -250,6 +250,7 @@ async function main() {
         memberRoleType: ClubMemberRoleType.REGULAR,
         schoolStatus: ClubMemberSchoolStatus.STUDENT,
         memberStatus: ClubMemberStatus.ACTIVE,
+        memberNumber: 1001,
         joinedAt: new Date("2024-01-01"),
       },
     });
@@ -333,6 +334,7 @@ async function main() {
         memberRoleType: ClubMemberRoleType.CHAIRMAN,
         schoolStatus: ClubMemberSchoolStatus.APPROVED,
         memberStatus: ClubMemberStatus.ACTIVE,
+        memberNumber: 1,
         isInstructor: true,
         joinedAt: new Date("2020-01-01"),
       },

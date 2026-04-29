@@ -87,6 +87,7 @@ Located in `src/components/admin/`:
   - Statistics dashboard for member statuses and roles.
   - Comprehensive member list with search/filter (planned).
   - Full profile editing (stamdata, contact info, membership type).
+  - Medlemsnummer: Management of club-specific member numbers used as payment references. Unique per club.
   - Instructor status: Marking a member as "Instruktør" enables their public visibility on the club's instructor contact page.
   - Certificate management (normalized model).
 - **Privacy**: All data is strictly tenant-scoped.

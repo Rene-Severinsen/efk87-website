@@ -48,6 +48,13 @@ export async function updateAdminMemberProfileAction(
   const city = getString("city");
   const mobilePhone = getString("mobilePhone");
   const mdkNumber = getString("mdkNumber");
+  const memberNumberRaw = getString("memberNumber");
+  const memberNumber = memberNumberRaw ? parseInt(memberNumberRaw, 10) : null;
+
+  if (memberNumber !== null && (isNaN(memberNumber) || memberNumber <= 0)) {
+    throw new Error("Medlemsnummer skal være et positivt heltal");
+  }
+
   const profileImageUrl = getString("profileImageUrl");
   const birthDate = getDate("birthDate");
   const joinedAt = getDate("joinedAt");
@@ -63,6 +70,23 @@ export async function updateAdminMemberProfileAction(
   const selectedCertificates = certificateTypes.filter(type => formData.get(`cert_${type}`) === "on");
 
   await prisma.$transaction(async (tx) => {
+    // Check for unique memberNumber within the club
+    if (memberNumber !== null) {
+      const existing = await tx.clubMemberProfile.findFirst({
+        where: {
+          clubId: club.id,
+          memberNumber,
+          userId: {
+            not: userId,
+          },
+        },
+      });
+
+      if (existing) {
+        throw new Error(`Medlemsnummer ${memberNumber} er allerede i brug i denne klub.`);
+      }
+    }
+
     // Update Profile
     await tx.clubMemberProfile.upsert({
       where: {
@@ -78,6 +102,7 @@ export async function updateAdminMemberProfileAction(
         postalCode,
         city,
         mobilePhone,
+        memberNumber,
         mdkNumber,
         profileImageUrl,
         membershipType,
@@ -97,6 +122,7 @@ export async function updateAdminMemberProfileAction(
         postalCode,
         city,
         mobilePhone,
+        memberNumber,
         mdkNumber,
         profileImageUrl,
         membershipType,

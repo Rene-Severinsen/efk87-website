@@ -541,6 +541,7 @@ model ClubMemberProfile {
   postalCode      String?
   city            String?
   mobilePhone     String?
+  memberNumber    Int?
   mdkNumber       String?
   profileImageUrl String?
   membershipType  ClubMemberMembershipType @default(SENIOR)
@@ -559,10 +560,12 @@ model ClubMemberProfile {
   user User @relation(fields: [userId], references: [id])
 
   @@unique([clubId, userId])
+  @@unique([clubId, memberNumber])
   @@index([clubId, memberStatus])
   @@index([clubId, membershipType])
   @@index([clubId, schoolStatus])
   @@index([clubId, memberRoleType])
+  @@index([clubId, memberNumber])
   @@index([clubId, legacySource, legacyId])
 }
 

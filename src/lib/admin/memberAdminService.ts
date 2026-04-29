@@ -8,6 +8,7 @@ export interface AdminMemberOverviewDTO {
   firstName: string | null;
   lastName: string | null;
   mobilePhone: string | null;
+  memberNumber: number | null;
   mdkNumber: string | null;
   membershipType: string;
   memberRoleType: string;
@@ -64,6 +65,7 @@ export async function getAdminMemberOverview(clubId: string): Promise<AdminMembe
     firstName: m.firstName,
     lastName: m.lastName,
     mobilePhone: m.mobilePhone,
+    memberNumber: m.memberNumber,
     mdkNumber: m.mdkNumber,
     membershipType: m.membershipType,
     memberRoleType: m.memberRoleType,

@@ -186,6 +186,7 @@ export default async function Page({ params }: PageProps) {
                   <Select label="Medlemskab" name="membershipType" options={membershipOptions} defaultValue={member.membershipType} />
                   <Select label="Klubrolle" name="memberRoleType" options={roleOptions} defaultValue={member.memberRoleType} />
                   <Select label="Status" name="memberStatus" options={statusOptions} defaultValue={member.memberStatus} />
+                  <Field label="Medlemsnummer" name="memberNumber" type="number" defaultValue={member.memberNumber} />
                   <Select label="Skolestatus" name="schoolStatus" options={schoolStatusOptions} defaultValue={member.schoolStatus} />
                   <Toggle label="Instruktør" name="isInstructor" defaultChecked={member.isInstructor} />
                 </Section>

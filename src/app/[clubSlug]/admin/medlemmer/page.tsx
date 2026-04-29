@@ -109,7 +109,7 @@ export default async function Page({ params }: PageProps) {
                 <tr>
                   <th>Navn</th>
                   <th>Email</th>
-                  <th>Mobil</th>
+                  <th>Medlemsnr.</th>
                   <th>MDK nr.</th>
                   <th>Medlemskab</th>
                   <th>Medlemstype</th>
@@ -125,7 +125,7 @@ export default async function Page({ params }: PageProps) {
                   <tr key={member.userId}>
                     <td style={{ fontWeight: '500' }}>{member.displayName}</td>
                     <td>{member.email}</td>
-                    <td>{member.mobilePhone || '—'}</td>
+                    <td>{member.memberNumber || '—'}</td>
                     <td>{member.mdkNumber || '—'}</td>
                     <td>{getMembershipLabel(member.membershipType)}</td>
                     <td>{getRoleLabel(member.memberRoleType)}</td>
