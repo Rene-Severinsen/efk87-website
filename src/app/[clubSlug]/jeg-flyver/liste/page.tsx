@@ -54,13 +54,13 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
         {flightIntents.length > 0 ? (
           <div className="list">
             {flightIntents.map((intent) => (
-              <div className="row-item" key={intent.id} style={{ padding: '1rem 0' }}>
-                <div className="row-icon" style={{ fontSize: '1.5rem' }}>
+              <div className="row-item" key={intent.id}>
+                <div className="row-icon">
                   {activityIcons[intent.activityType] || '•'}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div className="row-title" style={{ fontWeight: 600 }}>
+                  <div className="row-item-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                    <div className="row-title">
                       {intent.displayName}
                     </div>
                     <span className="status-badge info">

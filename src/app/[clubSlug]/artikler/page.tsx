@@ -73,7 +73,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
       currentPath={`/${clubSlug}/artikler`}
       maxWidth="1440px"
     >
-      <section className="toolbar" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+      <section className="toolbar-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
         <article className="card toolbar-card" style={{ padding: '18px 20px', minHeight: '84px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'var(--club-panel)' }}>
           <label htmlFor="search-input" style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--club-accent-2)', marginBottom: '8px' }}>Søg i artikler</label>
           <form action={`/${clubSlug}/artikler`} method="GET" style={{ position: 'relative' }}>
@@ -114,8 +114,8 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
         </article>
       </section>
 
-      <div className="layout" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-        <div className="stack" style={{ display: 'grid', gap: '20px', gridColumn: 'span 2' }}>
+      <div className="artikler-layout" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
+        <div className="stack" style={{ display: 'grid', gap: '20px' }}>
           {showFeatured && featuredArticle && (
             <ThemedSectionCard>
               <div className="section-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>

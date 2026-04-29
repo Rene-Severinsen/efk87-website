@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import { PublicNavigationItem } from "../../lib/publicSite/publicNavigation";
 import { logoutAction } from "../../lib/auth/logout";
 
@@ -19,24 +21,39 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
   actionItems,
   currentPath
 }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <header className="topbar">
       <div className="brand">
         <div className="brand-mark">{clubName}</div>
         <div>
-          <div>{clubDisplayName} Klubsite</div>
-          <div className="small">Det samlede overblik over din klub</div>
+          <div>{clubDisplayName}</div>
+          <div className="small">Klubsite</div>
         </div>
       </div>
 
-      <nav className="nav">
+      <button 
+        className="nav-toggle" 
+        onClick={toggleMenu}
+        aria-label="Toggle navigation"
+      >
+        {isMenuOpen ? '✕' : '☰'}
+      </button>
+
+      <nav className={`nav ${isMenuOpen ? 'mobile-open' : ''}`}>
         {navigationItems.map((item) => {
-           const isActive = currentPath === item.href || (item.key === 'home' && currentPath === `/${item.href.split('/')[1]}`);
+           const isActive = currentPath === item.href || (item.key === 'home' && (currentPath === `/${item.href.split('/')[1]}` || currentPath === `/${clubSlug}`));
            return (
             <a 
               key={item.key} 
               href={item.href}
               className={isActive ? 'active' : ''}
+              onClick={() => setIsMenuOpen(false)}
             >
               {item.label}
             </a>
@@ -44,12 +61,11 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
         })}
       </nav>
 
-      <div className="actions">
+      <div className={`actions ${isMenuOpen ? 'mobile-open' : ''}`}>
         {actionItems.map((item) => {
           if (item.key === 'logout') {
             return (
               <form key={item.key} action={async () => {
-                "use server";
                 await logoutAction(clubSlug);
               }}>
                 <button 
@@ -67,6 +83,7 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
               key={item.key} 
               href={item.href}
               className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
+              onClick={() => setIsMenuOpen(false)}
             >
               {item.label}
             </a>

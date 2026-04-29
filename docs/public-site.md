@@ -112,6 +112,14 @@ Visual settings are managed per club through the `ClubTheme` model.
 ### Approved Design Master
 The homepage (`PublicClubHomePage.tsx`) is the approved visual master. All non-home pages must follow the same dark premium club-platform theme using the shared themed shell.
 
+## Responsive Design
+All public and member-facing pages are built to be responsive-first.
+
+- **Breakpoints**: 768px (Mobile) and 1100px (Tablet).
+- **Mobile Menu**: `ThemedTopBar` provides a mobile-optimized navigation menu.
+- **Rules**: No horizontal overflow at 375px width, touch-friendly targets (44px), and readable font sizes.
+- **Documentation**: See [Responsive Design Guidelines](responsive-design.md) for details.
+
 ## Homepage V2
 
 Frontpage V2 is now the active live homepage for all clubs.

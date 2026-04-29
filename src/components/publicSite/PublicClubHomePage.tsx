@@ -1,9 +1,9 @@
 import React from 'react';
 import './PublicClubHomePage.css';
+import { ThemedTopBar } from './ThemedTopBar';
 import { ClubTheme, PublicHomeFeatureTile, PublicHomeInfoCard, PublicClubFooter, PublicSponsor } from "../../generated/prisma";
 import { PublicNavigationItem } from "../../lib/publicSite/publicNavigation";
 import { PublicFlightIntentListItem } from "../../lib/publicSite/publicFlightIntentService";
-import { logoutAction } from "../../lib/auth/logout";
 
 interface PublicFooterData {
   footer: PublicClubFooter | null;
@@ -101,57 +101,14 @@ export default function PublicClubHomePage({
   return (
     <div className="public-home" style={themeStyles}>
       <div className="shell">
-        <header className="topbar">
-          <div className="brand">
-            <div className="brand-mark">{clubName}</div>
-            <div>
-              <div>{clubDisplayName} Klubsite</div>
-              <div className="small">Ny visuel forside med overblik, aktivitet og hurtige indgange</div>
-            </div>
-          </div>
-
-          <nav className="nav">
-            {navigationItems.map((item) => (
-              <a 
-                key={item.key} 
-                href={item.href}
-                className={item.key === 'home' ? 'active' : ''}
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="actions">
-            {actionItems.map((item) => {
-              if (item.key === 'logout') {
-                return (
-                  <form key={item.key} action={async () => {
-                    "use server";
-                    await logoutAction(clubSlug);
-                  }}>
-                    <button 
-                      type="submit"
-                      className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
-                    >
-                      {item.label}
-                    </button>
-                  </form>
-                );
-              }
-
-              return (
-                <a 
-                  key={item.key} 
-                  href={item.href}
-                  className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
-                >
-                  {item.label}
-                </a>
-              );
-            })}
-          </div>
-        </header>
+        <ThemedTopBar 
+          clubSlug={clubSlug}
+          clubName={clubName}
+          clubDisplayName={clubDisplayName}
+          navigationItems={navigationItems}
+          actionItems={actionItems}
+          currentPath={`/${clubSlug}`}
+        />
 
         <section className="hero-grid">
           <article className="card hero-main" style={{ backgroundImage: `linear-gradient(180deg, rgba(6,10,18,0.18), rgba(6,10,18,0.84)), url('${IMAGES.heroMain}')` }}>

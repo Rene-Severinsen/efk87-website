@@ -39,15 +39,9 @@ export default async function ArticleDetailPage({ params }: PageProps) {
     >
       {article.heroImageUrl && (
         <div 
+          className="article-hero-container"
           style={{ 
-            width: '100%', 
-            height: '400px', 
-            borderRadius: 'var(--club-radius)', 
             backgroundImage: `url(${article.heroImageUrl})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            marginBottom: '2rem',
-            border: '1px solid var(--club-line)'
           }} 
         />
       )}
