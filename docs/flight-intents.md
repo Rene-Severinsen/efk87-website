@@ -36,11 +36,17 @@ The `ClubFlightIntent` model includes:
 - **Future intents:** Future-dated flight intents are supported at the data level but are not displayed on today's homepage.
 - **Submit Flow (Future):** "Jeg flyver" submission will be a `MEMBERS_ONLY` action. Future UI must support selecting today or a future date.
 
-## Shared Service
+## Shared Services
 
+### Public Access
 All public flight intent queries must go through `src/lib/publicSite/publicFlightIntentService.ts`.
 - `getTodayFlightIntents(clubId, viewer)`: Used for the daily presence list on the homepage, respecting visibility.
 - `getActiveFlightIntents(clubId, viewer)`: Returns all active intents, including future ones, respecting visibility.
+
+### Member Access
+All member-specific flight intent queries must go through `src/lib/flightIntents/memberFlightIntentService.ts`.
+- `getMemberRecentFlightIntents(clubId, viewer)`: Returns the member's own recent flight intents (limit 10), ordered by `flightDate` and `createdAt` descending.
+- **Ownership Identity Strategy (Current Implementation)**: Due to the current lack of a `userId` relation on `ClubFlightIntent`, ownership is determined by matching `displayName` against the viewer's `name` or `email` (fallback to "Medlem"). This is temporary and will be replaced by a `userId` relation in a future iteration.
 
 Direct Prisma queries in route pages are discouraged.
 
@@ -96,7 +102,7 @@ Future scope includes sending automated email notifications when a new flight in
 ### UI Feedback
 - The submission form may include a note informing the member that a message will be sent to the configured mailing list upon submission.
 
-## Member Submission Flow
+## Member Submission & Overview
 
 Submission of new flight intents requires an authenticated **ACTIVE** `ClubMembership`.
 
@@ -109,5 +115,7 @@ Submission of new flight intents requires an authenticated **ACTIVE** `ClubMembe
   - Rows are created with `status: ACTIVE`, `source: FUTURE_MEMBER_APP`, and `visibility: PUBLIC` (for now).
   - `displayName` is derived from the user's name or email.
   - `expiresAt` is set to the end of the `flightDate`.
+- **Overview**: The member page shows their own recent (up to 10) flight intents below the form.
+- **Edit/Cancel**: Not yet implemented. Future scope.
 - **Retention**: Data is retained for future statistics even after expiry.
 - **Analytics**: The model supports future analytics for activity volume, categorization, and engagement.

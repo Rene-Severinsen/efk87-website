@@ -4,6 +4,7 @@ import PublicClubShell from "../../../components/publicSite/PublicClubShell";
 import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 import { ClubFlightIntentType } from "../../../generated/prisma";
 import { createFlightIntentAction } from "../../../lib/flightIntents/createFlightIntentAction";
+import { getMemberRecentFlightIntents } from "../../../lib/flightIntents/memberFlightIntentService";
 
 interface JegFlyverPageProps {
   params: Promise<{
@@ -32,7 +33,9 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
   }
 
   // Ensure user is an active member
-  await requireActiveMemberForClub(club.id, club.slug);
+  const viewer = await requireActiveMemberForClub(club.id, club.slug);
+
+  const recentIntents = await getMemberRecentFlightIntents(club.id, viewer);
 
   const todayStr = new Date().toISOString().split("T")[0];
 
@@ -129,7 +132,57 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
           </form>
 
           <div className="mt-8 pt-8 border-t border-slate-100">
-            <p className="text-sm text-slate-500 italic text-center">
+            <h2 className="text-xl font-semibold mb-4">Dine seneste meldinger</h2>
+            
+            {recentIntents.length === 0 ? (
+              <p className="text-slate-500 italic">
+                Du har endnu ikke oprettet nogen &apos;Jeg flyver&apos;-meldinger.
+              </p>
+            ) : (
+              <div className="space-y-4">
+                {recentIntents.map((intent) => (
+                  <div key={intent.id} className="p-4 rounded-lg border border-slate-100 bg-slate-50">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="font-medium">
+                        {new Date(intent.flightDate).toLocaleDateString("da-DK", { 
+                          weekday: 'short', 
+                          day: 'numeric', 
+                          month: 'short' 
+                        })}
+                        {intent.plannedAt && (
+                          <span className="ml-2 text-slate-500">
+                            kl. {new Date(intent.plannedAt).toLocaleTimeString("da-DK", { 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
+                          </span>
+                        )}
+                      </div>
+                      <span className={`text-xs px-2 py-1 rounded-full ${
+                        intent.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-slate-200 text-slate-600'
+                      }`}>
+                        {intent.status}
+                      </span>
+                    </div>
+                    <div className="text-sm text-slate-700 mb-1">
+                      <span className="font-semibold">{getActivityLabel(intent.activityType)}</span>
+                    </div>
+                    {intent.message && (
+                      <div className="text-sm text-slate-600 italic">
+                        &ldquo;{intent.message}&rdquo;
+                      </div>
+                    )}
+                  </div>
+                ))}
+                <p className="text-xs text-slate-400 mt-4">
+                  Redigering og sletning er planlagt til en fremtidig opdatering.
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-slate-100 text-center">
+            <p className="text-sm text-slate-500 italic">
               Dagens offentlige aktivitetsliste vises på forsiden.
             </p>
           </div>
@@ -137,4 +190,16 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
       </div>
     </PublicClubShell>
   );
+}
+
+function getActivityLabel(type: ClubFlightIntentType): string {
+  switch (type) {
+    case ClubFlightIntentType.FLYING: return "Flyvning";
+    case ClubFlightIntentType.TRAINING: return "Skoleflyvning / Træning";
+    case ClubFlightIntentType.MAINTENANCE: return "Vedligeholdelse";
+    case ClubFlightIntentType.WEATHER_DEPENDENT: return "Vejrafhængig flyvning";
+    case ClubFlightIntentType.SOCIAL: return "Socialt samvær";
+    case ClubFlightIntentType.OTHER: return "Andet";
+    default: return type;
+  }
 }
