@@ -19,7 +19,7 @@ Admin routes are organized into several logical groups. Most routes currently ex
 
 ### Indhold
 - **Forsideindhold** (`/admin/forsideindhold`): Homepage content and section control (stub).
-- **Artikler** (`/admin/artikler`): News and article publishing (stub).
+- **Artikler** (`/admin/artikler`): News and article publishing. Supports rich text editing (TipTap), server-side slug generation, and external image URL insertion. Reading time has been removed.
 - **Forum** (`/admin/forum`): Forum moderation and settings (stub).
 - **Galleri** (`/admin/galleri`): Photo gallery management (read-only foundation).
 

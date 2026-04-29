@@ -6,48 +6,53 @@ import { requireClubBySlug } from "../tenancy/tenantService";
 import { requireClubAdminForClub } from "../auth/adminAccessGuards";
 import prisma from "../db/prisma";
 import { ArticleStatus, PublicSurfaceVisibility } from "../../generated/prisma";
-import { normalizeClubSlug } from "../tenancy/tenantParams";
+import { createUniqueArticleSlug } from "../articles/articleSlug";
+import sanitizeHtml from "sanitize-html";
+
+const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
+  allowedTags: [
+    "p", "h2", "h3", "h4", "strong", "em", "ul", "ol", "li", "blockquote", "a", "img"
+  ],
+  allowedAttributes: {
+    "a": ["href", "target", "rel"],
+    "img": ["src", "alt", "title"]
+  },
+  transformTags: {
+    "a": (tagName, attribs) => {
+      return {
+        tagName: "a",
+        attribs: {
+          ...attribs,
+          rel: "noopener noreferrer",
+          target: "_blank"
+        }
+      };
+    }
+  }
+};
 
 export async function createArticleAction(clubSlug: string, formData: FormData) {
   const club = await requireClubBySlug(clubSlug);
   await requireClubAdminForClub(club.id, clubSlug);
 
   const title = formData.get("title") as string;
-  const rawSlug = formData.get("slug") as string;
   const excerpt = formData.get("excerpt") as string;
-  const body = formData.get("body") as string;
+  const rawBody = formData.get("body") as string;
   const heroImageUrl = formData.get("heroImageUrl") as string;
   const authorName = formData.get("authorName") as string;
   const categoryId = formData.get("categoryId") as string;
   const status = formData.get("status") as ArticleStatus;
   const visibility = formData.get("visibility") as PublicSurfaceVisibility;
   const isFeatured = formData.get("isFeatured") === "true";
-  const readingMinutes = formData.get("readingMinutes") ? parseInt(formData.get("readingMinutes") as string, 10) : null;
   const tagIds = formData.getAll("tagIds") as string[];
 
   // Validation
-  if (!title || !rawSlug || !body) {
-    throw new Error("Title, slug, and body are required");
+  if (!title || !rawBody) {
+    throw new Error("Titel og indhold er påkrævet");
   }
 
-  const slug = normalizeClubSlug(rawSlug);
-  if (!slug) {
-    throw new Error("Invalid slug");
-  }
-
-  // Check for duplicate slug
-  const existing = await prisma.article.findUnique({
-    where: {
-      clubId_slug: {
-        clubId: club.id,
-        slug,
-      },
-    },
-  });
-
-  if (existing) {
-    throw new Error("Slug already in use");
-  }
+  const body = sanitizeHtml(rawBody, SANITIZE_OPTIONS);
+  const slug = await createUniqueArticleSlug(club.id, title);
 
   const publishedAt = status === ArticleStatus.PUBLISHED ? new Date() : null;
 
@@ -58,13 +63,12 @@ export async function createArticleAction(clubSlug: string, formData: FormData) 
       slug,
       excerpt,
       body,
-      heroImageUrl,
+      heroImageUrl: heroImageUrl || null,
       authorName,
       categoryId: categoryId || null,
       status,
       visibility,
       isFeatured,
-      readingMinutes,
       publishedAt,
       tags: {
         create: tagIds.map((tagId) => ({
@@ -84,47 +88,43 @@ export async function updateArticleAction(clubSlug: string, articleId: string, f
   await requireClubAdminForClub(club.id, clubSlug);
 
   const title = formData.get("title") as string;
-  const rawSlug = formData.get("slug") as string;
   const excerpt = formData.get("excerpt") as string;
-  const body = formData.get("body") as string;
+  const rawBody = formData.get("body") as string;
   const heroImageUrl = formData.get("heroImageUrl") as string;
   const authorName = formData.get("authorName") as string;
   const categoryId = formData.get("categoryId") as string;
   const status = formData.get("status") as ArticleStatus;
   const visibility = formData.get("visibility") as PublicSurfaceVisibility;
   const isFeatured = formData.get("isFeatured") === "true";
-  const readingMinutes = formData.get("readingMinutes") ? parseInt(formData.get("readingMinutes") as string, 10) : null;
   const tagIds = formData.getAll("tagIds") as string[];
 
   // Validation
-  if (!title || !rawSlug || !body) {
-    throw new Error("Title, slug, and body are required");
+  if (!title || !rawBody) {
+    throw new Error("Titel og indhold er påkrævet");
   }
 
-  const slug = normalizeClubSlug(rawSlug);
-  if (!slug) {
-    throw new Error("Invalid slug");
-  }
-
-  // Check for duplicate slug (excluding current article)
-  const existing = await prisma.article.findFirst({
-    where: {
-      clubId: club.id,
-      slug,
-      NOT: { id: articleId },
-    },
-  });
-
-  if (existing) {
-    throw new Error("Slug already in use");
-  }
+  const body = sanitizeHtml(rawBody, SANITIZE_OPTIONS);
 
   const currentArticle = await prisma.article.findUnique({
-    where: { id: articleId },
-    select: { status: true, publishedAt: true },
+    where: { id: articleId, clubId: club.id },
+    select: { status: true, publishedAt: true, slug: true },
   });
 
-  let publishedAt = currentArticle?.publishedAt;
+  if (!currentArticle) {
+    throw new Error("Artiklen blev ikke fundet");
+  }
+
+  // Slug generation logic:
+  // if article is DRAFT, regenerate slug from title.
+  // if article is PUBLISHED, keep existing slug unless no slug exists.
+  let slug = currentArticle.slug;
+  if (status === ArticleStatus.DRAFT) {
+    slug = await createUniqueArticleSlug(club.id, title, articleId);
+  } else if (!slug) {
+    slug = await createUniqueArticleSlug(club.id, title, articleId);
+  }
+
+  let publishedAt = currentArticle.publishedAt;
   if (status === ArticleStatus.PUBLISHED && !publishedAt) {
     publishedAt = new Date();
   }
@@ -138,13 +138,12 @@ export async function updateArticleAction(clubSlug: string, articleId: string, f
         slug,
         excerpt,
         body,
-        heroImageUrl,
+        heroImageUrl: heroImageUrl || null,
         authorName,
         categoryId: categoryId || null,
         status,
         visibility,
         isFeatured,
-        readingMinutes,
         publishedAt,
       },
     });

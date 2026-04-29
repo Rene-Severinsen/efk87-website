@@ -9,7 +9,6 @@ export interface ArticleDTO {
   excerpt: string | null;
   heroImageUrl: string | null;
   authorName: string | null;
-  readingMinutes: number | null;
   publishedAt: Date | null;
   categoryName: string | null;
   categorySlug: string | null;
@@ -147,7 +146,6 @@ function mapToArticleDTO(article: ArticleWithRelations): ArticleDTO {
     excerpt: article.excerpt,
     heroImageUrl: article.heroImageUrl,
     authorName: article.authorName,
-    readingMinutes: article.readingMinutes,
     publishedAt: article.publishedAt,
     categoryName: article.category?.name || null,
     categorySlug: article.category?.slug || null,

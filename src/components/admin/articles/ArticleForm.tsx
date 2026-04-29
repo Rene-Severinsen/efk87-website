@@ -3,6 +3,7 @@
 import React from "react";
 import { ArticleStatus, PublicSurfaceVisibility, ArticleCategory, ArticleTag, Article } from "../../../generated/prisma";
 import Link from "next/link";
+import ArticleRichTextEditor from "./ArticleRichTextEditor";
 
 interface ArticleWithTags extends Article {
   tags?: { tagId: string }[];
@@ -24,11 +25,13 @@ export default function ArticleForm({
   action,
 }: ArticleFormProps) {
   const [isPending, setIsPending] = React.useState(false);
+  const [bodyContent, setBodyContent] = React.useState(initialData?.body || "");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsPending(true);
     const formData = new FormData(e.currentTarget);
+    formData.set("body", bodyContent);
     try {
       await action(formData);
     } catch (error) {
@@ -54,17 +57,6 @@ export default function ArticleForm({
           </div>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '8px' }}>Slug</label>
-            <input
-              name="slug"
-              type="text"
-              required
-              defaultValue={initialData?.slug}
-              style={{ width: '100%', padding: '8px 12px', borderRadius: '4px', border: '1px solid #d9d9d9' }}
-            />
-          </div>
-
-          <div style={{ marginBottom: '16px' }}>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '8px' }}>Uddrag (Excerpt)</label>
             <textarea
               name="excerpt"
@@ -75,13 +67,10 @@ export default function ArticleForm({
           </div>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '8px' }}>Indhold (Markdown-ish)</label>
-            <textarea
-              name="body"
-              required
-              rows={15}
-              defaultValue={initialData?.body}
-              style={{ width: '100%', padding: '8px 12px', borderRadius: '4px', border: '1px solid #d9d9d9', fontFamily: 'monospace' }}
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '8px' }}>Indhold</label>
+            <ArticleRichTextEditor
+              content={bodyContent}
+              onChange={setBodyContent}
             />
           </div>
         </div>
@@ -172,24 +161,15 @@ export default function ArticleForm({
           </div>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '8px' }}>Læsetid (minutter)</label>
-            <input
-              name="readingMinutes"
-              type="number"
-              min="1"
-              defaultValue={initialData?.readingMinutes ?? undefined}
-              style={{ width: '100%', padding: '8px 12px', borderRadius: '4px', border: '1px solid #d9d9d9' }}
-            />
-          </div>
-
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '8px' }}>Hero Image URL</label>
+            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '8px' }}>Hero Image URL (Valgfri)</label>
             <input
               name="heroImageUrl"
               type="text"
               defaultValue={initialData?.heroImageUrl ?? undefined}
+              placeholder="https://eksempel.dk/billede.jpg"
               style={{ width: '100%', padding: '8px 12px', borderRadius: '4px', border: '1px solid #d9d9d9' }}
             />
+            <p style={{ fontSize: '0.75rem', color: '#666', marginTop: '4px' }}>Dette billede vises øverst i artiklen.</p>
           </div>
         </div>
 

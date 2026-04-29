@@ -32,6 +32,10 @@ All models are scoped by `clubId`. Every query and write operation must ensure t
 
 ## Implementation Details
 
+- **Slug Generation**: Slugs are auto-generated from the title. Uniqueness is guaranteed per club. For DRAFT articles, the slug is regenerated when the title changes. For PUBLISHED articles, the slug is preserved.
+- **Rich Text**: The article body is stored as sanitized HTML. The admin uses a WYSIWYG editor (TipTap).
+- **Images**: Inline images are supported via external URLs only. Hero images are optional.
+- **Sanitization**: All HTML content is sanitized before storage and rendering to prevent XSS.
 - **Services**: Located in `src/lib/articles/` (public) and `src/lib/admin/` (admin).
 - **Actions**: Located in `src/lib/admin/articleActions.ts`.
 - **Public UI**: Ported from the approved dark premium design mockup.
@@ -39,7 +43,7 @@ All models are scoped by `clubId`. Every query and write operation must ensure t
 
 ## Future Scopes
 
-- Rich-text editor (currently plain text/markdown-ish).
-- Image upload and storage (currently heroImageUrl text field).
+- Image upload and storage (currently external URLs only).
 - Legacy import scripts.
 - Comments.
+- Approval workflow.

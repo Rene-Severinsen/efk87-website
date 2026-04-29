@@ -91,7 +91,6 @@ model Article {
   visibility     PublicSurfaceVisibility
   isFeatured     Boolean                 @default(false)
   authorName     String?
-  readingMinutes Int?
   publishedAt    DateTime?
   legacySource   String?
   legacyId       String?

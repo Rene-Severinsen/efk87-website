@@ -82,7 +82,7 @@ export default async function ArtiklerPage({ params }: PageProps) {
                   </div>
 
                   <div className="meta" style={{ color: 'var(--club-muted)', fontSize: '14px' }}>
-                    Af {featuredArticle.authorName || 'Redaktionen'} · {featuredArticle.publishedAt ? new Date(featuredArticle.publishedAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' }) : ''} · {featuredArticle.readingMinutes || 0} min læsetid
+                    Af {featuredArticle.authorName || 'Redaktionen'} · {featuredArticle.publishedAt ? new Date(featuredArticle.publishedAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
                   </div>
 
                   <h3 style={{ fontSize: '30px', lineHeight: '1.08', letterSpacing: '-0.03em' }}>{featuredArticle.title}</h3>

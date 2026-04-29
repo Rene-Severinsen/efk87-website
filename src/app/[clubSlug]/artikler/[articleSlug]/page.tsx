@@ -55,14 +55,13 @@ export default async function ArticleDetailPage({ params }: PageProps) {
       <ThemedSectionCard>
         <div style={{ color: 'var(--club-muted)', marginBottom: '2rem', fontSize: '14px', display: 'flex', gap: '1rem' }}>
           <span>Af {article.authorName || 'Redaktionen'}</span>
-          {article.readingMinutes && <span>· {article.readingMinutes} min læsetid</span>}
         </div>
 
-        <div className="prose prose-invert max-w-none" style={{ color: 'var(--club-text)', lineHeight: '1.8', fontSize: '18px' }}>
-          {article.body.split('\n').map((para, i) => (
-            para.trim() ? <p key={i} style={{ marginBottom: '1.5rem' }}>{para}</p> : <br key={i} />
-          ))}
-        </div>
+        <div 
+          className="prose prose-invert max-w-none" 
+          style={{ color: 'var(--club-text)', lineHeight: '1.8', fontSize: '18px' }}
+          dangerouslySetInnerHTML={{ __html: article.body }}
+        />
 
         {article.tags.length > 0 && (
           <div style={{ marginTop: '3rem', borderTop: '1px solid var(--club-line)', paddingTop: '1.5rem' }}>
