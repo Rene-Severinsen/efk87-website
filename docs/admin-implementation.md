@@ -3,6 +3,31 @@
 ## Overview
 The club admin area is located at `/[clubSlug]/admin`. It provides a dedicated workspace for club administrators and owners to manage club-specific data, members, and content.
 
+## Route Structure
+Admin routes are organized into several logical groups. Most routes currently exist as **protected stubs** to reserve the URL space and provide a consistent navigation experience while real functionality is being implemented.
+
+### Overblik
+- **Forside** (`/admin`): Main dashboard with KPI overview.
+- **Handlinger i dag** (`/admin/handlinger-i-dag`): Tasks requiring immediate attention (stub).
+- **Systemstatus** (`/admin/systemstatus`): Operational health and delivery status (stub).
+
+### Klubdrift
+- **Medlemmer** (`/admin/medlemmer`): Member list and role management (stub).
+- **Flyveskole** (`/admin/flyveskole`): School flying and instructor overview (stub).
+- **Flyvemeldinger** (`/admin/flyvemeldinger`): Moderation of flight intents.
+- **Mailinglister** (`/admin/mailinglister`): Mailing list configuration (stub).
+
+### Indhold
+- **Forsideindhold** (`/admin/forsideindhold`): Homepage content and section control (stub).
+- **Artikler** (`/admin/artikler`): News and article publishing (stub).
+- **Forum** (`/admin/forum`): Forum moderation and settings (stub).
+- **Galleri** (`/admin/galleri`): Photo gallery management (stub).
+
+### Platform
+- **Statistik** (`/admin/statistik`): Activity metrics and flight reports.
+- **Eksport** (`/admin/eksport`): Secure data exports (stub).
+- **Site settings** (`/admin/site-settings`): Club configuration, theme, and domain (stub).
+
 ## Access Control
 Admin routes are protected by `requireClubAdminForClub` guard located in `src/lib/auth/adminAccessGuards.ts`.
 
@@ -25,6 +50,7 @@ Located in `src/components/admin/`:
 - `AdminShell`: Layout wrapper with sidebar and topbar.
 - `AdminDashboard`: Main dashboard view.
 - `AdminSidebar`: Navigation menu.
+- `AdminPlaceholderPage`: Consistent placeholder for unimplemented modules.
 - `AdminStatistik`: Statistics dashboard foundation.
 - `AdminHero`: Welcome section.
 - `AdminMetricGrid`: KPI cards (currently placeholders).

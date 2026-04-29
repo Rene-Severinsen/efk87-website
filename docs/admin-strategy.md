@@ -128,14 +128,17 @@ These addresses must be stored per tenant and must never be hardcoded in busines
 - **Calendar Logic**: Describe the calendar as a "simple calendar/overview" rather than a complex "event system".
 - **Out of Scope**: File/media uploads, full CMS editor implementation, emails, notifications, and complex analytics are future scope items.
 
+131. **All admin routes are protected stubs by default**: Routes are reserved and protected before implementation to ensure a consistent UX.
+
 ## Recommended Implementation Sequence
 
 1.  **Auth Provider**: Decide on and configure the authentication provider.
 2.  **Session Resolution**: Implement viewer/session resolution logic.
 3.  **Route Protection**: Protect the `/[clubSlug]/admin` route using middleware or layout-level checks.
 4.  **Admin Shell**: Create the basic admin layout and navigation.
-5.  **Read-only Dashboard**: Implement a dashboard showing current public site data in a read-only format. (COMPLETED v1 foundation)
-6.  **Homepage Editor**: Add the ability to edit the homepage hero and intro content.
-7.  **Theme Editor**: Implement the theme token editor.
-8.  **Surface Editors**: Implement editors for feature tiles, info cards, pages, and footer/sponsors.
-9.  **Moderation**: Add members management and "Jeg flyver" moderation/statistics.
+5.  **Route Stubs**: Implement all sidebar routes as protected stubs using `AdminPlaceholderPage`. (COMPLETED v1.1)
+6.  **Read-only Dashboard**: Implement a dashboard showing current public site data in a read-only format. (COMPLETED v1 foundation)
+7.  **Homepage Editor**: Add the ability to edit the homepage hero and intro content.
+8.  **Theme Editor**: Implement the theme token editor.
+9.  **Surface Editors**: Implement editors for feature tiles, info cards, pages, and footer/sponsors.
+10. **Moderation**: Add members management and "Jeg flyver" moderation/statistics. (In progress: Flight Intents completed)

@@ -39,14 +39,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             Forside
           </a>
           <a 
-            href={`/${clubSlug}/admin/actions`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/actions` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/handlinger-i-dag`} 
+            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/handlinger-i-dag` ? "active" : ""}`}
           >
             Handlinger i dag
           </a>
           <a 
-            href={`/${clubSlug}/admin/status`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/status` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/systemstatus`} 
+            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/systemstatus` ? "active" : ""}`}
           >
             Systemstatus
           </a>
@@ -55,14 +55,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         <div className="admin-sidebar-group">
           <div className="admin-sidebar-group-title">Klubdrift</div>
           <a 
-            href={`/${clubSlug}/admin/members`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/members` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/medlemmer`} 
+            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/medlemmer` ? "active" : ""}`}
           >
             Medlemmer
           </a>
           <a 
-            href={`/${clubSlug}/admin/flightschool`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/flightschool` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/flyveskole`} 
+            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/flyveskole` ? "active" : ""}`}
           >
             Flyveskole
           </a>
@@ -73,8 +73,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             Flyvemeldinger
           </a>
           <a 
-            href={`/${clubSlug}/admin/mailinglists`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/mailinglists` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/mailinglister`} 
+            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/mailinglister` ? "active" : ""}`}
           >
             Mailinglister
           </a>
@@ -83,14 +83,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         <div className="admin-sidebar-group">
           <div className="admin-sidebar-group-title">Indhold</div>
           <a 
-            href={`/${clubSlug}/admin/home-content`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/home-content` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/forsideindhold`} 
+            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/forsideindhold` ? "active" : ""}`}
           >
             Forsideindhold
           </a>
           <a 
-            href={`/${clubSlug}/admin/articles`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/articles` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/artikler`} 
+            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/artikler` ? "active" : ""}`}
           >
             Artikler
           </a>
@@ -101,8 +101,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             Forum
           </a>
           <a 
-            href={`/${clubSlug}/admin/gallery`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/gallery` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/galleri`} 
+            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/galleri` ? "active" : ""}`}
           >
             Galleri
           </a>
@@ -117,14 +117,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             Statistik
           </a>
           <a 
-            href={`/${clubSlug}/admin/export`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/export` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/eksport`} 
+            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/eksport` ? "active" : ""}`}
           >
             Eksport
           </a>
           <a 
-            href={`/${clubSlug}/admin/settings`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/settings` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/site-settings`} 
+            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/site-settings` ? "active" : ""}`}
           >
             Site settings
           </a>
