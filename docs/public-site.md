@@ -97,6 +97,7 @@ Visual settings are managed per club through the `ClubTheme` model.
 - **Dynamic Content**: Hero title and subtitle are sourced from the `PublicPage` model via `publicHomePageService`.
 - **Flight Intents**: "Jeg flyver" data is fetched via `publicFlightIntentService` and rendered on the homepage.
 - **Footer & Sponsors**: Data is fetched via `publicFooterService` and rendered on the homepage footer.
+- **Member Activity**: "Senest online" preview is fetched via `memberActivityService.ts` and shows a compact list of today's active members.
 - **Static Placeholders**: Content for forum activity and social highlights are currently static placeholders and will be modeled in future tasks.
 - **"Jeg flyver" Domain**: This is a social presence feature, not a standard event model. See [Flight Intents documentation](flight-intents.md) for details.
 

@@ -6,6 +6,7 @@ import { getClubTheme } from "../../lib/publicSite/publicThemeService";
 import { getActiveHomeFeatureTiles } from "../../lib/publicSite/publicHomeFeatureTileService";
 import { getActiveHomeInfoCards } from "../../lib/publicSite/publicHomeInfoCardService";
 import { getTodayFlightIntents } from "../../lib/publicSite/publicFlightIntentService";
+import { getMemberActivityStats } from "../../lib/publicSite/memberActivityService";
 import { getPublicFooterData } from "../../lib/publicSite/publicFooterService";
 import {
   getServerViewerForClub,
@@ -68,6 +69,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const featureTiles = await getActiveHomeFeatureTiles(club.id, viewer);
   const infoCards = await getActiveHomeInfoCards(club.id, viewer);
   const flightIntents = await getTodayFlightIntents(club.id, viewer);
+  const memberActivity = await getMemberActivityStats(club.id);
   const footerData = await getPublicFooterData(club.id);
   const navigationItems = getVisiblePublicNavigation(clubSlug, viewer);
   const actionItems = getVisiblePublicActions(clubSlug, viewer);
@@ -75,7 +77,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
   console.log("[ClubPage] DATA SUMMARY:", {
     clubId: club.id,
     hasHomePage: Boolean(homePage),
-    homePage,
+    memberActivity,
     hasTheme: Boolean(theme),
     featureTilesCount: featureTiles.length,
     infoCardsCount: infoCards.length,
@@ -113,6 +115,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
           viewer={serverViewer}
           theme={theme}
           todayFlightIntents={flightIntents}
+          memberActivity={memberActivity}
           navigationItems={navigationItems}
           actionItems={actionItems}
       />

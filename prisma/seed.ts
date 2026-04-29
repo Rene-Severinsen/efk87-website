@@ -114,10 +114,13 @@ async function main() {
     console.log("Seeding development test member...");
     const testMember = await prisma.user.upsert({
       where: { email: "test.member@efk87.local" },
-      update: {},
+      update: {
+        lastSeenAt: new Date(new Date().getTime() - 1000 * 60 * 15), // 15 mins ago
+      },
       create: {
         email: "test.member@efk87.local",
         name: "Test Member",
+        lastSeenAt: new Date(new Date().getTime() - 1000 * 60 * 15),
       },
     });
 
@@ -143,10 +146,13 @@ async function main() {
     console.log("Seeding development admin member...");
     const adminMember = await prisma.user.upsert({
       where: { email: "admin@efk87.local" },
-      update: {},
+      update: {
+        lastSeenAt: new Date(new Date().getTime() - 1000 * 60 * 5), // 5 mins ago
+      },
       create: {
         email: "admin@efk87.local",
         name: "Test Admin",
+        lastSeenAt: new Date(new Date().getTime() - 1000 * 60 * 5),
       },
     });
 

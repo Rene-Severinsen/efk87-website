@@ -1,6 +1,7 @@
 import React from 'react';
 import './PublicClubHomePageV2.css';
 import { PublicFlightIntentListItem } from '../../../lib/publicSite/publicFlightIntentService';
+import { MemberActivityStats } from '../../../lib/publicSite/memberActivityService';
 import { ServerViewerContext } from '../../../lib/auth/viewer';
 import { PublicNavigationItem } from '../../../lib/publicSite/publicNavigation';
 import Link from 'next/link';
@@ -18,6 +19,7 @@ interface PublicClubHomePageV2Props {
   };
   viewer: ServerViewerContext;
   todayFlightIntents: PublicFlightIntentListItem[];
+  memberActivity: MemberActivityStats;
   navigationItems: PublicNavigationItem[];
   actionItems: PublicNavigationItem[];
   theme?: {
@@ -39,7 +41,7 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Isolated V2 homepage component.
  * Ported closely from the provided mockup HTML.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, navigationItems, actionItems, theme }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems }: PublicClubHomePageV2Props) {
   const clubDisplayName = club.settings?.displayName || club.name;
   const clubShortName = club.settings?.shortName || club.name;
 
@@ -163,11 +165,30 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
         <section className="home-v2-stats-row">
           <article className="home-v2-card home-v2-stat">
             <div className="home-v2-top">
-              <small>Medlemmer online i dag</small>
-              <span className="home-v2-status-badge home-v2-info">Live</span>
+              <small>Senest online</small>
+              <span className="home-v2-status-badge home-v2-info">I dag</span>
             </div>
-            <div className="home-v2-value">23</div>
-            <small>7 flere end sidste søndag kl. 16:00</small>
+            
+            <div className="home-v2-compact-list">
+              {memberActivity.latestMembers.length > 0 ? (
+                memberActivity.latestMembers.map((member) => (
+                  <div key={member.id} className="home-v2-compact-item">
+                    <span className="home-v2-time">
+                      {member.lastSeenAt.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                    <span className="home-v2-name">
+                      {viewer.isMember ? (member.name || 'Medlem') : 'Medlem'}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <div className="home-v2-compact-empty">Ingen aktivitet endnu</div>
+              )}
+            </div>
+
+            <div className="home-v2-stat-footer">
+              <small>{memberActivity.todayActiveCount} medlemmer aktive i dag</small>
+            </div>
           </article>
           <article className="home-v2-card home-v2-stat">
             <div className="home-v2-top">
