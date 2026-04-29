@@ -33,7 +33,7 @@ const ArticleRichTextEditor = ({ content, onChange }: ArticleRichTextEditorProps
   }
 
   return (
-    <div className="w-full border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600 min-h-[400px]">
+    <div className="w-full border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600 resize-y overflow-auto min-h-[420px] max-h-[900px]">
       <BlockNoteView 
         editor={editor} 
         onChange={async () => {
@@ -44,6 +44,9 @@ const ArticleRichTextEditor = ({ content, onChange }: ArticleRichTextEditorProps
       />
       <style jsx global>{`
         .bn-container {
+          min-height: 100%;
+        }
+        .bn-editor {
           min-height: 400px;
         }
         /* Fix for potential z-index issues or toolbar positioning if any */
