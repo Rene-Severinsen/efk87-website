@@ -7,8 +7,11 @@ import { ProfileCertificatesPanel } from './ProfileCertificatesPanel';
 import { ProfileMailingListsPanel } from './ProfileMailingListsPanel';
 import { MemberProfileDTO } from '@/lib/members/memberProfileService';
 import { getMemberDisplayName } from '@/lib/members/memberUtils';
+import { ClubMailingListDto } from '@/lib/mailingLists/clubMailingListService';
 
 interface ProfilePageContentProps {
+  clubId: string;
+  clubSlug: string;
   viewer: {
     userId: string;
     name: string;
@@ -17,9 +20,16 @@ interface ProfilePageContentProps {
     membershipStatus: string;
   };
   profile: MemberProfileDTO;
+  mailingLists: ClubMailingListDto[];
 }
 
-export const MemberProfile: React.FC<ProfilePageContentProps> = ({ viewer, profile }) => {
+export const MemberProfile: React.FC<ProfilePageContentProps> = ({ 
+  clubId, 
+  clubSlug, 
+  viewer, 
+  profile,
+  mailingLists
+}) => {
   const firstName = profile.firstName || '';
   const lastName = profile.lastName || '';
   const displayName = getMemberDisplayName(profile, { name: viewer.name, email: viewer.email });
@@ -58,9 +68,13 @@ export const MemberProfile: React.FC<ProfilePageContentProps> = ({ viewer, profi
             isInstructor={profile.isInstructor}
           />
           
-          <ProfileCertificatesPanel certificates={profile.certificates} />
+          <ProfileCertificatesPanel 
+            clubId={clubId}
+            clubSlug={clubSlug}
+            certificates={profile.certificates} 
+          />
           
-          <ProfileMailingListsPanel />
+          <ProfileMailingListsPanel lists={mailingLists} />
         </div>
       </div>
     </div>

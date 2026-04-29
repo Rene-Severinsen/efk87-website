@@ -5,6 +5,13 @@ import { AdminMemberActionResponse } from "@/lib/admin/memberAdminActions";
 import { SubmitButton } from "@/components/admin/SubmitButton";
 import Link from "next/link";
 import { ClubMemberCertificateType, ClubMemberProfile } from "@/generated/prisma";
+import { 
+  MEMBERSHIP_TYPE_LABELS, 
+  ROLE_TYPE_LABELS, 
+  SCHOOL_STATUS_LABELS, 
+  MEMBER_STATUS_LABELS,
+  CERTIFICATE_LABELS
+} from "@/lib/members/memberConstants";
 
 interface MemberEditFormProps {
   clubSlug: string;
@@ -91,32 +98,10 @@ const CertificateTile = ({ label, name, defaultChecked }: { label: string, name:
 export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFormProps) {
   const [state, formAction] = useActionState(updateAction, null);
 
-  const membershipOptions = [
-    { value: 'SENIOR', label: 'Senior' },
-    { value: 'JUNIOR', label: 'Junior' },
-    { value: 'PASSIVE', label: 'Passiv' },
-  ];
-
-  const roleOptions = [
-    { value: 'REGULAR', label: 'Almindelig medlem' },
-    { value: 'BOARD_MEMBER', label: 'Bestyrelsesmedlem' },
-    { value: 'BOARD_SUPPLEANT', label: 'Bestyrelsessuppleant' },
-    { value: 'TREASURER', label: 'Kasserer' },
-    { value: 'CHAIRMAN', label: 'Formand' },
-    { value: 'VICE_CHAIRMAN', label: 'Næstformand' },
-  ];
-
-  const schoolStatusOptions = [
-    { value: 'APPROVED', label: 'Godkendt' },
-    { value: 'STUDENT', label: 'Elev i flyveskolen' },
-    { value: 'NOT_APPROVED', label: 'Ikke godkendt' },
-  ];
-
-  const statusOptions = [
-    { value: 'ACTIVE', label: 'Aktiv' },
-    { value: 'RESIGNED', label: 'Udmeldt' },
-    { value: 'NEW', label: 'Ny' },
-  ];
+  const membershipOptions = Object.entries(MEMBERSHIP_TYPE_LABELS).map(([value, label]) => ({ value, label }));
+  const roleOptions = Object.entries(ROLE_TYPE_LABELS).map(([value, label]) => ({ value, label }));
+  const schoolStatusOptions = Object.entries(SCHOOL_STATUS_LABELS).map(([value, label]) => ({ value, label }));
+  const statusOptions = Object.entries(MEMBER_STATUS_LABELS).map(([value, label]) => ({ value, label }));
 
   const formatDate = (date: Date | string | null) => {
     if (!date) return "";
@@ -198,12 +183,12 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
               Certifikater
             </h3>
             <div className="grid grid-cols-2 gap-3">
-              {Object.values(ClubMemberCertificateType).map(cert => (
+              {Object.entries(CERTIFICATE_LABELS).map(([cert, label]) => (
                 <CertificateTile 
                   key={cert} 
-                  label={cert.replace(/_/g, ' ').replace('CERTIFICATE', 'certifikat')} 
+                  label={label} 
                   name={`cert_${cert}`} 
-                  defaultChecked={member.certificates?.includes(cert)} 
+                  defaultChecked={member.certificates?.includes(cert as ClubMemberCertificateType)} 
                 />
               ))}
             </div>

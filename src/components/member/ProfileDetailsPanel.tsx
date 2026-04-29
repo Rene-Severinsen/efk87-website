@@ -1,6 +1,9 @@
 import React from 'react';
 import { ThemedSectionCard } from '../publicSite/ThemedBuildingBlocks';
 
+import { SCHOOL_STATUS_LABELS } from '@/lib/members/memberConstants';
+import { ClubMemberSchoolStatus } from '@/generated/prisma';
+
 interface ProfileDetailsPanelProps {
   firstName: string;
   lastName: string;
@@ -42,12 +45,8 @@ export const ProfileDetailsPanel: React.FC<ProfileDetailsPanelProps> = ({
   };
 
   const getSchoolStatusLabel = (status?: string) => {
-    switch (status) {
-      case 'APPROVED': return 'A-certifikat (godkendt)';
-      case 'STUDENT': return 'Elev';
-      case 'NOT_APPROVED': return 'Ikke godkendt';
-      default: return status || 'Ikke oplyst';
-    }
+    if (!status) return 'Ikke oplyst';
+    return SCHOOL_STATUS_LABELS[status as ClubMemberSchoolStatus] || status;
   };
 
   return (

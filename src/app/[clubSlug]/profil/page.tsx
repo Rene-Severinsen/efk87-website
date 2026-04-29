@@ -3,6 +3,7 @@ import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageSh
 import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 import { MemberProfile } from "../../../components/member/MemberProfile";
 import { getOrCreateOwnMemberProfile } from "../../../lib/members/memberProfileService";
+import { getActiveClubMailingLists } from "../../../lib/mailingLists/clubMailingListService";
 
 interface ProfilePageProps {
   params: Promise<{
@@ -23,6 +24,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const viewer = await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/profil`);
 
   const profile = await getOrCreateOwnMemberProfile(club.id, viewer.userId!);
+  const mailingLists = await getActiveClubMailingLists(club.id);
 
   return (
     <ThemedClubPageShell
@@ -38,6 +40,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       maxWidth="1440px"
     >
       <MemberProfile 
+        clubId={club.id}
+        clubSlug={clubSlug}
         viewer={{
           userId: viewer.userId!,
           name: viewer.name || "Medlem",
@@ -46,6 +50,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           membershipStatus: viewer.membershipStatus || "Active",
         }}
         profile={profile}
+        mailingLists={mailingLists}
       />
     </ThemedClubPageShell>
   );
