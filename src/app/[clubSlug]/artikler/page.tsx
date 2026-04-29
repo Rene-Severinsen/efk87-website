@@ -77,7 +77,6 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
       navigationItems={navigationItems}
       actionItems={actionItems}
       title="Artikler fra livet i klubben."
-      eyebrow="✍️ Redaktionelt univers · Nyheder, ture, teknik og klubhistorier"
       subtitle="Her samler vi klubbens historier, tekniske erfaringer, flyveture, skoleflyvning og det, der gør EFK87 til mere end bare en plads at starte fra."
       currentPath={`/${clubSlug}/artikler`}
       maxWidth="1440px"
@@ -230,7 +229,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                 </Link>
               )}
             </div>
-            <div className="tag-cloud" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <div className="article-tag-cloud">
               <Link
                 href={getFilterUrl({ tag: null })}
                 className={`article-tag-cloud-chip tier-1 ${!selectedTagSlug ? 'active' : ''}`}
