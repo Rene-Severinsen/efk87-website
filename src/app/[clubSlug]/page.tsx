@@ -21,6 +21,7 @@ import {
 } from "../../lib/publicSite/publicNavigation";
 import { getNewMemberHighlights } from "../../lib/members/newMemberHighlightService";
 import { getHomepageMarqueeCalendarEntries } from "../../lib/publicSite/publicCalendarService";
+import { getLatestForumActivity } from "../../lib/forum/forumService";
 
 interface ClubPageProps {
   params: Promise<{
@@ -84,6 +85,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const actionItems = getVisiblePublicActions(clubSlug, viewer);
   const newMemberHighlights = await getNewMemberHighlights(club.id);
   const calendarMarquee = await getHomepageMarqueeCalendarEntries(club.id);
+  const latestForumActivity = await getLatestForumActivity(club.id);
 
   console.log("[ClubPage] DATA SUMMARY:", {
     clubId: club.id,
@@ -131,6 +133,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
           actionItems={actionItems}
           newMemberHighlights={newMemberHighlights}
           calendarMarquee={calendarMarquee}
+          latestForumActivity={latestForumActivity}
       />
   );
 }

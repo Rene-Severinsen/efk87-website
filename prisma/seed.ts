@@ -708,6 +708,125 @@ async function main() {
     console.log("Gallery samples seeded.");
   }
 
+  // Seed Forum for EFK87
+  const forumCategories = [
+    { title: "Generelt", slug: "generelt", description: "Her kan vi tale om alt muligt mellem himmel og jord.", sortOrder: 10 },
+    { title: "Køb og salg", slug: "koeb-salg", description: "Markedsplads for brugt udstyr.", sortOrder: 20 },
+    { title: "Skoleflyvning", slug: "skoleflyvning", description: "Alt om uddannelse, certifikater og elevlivet.", sortOrder: 30 },
+    { title: "GPS Triangle", slug: "gps-triangle", description: "Teknik og tips til GPS Triangle flyvning.", sortOrder: 40 },
+    { title: "Teknik", slug: "teknik", description: "Spørgsmål om servoer, motorer, radioer og alt det andet grej.", sortOrder: 50 },
+  ];
+
+  for (const cat of forumCategories) {
+    await prisma.clubForumCategory.upsert({
+      where: { clubId_slug: { clubId: efk87.id, slug: cat.slug } },
+      update: cat,
+      create: { ...cat, clubId: efk87.id },
+    });
+  }
+
+  if (process.env.APP_ENV === "development") {
+    console.log("Seeding forum samples...");
+    const adminUser = await prisma.user.findUnique({ where: { email: "admin@efk87.local" } });
+    const memberUser = await prisma.user.findUnique({ where: { email: "test.member@efk87.local" } });
+
+    if (adminUser && memberUser) {
+      const catGenerelt = await prisma.clubForumCategory.findFirst({ where: { slug: "generelt" } });
+      const catGps = await prisma.clubForumCategory.findFirst({ where: { slug: "gps-triangle" } });
+      const catTeknik = await prisma.clubForumCategory.findFirst({ where: { slug: "teknik" } });
+
+      const threads = [
+        {
+          title: "Forårsoprydning på pladsen – hvem kommer?",
+          slug: "foraarsoprydning-paa-pladsen",
+          bodyHtml: "<p>Vi skal have gjort pladsen klar til sæsonen. Hvem kan komme på lørdag?</p>",
+          categoryId: catGenerelt!.id,
+          authorUserId: adminUser.id,
+          iconKey: "calendar",
+          createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2), // 2 hours ago
+          lastActivityAt: new Date(),
+        },
+        {
+          title: "Nyt GPS-triangle setup til sæson 2026",
+          slug: "nyt-gps-triangle-setup-2026",
+          bodyHtml: "<p>Jeg har kigget på det nye udstyr fra Skynavigator. Er der nogen der har erfaringer?</p>",
+          categoryId: catGps!.id,
+          authorUserId: memberUser.id,
+          iconKey: "compass",
+          createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 24), // 1 day ago
+          lastActivityAt: new Date(new Date().getTime() - 1000 * 60 * 43), // 43 min ago
+        },
+        {
+          title: "Bedste lader til 12V i klubhuset?",
+          slug: "bedste-lader-til-12v",
+          bodyHtml: "<p>Hvad bruger I når I lader op i klubhuset? Jeg leder efter noget stabilt.</p>",
+          categoryId: catTeknik!.id,
+          authorUserId: adminUser.id,
+          iconKey: "battery",
+          createdAt: new Date(),
+          lastActivityAt: new Date(),
+        },
+        {
+          title: "Weekend på skrænten gav både vind, grin og gode starter.",
+          slug: "weekend-paa-skraenten-forum",
+          bodyHtml: "<p>Det var en fantastisk tur. Her er et par billeder...</p>",
+          categoryId: catGenerelt!.id,
+          authorUserId: memberUser.id,
+          iconKey: "glider",
+          createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 48), // 2 days ago
+          lastActivityAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 48),
+        }
+      ];
+
+      for (const t of threads) {
+        const thread = await prisma.clubForumThread.upsert({
+          where: { clubId_categoryId_slug: { clubId: efk87.id, categoryId: t.categoryId, slug: t.slug } },
+          update: t,
+          create: { ...t, clubId: efk87.id },
+        });
+
+        if (t.slug === "foraarsoprydning-paa-pladsen") {
+          // Add 32 replies to trigger amber badge
+          for (let i = 0; i < 32; i++) {
+            await prisma.clubForumReply.create({
+              data: {
+                clubId: efk87.id,
+                threadId: thread.id,
+                authorUserId: i % 2 === 0 ? memberUser.id : adminUser.id,
+                bodyHtml: `<p>Svar nr ${i+1}!</p>`,
+                createdAt: new Date(new Date().getTime() - 1000 * 60 * (32-i)),
+              }
+            });
+          }
+          await prisma.clubForumThread.update({
+            where: { id: thread.id },
+            data: { replyCount: 32 }
+          });
+        }
+
+        if (t.slug === "nyt-gps-triangle-setup-2026") {
+          // Add 18 replies to trigger cyan badge
+          for (let i = 0; i < 18; i++) {
+            await prisma.clubForumReply.create({
+              data: {
+                clubId: efk87.id,
+                threadId: thread.id,
+                authorUserId: adminUser.id,
+                bodyHtml: `<p>Godt spørgsmål ${i+1}</p>`,
+                createdAt: new Date(new Date().getTime() - 1000 * 60 * (60-i)),
+              }
+            });
+          }
+          await prisma.clubForumThread.update({
+            where: { id: thread.id },
+            data: { replyCount: 18 }
+          });
+        }
+      }
+    }
+    console.log("Forum samples seeded.");
+  }
+
   console.log({ efk87 });
   console.log("Seed finished.");
 }

@@ -7,6 +7,7 @@ import { getMemberActivityStats } from "../../../../lib/memberActivity/memberAct
 import { getVisiblePublicNavigation, getVisiblePublicActions } from "../../../../lib/publicSite/publicNavigation";
 import { getNewMemberHighlights } from "../../../../lib/members/newMemberHighlightService";
 import { getHomepageMarqueeCalendarEntries } from "../../../../lib/publicSite/publicCalendarService";
+import { getLatestForumActivity } from "../../../../lib/forum/forumService";
 import PublicClubHomePageV2 from "../../../../components/publicSite/homeV2/PublicClubHomePageV2";
 
 interface PreviewPageProps {
@@ -37,12 +38,13 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
 
   // Fetch real data
   const visibilityContext = toViewerVisibilityContext(viewer);
-  const [theme, todayFlightIntents, memberActivity, newMemberHighlights, calendarMarquee] = await Promise.all([
+  const [theme, todayFlightIntents, memberActivity, newMemberHighlights, calendarMarquee, latestForumActivity] = await Promise.all([
     getClubTheme(club.id),
     getTodayFlightIntents(club.id, visibilityContext),
     getMemberActivityStats(club.id, viewer),
     getNewMemberHighlights(club.id),
     getHomepageMarqueeCalendarEntries(club.id),
+    getLatestForumActivity(club.id),
   ]);
 
   const navigationItems = getVisiblePublicNavigation(clubSlug, visibilityContext);
@@ -59,6 +61,7 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
       actionItems={actionItems}
       newMemberHighlights={newMemberHighlights}
       calendarMarquee={calendarMarquee}
+      latestForumActivity={latestForumActivity}
     />
   );
 }

@@ -9,6 +9,33 @@ import NewMembersHighlightCard from '../../club/NewMembersHighlightCard';
 import Link from 'next/link';
 import { ThemedTopBar } from '../ThemedTopBar';
 import { PublicCalendarEntry } from '../../../lib/publicSite/publicCalendarService';
+import { getMemberDisplayName } from '../../member/MemberDisplayName';
+import { getForumReplyBadge } from '../../../lib/forum/forumHelpers';
+import ForumIcon from '../../forum/ForumIcon';
+import ForumReplyBadge from '../../forum/ForumReplyBadge';
+import { ClubForumThread, ClubForumCategory } from '../../../generated/prisma';
+
+type ThreadWithRelations = ClubForumThread & {
+  category: ClubForumCategory;
+  author: {
+    id: string;
+    name: string | null;
+    memberProfiles: {
+      firstName: string | null;
+      lastName: string | null;
+    }[];
+  };
+  replies: {
+    author: {
+      id: string;
+      name: string | null;
+      memberProfiles: {
+        firstName: string | null;
+        lastName: string | null;
+      }[];
+    };
+  }[];
+};
 
 interface PublicClubHomePageV2Props {
   club: {
@@ -28,6 +55,7 @@ interface PublicClubHomePageV2Props {
   actionItems: PublicNavigationItem[];
   newMemberHighlights: NewMemberHighlightData;
   calendarMarquee: PublicCalendarEntry[];
+  latestForumActivity: ThreadWithRelations[];
   theme?: {
     backgroundColor: string;
     panelColor: string;
@@ -47,7 +75,7 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Isolated V2 homepage component.
  * Ported closely from the provided mockup HTML.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity }: PublicClubHomePageV2Props) {
   const clubDisplayName = club.settings?.displayName || club.name;
   const clubShortName = club.settings?.shortName || club.name;
 
@@ -136,57 +164,45 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Forum – seneste aktivitet</h2>
-                <a className="home-v2-link-soft" href="#">Åbn forum</a>
+                <Link className="home-v2-link-soft" href={`/${club.slug}/forum`}>Åbn forum</Link>
               </div>
               <div className="home-v2-thread-list">
-                <div className="home-v2-row-item">
-                  <div className="home-v2-row-icon">💬</div>
-                  <div>
-                    <div className="home-v2-row-title">Forårsoprydning på pladsen – hvem kommer?</div>
-                    <div className="home-v2-row-sub">9 nye svar · Sidste svar af Jesper Holm for 14 min siden</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-warn">32 svar</span>
-                </div>
-                <div className="home-v2-row-item">
-                  <div className="home-v2-row-icon">🧭</div>
-                  <div>
-                    <div className="home-v2-row-title">Nyt GPS-triangle setup til sæson 2026</div>
-                    <div className="home-v2-row-sub">4 nye svar · Sidste svar for 43 min siden</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-info">18 svar</span>
-                </div>
-                <div className="home-v2-row-item">
-                  <div className="home-v2-row-icon">🔋</div>
-                  <div>
-                    <div className="home-v2-row-title">Bedste lader til 12V i klubhuset?</div>
-                    <div className="home-v2-row-sub">Ny tråd oprettet i dag · 3 svar · Teknik</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-ok">Ny</span>
-                </div>
-                <div className="home-v2-row-item">
-                  <div className="home-v2-row-icon">🔋</div>
-                  <div>
-                    <div className="home-v2-row-title">Bedste lader til 12V i klubhuset?</div>
-                    <div className="home-v2-row-sub">Ny tråd oprettet i dag · 3 svar · Teknik</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-ok">Ny</span>
-                </div>
-                <div className="home-v2-row-item">
-                  <div className="home-v2-row-icon">🔋</div>
-                  <div>
-                    <div className="home-v2-row-title">Bedste lader til 12V i klubhuset?</div>
-                    <div className="home-v2-row-sub">Ny tråd oprettet i dag · 3 svar · Teknik</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-ok">Ny</span>
-                </div>
-                <div className="home-v2-row-item">
-                  <div className="home-v2-row-icon">🔋</div>
-                  <div>
-                    <div className="home-v2-row-title">Bedste lader til 12V i klubhuset?</div>
-                    <div className="home-v2-row-sub">Ny tråd oprettet i dag · 3 svar · Teknik</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-ok">Ny</span>
-                </div>
+                {latestForumActivity.length === 0 ? (
+                  <div className="home-v2-compact-empty">Ingen aktivitet i forum endnu</div>
+                ) : (
+                  latestForumActivity.map((thread) => {
+                    const latestReply = thread.replies[0];
+                    const badge = getForumReplyBadge(thread.replyCount, thread.lastActivityAt);
+                    
+                    let metaLine = "";
+                    if (latestReply) {
+                      const authorName = getMemberDisplayName(latestReply.author);
+                      metaLine = `${thread.replyCount} svar · Sidste svar af ${authorName}`;
+                    } else {
+                      const authorName = getMemberDisplayName(thread.author);
+                      metaLine = `Ny tråd oprettet af ${authorName} · ${thread.category.title}`;
+                    }
+
+                    return (
+                      <Link 
+                        key={thread.id} 
+                        href={`/${club.slug}/forum/${thread.category.slug}/${thread.slug}`}
+                        className="home-v2-row-item group"
+                      >
+                        <div className="home-v2-row-icon flex items-center justify-center">
+                          <ForumIcon iconKey={thread.iconKey} className="w-5 h-5" />
+                        </div>
+                        <div className="flex-grow min-w-0">
+                          <div className="home-v2-row-title truncate group-hover:text-sky-400 transition-colors">
+                            {thread.title}
+                          </div>
+                          <div className="home-v2-row-sub truncate">{metaLine}</div>
+                        </div>
+                        <ForumReplyBadge badge={badge} />
+                      </Link>
+                    );
+                  })
+                )}
               </div>
             </article>
 

@@ -1,0 +1,114 @@
+import { notFound } from "next/navigation";
+import { resolveClubContext } from "../../../../../lib/publicSite/publicPageRoute";
+import ThemedClubPageShell from "../../../../../components/publicSite/ThemedClubPageShell";
+import { requireActiveMemberForClub } from "../../../../../lib/auth/accessGuards";
+import { getForumCategoryBySlug, getForumThreadBySlug, getForumReplies } from "../../../../../lib/forum/forumService";
+import { getMemberDisplayName } from "../../../../../components/member/MemberDisplayName";
+import { formatAdminDateTime } from "../../../../../lib/format/adminDateFormat";
+import ReplyForm from "../../../../../components/forum/ReplyForm";
+import { createForumReply } from "../../../../../lib/forum/actions/memberForumActions";
+import { User, Clock, Lock } from "lucide-react";
+
+interface ThreadDetailPageProps {
+  params: Promise<{
+    clubSlug: string;
+    categorySlug: string;
+    threadSlug: string;
+  }>;
+}
+
+export default async function ThreadDetailPage({ params }: ThreadDetailPageProps) {
+  const { clubSlug, categorySlug, threadSlug } = await params;
+
+  const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
+
+  // Ensure user is an active member
+  await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/forum/${categorySlug}/${threadSlug}`);
+
+  const category = await getForumCategoryBySlug(club.id, categorySlug);
+  if (!category) notFound();
+
+  const thread = await getForumThreadBySlug(club.id, category.id, threadSlug);
+  if (!thread) notFound();
+
+  const replies = await getForumReplies(thread.id);
+
+  const replyAction = createForumReply.bind(null, clubSlug, categorySlug, threadSlug, thread.id);
+
+  return (
+    <ThemedClubPageShell
+      clubSlug={clubSlug}
+      clubName={club.settings?.shortName || club.name}
+      clubDisplayName={club.settings?.displayName || club.name}
+      theme={theme}
+      footerData={footerData}
+      navigationItems={navigationItems}
+      actionItems={actionItems}
+      title={thread.title}
+      eyebrow={category.title}
+      currentPath={`/${clubSlug}/forum/${categorySlug}/${threadSlug}`}
+    >
+      <div className="space-y-8 mt-8">
+        {/* OP Thread Body */}
+        <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl">
+          <div className="p-8 border-b border-white/10 bg-white/5">
+            <div className="flex flex-wrap items-center gap-6 text-sm text-slate-400">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-sky-500/20 flex items-center justify-center text-sky-400 border border-sky-500/20">
+                  <User className="w-4 h-4" />
+                </div>
+                <span className="font-bold text-white">{getMemberDisplayName(thread.author)}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                <span>{formatAdminDateTime(thread.createdAt)}</span>
+              </div>
+            </div>
+          </div>
+          <div className="p-8">
+            <div 
+              className="prose prose-invert prose-sky max-w-none"
+              dangerouslySetInnerHTML={{ __html: thread.bodyHtml }}
+            />
+          </div>
+        </div>
+
+        {/* Replies */}
+        {replies.map((reply) => (
+          <div key={reply.id} className="backdrop-blur-md bg-white/5 border border-white/10 rounded-[2rem] overflow-hidden shadow-xl ml-4 sm:ml-8 lg:ml-12">
+            <div className="p-6 border-b border-white/10 bg-white/5 flex flex-wrap items-center gap-6 text-sm text-slate-400">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+                  <User className="w-3 h-3" />
+                </div>
+                <span className="font-bold text-white">{getMemberDisplayName(reply.author)}</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs">
+                <Clock className="w-3.5 h-3.5" />
+                <span>{formatAdminDateTime(reply.createdAt)}</span>
+              </div>
+            </div>
+            <div className="p-6">
+              <div 
+                className="prose prose-invert prose-sky prose-sm max-w-none"
+                dangerouslySetInnerHTML={{ __html: reply.bodyHtml }}
+              />
+            </div>
+          </div>
+        ))}
+
+        {/* Reply Form or Locked Message */}
+        {thread.isLocked ? (
+          <div className="p-8 text-center backdrop-blur-md bg-amber-500/5 border border-amber-500/20 rounded-[2rem] flex flex-col items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 border border-amber-500/20">
+              <Lock className="w-6 h-6" />
+            </div>
+            <p className="text-amber-400 font-bold uppercase tracking-widest text-sm">Denne tråd er låst og kan ikke besvares.</p>
+          </div>
+        ) : (
+          <ReplyForm action={replyAction} />
+        )}
+      </div>
+    </ThemedClubPageShell>
+  );
+}

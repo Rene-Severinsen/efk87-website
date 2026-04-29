@@ -87,6 +87,14 @@ Normalized storage for member certificates.
 - **Constraints**: Unique combination of `clubId` + `userId` + `certificateType`.
 - **Enum**: `ClubMemberCertificateType` (A_CERTIFICATE, S_CONTROLLER, etc.).
 
+#### Club Forum
+Tenant-scoped forum module for club members.
+- **ClubForumCategory**: Manageable headings for threads. Scoped by `clubId`. Unique `slug` per club.
+- **ClubForumThread**: Member-created discussions. Scoped by `clubId` and `categoryId`. Automatically assigned `iconKey` based on title/category. Unique `slug` per category.
+- **ClubForumReply**: Member replies to threads. Scoped by `clubId` and `threadId`.
+- **Logic**: Threads track `lastActivityAt` and `replyCount` for efficient listing and homepage activity feed.
+- **Security**: Access is generally `MEMBERS_ONLY`.
+
 > **Note**: Authentication (login, password management, etc.) is not yet implemented. The `User` model currently only serves as a profile and membership anchor.
 
 ### Environment Separation

@@ -37,6 +37,9 @@ model Club {
   memberProfiles ClubMemberProfile[]
   memberCertificates ClubMemberCertificate[]
   calendarEntries ClubCalendarEntry[]
+  forumCategories ClubForumCategory[]
+  forumThreads    ClubForumThread[]
+  forumReplies    ClubForumReply[]
 }
 
 model PublicClubFooter {
@@ -359,6 +362,8 @@ model User {
   dailyActivity MemberDailyActivity[]
   memberProfiles ClubMemberProfile[]
   memberCertificates ClubMemberCertificate[]
+  forumThreads    ClubForumThread[]
+  forumReplies    ClubForumReply[]
 }
 
 model Account {
@@ -394,6 +399,68 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model ClubForumCategory {
+  id          String   @id @default(cuid())
+  clubId      String
+  title       String
+  description String?
+  slug        String
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  club    Club              @relation(fields: [clubId], references: [id])
+  threads ClubForumThread[]
+
+  @@unique([clubId, slug])
+  @@index([clubId, sortOrder])
+}
+
+model ClubForumThread {
+  id             String   @id @default(cuid())
+  clubId         String
+  categoryId     String
+  authorUserId   String
+  title          String
+  slug           String
+  bodyHtml       String
+  iconKey        String
+  isPinned       Boolean  @default(false)
+  isLocked       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  lastActivityAt DateTime @default(now())
+  replyCount     Int      @default(0)
+
+  club     Club              @relation(fields: [clubId], references: [id])
+  category ClubForumCategory @relation(fields: [categoryId], references: [id])
+  author   User              @relation(fields: [authorUserId], references: [id])
+  replies  ClubForumReply[]
+
+  @@unique([clubId, categoryId, slug])
+  @@index([clubId, categoryId, lastActivityAt])
+  @@index([authorUserId])
+}
+
+model ClubForumReply {
+  id           String   @id @default(cuid())
+  clubId       String
+  threadId     String
+  authorUserId String
+  bodyHtml     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  isDeleted    Boolean  @default(false)
+
+  club   Club            @relation(fields: [clubId], references: [id])
+  thread ClubForumThread @relation(fields: [threadId], references: [id])
+  author User            @relation(fields: [authorUserId], references: [id])
+
+  @@index([clubId, threadId, createdAt])
+  @@index([authorUserId])
 }
 
 model ClubMembership {

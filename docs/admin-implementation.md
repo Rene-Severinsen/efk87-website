@@ -20,7 +20,7 @@ Admin routes are organized into several logical groups. Most routes currently ex
 ### Indhold
 - **Forsideindhold** (`/admin/forsideindhold`): Homepage content and section control (stub).
 - **Artikler** (`/admin/artikler`): News and article publishing. Supports rich text editing (BlockNote), server-side slug generation, and external image URL insertion. Articles are organized by tags; categories are not used. Reading time has been removed. Image upload is not implemented.
-- **Forum** (`/admin/forum`): Forum moderation and settings (stub).
+- **Forum** (`/admin/forum`): Forum category management. Allows admins to create, edit, and deactivate forum categories.
 - **Galleri** (`/admin/galleri`): Photo gallery management (read-only foundation).
 - **Kalender** (`/admin/kalender`): Admin-managed calendar and homepage marquee entries.
 
@@ -118,6 +118,16 @@ Located in `src/components/admin/`:
   - Set date, time, location, and rich description.
   - Control publication status.
   - "Force Show in Marquee" flag to override normal upcoming logic on the homepage.
+
+### Forum Administration
+- **Route**: `/[clubSlug]/admin/forum`
+- **Purpose**: Manage forum categories.
+- **Actions**: `src/lib/forum/actions/adminForumActions.ts`
+- **Service**: `src/lib/forum/forumService.ts`
+- **Capabilities**:
+  - Full CRUD for forum categories (title, description, slug, sort order, active status).
+  - List all categories with thread counts.
+  - Quick links to view categories on the public site.
 
 ## Formatting Rules
 Admin views follow standardized formatting for consistency:

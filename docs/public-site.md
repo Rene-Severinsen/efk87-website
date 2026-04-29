@@ -22,7 +22,7 @@ Currently, the public club navigation is defined statically in `src/lib/publicSi
 
 ### Member-only Areas
 - **Min profil**: `/{clubSlug}/profil` (MEMBERS_ONLY) - Protected member profile page based on the approved mockup.
-- **Forum**: `/{clubSlug}/forum` (MEMBERS_ONLY) - Placeholder only.
+- **Forum**: `/{clubSlug}/forum` (MEMBERS_ONLY) - Full member forum with categories, threads, and replies.
 - **Jeg flyver**: `/{clubSlug}/jeg-flyver` (MEMBERS_ONLY)
 - **Jeg flyver liste**: `/{clubSlug}/jeg-flyver/liste` (PUBLIC)
 
@@ -106,7 +106,7 @@ Visual settings are managed per club through the `ClubTheme` model.
 - **Flight Intents**: "Jeg flyver" data is fetched via `publicFlightIntentService` and rendered on the homepage.
 - **Footer & Sponsors**: Data is fetched via `publicFooterService` and rendered on the homepage footer.
 - **Member Activity**: "Senest online" preview is fetched via `src/lib/memberActivity/memberActivityService.ts` and shows a compact list of today's active members, scoped to the current club.
-- **Static Placeholders**: Content for forum activity and social highlights are currently static placeholders and will be modeled in future tasks.
+- **Forum Activity**: Real-time forum activity (latest threads and replies) is fetched via `src/lib/forum/forumService.ts` and rendered on the homepage using the approved "dark premium" card design.
 - **"Jeg flyver" Domain**: This is a social presence feature, not a standard event model. See [Flight Intents documentation](flight-intents.md) for details.
 
 ### Approved Design Master
