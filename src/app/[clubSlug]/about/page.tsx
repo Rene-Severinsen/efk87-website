@@ -1,5 +1,6 @@
 import { resolvePublicPageForClub } from "../../../lib/publicSite/publicPageRoute";
-import PublicContentPage from "../../../components/publicSite/PublicContentPage";
+import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
+import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
 
 interface AboutPageProps {
   params: Promise<{
@@ -10,15 +11,29 @@ interface AboutPageProps {
 export default async function AboutPage({ params }: AboutPageProps) {
   const { clubSlug } = await params;
   const pageSlug = "about";
-  const { club, page } = await resolvePublicPageForClub(clubSlug, pageSlug);
+  const { club, page, theme, footerData, navigationItems, actionItems } = await resolvePublicPageForClub(clubSlug, pageSlug);
+
+  const title = page?.title ?? `Om ${club.settings?.shortName || club.name}`;
+  const body = page?.body ?? "Information om klubben vil snart være tilgængelig.";
 
   return (
-    <PublicContentPage
-      club={club}
-      title={page?.title ?? ""}
-      body={page?.body ?? ""}
-      fallbackTitle={`About ${club.name}`}
-      fallbackBody="Club profile content will be managed here."
-    />
+    <ThemedClubPageShell
+      clubName={club.settings?.shortName || club.name}
+      clubDisplayName={club.settings?.displayName || club.name}
+      theme={theme}
+      footerData={footerData}
+      navigationItems={navigationItems}
+      actionItems={actionItems}
+      title={title}
+      currentPath={`/${clubSlug}/about`}
+    >
+      <ThemedSectionCard>
+        <div className="prose prose-invert max-w-none">
+          <p className="text-lg opacity-90 leading-relaxed">
+            {body}
+          </p>
+        </div>
+      </ThemedSectionCard>
+    </ThemedClubPageShell>
   );
 }

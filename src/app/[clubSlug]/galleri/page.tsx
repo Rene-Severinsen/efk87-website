@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { resolvePublicPageForClub } from "../../../lib/publicSite/publicPageRoute";
-import PublicContentPage from "../../../components/publicSite/PublicContentPage";
+import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
+import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
 
 interface PageProps {
   params: Promise<{
@@ -11,18 +12,30 @@ interface PageProps {
 export default async function GalleriPage({ params }: PageProps) {
   const { clubSlug } = await params;
   const pageSlug = "galleri";
-  const { club, page } = await resolvePublicPageForClub(clubSlug, pageSlug);
+  const { club, page, theme, footerData, navigationItems, actionItems } = await resolvePublicPageForClub(clubSlug, pageSlug);
 
   if (!page) {
     notFound();
   }
 
   return (
-    <PublicContentPage
-      club={club}
+    <ThemedClubPageShell
+      clubName={club.settings?.shortName || club.name}
+      clubDisplayName={club.settings?.displayName || club.name}
+      theme={theme}
+      footerData={footerData}
+      navigationItems={navigationItems}
+      actionItems={actionItems}
       title={page.title}
-      body={page.body}
-      variant="full"
-    />
+      currentPath={`/${clubSlug}/galleri`}
+    >
+      <ThemedSectionCard>
+        <div className="prose prose-invert max-w-none">
+          <p className="text-lg opacity-90 leading-relaxed">
+            {page.body}
+          </p>
+        </div>
+      </ThemedSectionCard>
+    </ThemedClubPageShell>
   );
 }

@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
-import { requireClubBySlug, TenancyError } from "../../../lib/tenancy/tenantService";
-import PublicClubShell from "../../../components/publicSite/PublicClubShell";
+import { resolveClubContext } from "../../../lib/publicSite/publicPageRoute";
+import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
+import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
 import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 import { ClubFlightIntentType } from "../../../generated/prisma";
 import { createFlightIntentAction } from "../../../lib/flightIntents/createFlightIntentAction";
@@ -22,15 +22,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
   const { clubSlug } = await params;
   const { created } = await searchParams;
 
-  let club;
-  try {
-    club = await requireClubBySlug(clubSlug);
-  } catch (error) {
-    if (error instanceof TenancyError) {
-      notFound();
-    }
-    throw error;
-  }
+  const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member
   const viewer = await requireActiveMemberForClub(club.id, club.slug);
@@ -40,155 +32,157 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
   const todayStr = new Date().toISOString().split("T")[0];
 
   return (
-    <PublicClubShell club={club}>
-      <div className="flex flex-col items-center justify-center p-6 text-slate-900 mt-12">
-        <div className="max-w-2xl w-full bg-white rounded-xl shadow-sm border border-slate-200 p-8 md:p-12">
-          <h1 className="text-4xl font-bold tracking-tight mb-6">
-            Jeg flyver
-          </h1>
+    <ThemedClubPageShell
+      clubName={club.settings?.shortName || club.name}
+      clubDisplayName={club.settings?.displayName || club.name}
+      theme={theme}
+      footerData={footerData}
+      navigationItems={navigationItems}
+      actionItems={actionItems}
+      title="Jeg flyver"
+      subtitle="Her kan medlemmer melde, at de tager ud på pladsen."
+      currentPath={`/${clubSlug}/jeg-flyver`}
+      maxWidth="800px"
+    >
+      <ThemedSectionCard>
+        {created === "1" && (
+          <div className="mb-8 p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-md">
+            Din flyvemelding er oprettet!
+          </div>
+        )}
+
+        <form action={createFlightIntentAction} className="space-y-6">
+          <input type="hidden" name="clubSlug" value={clubSlug} />
           
-          {created === "1" && (
-            <div className="mb-8 p-4 bg-green-50 border border-green-200 text-green-800 rounded-md">
-              Din flyvemelding er oprettet!
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="flightDate" className="block text-sm font-medium opacity-80 mb-2">
+                Dato *
+              </label>
+              <input
+                type="date"
+                id="flightDate"
+                name="flightDate"
+                required
+                defaultValue={todayStr}
+                min={todayStr}
+                className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-white"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="plannedTime" className="block text-sm font-medium opacity-80 mb-2">
+                Forventet tidspunkt (valgfrit)
+              </label>
+              <input
+                type="time"
+                id="plannedTime"
+                name="plannedTime"
+                className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-white"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="activityType" className="block text-sm font-medium opacity-80 mb-2">
+              Aktivitetstype *
+            </label>
+            <select
+              id="activityType"
+              name="activityType"
+              required
+              defaultValue={ClubFlightIntentType.FLYING}
+              className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-white"
+              style={{ colorScheme: 'dark' }}
+            >
+              <option value={ClubFlightIntentType.FLYING}>Flyvning</option>
+              <option value={ClubFlightIntentType.TRAINING}>Skoleflyvning / Træning</option>
+              <option value={ClubFlightIntentType.MAINTENANCE}>Vedligeholdelse</option>
+              <option value={ClubFlightIntentType.WEATHER_DEPENDENT}>Vejrafhængig flyvning</option>
+              <option value={ClubFlightIntentType.SOCIAL}>Socialt samvær</option>
+              <option value={ClubFlightIntentType.OTHER}>Andet</option>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="message" className="block text-sm font-medium opacity-80 mb-2">
+              Besked (valgfrit, max 240 tegn)
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows={3}
+              maxLength={240}
+              placeholder="F.eks. hvilke fly du tager med, eller om der er noget specielt..."
+              className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-white placeholder-white/20"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-base font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          >
+            Meld ankomst
+          </button>
+        </form>
+
+        <div className="mt-12 pt-8 border-t border-white/5">
+          <h2 className="text-xl font-semibold mb-6">Dine seneste meldinger</h2>
+          
+          {recentIntents.length === 0 ? (
+            <p className="opacity-50 italic">
+              Du har endnu ikke oprettet nogen &apos;Jeg flyver&apos;-meldinger.
+            </p>
+          ) : (
+            <div className="space-y-4">
+              {recentIntents.map((intent) => (
+                <div key={intent.id} className="p-4 rounded-lg border border-white/5 bg-white/5">
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="font-medium">
+                      {new Date(intent.flightDate).toLocaleDateString("da-DK", { 
+                        weekday: 'short', 
+                        day: 'numeric', 
+                        month: 'short' 
+                      })}
+                      {intent.plannedAt && (
+                        <span className="ml-2 opacity-60">
+                          kl. {new Date(intent.plannedAt).toLocaleTimeString("da-DK", { 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                          })}
+                        </span>
+                      )}
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      intent.status === 'ACTIVE' ? 'bg-green-500/20 text-green-400' : 'bg-white/10 text-white/50'
+                    }`}>
+                      {intent.status}
+                    </span>
+                  </div>
+                  <div className="text-sm opacity-90 mb-1">
+                    <span className="font-semibold">{getActivityLabel(intent.activityType)}</span>
+                  </div>
+                  {intent.message && (
+                    <div className="text-sm opacity-70 italic">
+                      &ldquo;{intent.message}&rdquo;
+                    </div>
+                  )}
+                </div>
+              ))}
+              <p className="text-xs opacity-40 mt-6">
+                Redigering og sletning er planlagt til en fremtidig opdatering.
+              </p>
             </div>
           )}
-
-          <p className="text-lg text-slate-600 mb-8">
-            Her kan medlemmer melde, at de tager ud på pladsen.
-          </p>
-
-          <form action={createFlightIntentAction} className="space-y-6">
-            <input type="hidden" name="clubSlug" value={clubSlug} />
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="flightDate" className="block text-sm font-medium text-slate-700 mb-1">
-                  Dato *
-                </label>
-                <input
-                  type="date"
-                  id="flightDate"
-                  name="flightDate"
-                  required
-                  defaultValue={todayStr}
-                  min={todayStr}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="plannedTime" className="block text-sm font-medium text-slate-700 mb-1">
-                  Forventet tidspunkt (valgfrit)
-                </label>
-                <input
-                  type="time"
-                  id="plannedTime"
-                  name="plannedTime"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="activityType" className="block text-sm font-medium text-slate-700 mb-1">
-                Aktivitetstype *
-              </label>
-              <select
-                id="activityType"
-                name="activityType"
-                required
-                defaultValue={ClubFlightIntentType.FLYING}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value={ClubFlightIntentType.FLYING}>Flyvning</option>
-                <option value={ClubFlightIntentType.TRAINING}>Skoleflyvning / Træning</option>
-                <option value={ClubFlightIntentType.MAINTENANCE}>Vedligeholdelse</option>
-                <option value={ClubFlightIntentType.WEATHER_DEPENDENT}>Vejrafhængig flyvning</option>
-                <option value={ClubFlightIntentType.SOCIAL}>Socialt samvær</option>
-                <option value={ClubFlightIntentType.OTHER}>Andet</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-1">
-                Besked (valgfrit, max 240 tegn)
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={3}
-                maxLength={240}
-                placeholder="F.eks. hvilke fly du tager med, eller om der er noget specielt..."
-                className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              ></textarea>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-            >
-              Meld ankomst
-            </button>
-          </form>
-
-          <div className="mt-8 pt-8 border-t border-slate-100">
-            <h2 className="text-xl font-semibold mb-4">Dine seneste meldinger</h2>
-            
-            {recentIntents.length === 0 ? (
-              <p className="text-slate-500 italic">
-                Du har endnu ikke oprettet nogen &apos;Jeg flyver&apos;-meldinger.
-              </p>
-            ) : (
-              <div className="space-y-4">
-                {recentIntents.map((intent) => (
-                  <div key={intent.id} className="p-4 rounded-lg border border-slate-100 bg-slate-50">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="font-medium">
-                        {new Date(intent.flightDate).toLocaleDateString("da-DK", { 
-                          weekday: 'short', 
-                          day: 'numeric', 
-                          month: 'short' 
-                        })}
-                        {intent.plannedAt && (
-                          <span className="ml-2 text-slate-500">
-                            kl. {new Date(intent.plannedAt).toLocaleTimeString("da-DK", { 
-                              hour: '2-digit', 
-                              minute: '2-digit' 
-                            })}
-                          </span>
-                        )}
-                      </div>
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        intent.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-slate-200 text-slate-600'
-                      }`}>
-                        {intent.status}
-                      </span>
-                    </div>
-                    <div className="text-sm text-slate-700 mb-1">
-                      <span className="font-semibold">{getActivityLabel(intent.activityType)}</span>
-                    </div>
-                    {intent.message && (
-                      <div className="text-sm text-slate-600 italic">
-                        &ldquo;{intent.message}&rdquo;
-                      </div>
-                    )}
-                  </div>
-                ))}
-                <p className="text-xs text-slate-400 mt-4">
-                  Redigering og sletning er planlagt til en fremtidig opdatering.
-                </p>
-              </div>
-            )}
-          </div>
-
-          <div className="mt-8 pt-8 border-t border-slate-100 text-center">
-            <p className="text-sm text-slate-500 italic">
-              Dagens offentlige aktivitetsliste vises på forsiden.
-            </p>
-          </div>
         </div>
-      </div>
-    </PublicClubShell>
+
+        <div className="mt-10 pt-8 border-t border-white/5 text-center">
+          <p className="text-sm opacity-50 italic">
+            Dagens offentlige aktivitetsliste vises på forsiden.
+          </p>
+        </div>
+      </ThemedSectionCard>
+    </ThemedClubPageShell>
   );
 }
 

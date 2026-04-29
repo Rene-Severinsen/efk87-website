@@ -100,25 +100,34 @@ Visual settings are managed per club through the `ClubTheme` model.
 - **Static Placeholders**: Content for forum activity and social highlights are currently static placeholders and will be modeled in future tasks.
 - **"Jeg flyver" Domain**: This is a social presence feature, not a standard event model. See [Flight Intents documentation](flight-intents.md) for details.
 
+### Approved Design Master
+The homepage (`PublicClubHomePage.tsx`) is the approved visual master. All non-home pages must follow the same dark premium club-platform theme using the shared themed shell.
+
 ## Components
 
 ### PublicClubHomePage
-`src/components/publicSite/PublicClubHomePage.tsx` implements the approved mockup structure and style. It uses `PublicClubHomePage.css` for scoped styling.
+`src/components/publicSite/PublicClubHomePage.tsx` implements the approved mockup structure and style for the homepage. It uses `PublicClubHomePage.css` for scoped styling.
 
-### PublicClubShell
-`src/components/publicSite/PublicClubShell.tsx` is the base layout component for other public-facing club pages.
+### ThemedClubPageShell
+`src/components/publicSite/ThemedClubPageShell.tsx` is the shared layout for all non-home club pages.
 
-- It accepts a `club` object and `children`.
-- It renders the club's display name.
-- It renders the navigation links generated from the tenant slug.
-- It provides a consistent header and footer for the public site.
+- **Visual Consistency**: Uses the same dark premium visual language as the homepage.
+- **Theme Support**: Applies `ClubTheme` CSS variables consistently across the site.
+- **Navigation**: Uses the approved `ThemedTopBar` with visibility-aware navigation and actions.
+- **Footer**: Uses the approved `ThemedFooter` with club contact info and sponsors.
+- **Content Area**: Provides a centered content area (default max-width 1000px) with a themed header.
 
-### PublicContentPage
-`src/components/publicSite/PublicContentPage.tsx` is the reusable renderer for generic CMS content pages.
+### ThemedBuildingBlocks
+Reusable small themed components for consistent internal page styling:
+- **ThemedPageHeader**: Standard title and optional subtitle/eyebrow.
+- **ThemedSectionCard**: A card container matching the homepage "section-card" style.
+- **ThemedCard**: Standard card container matching the homepage "card" style.
 
-- It accepts `club`, `title`, `body`, and optional fallbacks.
-- It supports `card` (centered card) and `full` (standard full-width) layout variants.
-- Generic public content pages MUST use this component to ensure consistent styling.
+### PublicClubShell (Deprecated)
+`src/components/publicSite/PublicClubShell.tsx` is the old white/default layout and is deprecated. All pages should use `ThemedClubPageShell`.
+
+### PublicContentPage (Deprecated)
+`src/components/publicSite/PublicContentPage.tsx` is deprecated in favor of `ThemedClubPageShell` and `ThemedSectionCard`.
 
 ## Implementation Guidelines
 

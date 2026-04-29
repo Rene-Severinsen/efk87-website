@@ -21,7 +21,12 @@ This document outlines the canonical structure of the EFK87 Next.js application.
 - **Styling**: Tailwind CSS is used for styling. Global styles are defined in `src/app/globals.css`.
 - **Design Foundation**: Modern business/club-platform expression. Future design phases will reuse existing mockup examples.
 
-## Routing
+## Visual Design
+- **Homepage Design Master**: The homepage (`PublicClubHomePage.tsx`) is the visual master for the platform's premium dark theme.
+- **Shared Themed Shell**: All non-home pages within a club must use `ThemedClubPageShell.tsx` to ensure visual consistency and correct navigation.
+- **Themed Components**: Use `ThemedSectionCard`, `ThemedCard`, and `ThemedPageHeader` for consistent content presentation.
 
+## Routing
 - `/`: Minimal platform placeholder.
 - `/[clubSlug]`: Entry point for individual clubs (tenants).
+- `/[clubSlug]/[pageSlug]`: Individual club pages (About, Articles, Gallery, etc.) using the shared themed shell.

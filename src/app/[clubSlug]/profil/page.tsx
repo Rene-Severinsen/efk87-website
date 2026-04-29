@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
-import { requireClubBySlug, TenancyError } from "../../../lib/tenancy/tenantService";
-import PublicClubShell from "../../../components/publicSite/PublicClubShell";
+import { resolveClubContext } from "../../../lib/publicSite/publicPageRoute";
+import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
+import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
 import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 
 interface ProfilePageProps {
@@ -16,31 +16,29 @@ interface ProfilePageProps {
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const { clubSlug } = await params;
 
-  let club;
-  try {
-    club = await requireClubBySlug(clubSlug);
-  } catch (error) {
-    if (error instanceof TenancyError) {
-      notFound();
-    }
-    throw error;
-  }
+  const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member
   await requireActiveMemberForClub(club.id, club.slug);
 
   return (
-    <PublicClubShell club={club}>
-      <div className="flex flex-col items-center justify-center p-6 text-slate-900 mt-12">
-        <div className="max-w-2xl w-full bg-white rounded-xl shadow-sm border border-slate-200 p-12">
-          <h1 className="text-4xl font-bold tracking-tight mb-6">
-            Min profil
-          </h1>
-          <p className="text-lg text-slate-600">
+    <ThemedClubPageShell
+      clubName={club.settings?.shortName || club.name}
+      clubDisplayName={club.settings?.displayName || club.name}
+      theme={theme}
+      footerData={footerData}
+      navigationItems={navigationItems}
+      actionItems={actionItems}
+      title="Min profil"
+      currentPath={`/${clubSlug}/profil`}
+    >
+      <ThemedSectionCard>
+        <div className="prose prose-invert max-w-none">
+          <p className="text-lg opacity-90 leading-relaxed">
             Medlemsprofil bliver tilføjet senere.
           </p>
         </div>
-      </div>
-    </PublicClubShell>
+      </ThemedSectionCard>
+    </ThemedClubPageShell>
   );
 }
