@@ -90,6 +90,30 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
           </form>
         )}
 
+        {env.DEV_LOGIN_ENABLED && (
+          <div className="mt-8 pt-8 border-t border-white/5">
+            <form
+              action={async () => {
+                "use server";
+                if (!env.DEV_LOGIN_ENABLED) return;
+                try {
+                  await signIn("dev-login", { redirectTo: `/${clubSlug}` });
+                } catch (error) {
+                  throw error;
+                }
+              }}
+            >
+              <button
+                type="submit"
+                className="w-full flex flex-col items-center justify-center py-3 px-4 border border-dashed border-amber-500/50 rounded-lg text-amber-200 bg-amber-900/20 hover:bg-amber-900/40 transition-colors"
+              >
+                <span className="font-semibold">Snyde-login som testmedlem</span>
+                <span className="text-xs opacity-70 mt-1">Kun aktiv i lokal development.</span>
+              </button>
+            </form>
+          </div>
+        )}
+
         <div className="mt-10 pt-8 border-t border-white/5 text-center">
           <p className="text-sm opacity-60">
             Login giver kun adgang, hvis din bruger har aktivt medlemskab af klubben.

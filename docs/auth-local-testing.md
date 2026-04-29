@@ -48,6 +48,21 @@ A test member is provided in the seed data for development:
 
 ## Step-by-Step Testing Workflow
 
+### Quick Dev Login (Fastest)
+
+For rapid development, you can use the "Snyde-login" feature which bypasses the magic link workflow:
+
+1.  **Enable Dev Login**:
+    Set `DEV_LOGIN_ENABLED=true` in your `.env`.
+2.  **Start Services & Seed**:
+    `docker compose up -d` and `npm run db:seed`.
+3.  **Login**:
+    - Open: [http://localhost:3000/efk87/login](http://localhost:3000/efk87/login)
+    - Click **"Snyde-login som testmedlem"**.
+    - You are now instantly logged in as `test.member@efk87.local`.
+
+### Magic Link Workflow (Full path)
+
 1.  **Start Services**:
     ```bash
     docker compose up -d

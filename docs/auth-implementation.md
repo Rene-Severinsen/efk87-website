@@ -20,6 +20,7 @@ This document details the Auth.js foundation implemented for the EFK87 platform.
 - `AUTH_EMAIL_SERVER`: (Optional) SMTP connection string (e.g., `smtp://user:pass@smtp.example.com:587`).
 - `AUTH_EMAIL_FROM`: (Optional) The "From" address for magic link emails.
 - `AUTH_EMAIL_LOGIN_ENABLED`: Explicit flag to enable email magic link login. MUST be `true` for any environment to send magic links.
+- `DEV_LOGIN_ENABLED`: (Development only) Explicit flag to enable quick "Snyde-login" as the test member.
 
 #### Email Provider Activation
 The Email (Nodemailer) provider is enabled only if `AUTH_EMAIL_LOGIN_ENABLED` is `true` AND both `AUTH_EMAIL_SERVER` and `AUTH_EMAIL_FROM` are present. If `AUTH_EMAIL_LOGIN_ENABLED` is missing or `false`, the login page shows an informational message. If enabled but SMTP is missing, it shows a configuration warning.
@@ -128,6 +129,20 @@ For development and verification of protected member routes, a local test member
 4.  **Callback**: Clicking the link hits the Auth.js callback route.
 5.  **Identity Mapping**: The callback verifies the token and maps the email to a `User` record in the database.
 6.  **Session**: A persistent `Session` is created for the user.
+
+### Quick Dev Login (Snyde-login)
+
+To speed up local development, a "Snyde-login" button is available on the login page when `APP_ENV=development` and `DEV_LOGIN_ENABLED=true`.
+
+- **Mechanism**: Uses Auth.js `Credentials` provider.
+- **Identity**: Always logs in as `test.member@efk87.local`.
+- **Safety**: 
+  - The provider is only registered in the `auth.ts` configuration if the environment is strictly `development` and the flag is enabled.
+  - The `authorize` function in the provider explicitly checks the environment flag again.
+  - It only allows logging in as the pre-defined test user found by email in the database.
+  - It does not accept any user-provided credentials.
+  - Access control still depends on `ClubMembership` checks after the session is created.
+  - It is completely disabled in `qa` and `production` environments by the environment validator.
 
 ### Access Control Post-Login
 - **Identity != Membership**: Authenticated user identity does not grant club access.

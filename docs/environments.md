@@ -36,6 +36,11 @@ All environment variables must be accessed through the centralized utility at `s
     - Default is `false` for all environments.
     - SMTP configuration (`AUTH_EMAIL_SERVER`, `AUTH_EMAIL_FROM`) must also be present to enable login.
     - QA must not send login links to real members unless explicitly configured with safe test mail.
+5.  **Quick Dev Login**:
+    - `DEV_LOGIN_ENABLED` allows instant login as a test member in local development.
+    - This flag is **only** effective when `APP_ENV=development`.
+    - It is automatically disabled in `qa` and `production` even if set to `true`.
+    - It must never be enabled in production.
 
 ## Usage
 

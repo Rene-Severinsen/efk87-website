@@ -24,6 +24,11 @@ interface EnvConfig {
    */
   AUTH_EMAIL_LOGIN_ENABLED: boolean;
   /**
+   * Explicit flag to enable quick dev login.
+   * ONLY works in development.
+   */
+  DEV_LOGIN_ENABLED: boolean;
+  /**
    * Safety helper to control whether external notifications (emails, etc.) can be sent.
    * development: false
    * qa: false
@@ -39,6 +44,7 @@ function validateEnv(): EnvConfig {
   const AUTH_EMAIL_SERVER = process.env.AUTH_EMAIL_SERVER;
   const AUTH_EMAIL_FROM = process.env.AUTH_EMAIL_FROM;
   const AUTH_EMAIL_LOGIN_ENABLED = process.env.AUTH_EMAIL_LOGIN_ENABLED === 'true';
+  const DEV_LOGIN_ENABLED = process.env.DEV_LOGIN_ENABLED === 'true';
 
   if (!APP_ENV) {
     throw new Error('APP_ENV is not defined. Must be one of: development, qa, production');
@@ -60,6 +66,9 @@ function validateEnv(): EnvConfig {
   const isQa = APP_ENV === 'qa';
   const isProduction = APP_ENV === 'production';
 
+  // Safety: DEV_LOGIN_ENABLED must only be true in development
+  const safeDevLoginEnabled = isDevelopment && DEV_LOGIN_ENABLED;
+
   return {
     APP_ENV,
     DATABASE_URL,
@@ -70,6 +79,7 @@ function validateEnv(): EnvConfig {
     isQa,
     isProduction,
     AUTH_EMAIL_LOGIN_ENABLED,
+    DEV_LOGIN_ENABLED: safeDevLoginEnabled,
     canSendExternalNotifications: isProduction,
   };
 }
