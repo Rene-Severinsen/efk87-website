@@ -26,6 +26,7 @@ Administrators can create new members manually:
 - **Status**: All new members start with `memberStatus = NEW`.
 - **Certificates/Instructor**: These fields are not set during initial creation and must be updated after the member is active.
 - **Automatic Medlemsnummer**: Assigned automatically at save time using the max+1 logic.
+- **MDK Number Validation**: For new members, `mdkNumber` is required if `membershipType` is `SENIOR` or `JUNIOR`. It is optional for `PASSIVE`.
 - **User Creation**: If a user with the given email doesn't exist, a new User account is created. If they already exist, they are linked to the new membership and profile.
 
 ## Tenancy & Privacy

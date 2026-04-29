@@ -91,6 +91,7 @@ Located in `src/components/admin/`:
   - Statistics dashboard for member statuses and roles.
   - Comprehensive member list.
   - Member creation with automatic `memberNumber` assignment.
+  - MDK nummer validation: Required for `SENIOR` and `JUNIOR` membership types during creation. Optional for `PASSIVE`.
   - Full profile editing (stamdata, contact info, membership type).
   - Medlemsnummer: Management of club-specific member numbers used as payment references. Unique per club. System-managed (read-only) once assigned.
   - Instructor status: Marking a member as "Instruktør" enables their public visibility on the club's instructor contact page.

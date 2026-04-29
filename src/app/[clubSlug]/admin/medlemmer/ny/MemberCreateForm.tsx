@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { AdminMemberActionResponse } from "@/lib/admin/memberCreateActions";
 import { SubmitButton } from "@/components/admin/SubmitButton";
 import Link from "next/link";
@@ -40,12 +40,13 @@ const Field = ({ label, name, type = "text", defaultValue, placeholder, fullWidt
   </div>
 );
 
-const Select = ({ label, name, options, defaultValue }: { label: string, name: string, options: { value: string, label: string }[], defaultValue?: string }) => (
+const Select = ({ label, name, options, defaultValue, onChange }: { label: string, name: string, options: { value: string, label: string }[], defaultValue?: string, onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void }) => (
   <div className="md:col-span-1">
     <label className="block text-sm font-medium mb-2 text-slate-400 ml-1">{label}</label>
     <select 
       name={name} 
       defaultValue={defaultValue}
+      onChange={onChange}
       className="w-full px-4 py-3 rounded-xl bg-slate-900/40 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500/40 transition-all appearance-none shadow-inner"
       style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1.25rem' }}
     >
@@ -56,6 +57,9 @@ const Select = ({ label, name, options, defaultValue }: { label: string, name: s
 
 export function MemberCreateForm({ clubSlug, nextMemberNumber, createAction }: MemberCreateFormProps) {
   const [state, formAction] = useActionState(createAction, null);
+  const [membershipType, setMembershipType] = useState("SENIOR");
+
+  const isMdkRequired = membershipType === "SENIOR" || membershipType === "JUNIOR";
 
   const membershipOptions = [
     { value: 'SENIOR', label: 'Senior' },
@@ -91,8 +95,20 @@ export function MemberCreateForm({ clubSlug, nextMemberNumber, createAction }: M
           </Section>
 
           <Section title="Medlemsdata">
-            <Select label="Medlemskab" name="membershipType" options={membershipOptions} defaultValue="SENIOR" />
-            <Field label="MDK nummer" name="mdkNumber" placeholder="Valgfrit" />
+            <Select 
+              label="Medlemskab" 
+              name="membershipType" 
+              options={membershipOptions} 
+              defaultValue="SENIOR" 
+              onChange={(e) => setMembershipType(e.target.value)}
+            />
+            <Field 
+              label={`MDK nummer${isMdkRequired ? ' *' : ''}`} 
+              name="mdkNumber" 
+              placeholder={isMdkRequired ? "Påkrævet" : "Valgfrit"} 
+              error={state?.fieldErrors?.mdkNumber}
+              helperText="Påkrævet for Senior og Junior. Valgfri for Passiv."
+            />
           </Section>
         </div>
 

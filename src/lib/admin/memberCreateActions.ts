@@ -71,6 +71,14 @@ export async function createAdminMemberAction(
   
   const membershipType = formData.get("membershipType") as ClubMemberMembershipType || ClubMemberMembershipType.SENIOR;
 
+  // Validate mdkNumber based on membershipType
+  if ((membershipType === ClubMemberMembershipType.SENIOR || membershipType === ClubMemberMembershipType.JUNIOR) && !mdkNumber) {
+    return { 
+      error: "Valideringsfejl", 
+      fieldErrors: { mdkNumber: "MDK nummer er påkrævet for Senior og Junior." } 
+    };
+  }
+
   try {
     const result = await prisma.$transaction(async (tx) => {
       // 1. Get or create User
