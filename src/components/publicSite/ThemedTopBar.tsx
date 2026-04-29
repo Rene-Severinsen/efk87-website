@@ -1,6 +1,4 @@
-'use client';
-
-import React, { useState } from 'react';
+import React from 'react';
 import { PublicNavigationItem } from '../../lib/publicSite/publicNavigation';
 import { logoutAction } from '../../lib/auth/logout';
 
@@ -21,18 +19,6 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
                                                             actionItems,
                                                             currentPath,
                                                           }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsMenuOpen((open) => !open);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
-
   const isActiveItem = (item: PublicNavigationItem) => {
     if (currentPath === item.href) return true;
 
@@ -63,7 +49,6 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
                             : 'border border-sky-300/25 bg-sky-300/10 text-white'
                         : 'text-slate-400 hover:bg-white/5 hover:text-white',
                   ].join(' ')}
-                  onClick={closeMenu}
               >
                 {item.label}
               </a>
@@ -87,9 +72,7 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
             return (
                 <form
                     key={item.key}
-                    action={async () => {
-                      await logoutAction(clubSlug);
-                    }}
+                    action={logoutAction.bind(null, clubSlug)}
                     className={mobile ? 'w-full' : ''}
                 >
                   <button type="submit" className={baseClassName}>
@@ -104,7 +87,6 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
                   key={item.key}
                   href={item.href}
                   className={baseClassName}
-                  onClick={closeMenu}
               >
                 {item.label}
               </a>
@@ -114,38 +96,9 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
   );
 
   return (
-      <header className="efk-topbar-root sticky top-4 z-[900] relative isolation-isolate mx-auto w-full max-w-[1400px] rounded-[24px] border border-white/10 bg-slate-950/90 px-4 py-3 shadow-2xl backdrop-blur-xl min-[1100px]:rounded-full pointer-events-auto">
-        {/* Mobile/Tablet Header */}
-        <div className="efk-topbar-mobile grid grid-cols-[minmax(0,1fr)_48px] items-center gap-3 min-[1100px]:hidden">
-          <div className="flex min-w-0 items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold text-white">
-              {clubName}
-            </div>
-
-            <div className="flex min-w-0 flex-col">
-            <span className="truncate text-sm font-bold leading-tight text-white">
-              {clubDisplayName}
-            </span>
-              <span className="truncate text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-              Klubsite
-            </span>
-            </div>
-          </div>
-
-          <button
-              type="button"
-              onClick={toggleMenu}
-              className="efk-topbar-burger justify-self-end h-12 w-12 min-h-[48px] min-w-[48px] rounded-xl border border-white/10 bg-slate-900/90 text-white flex items-center justify-center cursor-pointer touch-manipulation select-none pointer-events-auto z-10 transition-colors hover:bg-white/5 active:bg-white/10"
-              aria-expanded={isMenuOpen}
-              aria-controls="public-mobile-menu"
-              aria-label={isMenuOpen ? 'Luk menu' : 'Åbn menu'}
-          >
-            <span aria-hidden="true">{isMenuOpen ? '✕' : '☰'}</span>
-          </button>
-        </div>
-
+      <header className="efk-topbar-root sticky top-4 z-[900] relative isolation-isolate mx-auto w-full max-w-[1400px] pointer-events-auto">
         {/* Desktop Header */}
-        <div className="efk-topbar-desktop hidden items-center justify-between gap-6 min-[1100px]:flex">
+        <div className="efk-topbar-desktop hidden items-center justify-between gap-6 min-[1100px]:flex rounded-full border border-white/10 bg-slate-950/90 px-6 py-3 shadow-2xl backdrop-blur-xl">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold text-white">
               {clubName}
@@ -170,16 +123,36 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
           </div>
         </div>
 
-        {isMenuOpen && (
-            <nav
-                id="public-mobile-menu"
-                className="efk-topbar-menu absolute left-0 right-0 top-[calc(100%+0.75rem)] z-[950] flex flex-col gap-2 rounded-2xl border border-white/10 bg-slate-950/95 p-4 shadow-2xl backdrop-blur-xl min-[1100px]:hidden"
-            >
-              {renderNavLinks(true)}
-              <div className="my-2 h-px bg-white/10" />
-              <div className="flex flex-col gap-2">{renderAuthActions(true)}</div>
-            </nav>
-        )}
+        {/* Mobile/Tablet Header */}
+        <details className="efk-topbar-mobile-details group min-[1100px]:hidden rounded-[24px] border border-white/10 bg-slate-950/90 px-4 py-3 shadow-2xl backdrop-blur-xl">
+          <summary className="efk-topbar-mobile-summary flex items-center justify-between cursor-pointer list-none select-none touch-manipulation min-h-[56px] [&::-webkit-details-marker]:hidden">
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold text-white">
+                {clubName}
+              </div>
+
+              <div className="flex min-w-0 flex-col">
+              <span className="truncate text-sm font-bold leading-tight text-white">
+                {clubDisplayName}
+              </span>
+                <span className="truncate text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                Klubsite
+              </span>
+              </div>
+            </div>
+
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-slate-900/90 text-white transition-colors hover:bg-white/5 active:bg-white/10">
+              <span className="text-xl group-open:hidden">☰</span>
+              <span className="text-xl hidden group-open:block">✕</span>
+            </div>
+          </summary>
+
+          <nav className="efk-topbar-mobile-menu mt-3 flex flex-col gap-2 rounded-2xl border border-white/10 bg-slate-950/95 p-4 shadow-2xl">
+            {renderNavLinks(true)}
+            <div className="my-2 h-px bg-white/10" />
+            <div className="flex flex-col gap-2">{renderAuthActions(true)}</div>
+          </nav>
+        </details>
       </header>
   );
 };
