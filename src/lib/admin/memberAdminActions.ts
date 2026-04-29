@@ -13,11 +13,18 @@ import {
   ClubMemberCertificateType
 } from "@/generated/prisma";
 
+export type AdminMemberActionResponse = {
+  success?: boolean;
+  error?: string;
+  fieldErrors?: Record<string, string>;
+};
+
 export async function updateAdminMemberProfileAction(
   clubSlug: string,
   userId: string,
+  prevState: AdminMemberActionResponse | null,
   formData: FormData
-) {
+): Promise<AdminMemberActionResponse> {
   const club = await getClubBySlug(clubSlug);
   if (!club) throw new Error("Club not found");
 
@@ -52,7 +59,10 @@ export async function updateAdminMemberProfileAction(
   const memberNumber = memberNumberRaw ? parseInt(memberNumberRaw, 10) : null;
 
   if (memberNumber !== null && (isNaN(memberNumber) || memberNumber <= 0)) {
-    throw new Error("Medlemsnummer skal være et positivt heltal");
+    return { 
+      error: "Valideringsfejl", 
+      fieldErrors: { memberNumber: "Medlemsnummer skal være et positivt heltal" } 
+    };
   }
 
   const profileImageUrl = getString("profileImageUrl");
@@ -69,103 +79,123 @@ export async function updateAdminMemberProfileAction(
   const certificateTypes = Object.values(ClubMemberCertificateType);
   const selectedCertificates = certificateTypes.filter(type => formData.get(`cert_${type}`) === "on");
 
-  await prisma.$transaction(async (tx) => {
-    // Check for unique memberNumber within the club
-    if (memberNumber !== null) {
-      const existing = await tx.clubMemberProfile.findFirst({
+  try {
+    await prisma.$transaction(async (tx) => {
+      // Check for unique memberNumber within the club
+      if (memberNumber !== null) {
+        const existing = await tx.clubMemberProfile.findFirst({
+          where: {
+            clubId: club.id,
+            memberNumber,
+            userId: {
+              not: userId,
+            },
+          },
+        });
+
+        if (existing) {
+          throw new Error(`Medlemsnummer ${memberNumber} er allerede i brug i denne klub.`);
+        }
+      }
+
+      // Update Profile
+      await tx.clubMemberProfile.upsert({
+        where: {
+          clubId_userId: {
+            clubId: club.id,
+            userId,
+          },
+        },
+        update: {
+          firstName,
+          lastName,
+          addressLine,
+          postalCode,
+          city,
+          mobilePhone,
+          memberNumber,
+          mdkNumber,
+          profileImageUrl,
+          membershipType,
+          memberRoleType,
+          schoolStatus,
+          memberStatus,
+          isInstructor,
+          birthDate,
+          joinedAt,
+        },
+        create: {
+          clubId: club.id,
+          userId,
+          firstName,
+          lastName,
+          addressLine,
+          postalCode,
+          city,
+          mobilePhone,
+          memberNumber,
+          mdkNumber,
+          profileImageUrl,
+          membershipType,
+          memberRoleType,
+          schoolStatus,
+          memberStatus,
+          isInstructor,
+          birthDate,
+          joinedAt,
+        },
+      });
+
+      // Update Certificates
+      // 1. Remove unchecked ones
+      await tx.clubMemberCertificate.deleteMany({
         where: {
           clubId: club.id,
-          memberNumber,
-          userId: {
-            not: userId,
+          userId,
+          certificateType: {
+            notIn: selectedCertificates,
           },
         },
       });
 
-      if (existing) {
-        throw new Error(`Medlemsnummer ${memberNumber} er allerede i brug i denne klub.`);
-      }
-    }
-
-    // Update Profile
-    await tx.clubMemberProfile.upsert({
-      where: {
-        clubId_userId: {
-          clubId: club.id,
-          userId,
-        },
-      },
-      update: {
-        firstName,
-        lastName,
-        addressLine,
-        postalCode,
-        city,
-        mobilePhone,
-        memberNumber,
-        mdkNumber,
-        profileImageUrl,
-        membershipType,
-        memberRoleType,
-        schoolStatus,
-        memberStatus,
-        isInstructor,
-        birthDate,
-        joinedAt,
-      },
-      create: {
-        clubId: club.id,
-        userId,
-        firstName,
-        lastName,
-        addressLine,
-        postalCode,
-        city,
-        mobilePhone,
-        memberNumber,
-        mdkNumber,
-        profileImageUrl,
-        membershipType,
-        memberRoleType,
-        schoolStatus,
-        memberStatus,
-        isInstructor,
-        birthDate,
-        joinedAt,
-      },
-    });
-
-    // Update Certificates
-    // 1. Remove unchecked ones
-    await tx.clubMemberCertificate.deleteMany({
-      where: {
-        clubId: club.id,
-        userId,
-        certificateType: {
-          notIn: selectedCertificates,
-        },
-      },
-    });
-
-    // 2. Add checked ones (using upsert to avoid duplicates)
-    for (const certType of selectedCertificates) {
-      await tx.clubMemberCertificate.upsert({
-        where: {
-          clubId_userId_certificateType: {
+      // 2. Add checked ones (using upsert to avoid duplicates)
+      for (const certType of selectedCertificates) {
+        await tx.clubMemberCertificate.upsert({
+          where: {
+            clubId_userId_certificateType: {
+              clubId: club.id,
+              userId,
+              certificateType: certType,
+            },
+          },
+          update: {},
+          create: {
             clubId: club.id,
             userId,
             certificateType: certType,
           },
-        },
-        update: {},
-        create: {
-          clubId: club.id,
-          userId,
-          certificateType: certType,
-        },
-      });
+        });
+      }
+    });
+  } catch (err) {
+    if (err instanceof Error && err.message.includes("Medlemsnummer")) {
+      return { 
+        error: "Valideringsfejl", 
+        fieldErrors: { memberNumber: err.message } 
+      };
     }
-  });
+    // Prisma unique constraint error fallback
+    if (err && typeof err === 'object' && 'code' in err && err.code === 'P2002') {
+      const meta = (err as { meta?: { target?: string[] } }).meta;
+      if (meta?.target?.includes('memberNumber')) {
+        return {
+          error: "Valideringsfejl",
+          fieldErrors: { memberNumber: `Medlemsnummer ${memberNumber} er allerede i brug i denne klub.` }
+        };
+      }
+    }
+    throw err;
+  }
 
   revalidatePath(`/${clubSlug}/admin/medlemmer`);
   revalidatePath(`/${clubSlug}/admin/medlemmer/${userId}/rediger`);
