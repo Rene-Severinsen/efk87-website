@@ -23,12 +23,6 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
                                                           }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsMenuOpen((open) => !open);
-  };
-
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
@@ -114,9 +108,9 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
   );
 
   return (
-      <header className="sticky top-4 z-[900] isolation-isolate mx-auto w-full max-w-[1400px] rounded-[24px] border border-white/10 bg-slate-950/80 px-4 py-3 shadow-2xl backdrop-blur-xl min-[1100px]:rounded-full">
+      <header className="sticky top-4 z-[900] relative isolation-isolate mx-auto w-full max-w-[1400px] rounded-[24px] border border-white/10 bg-slate-950/90 px-4 py-3 shadow-2xl backdrop-blur-xl min-[1100px]:rounded-full pointer-events-auto">
         {/* Mobile/Tablet Header */}
-        <div className="flex items-center justify-between gap-3 pointer-events-auto min-[1100px]:hidden">
+        <div className="flex items-center justify-between gap-3 pointer-events-auto pr-14 min-[1100px]:hidden">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold text-white">
               {clubName}
@@ -132,17 +126,30 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
             </div>
           </div>
 
-          <button
-              type="button"
-              onClick={toggleMenu}
-              className="relative z-[999] flex h-11 min-h-[44px] w-11 min-w-[44px] touch-manipulation select-none items-center justify-center rounded-xl text-2xl text-white transition-colors hover:bg-white/5 active:bg-white/10"
-              aria-expanded={isMenuOpen}
-              aria-controls="public-mobile-menu"
-              aria-label={isMenuOpen ? 'Luk menu' : 'Åbn menu'}
-          >
-            <span aria-hidden="true">{isMenuOpen ? '✕' : '☰'}</span>
-          </button>
+          <div className="flex items-center gap-2">
+          </div>
         </div>
+
+        {/* Burger button: absolute top-layer hit area */}
+        <button
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              setIsMenuOpen((open) => !open);
+            }}
+            onTouchEnd={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              setIsMenuOpen((open) => !open);
+            }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-[9999] pointer-events-auto touch-manipulation select-none cursor-pointer flex h-12 w-12 min-h-[48px] min-w-[48px] items-center justify-center rounded-xl bg-slate-900/90 border border-white/10 text-white transition-colors hover:bg-white/5 active:bg-white/10 min-[1100px]:hidden"
+            aria-expanded={isMenuOpen}
+            aria-controls="public-mobile-menu"
+            aria-label={isMenuOpen ? 'Luk menu' : 'Åbn menu'}
+        >
+          <span aria-hidden="true">{isMenuOpen ? '✕' : '☰'}</span>
+        </button>
 
         {/* Desktop Header */}
         <div className="hidden items-center justify-between gap-6 min-[1100px]:flex">
