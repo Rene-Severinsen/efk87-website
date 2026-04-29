@@ -28,6 +28,7 @@ model Club {
   flightIntents ClubFlightIntent[]
   publicFooter  PublicClubFooter?
   publicSponsors PublicSponsor[]
+  dailyActivity MemberDailyActivity[]
 }
 
 model PublicClubFooter {
@@ -205,11 +206,11 @@ model User {
   image         String?
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
-  lastSeenAt    DateTime?
   memberships   ClubMembership[]
   accounts      Account[]
   sessions      Session[]
   flightIntents ClubFlightIntent[]
+  dailyActivity MemberDailyActivity[]
 }
 
 model Account {
@@ -312,4 +313,22 @@ enum MembershipStatus {
   ACTIVE
   INVITED
   DISABLED
+}
+
+model MemberDailyActivity {
+  id           String   @id @default(cuid())
+  clubId       String
+  userId       String
+  activityDate DateTime
+  firstSeenAt  DateTime
+  lastSeenAt   DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([clubId, userId, activityDate])
+  @@index([clubId, activityDate])
+  @@index([userId, activityDate])
 }

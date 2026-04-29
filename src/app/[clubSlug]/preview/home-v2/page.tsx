@@ -3,7 +3,7 @@ import { requireClubBySlug } from "../../../../lib/tenancy/tenantService";
 import { getServerViewerForClub, toViewerVisibilityContext } from "../../../../lib/auth/viewer";
 import { getClubTheme } from "../../../../lib/publicSite/publicThemeService";
 import { getTodayFlightIntents } from "../../../../lib/publicSite/publicFlightIntentService";
-import { getMemberActivityStats } from "../../../../lib/publicSite/memberActivityService";
+import { getMemberActivityStats } from "../../../../lib/memberActivity/memberActivityService";
 import { getVisiblePublicNavigation, getVisiblePublicActions } from "../../../../lib/publicSite/publicNavigation";
 import PublicClubHomePageV2 from "../../../../components/publicSite/homeV2/PublicClubHomePageV2";
 
@@ -38,7 +38,7 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
   const [theme, todayFlightIntents, memberActivity] = await Promise.all([
     getClubTheme(club.id),
     getTodayFlightIntents(club.id, visibilityContext),
-    getMemberActivityStats(club.id),
+    getMemberActivityStats(club.id, viewer),
   ]);
 
   const navigationItems = getVisiblePublicNavigation(clubSlug, visibilityContext);

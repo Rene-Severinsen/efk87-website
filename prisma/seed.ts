@@ -114,12 +114,32 @@ async function main() {
     console.log("Seeding development test member...");
     const testMember = await prisma.user.upsert({
       where: { email: "test.member@efk87.local" },
-      update: {
-        lastSeenAt: new Date(new Date().getTime() - 1000 * 60 * 15), // 15 mins ago
-      },
+      update: {},
       create: {
         email: "test.member@efk87.local",
         name: "Test Member",
+      },
+    });
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    await prisma.memberDailyActivity.upsert({
+      where: {
+        clubId_userId_activityDate: {
+          clubId: efk87.id,
+          userId: testMember.id,
+          activityDate: today,
+        },
+      },
+      update: {
+        lastSeenAt: new Date(new Date().getTime() - 1000 * 60 * 15),
+      },
+      create: {
+        clubId: efk87.id,
+        userId: testMember.id,
+        activityDate: today,
+        firstSeenAt: new Date(new Date().getTime() - 1000 * 60 * 60),
         lastSeenAt: new Date(new Date().getTime() - 1000 * 60 * 15),
       },
     });
@@ -146,12 +166,29 @@ async function main() {
     console.log("Seeding development admin member...");
     const adminMember = await prisma.user.upsert({
       where: { email: "admin@efk87.local" },
-      update: {
-        lastSeenAt: new Date(new Date().getTime() - 1000 * 60 * 5), // 5 mins ago
-      },
+      update: {},
       create: {
         email: "admin@efk87.local",
         name: "Test Admin",
+      },
+    });
+
+    await prisma.memberDailyActivity.upsert({
+      where: {
+        clubId_userId_activityDate: {
+          clubId: efk87.id,
+          userId: adminMember.id,
+          activityDate: today,
+        },
+      },
+      update: {
+        lastSeenAt: new Date(new Date().getTime() - 1000 * 60 * 5),
+      },
+      create: {
+        clubId: efk87.id,
+        userId: adminMember.id,
+        activityDate: today,
+        firstSeenAt: new Date(new Date().getTime() - 1000 * 60 * 30),
         lastSeenAt: new Date(new Date().getTime() - 1000 * 60 * 5),
       },
     });

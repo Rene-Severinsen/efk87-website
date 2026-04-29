@@ -1,7 +1,7 @@
 import React from 'react';
 import './PublicClubHomePageV2.css';
 import { PublicFlightIntentListItem } from '../../../lib/publicSite/publicFlightIntentService';
-import { MemberActivityStats } from '../../../lib/publicSite/memberActivityService';
+import { MemberActivityStats } from '../../../lib/memberActivity/memberActivityService';
 import { ServerViewerContext } from '../../../lib/auth/viewer';
 import { PublicNavigationItem } from '../../../lib/publicSite/publicNavigation';
 import Link from 'next/link';
@@ -171,13 +171,13 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             
             <div className="home-v2-compact-list">
               {memberActivity.latestMembers.length > 0 ? (
-                memberActivity.latestMembers.map((member) => (
-                  <div key={member.id} className="home-v2-compact-item">
+                memberActivity.latestMembers.map((member, idx) => (
+                  <div key={idx} className="home-v2-compact-item">
                     <span className="home-v2-time">
                       {member.lastSeenAt.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
                     </span>
                     <span className="home-v2-name">
-                      {viewer.isMember ? (member.name || 'Medlem') : 'Medlem'}
+                      {member.displayName}
                     </span>
                   </div>
                 ))

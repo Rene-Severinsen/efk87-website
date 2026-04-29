@@ -63,6 +63,11 @@ Stores basic configuration for a club, such as display name, short name, and pub
 - **Membership Scope**: A membership always belongs to a specific club via `clubId`. This ensures that roles and statuses are context-specific.
 - **Roles & Status**: Currently uses simple enums (`ClubRole` and `MembershipStatus`) to manage access level and account state within a club.
 
+#### MemberDailyActivity
+Tenant-scoped activity tracking. Each record represents one user's activity for one club on one specific day (`activityDate`). This replaces global user activity tracking to support multi-tenancy.
+- **Constraints**: Unique combination of `clubId` + `userId` + `activityDate`.
+- **Purpose**: Power "Senest online" and future per-club activity statistics without exposing cross-club activity.
+
 > **Note**: Authentication (login, password management, etc.) is not yet implemented. The `User` model currently only serves as a profile and membership anchor.
 
 ### Environment Separation
