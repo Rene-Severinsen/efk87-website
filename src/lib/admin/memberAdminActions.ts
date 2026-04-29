@@ -55,15 +55,7 @@ export async function updateAdminMemberProfileAction(
   const city = getString("city");
   const mobilePhone = getString("mobilePhone");
   const mdkNumber = getString("mdkNumber");
-  const memberNumberRaw = getString("memberNumber");
-  const memberNumber = memberNumberRaw ? parseInt(memberNumberRaw, 10) : null;
-
-  if (memberNumber !== null && (isNaN(memberNumber) || memberNumber <= 0)) {
-    return { 
-      error: "Valideringsfejl", 
-      fieldErrors: { memberNumber: "Medlemsnummer skal være et positivt heltal" } 
-    };
-  }
+  // memberNumber is now auto-assigned and not editable from edit form
 
   const profileImageUrl = getString("profileImageUrl");
   const birthDate = getDate("birthDate");
@@ -81,59 +73,21 @@ export async function updateAdminMemberProfileAction(
 
   try {
     await prisma.$transaction(async (tx) => {
-      // Check for unique memberNumber within the club
-      if (memberNumber !== null) {
-        const existing = await tx.clubMemberProfile.findFirst({
-          where: {
-            clubId: club.id,
-            memberNumber,
-            userId: {
-              not: userId,
-            },
-          },
-        });
-
-        if (existing) {
-          throw new Error(`Medlemsnummer ${memberNumber} er allerede i brug i denne klub.`);
-        }
-      }
-
       // Update Profile
-      await tx.clubMemberProfile.upsert({
+      await tx.clubMemberProfile.update({
         where: {
           clubId_userId: {
             clubId: club.id,
             userId,
           },
         },
-        update: {
+        data: {
           firstName,
           lastName,
           addressLine,
           postalCode,
           city,
           mobilePhone,
-          memberNumber,
-          mdkNumber,
-          profileImageUrl,
-          membershipType,
-          memberRoleType,
-          schoolStatus,
-          memberStatus,
-          isInstructor,
-          birthDate,
-          joinedAt,
-        },
-        create: {
-          clubId: club.id,
-          userId,
-          firstName,
-          lastName,
-          addressLine,
-          postalCode,
-          city,
-          mobilePhone,
-          memberNumber,
           mdkNumber,
           profileImageUrl,
           membershipType,
@@ -178,22 +132,6 @@ export async function updateAdminMemberProfileAction(
       }
     });
   } catch (err) {
-    if (err instanceof Error && err.message.includes("Medlemsnummer")) {
-      return { 
-        error: "Valideringsfejl", 
-        fieldErrors: { memberNumber: err.message } 
-      };
-    }
-    // Prisma unique constraint error fallback
-    if (err && typeof err === 'object' && 'code' in err && err.code === 'P2002') {
-      const meta = (err as { meta?: { target?: string[] } }).meta;
-      if (meta?.target?.includes('memberNumber')) {
-        return {
-          error: "Valideringsfejl",
-          fieldErrors: { memberNumber: `Medlemsnummer ${memberNumber} er allerede i brug i denne klub.` }
-        };
-      }
-    }
     throw err;
   }
 

@@ -73,6 +73,7 @@ Stores club-specific member stamdata (profile information).
 - **Constraints**: Unique combination of `clubId` + `userId`.
 - **Fields**: Name, address, phone, Medlemsnummer (`memberNumber`), MDK number, profile image URL, membership type, club role, school status, member status.
 - **Uniqueness**: `memberNumber` is unique per `clubId`.
+- **Automatic Assignment**: `memberNumber` is assigned automatically when a new profile is created for a club, using a max+1 logic scoped to that club.
 - **Privacy**: Contains private member data, strictly tenant-scoped.
 
 #### ClubMemberCertificate

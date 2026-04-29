@@ -157,7 +157,13 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
             <Select label="Medlemskab" name="membershipType" options={membershipOptions} defaultValue={member.membershipType} />
             <Select label="Klubrolle" name="memberRoleType" options={roleOptions} defaultValue={member.memberRoleType} />
             <Select label="Status" name="memberStatus" options={statusOptions} defaultValue={member.memberStatus} />
-            <Field label="Medlemsnummer" name="memberNumber" type="number" defaultValue={member.memberNumber} error={state?.fieldErrors?.memberNumber} />
+            <div className="md:col-span-1">
+              <label className="block text-sm font-medium mb-2 text-slate-400 ml-1">Medlemsnummer</label>
+              <div className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-white/10 text-slate-400 font-semibold shadow-inner">
+                {member.memberNumber || 'Tildeles automatisk'}
+              </div>
+              <p className="mt-1.5 ml-1 text-xs text-slate-500">Kan ikke ændres manuelt</p>
+            </div>
             <Select label="Skolestatus" name="schoolStatus" options={schoolStatusOptions} defaultValue={member.schoolStatus} />
             <Toggle label="Instruktør" name="isInstructor" defaultChecked={member.isInstructor} />
           </Section>
@@ -200,6 +206,29 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
                   defaultChecked={member.certificates?.includes(cert)} 
                 />
               ))}
+            </div>
+          </div>
+
+          <div className="backdrop-blur-md bg-[#121b2e]/80 border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500/50 to-orange-500/50 opacity-30" />
+            <h3 className="text-xl font-bold mb-6 pb-3 border-b border-white/10 text-white flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-amber-500 rounded-full" />
+              Fakturering
+            </h3>
+            <div className="space-y-4">
+              <button 
+                type="button"
+                disabled
+                className="w-full px-6 py-3 rounded-xl bg-slate-800 text-slate-500 font-bold border border-white/5 cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                Opret fakturagrundlag
+              </button>
+              <p className="text-xs text-slate-500 italic text-center">
+                Integration til Dinero/faktureringsmotor tilkobles senere.
+              </p>
             </div>
           </div>
         </div>

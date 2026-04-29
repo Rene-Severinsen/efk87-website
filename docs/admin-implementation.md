@@ -77,19 +77,25 @@ Located in `src/components/admin/`:
 ### Medlemshåndtering (Member Management)
 - **Routes**: 
   - `/[clubSlug]/admin/medlemmer` (Overview)
+  - `/[clubSlug]/admin/medlemmer/ny` (Create)
   - `/[clubSlug]/admin/medlemmer/[userId]/rediger` (Edit)
 - **Purpose**: Manage member profiles, club roles, and certificates.
 - **Services**: 
   - `src/lib/admin/memberAdminService.ts`
   - `src/lib/members/memberProfileService.ts`
-- **Actions**: `src/lib/admin/memberAdminActions.ts`
+  - `src/lib/members/memberNumberService.ts`
+- **Actions**: 
+  - `src/lib/admin/memberAdminActions.ts` (Update)
+  - `src/lib/admin/memberCreateActions.ts` (Create)
 - **Capabilities**: 
   - Statistics dashboard for member statuses and roles.
-  - Comprehensive member list with search/filter (planned).
+  - Comprehensive member list.
+  - Member creation with automatic `memberNumber` assignment.
   - Full profile editing (stamdata, contact info, membership type).
-  - Medlemsnummer: Management of club-specific member numbers used as payment references. Unique per club.
+  - Medlemsnummer: Management of club-specific member numbers used as payment references. Unique per club. System-managed (read-only) once assigned.
   - Instructor status: Marking a member as "Instruktør" enables their public visibility on the club's instructor contact page.
   - Certificate management (normalized model).
+  - Future billing: Reserved UI for pushing members to billing/Dinero.
 - **Privacy**: All data is strictly tenant-scoped.
 
 ### Statistik (Statistics)

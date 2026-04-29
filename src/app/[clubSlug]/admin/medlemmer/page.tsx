@@ -84,9 +84,25 @@ export default async function Page({ params }: PageProps) {
       userEmail={viewer.email}
     >
       <div className="admin-page-container">
-        <div className="admin-header">
-          <h1 className="admin-title">Medlemmer</h1>
-          <p className="admin-description">Overblik over klubbens medlemmer, medlemsstatus og certifikater.</p>
+        <div className="admin-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+          <div>
+            <h1 className="admin-title">Medlemmer</h1>
+            <p className="admin-description">Overblik over klubbens medlemmer, medlemsstatus og certifikater.</p>
+          </div>
+          <Link 
+            href={`/${clubSlug}/admin/medlemmer/ny`}
+            className="admin-button-primary"
+            style={{ 
+              backgroundColor: 'var(--admin-accent)', 
+              color: 'white', 
+              padding: '0.75rem 1.5rem', 
+              borderRadius: '0.5rem', 
+              fontWeight: '600',
+              textDecoration: 'none'
+            }}
+          >
+            Opret medlem
+          </Link>
         </div>
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>

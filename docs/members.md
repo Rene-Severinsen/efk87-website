@@ -15,9 +15,18 @@ We have separated access/authorization from profile data:
 
 - **Uniqueness**: `memberNumber` is unique per club.
 - **Payment Reference**: It is primarily used as a reference for kontingent payments.
-- **Sequential Assignment**: For new members, the system follows a max+1 logic (see `getNextMemberNumber` in `memberNumberService.ts`).
+- **Automatic Assignment**: For new members, the system follows a max+1 logic (see `getNextMemberNumber` in `memberNumberService.ts`).
+- **Read-only**: Once assigned, the `memberNumber` is system-managed and cannot be edited by administrators or members.
 - **Legacy Preservation**: When importing members from legacy systems, their existing `memberNumber` must be preserved.
 - **Separate from MDK**: This field is NOT the same as the MDK number and both can exist simultaneously.
+
+## Onboarding (Admin Create Member)
+
+Administrators can create new members manually:
+- **Status**: All new members start with `memberStatus = NEW`.
+- **Certificates/Instructor**: These fields are not set during initial creation and must be updated after the member is active.
+- **Automatic Medlemsnummer**: Assigned automatically at save time using the max+1 logic.
+- **User Creation**: If a user with the given email doesn't exist, a new User account is created. If they already exist, they are linked to the new membership and profile.
 
 ## Tenancy & Privacy
 
