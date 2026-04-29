@@ -1,13 +1,12 @@
 import prisma from "../db/prisma";
-import * as PrismaModels from "../../generated/prisma";
 import { GalleryAlbumStatus, PublicSurfaceVisibility } from "../../generated/prisma";
 
 export interface AdminGalleryOverviewDTO {
   albums: {
     id: string;
     title: string;
-    status: PrismaModels.GalleryAlbumStatus;
-    visibility: PrismaModels.PublicSurfaceVisibility;
+    status: GalleryAlbumStatus;
+    visibility: PublicSurfaceVisibility;
     imageCount: number;
     legacySource: string | null;
     legacyId: string | null;
@@ -22,14 +21,7 @@ export interface AdminGalleryOverviewDTO {
 }
 
 export async function getAdminGalleryOverview(clubId: string): Promise<AdminGalleryOverviewDTO> {
-  console.log("prisma models available:", Object.keys(prisma).filter(k => !k.startsWith('$')));
-  
-  // @ts-ignore - debugging why it is undefined at runtime
-  if (!prisma.galleryAlbum) {
-    throw new Error("prisma.galleryAlbum is undefined in getAdminGalleryOverview");
-  }
-
-  const albums = await (prisma as any).galleryAlbum.findMany({
+  const albums = await prisma.galleryAlbum.findMany({
     where: {
       clubId,
     },
@@ -43,16 +35,16 @@ export async function getAdminGalleryOverview(clubId: string): Promise<AdminGall
     },
   });
 
-  const totalImages = await (prisma as any).galleryImage.count({
+  const totalImages = await prisma.galleryImage.count({
     where: {
       clubId,
     },
   });
 
-  const publishedAlbumsCount = (albums as any[]).filter(a => a.status === GalleryAlbumStatus.PUBLISHED).length;
+  const publishedAlbumsCount = albums.filter(a => a.status === GalleryAlbumStatus.PUBLISHED).length;
 
   return {
-    albums: (albums as any[]).map((album) => ({
+    albums: albums.map((album) => ({
       id: album.id,
       title: album.title,
       status: album.status,
