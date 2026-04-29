@@ -51,6 +51,7 @@ The `ServerViewerContext` includes:
 - `isAdmin`: `boolean` (True if authenticated AND has `ACTIVE` membership AND role is `ADMIN` or `OWNER`)
 - `userId?`: `string`
 - `email?`: `string`
+- `name?`: `string | null`
 - `clubId?`: `string`
 - `membershipStatus?`: `MembershipStatus`
 - `clubRole?`: `ClubRole`

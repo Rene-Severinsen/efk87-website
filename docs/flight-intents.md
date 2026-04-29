@@ -72,8 +72,24 @@ Note: Login and member activity analytics must be handled by a separate activity
 - [x] Shared service for public access.
 - [x] Homepage rendering from real data.
 - [x] Idempotent seed data for EFK87 demo.
-- [ ] Member submit flow (Requires Auth).
+- [x] Member submit foundation (authenticated ACTIVE member).
 - [ ] Edit/Cancel flow.
 - [ ] Automatic expiry logic.
 - [ ] Notifications/Emails.
 - [ ] Statistics UI/Graphs.
+
+## Member Submission Flow
+
+Submission of new flight intents requires an authenticated **ACTIVE** `ClubMembership`.
+
+- **Route**: `/[clubSlug]/jeg-flyver`
+- **Rules**:
+  - `flightDate` must be today or in the future. Past dates are rejected.
+  - `plannedTime` is optional and combined with `flightDate` into `plannedAt`.
+  - `activityType` is required.
+  - `message` is optional (max 240 chars).
+  - Rows are created with `status: ACTIVE`, `source: FUTURE_MEMBER_APP`, and `visibility: PUBLIC` (for now).
+  - `displayName` is derived from the user's name or email.
+  - `expiresAt` is set to the end of the `flightDate`.
+- **Retention**: Data is retained for future statistics even after expiry.
+- **Analytics**: The model supports future analytics for activity volume, categorization, and engagement.
