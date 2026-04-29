@@ -133,7 +133,8 @@ Frontpage V2 is now the active live homepage for all clubs.
 - **Guidelines**:
   - v2 uses real data for club, user profile, and "Jeg flyver" activity.
   - v2 includes a "Nye medlemmer" highlight card that appears when members have joined within the last 14 days.
-  - Chat, statistics, gallery, and next activities remain static placeholders.
+  - v2 uses the `ClubCalendarEntry` model to populate the homepage marquee (ticker).
+  - Chat, statistics, and gallery remain static placeholders.
   - v2 CSS is scoped and non-invasive.
 
 ## Components
@@ -180,6 +181,7 @@ Reusable small themed components for consistent internal page styling:
   - `/[clubSlug]/bliv-medlem`: Bliv medlem (PublicPage content stub)
   - `/[clubSlug]/jeg-flyver/liste`: Jeg flyver (Full today list)
   - `/[clubSlug]/login`: Log ind (Placeholder only, no auth implementation)
+  - `/[clubSlug]/kalender/[entryId]`: Kalenderindslag (Public detail page)
 
 ### Public Route Details
 - **Content Stubs**: Galleri, Artikler, Flyveskole, and Bliv medlem use the `PublicPage` model via `publicPageService`. They currently contain seed content for EFK87 and serve as visual/structural stubs.
@@ -187,7 +189,7 @@ Reusable small themed components for consistent internal page styling:
 - **Member-only Areas**: Forum (`/[clubSlug]/forum`) and My Profile (`/[clubSlug]/profil`) are intended for members only and are hidden from anonymous visitors in the navigation.
 - **Scope Limitations**:
   - Gallery is now implemented as a read-only foundation with tenant-scoping.
-  - Calendar and event logic are not implemented.
+  - Calendar and marquee logic are implemented.
   - Forum backend is not implemented.
   - No CMS editor or Admin UI for managing these pages yet.
 - **Content Management**: Real content for these pages will later be CMS/admin-managed where relevant.

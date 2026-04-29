@@ -36,6 +36,7 @@ model Club {
   articleTags   ArticleTag[]
   memberProfiles ClubMemberProfile[]
   memberCertificates ClubMemberCertificate[]
+  calendarEntries ClubCalendarEntry[]
 }
 
 model PublicClubFooter {
@@ -106,6 +107,26 @@ model Article {
   @@index([clubId, isFeatured])
   @@index([clubId, publishedAt])
   @@index([clubId, legacySource, legacyId])
+}
+
+model ClubCalendarEntry {
+  id                 String    @id @default(cuid())
+  clubId             String
+  title              String
+  descriptionHtml    String?
+  startsAt           DateTime
+  endsAt             DateTime?
+  location           String?
+  isPublished        Boolean   @default(true)
+  forceShowInMarquee Boolean   @default(false)
+  sortOrder          Int?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+
+  @@index([clubId, startsAt])
+  @@index([clubId, isPublished])
 }
 
 model ArticleTag {

@@ -8,6 +8,7 @@ import { NewMemberHighlightData } from '../../../lib/members/newMemberHighlightS
 import NewMembersHighlightCard from '../../club/NewMembersHighlightCard';
 import Link from 'next/link';
 import { ThemedTopBar } from '../ThemedTopBar';
+import { PublicCalendarEntry } from '../../../lib/publicSite/publicCalendarService';
 
 interface PublicClubHomePageV2Props {
   club: {
@@ -26,6 +27,7 @@ interface PublicClubHomePageV2Props {
   navigationItems: PublicNavigationItem[];
   actionItems: PublicNavigationItem[];
   newMemberHighlights: NewMemberHighlightData;
+  calendarMarquee: PublicCalendarEntry[];
   theme?: {
     backgroundColor: string;
     panelColor: string;
@@ -45,24 +47,10 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Isolated V2 homepage component.
  * Ported closely from the provided mockup HTML.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee }: PublicClubHomePageV2Props) {
   const clubDisplayName = club.settings?.displayName || club.name;
   const clubShortName = club.settings?.shortName || club.name;
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
-  };
-
-  const getEmojiForActivity = (type: string) => {
-    switch (type) {
-      case 'FLYING': return '✈️';
-      case 'MAINTENANCE': return '🛠️';
-      case 'WEATHER_DEPENDENT': return '🌬️';
-      case 'TRAINING': return '🎓';
-      case 'SOCIAL': return '☕';
-      default: return '📍';
-    }
-  };
 
   return (
     <div className="home-v2-root">
@@ -104,14 +92,37 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           <article className="home-v2-card home-v2-marquee-card">
             <div className="home-v2-marquee">
               <div className="home-v2-marquee-track">
-                <span>• Søndag 10:30: Klubåbning og kaffe i skuret</span>
-                <span>• Søndag 11:00: Skoleflyvning – El-træner på bane 2</span>
-                <span>• Onsdag 19:00: Bestyrelsesmøde i klubhuset</span>
-                <span>• Lørdag 09:30: Forårsoprydning på pladsen</span>
-                <span>• Søndag 10:30: Klubåbning og kaffe i skuret</span>
-                <span>• Søndag 11:00: Skoleflyvning – El-træner på bane 2</span>
-                <span>• Onsdag 19:00: Bestyrelsesmøde i klubhuset</span>
-                <span>• Lørdag 09:30: Forårsoprydning på pladsen</span>
+                {calendarMarquee.length > 0 ? (
+                  <>
+                    {[...calendarMarquee, ...calendarMarquee].map((entry, idx) => {
+                      const dateDisplay = entry.startsAt.toLocaleDateString('da-DK', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                      });
+                      const hasTime = entry.startsAt.getHours() !== 0 || entry.startsAt.getMinutes() !== 0;
+                      const timeDisplay = hasTime ? entry.startsAt.toLocaleTimeString('da-DK', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      }) : '';
+                      
+                      return (
+                        <React.Fragment key={`${entry.id}-${idx}`}>
+                          <Link href={`/${club.slug}/kalender/${entry.id}`} className="home-v2-marquee-item">
+                            <span className="home-v2-marquee-date">{dateDisplay}</span>
+                            <span className="home-v2-marquee-title">{entry.title}</span>
+                            {hasTime && <span className="home-v2-marquee-time">{timeDisplay}</span>}
+                          </Link>
+                          <span className="home-v2-marquee-separator">
+                             <div className="home-v2-marquee-logo-mark">EFK87</div>
+                          </span>
+                        </React.Fragment>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <span>Ingen kommende kalenderindslag</span>
+                )}
               </div>
             </div>
           </article>

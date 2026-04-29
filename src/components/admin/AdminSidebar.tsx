@@ -90,9 +90,15 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           </a>
           <a 
             href={`/${clubSlug}/admin/artikler`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/artikler` ? "active" : ""}`}
+            className={`admin-sidebar-item ${pathname?.startsWith(`/${clubSlug}/admin/artikler`) ? "active" : ""}`}
           >
             Artikler
+          </a>
+          <a 
+            href={`/${clubSlug}/admin/kalender`} 
+            className={`admin-sidebar-item ${pathname?.startsWith(`/${clubSlug}/admin/kalender`) ? "active" : ""}`}
+          >
+            Kalender
           </a>
           <a 
             href={`/${clubSlug}/admin/forum`} 

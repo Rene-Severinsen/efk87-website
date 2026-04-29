@@ -20,6 +20,7 @@ import {
   getVisiblePublicActions,
 } from "../../lib/publicSite/publicNavigation";
 import { getNewMemberHighlights } from "../../lib/members/newMemberHighlightService";
+import { getHomepageMarqueeCalendarEntries } from "../../lib/publicSite/publicCalendarService";
 
 interface ClubPageProps {
   params: Promise<{
@@ -82,6 +83,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const navigationItems = getVisiblePublicNavigation(clubSlug, viewer);
   const actionItems = getVisiblePublicActions(clubSlug, viewer);
   const newMemberHighlights = await getNewMemberHighlights(club.id);
+  const calendarMarquee = await getHomepageMarqueeCalendarEntries(club.id);
 
   console.log("[ClubPage] DATA SUMMARY:", {
     clubId: club.id,
@@ -128,6 +130,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
           navigationItems={navigationItems}
           actionItems={actionItems}
           newMemberHighlights={newMemberHighlights}
+          calendarMarquee={calendarMarquee}
       />
   );
 }

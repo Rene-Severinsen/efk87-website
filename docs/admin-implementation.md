@@ -22,6 +22,7 @@ Admin routes are organized into several logical groups. Most routes currently ex
 - **Artikler** (`/admin/artikler`): News and article publishing. Supports rich text editing (BlockNote), server-side slug generation, and external image URL insertion. Articles are organized by tags; categories are not used. Reading time has been removed. Image upload is not implemented.
 - **Forum** (`/admin/forum`): Forum moderation and settings (stub).
 - **Galleri** (`/admin/galleri`): Photo gallery management (read-only foundation).
+- **Kalender** (`/admin/kalender`): Admin-managed calendar and homepage marquee entries.
 
 ### Platform
 - **Statistik** (`/admin/statistik`): Activity metrics and flight reports.
@@ -106,6 +107,17 @@ Located in `src/components/admin/`:
 - **Capabilities**: View activity trend for the last 14 days, today's activity metrics, and annual flight intent summaries.
 - **Privacy**: Real names are shown in the admin view.
 - **Tenant Scoping**: All statistics are strictly scoped to the current club.
+
+### Kalender (Calendar)
+- **Route**: `/[clubSlug]/admin/kalender`
+- **Purpose**: Manage club calendar entries ("Kalenderindslag").
+- **Actions**: `src/lib/admin/calendarActions.ts`
+- **Service**: `src/lib/admin/calendarAdminService.ts`
+- **Capabilities**:
+  - Full CRUD for calendar entries.
+  - Set date, time, location, and rich description.
+  - Control publication status.
+  - "Force Show in Marquee" flag to override normal upcoming logic on the homepage.
 
 ## Formatting Rules
 Admin views follow standardized formatting for consistency:

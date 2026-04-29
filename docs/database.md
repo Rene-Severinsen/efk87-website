@@ -68,6 +68,12 @@ Tenant-scoped activity tracking. Each record represents one user's activity for 
 - **Constraints**: Unique combination of `clubId` + `userId` + `activityDate`.
 - **Purpose**: Power "Senest online" and future per-club activity statistics without exposing cross-club activity.
 
+#### ClubCalendarEntry
+Tenant-scoped calendar entries used for club events and homepage visibility.
+- **Fields**: id, clubId, title, descriptionHtml (sanitized), startsAt, endsAt (optional), location (optional), isPublished, forceShowInMarquee.
+- **Logic**: Used as the data source for the homepage marquee/ticker.
+- **Constraints**: Scoped by `clubId`. Published entries are visible publicly.
+
 #### ClubMemberProfile
 Stores club-specific member stamdata (profile information).
 - **Constraints**: Unique combination of `clubId` + `userId`.
