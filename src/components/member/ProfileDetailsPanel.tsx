@@ -86,7 +86,7 @@ export const ProfileDetailsPanel: React.FC<ProfileDetailsPanelProps> = ({
             type="button"
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
           >
-            Rediger oplysninger
+            Rediger
           </button>
         )}
       </div>

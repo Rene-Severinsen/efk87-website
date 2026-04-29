@@ -54,9 +54,10 @@ export const ProfileCertificatesPanel: React.FC<ProfileCertificatesPanelProps> =
         <h2>Certifikater</h2>
         {!isEditing ? (
           <button 
+            className="link-soft" 
             onClick={() => setIsEditing(true)}
-            className="text-accent hover:underline text-sm font-medium"
-            style={{ color: 'var(--club-accent)', background: 'none', border: 'none', cursor: 'pointer' }}
+            type="button"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
           >
             Rediger
           </button>
