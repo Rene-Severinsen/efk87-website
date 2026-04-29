@@ -116,11 +116,6 @@ export const ProfileDetailsPanel: React.FC<ProfileDetailsPanelProps> = ({
         </div>
       </div>
 
-      <div className="profile-submit-row">
-        <div className="small" style={{ fontSize: '13px', color: 'var(--club-muted)', maxWidth: '400px' }}>
-          Kontakt en administrator hvis dine personlige oplysninger skal ændres.
-        </div>
-      </div>
     </ThemedSectionCard>
   );
 };
