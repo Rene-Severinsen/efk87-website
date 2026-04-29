@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { resolvePublicPageForClub } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
-import { ThemedSectionCard, ThemedPageHeader } from "../../../components/publicSite/ThemedBuildingBlocks";
+import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
 import { getPublishedGalleryAlbums } from "../../../lib/gallery/galleryService";
 import { getServerViewerForClub } from "../../../lib/auth/viewer";
 
@@ -34,13 +34,9 @@ export default async function GalleriPage({ params }: PageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title="Galleri"
+      subtitle="Billeder og albums fra klubbens liv."
       currentPath={`/${clubSlug}/galleri`}
     >
-      <ThemedPageHeader 
-        title="Galleri" 
-        subtitle="Billeder og albums fra klubbens liv."
-      />
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {albums.length > 0 ? (
           albums.map((album) => (

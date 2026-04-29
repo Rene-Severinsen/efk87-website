@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { resolvePublicPageForClub } from "../../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPageShell";
-import { ThemedSectionCard, ThemedPageHeader } from "../../../../components/publicSite/ThemedBuildingBlocks";
+import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { getPublishedGalleryAlbumBySlug } from "../../../../lib/gallery/galleryService";
 import { getServerViewerForClub } from "../../../../lib/auth/viewer";
 
@@ -37,6 +37,7 @@ export default async function AlbumDetailPage({ params }: PageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title={album.title}
+      subtitle={album.description || undefined}
       currentPath={`/${clubSlug}/galleri/${albumSlug}`}
     >
       <div className="mb-8">
@@ -46,10 +47,6 @@ export default async function AlbumDetailPage({ params }: PageProps) {
         >
           ← Tilbage til galleri
         </Link>
-        <ThemedPageHeader 
-          title={album.title} 
-          subtitle={album.description || undefined}
-        />
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
