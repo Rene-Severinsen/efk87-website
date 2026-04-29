@@ -29,7 +29,7 @@ export default function ArticleSortSelect({ currentSort, clubSlug }: ArticleSort
     <select 
       defaultValue={currentSort}
       onChange={handleChange}
-      className="w-full appearance-none flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-[14px] bg-[var(--club-panel-soft)] border border-[var(--club-line)] text-[#dbe7ff] text-sm sm:text-[15px] outline-none cursor-pointer"
+      className="w-full appearance-none flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-[14px] bg-[var(--club-panel-soft)] border border-[var(--club-line)] text-[#dbe7ff] text-sm sm:text-[15px] outline-none cursor-pointer focus:border-sky-300/40 focus:ring-2 focus:ring-sky-300/10 transition-all"
     >
       <option value="newest">Nyeste først</option>
       <option value="oldest">Ældste først</option>

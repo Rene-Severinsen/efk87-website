@@ -1,3 +1,45 @@
+.home-v2-root {
+  --home-v2-text: #edf2ff;
+  --home-v2-muted: #aab7d4;
+  --home-v2-line: rgba(255,255,255,0.08);
+  color: var(--home-v2-text);
+  background:
+          radial-gradient(circle at top left, rgba(125,211,252,0.16), transparent 28%),
+          radial-gradient(circle at top right, rgba(110,231,183,0.12), transparent 24%),
+          linear-gradient(180deg, #08101c 0%, #0b1220 100%);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.home-v2-root .home-v2-card,
+.home-v2-root .home-v2-stat,
+.home-v2-root .home-v2-section-card,
+.home-v2-root .home-v2-mini-card,
+.home-v2-root .home-v2-marquee-card,
+.home-v2-root .new-members-highlight-card {
+  background: rgba(18, 27, 46, 0.88);
+  color: var(--home-v2-text);
+  border: 1px solid var(--home-v2-line);
+}
+
+.home-v2-root .new-member-item {
+  background: rgba(255,255,255,0.035);
+  color: var(--home-v2-text);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.home-v2-marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: home-v2-marquee-scroll 40s linear infinite;
+  color: var(--home-v2-text);
+}
+
+@keyframes home-v2-marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
 @media (max-width: 768px) {
   .home-v2-root {
     --home-v2-radius: 16px;

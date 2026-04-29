@@ -85,7 +85,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
               type="text"
               defaultValue={searchQuery || ''}
               placeholder="Søg efter emne, forfatter eller titel..."
-              className="w-full flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-[14px] bg-[var(--club-panel-soft)] border border-[var(--club-line)] text-[#dbe7ff] text-sm sm:text-[15px] outline-none"
+              className="w-full appearance-none flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-[14px] bg-[var(--club-panel-soft)] border border-[var(--club-line)] text-[#dbe7ff] text-sm sm:text-[15px] outline-none focus:border-sky-300/40 focus:ring-2 focus:ring-sky-300/10 transition-all placeholder:text-slate-400/60"
             />
             <button type="submit" className="absolute right-3.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer opacity-70 hover:opacity-100">
               🔎
