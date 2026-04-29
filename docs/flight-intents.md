@@ -37,8 +37,8 @@ The `ClubFlightIntent` model includes:
 
 - **Intended Date:** `flightDate` represents the calendar day the member intends to be active. 
 - **Timezone:** Timezone handling must respect `Europe/Copenhagen`.
-- **Homepage Visibility**: The public homepage shows latest 5 today entries only, respecting visibility. 
-- **Full List Route**: A full public read-only list for today is available at `/[clubSlug]/jeg-flyver/liste`.
+- **Homepage Visibility**: The public homepage shows latest 5 today entries only from the database, respecting visibility. No hardcoded fallback/mock data is used.
+- **Full List Route**: A full public read-only list for today is available at `/[clubSlug]/jeg-flyver/liste`. It uses database records only.
 - **Title/Subtitle**: The full list page has the title “Jeg flyver” and subtitle “Her kan du se dagens flyvemeldinger.”.
 - **Empty State**: Displays “Der er endnu ingen flyvemeldinger for i dag.” if no entries exist.
     - For anonymous visitors, it only shows rows where `visibility` is `PUBLIC`.
@@ -89,8 +89,8 @@ Note: Login and member activity analytics must be handled by a separate activity
 
 - [x] Foundation model and enums.
 - [x] Shared service for public access.
-- [x] Homepage rendering from real data.
-- [x] Idempotent seed data for EFK87 demo.
+- [x] Homepage rendering from real data only.
+- [x] Idempotent seed data for EFK87.
 - [x] Member submit foundation (authenticated ACTIVE member).
 - [x] Member cancellation flow.
 - [x] Admin moderation foundation (cancel intents).

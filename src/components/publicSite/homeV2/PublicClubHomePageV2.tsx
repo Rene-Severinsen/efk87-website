@@ -276,7 +276,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                   <div className="home-v2-row-icon">🧭</div>
                   <div>
                     <div className="home-v2-row-title">Nyt GPS-triangle setup til sæson 2026</div>
-                    <div className="home-v2-row-sub">4 nye svar · Sidste svar af René Severinsen for 43 min siden</div>
+                    <div className="home-v2-row-sub">4 nye svar · Sidste svar for 43 min siden</div>
                   </div>
                   <span className="home-v2-status-badge home-v2-info">18 svar</span>
                 </div>

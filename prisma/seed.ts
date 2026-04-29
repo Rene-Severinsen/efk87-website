@@ -1,10 +1,6 @@
 import prisma from "../src/lib/db/prisma";
 import { 
   PublicPageStatus, 
-  ClubFlightIntentType, 
-  ClubFlightIntentStatus, 
-  ClubFlightIntentSource, 
-  ClubFlightIntentVisibility,
   PublicSurfaceVisibility,
   ClubMailingListPurpose 
 } from "../src/generated/prisma";
@@ -285,7 +281,7 @@ async function main() {
   }
 
   // Seed public home info cards for EFK87
-  const adminUser = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: "admin@efk87.local" },
     update: {},
     create: {
@@ -293,89 +289,6 @@ async function main() {
       name: "Test Admin",
     },
   });
-
-  // Seed mockup-style active flight intents for EFK87
-  // These are demo/homepage seed data
-  // Current local date in this context is 2026-04-29
-  // Note: "Jeg flyver" submit action is members-only later, but for now we seed demo data as PUBLIC.
-  const flightIntents = [
-    {
-      userId: adminUser.id,
-      displayName: "René Severinsen",
-      message: "Kommer ca. 11:15 med DG-800.",
-      activityType: ClubFlightIntentType.FLYING,
-      status: ClubFlightIntentStatus.ACTIVE,
-      source: ClubFlightIntentSource.ADMIN_SEED,
-      visibility: ClubFlightIntentVisibility.PUBLIC,
-      flightDate: new Date("2026-04-29T00:00:00Z"),
-      createdAt: new Date("2026-04-29T09:07:00Z"),
-      plannedAt: new Date("2026-04-29T11:15:00Z"),
-      expiresAt: new Date("2026-04-29T20:00:00Z"),
-    },
-    {
-      userId: adminUser.id,
-      displayName: "Lars Mikkelsen",
-      message: "Er på pladsen fra 10:30. Tager lader med til 6S hvis nogen mangler.",
-      activityType: ClubFlightIntentType.MAINTENANCE,
-      status: ClubFlightIntentStatus.ACTIVE,
-      source: ClubFlightIntentSource.ADMIN_SEED,
-      visibility: ClubFlightIntentVisibility.PUBLIC,
-      flightDate: new Date("2026-04-29T00:00:00Z"),
-      createdAt: new Date("2026-04-29T08:48:00Z"),
-      plannedAt: new Date("2026-04-29T10:30:00Z"),
-      expiresAt: new Date("2026-04-29T20:00:00Z"),
-    },
-    {
-      userId: adminUser.id,
-      displayName: "Søren Østergaard",
-      message: "Ser vinden an – hvis den holder sig under 6 m/s kommer jeg med skræntkassen.",
-      activityType: ClubFlightIntentType.WEATHER_DEPENDENT,
-      status: ClubFlightIntentStatus.ACTIVE,
-      source: ClubFlightIntentSource.ADMIN_SEED,
-      visibility: ClubFlightIntentVisibility.PUBLIC,
-      flightDate: new Date("2026-04-29T00:00:00Z"),
-      createdAt: new Date("2026-04-29T08:12:00Z"),
-      plannedAt: new Date("2026-04-29T10:00:00Z"),
-      expiresAt: new Date("2026-04-29T20:00:00Z"),
-    },
-    {
-      userId: adminUser.id,
-      displayName: "Erik Jensen",
-      message: "Planlægger flyvning i morgen tidlig.",
-      activityType: ClubFlightIntentType.FLYING,
-      status: ClubFlightIntentStatus.ACTIVE,
-      source: ClubFlightIntentSource.ADMIN_SEED,
-      visibility: ClubFlightIntentVisibility.PUBLIC,
-      flightDate: new Date("2026-04-30T00:00:00Z"),
-      createdAt: new Date("2026-04-29T14:00:00Z"),
-      plannedAt: new Date("2026-04-30T09:00:00Z"),
-      expiresAt: new Date("2026-04-30T18:00:00Z"),
-    },
-  ];
-
-  for (const intent of flightIntents) {
-    const existingIntent = await prisma.clubFlightIntent.findFirst({
-      where: {
-        clubId: efk87.id,
-        displayName: intent.displayName,
-        flightDate: intent.flightDate,
-      },
-    });
-
-    if (existingIntent) {
-      await prisma.clubFlightIntent.update({
-        where: { id: existingIntent.id },
-        data: intent,
-      });
-    } else {
-      await prisma.clubFlightIntent.create({
-        data: {
-          clubId: efk87.id,
-          ...intent,
-        },
-      });
-    }
-  }
 
   // Seed public home info cards for EFK87
   const homeInfoCards = [

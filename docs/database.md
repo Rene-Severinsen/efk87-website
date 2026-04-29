@@ -37,7 +37,7 @@ import prisma from "@/lib/db/prisma";
 
 ### Seeding
 
-The database seed logic is idempotent and ensures that the initial platform data is present without resetting or deleting existing data.
+The database seed logic is idempotent and ensures that the initial platform data is present without resetting or deleting existing data. Seed data is limited to core structure and essential test users.
 
 - **Path**: `prisma/seed.ts`
 - **Command**: `npm run db:seed` (or `npx prisma db seed`)

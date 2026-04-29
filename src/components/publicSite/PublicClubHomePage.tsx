@@ -306,35 +306,13 @@ export default function PublicClubHomePage({
                   </div>
                 ))
               ) : (
-                <>
-                  {/* Placeholder fallback if no flight intents exist */}
-                  <div className="row-item">
-                    <div className="row-icon">✈️</div>
-                    <div>
-                      <div className="row-title">René Severinsen</div>
-                      <div className="row-sub">“Kommer ca. 11:15 med DG-800.”</div>
-                    </div>
-                    <span className="status-badge info">09:07</span>
+                <div className="row-item">
+                  <div className="row-icon">ℹ️</div>
+                  <div>
+                    <div className="row-title">Ingen flyvemeldinger</div>
+                    <div className="row-sub">Der er ikke registreret nogen flyvemeldinger for i dag endnu.</div>
                   </div>
-
-                  <div className="row-item">
-                    <div className="row-icon">🛠️</div>
-                    <div>
-                      <div className="row-title">Lars Mikkelsen</div>
-                      <div className="row-sub">“Er på pladsen fra 10:30. Tager lader med til 6S hvis nogen mangler.”</div>
-                    </div>
-                    <span className="status-badge info">08:48</span>
-                  </div>
-
-                  <div className="row-item">
-                    <div className="row-icon">🌬️</div>
-                    <div>
-                      <div className="row-title">Søren Østergaard</div>
-                      <div className="row-sub">“Ser vinden an – hvis den holder sig under 6 m/s kommer jeg med skræntkassen.”</div>
-                    </div>
-                    <span className="status-badge info">08:12</span>
-                  </div>
-                </>
+                </div>
               )}
             </div>
           </article>
@@ -361,7 +339,7 @@ export default function PublicClubHomePage({
                   <div className="row-icon">🧭</div>
                   <div>
                     <div className="row-title">Nyt GPS-triangle setup til sæson 2026</div>
-                    <div className="row-sub">4 nye svar · Sidste svar af René Severinsen for 43 min siden</div>
+                    <div className="row-sub">4 nye svar · Sidste svar for 43 min siden</div>
                   </div>
                   <span className="status-badge info">18 svar</span>
                 </div>
