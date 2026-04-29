@@ -25,23 +25,25 @@ interface ClubPageProps {
 export default async function ClubPage({ params }: ClubPageProps) {
   const { clubSlug } = await params;
 
+  const reservedSlugs = ["favicon.ico", "admin", "api", "static", "images"];
+  if (reservedSlugs.includes(clubSlug)) {
+    notFound();
+  }
+
   // console.log("[ClubPage] PAGE PARAM clubSlug:", clubSlug);
 
   let club;
 
   try {
     club = await requireClubBySlug(clubSlug);
-
-    // console.log("[ClubPage] RESOLVED CLUB:", {
-    //   id: club.id,
-    //   name: club.name,
-    //   slug: club.slug,
-    //   settings: club.settings,
-    // });
   } catch (error) {
     console.error("[ClubPage] FAILED TO RESOLVE CLUB:", {
       clubSlug,
-      error,
+      error: error instanceof Error ? {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      } : error,
     });
 
     if (error instanceof TenancyError) {
