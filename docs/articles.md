@@ -37,7 +37,8 @@ All models are scoped by `clubId`. Every query and write operation must ensure t
 - **Sanitization**: All HTML content is sanitized before storage and rendering to prevent XSS.
 - **Services**: Located in `src/lib/articles/` (public) and `src/lib/admin/` (admin).
 - **Actions**: Located in `src/lib/admin/articleActions.ts`.
-- **Public UI**: Ported from the approved dark premium design mockup.
+- **Public UI**: The public articles overview (`/artikler`) features a weighted tag cloud where tag sizes (4 tiers) reflect article counts. Filtering by tag is handled via URL search parameters.
+- **Article Cards**: Cards (featured and regular) are text-first if no hero image is provided, removing empty placeholders for a cleaner layout.
 - **Admin UI**: Integrated into the existing admin shell using the standard admin design language.
 
 ## Future Scopes

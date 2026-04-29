@@ -108,15 +108,36 @@ export async function getPublishedArticleBySlug(
   };
 }
 
-export async function getArticleTags(clubId: string) {
-  return prisma.articleTag.findMany({
+export async function getArticleTags(clubId: string, viewer: ViewerVisibilityContext) {
+  const tags = await prisma.articleTag.findMany({
     where: {
       clubId,
+    },
+    include: {
+      _count: {
+        select: {
+          articles: {
+            where: {
+              article: {
+                status: ArticleStatus.PUBLISHED,
+                visibility: viewer.isMember ? { in: [PublicSurfaceVisibility.PUBLIC, PublicSurfaceVisibility.MEMBERS_ONLY] } : PublicSurfaceVisibility.PUBLIC,
+              }
+            }
+          }
+        }
+      }
     },
     orderBy: {
       name: "asc",
     },
   });
+
+  return tags.map(tag => ({
+    id: tag.id,
+    slug: tag.slug,
+    name: tag.name,
+    articleCount: tag._count.articles,
+  }));
 }
 
 function mapToArticleDTO(article: ArticleWithRelations): ArticleDTO {
