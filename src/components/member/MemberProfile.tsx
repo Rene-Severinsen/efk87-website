@@ -6,6 +6,7 @@ import { ProfileDetailsPanel } from './ProfileDetailsPanel';
 import { ProfileCertificatesPanel } from './ProfileCertificatesPanel';
 import { ProfileMailingListsPanel } from './ProfileMailingListsPanel';
 import { MemberProfileDTO } from '@/lib/members/memberProfileService';
+import { getMemberDisplayName } from '@/lib/members/memberUtils';
 
 interface ProfilePageContentProps {
   viewer: {
@@ -21,6 +22,7 @@ interface ProfilePageContentProps {
 export const MemberProfile: React.FC<ProfilePageContentProps> = ({ viewer, profile }) => {
   const firstName = profile.firstName || '';
   const lastName = profile.lastName || '';
+  const displayName = getMemberDisplayName(profile, { name: viewer.name, email: viewer.email });
 
   return (
     <div className="member-profile-content">
@@ -29,12 +31,13 @@ export const MemberProfile: React.FC<ProfilePageContentProps> = ({ viewer, profi
       <div className="profile-layout">
         <div className="profile-stack">
           <ProfileSummaryCard 
-            name={profile.firstName && profile.lastName ? `${profile.firstName} ${profile.lastName}` : viewer.name}
+            name={displayName}
             role={profile.memberRoleType}
             status={profile.memberStatus}
             profileImageUrl={profile.profileImageUrl}
             membershipType={profile.membershipType}
             certificates={profile.certificates}
+            memberNumber={profile.memberNumber}
           />
         </div>
 
@@ -42,11 +45,17 @@ export const MemberProfile: React.FC<ProfilePageContentProps> = ({ viewer, profi
           <ProfileDetailsPanel 
             firstName={firstName}
             lastName={lastName}
-            email={viewer.email}
+            email={profile.email || viewer.email}
             mobilePhone={profile.mobilePhone || ''}
             addressLine={profile.addressLine || ''}
             postalCode={profile.postalCode || ''}
             city={profile.city || ''}
+            memberNumber={profile.memberNumber}
+            mdkNumber={profile.mdkNumber || ''}
+            birthDate={profile.birthDate}
+            joinedAt={profile.joinedAt}
+            schoolStatus={profile.schoolStatus}
+            isInstructor={profile.isInstructor}
           />
           
           <ProfileCertificatesPanel certificates={profile.certificates} />

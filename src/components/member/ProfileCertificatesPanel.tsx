@@ -6,57 +6,59 @@ interface ProfileCertificatesPanelProps {
   certificates?: ClubMemberCertificateType[];
 }
 
-const CertItem = ({ type, label, certificates }: { type: ClubMemberCertificateType, label: string, certificates: ClubMemberCertificateType[] }) => {
-  const hasCert = certificates.includes(type);
-  return (
-    <div className="cert-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--club-line)' }}>
-      <span>{label}</span>
-      {hasCert ? (
-        <span style={{ color: 'var(--club-accent)', fontSize: '12px', fontWeight: 'bold' }}>✓ AKTIV</span>
-      ) : (
-        <span style={{ opacity: 0.3, fontSize: '12px' }}>—</span>
-      )}
-    </div>
-  );
+const getCertLabel = (type: ClubMemberCertificateType) => {
+  switch (type) {
+    case 'A_CERTIFICATE': return 'A-certifikat';
+    case 'A_CONTROLLER': return 'A-kontrollant';
+    case 'A_LARGE_MODEL': return 'A-stormodel';
+    case 'A_LARGE_MODEL_CONTROLLER': return 'A-stormodel kontrollant';
+    case 'S_CERTIFICATE': return 'S-certifikat';
+    case 'S_CONTROLLER': return 'S-kontrollant';
+    case 'S_LARGE_MODEL': return 'S-stormodel';
+    case 'S_LARGE_MODEL_CONTROLLER': return 'S-stormodel kontrollant';
+    case 'H_CERTIFICATE': return 'H-certifikat';
+    case 'H_CONTROLLER': return 'H-kontrollant';
+    case 'H_LARGE_MODEL': return 'H-stormodel';
+    case 'H_LARGE_MODEL_CONTROLLER': return 'H-stormodel kontrollant';
+    case 'J_LARGE_MODEL': return 'J-stormodel';
+    case 'J_LARGE_MODEL_CONTROLLER': return 'J-stormodel kontrollant';
+    default: return (type as string).replace(/_/g, ' ').replace('CERTIFICATE', 'certifikat');
+  }
 };
 
 export const ProfileCertificatesPanel: React.FC<ProfileCertificatesPanelProps> = ({ certificates = [] }) => {
+  if (certificates.length === 0) {
+    return (
+      <ThemedSectionCard>
+        <div className="section-head">
+          <h2>Certifikater</h2>
+        </div>
+        <p style={{ opacity: 0.5, fontStyle: 'italic', padding: '12px 0' }}>
+          Ingen certifikater registreret.
+        </p>
+      </ThemedSectionCard>
+    );
+  }
+
   return (
     <ThemedSectionCard>
       <div className="section-head">
         <h2>Certifikater</h2>
       </div>
 
-      <div className="cert-grid">
-        <div className="cert-card">
-          <h4>A-kategori</h4>
-          <CertItem type="A_CERTIFICATE" label="A-certifikat" certificates={certificates} />
-          <CertItem type="A_CONTROLLER" label="A-kontrollant" certificates={certificates} />
-          <CertItem type="A_LARGE_MODEL" label="A-stormodel" certificates={certificates} />
-          <CertItem type="A_LARGE_MODEL_CONTROLLER" label="A-stormodel kontrollant" certificates={certificates} />
-        </div>
-
-        <div className="cert-card">
-          <h4>S-kategori</h4>
-          <CertItem type="S_CERTIFICATE" label="S-certifikat" certificates={certificates} />
-          <CertItem type="S_CONTROLLER" label="S-kontrollant" certificates={certificates} />
-          <CertItem type="S_LARGE_MODEL" label="S-stormodel" certificates={certificates} />
-          <CertItem type="S_LARGE_MODEL_CONTROLLER" label="S-stormodel kontrollant" certificates={certificates} />
-        </div>
-
-        <div className="cert-card">
-          <h4>H-kategori</h4>
-          <CertItem type="H_CERTIFICATE" label="H-certifikat" certificates={certificates} />
-          <CertItem type="H_CONTROLLER" label="H-kontrollant" certificates={certificates} />
-          <CertItem type="H_LARGE_MODEL" label="H-stormodel" certificates={certificates} />
-          <CertItem type="H_LARGE_MODEL_CONTROLLER" label="H-stormodel kontrollant" certificates={certificates} />
-        </div>
-
-        <div className="cert-card">
-          <h4>J-kategori</h4>
-          <CertItem type="J_LARGE_MODEL" label="J-stormodel" certificates={certificates} />
-          <CertItem type="J_LARGE_MODEL_CONTROLLER" label="J-stormodel kontrollant" certificates={certificates} />
-        </div>
+      <div className="cert-list" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        {certificates.map((cert) => (
+          <div key={cert} className="cert-item" style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            padding: '12px 0', 
+            borderBottom: '1px solid var(--club-line)' 
+          }}>
+            <span style={{ fontWeight: 500 }}>{getCertLabel(cert)}</span>
+            <span style={{ color: 'var(--club-accent)', fontSize: '12px', fontWeight: 'bold' }}>✓ AKTIV</span>
+          </div>
+        ))}
       </div>
     </ThemedSectionCard>
   );

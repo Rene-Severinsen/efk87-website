@@ -9,6 +9,7 @@ interface ProfileSummaryCardProps {
   profileImageUrl?: string | null;
   membershipType?: string;
   certificates?: ClubMemberCertificateType[];
+  memberNumber?: number | null;
 }
 
 export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({ 
@@ -17,7 +18,8 @@ export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({
   status,
   profileImageUrl,
   membershipType,
-  certificates = []
+  certificates = [],
+  memberNumber
 }) => {
   // Generate initials for the avatar placeholder
   const initials = name
@@ -68,6 +70,7 @@ export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({
         <div className="avatar-wrap">
           <div className="avatar">
             {profileImageUrl ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
               <img src={profileImageUrl} alt={name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
             ) : (
               <span style={{ color: 'var(--club-text)' }}>{initials}</span>
@@ -78,6 +81,7 @@ export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({
         <h3>{name}</h3>
         <p className="small" style={{ fontSize: '13px', color: 'var(--club-muted)' }}>
           {getStatusLabel(status)} · {getRoleLabel(role)}
+          {memberNumber && ` · Medlemsnr. ${memberNumber}`}
         </p>
 
         <div className="meta-row">

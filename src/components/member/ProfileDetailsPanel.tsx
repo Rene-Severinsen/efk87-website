@@ -9,6 +9,12 @@ interface ProfileDetailsPanelProps {
   addressLine?: string;
   postalCode?: string;
   city?: string;
+  memberNumber?: number | null;
+  mdkNumber?: string;
+  birthDate?: Date | null;
+  joinedAt?: Date | null;
+  schoolStatus?: string;
+  isInstructor?: boolean;
 }
 
 export const ProfileDetailsPanel: React.FC<ProfileDetailsPanelProps> = ({ 
@@ -18,8 +24,32 @@ export const ProfileDetailsPanel: React.FC<ProfileDetailsPanelProps> = ({
   mobilePhone,
   addressLine,
   postalCode,
-  city
+  city,
+  memberNumber,
+  mdkNumber,
+  birthDate,
+  joinedAt,
+  schoolStatus,
+  isInstructor
 }) => {
+  const formatDate = (date: Date | null | undefined) => {
+    if (!date) return 'Ikke oplyst';
+    return new Date(date).toLocaleDateString('da-DK', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const getSchoolStatusLabel = (status?: string) => {
+    switch (status) {
+      case 'APPROVED': return 'A-certifikat (godkendt)';
+      case 'STUDENT': return 'Elev';
+      case 'NOT_APPROVED': return 'Ikke godkendt';
+      default: return status || 'Ikke oplyst';
+    }
+  };
+
   return (
     <ThemedSectionCard>
       <div className="section-head">
@@ -57,6 +87,33 @@ export const ProfileDetailsPanel: React.FC<ProfileDetailsPanelProps> = ({
         <div className="profile-field">
           <label>By</label>
           <input type="text" value={city || ''} placeholder="By" readOnly />
+        </div>
+
+        <div className="profile-field">
+          <label>Medlemsnummer</label>
+          <input type="text" value={memberNumber || ''} placeholder="Ikke oplyst" readOnly />
+        </div>
+        <div className="profile-field">
+          <label>MDK-nummer</label>
+          <input type="text" value={mdkNumber || ''} placeholder="Ikke oplyst" readOnly />
+        </div>
+
+        <div className="profile-field">
+          <label>Fødselsdato</label>
+          <input type="text" value={formatDate(birthDate)} readOnly />
+        </div>
+        <div className="profile-field">
+          <label>Indmeldt dato</label>
+          <input type="text" value={formatDate(joinedAt)} readOnly />
+        </div>
+
+        <div className="profile-field">
+          <label>Skolestatus</label>
+          <input type="text" value={getSchoolStatusLabel(schoolStatus)} readOnly />
+        </div>
+        <div className="profile-field">
+          <label>Instruktør</label>
+          <input type="text" value={isInstructor ? 'Ja' : 'Nej'} readOnly />
         </div>
       </div>
 

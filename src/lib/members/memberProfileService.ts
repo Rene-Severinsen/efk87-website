@@ -9,6 +9,8 @@ export interface MemberProfileDTO {
   postalCode: string | null;
   city: string | null;
   mobilePhone: string | null;
+  email: string | null;
+  memberNumber: number | null;
   mdkNumber: string | null;
   profileImageUrl: string | null;
   membershipType: string;
@@ -60,6 +62,8 @@ export async function getOwnMemberProfile(clubId: string, userId: string): Promi
     postalCode: profile.postalCode,
     city: profile.city,
     mobilePhone: profile.mobilePhone,
+    email: profile.user.email,
+    memberNumber: profile.memberNumber,
     mdkNumber: profile.mdkNumber,
     profileImageUrl: profile.profileImageUrl,
     membershipType: profile.membershipType,
@@ -81,6 +85,13 @@ export async function getOrCreateOwnMemberProfile(clubId: string, userId: string
 
   // Create default profile
   const profile = await prisma.clubMemberProfile.create({
+    include: {
+      user: {
+        select: {
+          email: true,
+        },
+      },
+    },
     data: {
       clubId,
       userId,
@@ -99,6 +110,8 @@ export async function getOrCreateOwnMemberProfile(clubId: string, userId: string
     postalCode: profile.postalCode,
     city: profile.city,
     mobilePhone: profile.mobilePhone,
+    email: profile.user.email,
+    memberNumber: profile.memberNumber,
     mdkNumber: profile.mdkNumber,
     profileImageUrl: profile.profileImageUrl,
     membershipType: profile.membershipType,
