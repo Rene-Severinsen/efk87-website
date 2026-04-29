@@ -4,7 +4,7 @@ import "@blocknote/core/fonts/inter.css";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import { useCreateBlockNote } from "@blocknote/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface ArticleRichTextEditorProps {
   content: string;
@@ -12,13 +12,19 @@ interface ArticleRichTextEditorProps {
 }
 
 const ArticleRichTextEditor = ({ content, onChange }: ArticleRichTextEditorProps) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // Initialize editor
   const editor = useCreateBlockNote();
 
   // Effect to load initial content
   useEffect(() => {
     async function loadInitialContent() {
-      if (content && editor) {
+      if (content && editor && isMounted) {
         const blocks = await editor.tryParseHTMLToBlocks(content);
         editor.replaceBlocks(editor.document, blocks);
       }
@@ -26,9 +32,9 @@ const ArticleRichTextEditor = ({ content, onChange }: ArticleRichTextEditorProps
     loadInitialContent();
     // Only run once on mount or when editor is ready
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editor]);
+  }, [editor, isMounted]);
 
-  if (!editor) {
+  if (!editor || !isMounted) {
     return null;
   }
 

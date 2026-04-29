@@ -54,66 +54,51 @@ export default async function AdminCalendarPage({ params }: PageProps) {
     >
       <div className="admin-page-header" style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>Kalender</h1>
-          <p style={{ color: '#666', marginTop: '4px' }}>Administrer klubbens kalenderindslag.</p>
+          <h1 className="admin-section-title" style={{ margin: 0 }}>Kalender</h1>
+          <p className="admin-form-help">Administrer klubbens kalenderindslag.</p>
         </div>
         <Link href={`/${clubSlug}/admin/kalender/ny`} className="admin-btn admin-btn-primary">
           Opret kalenderindslag
         </Link>
       </div>
 
-      <div className="admin-card" style={{ background: '#fff', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+      <div className="admin-card" style={{ padding: 0, overflow: 'hidden' }}>
+        <table className="admin-table">
           <thead>
-            <tr style={{ background: '#fafafa', borderBottom: '1px solid #f0f0f0' }}>
-              <th style={{ padding: '12px 16px', fontWeight: '600' }}>Dato & Tid</th>
-              <th style={{ padding: '12px 16px', fontWeight: '600' }}>Titel</th>
-              <th style={{ padding: '12px 16px', fontWeight: '600' }}>Status</th>
-              <th style={{ padding: '12px 16px', fontWeight: '600' }}>Marquee</th>
-              <th style={{ padding: '12px 16px', fontWeight: '600', textAlign: 'right' }}>Handling</th>
+            <tr>
+              <th>Dato & Tid</th>
+              <th>Titel</th>
+              <th>Status</th>
+              <th>Marquee</th>
+              <th style={{ textAlign: 'right' }}>Handling</th>
             </tr>
           </thead>
           <tbody>
             {entries.length > 0 ? entries.map((entry) => (
-              <tr key={entry.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
-                <td style={{ padding: '12px 16px' }}>
-                  <div style={{ fontWeight: '500' }}>{formatDate(entry.startsAt)}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#666' }}>{formatTime(entry.startsAt)}</div>
+              <tr key={entry.id}>
+                <td>
+                  <div style={{ fontWeight: '600' }}>{formatDate(entry.startsAt)}</div>
+                  <div className="admin-form-help">{formatTime(entry.startsAt)}</div>
                 </td>
-                <td style={{ padding: '12px 16px' }}>
-                  <div style={{ fontWeight: '500' }}>{entry.title}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#999' }}>{entry.location || 'Ingen lokation'}</div>
+                <td>
+                  <div style={{ fontWeight: '600' }}>{entry.title}</div>
+                  <div className="admin-form-help">{entry.location || 'Ingen lokation'}</div>
                 </td>
-                <td style={{ padding: '12px 16px' }}>
-                  <span style={{ 
-                    padding: '2px 8px', 
-                    borderRadius: '4px', 
-                    fontSize: '0.75rem', 
-                    fontWeight: '600',
-                    background: entry.isPublished ? '#e6f7ff' : '#fff1f0',
-                    color: entry.isPublished ? '#1890ff' : '#ff4d4f'
-                  }}>
+                <td>
+                  <span className={`admin-badge ${entry.isPublished ? 'admin-badge-info' : 'admin-badge-error'}`}>
                     {entry.isPublished ? 'Publiceret' : 'Kladde'}
                   </span>
                 </td>
-                <td style={{ padding: '12px 16px' }}>
+                <td>
                   {entry.forceShowInMarquee && (
-                    <span style={{ 
-                      padding: '2px 8px', 
-                      borderRadius: '4px', 
-                      fontSize: '0.72rem', 
-                      fontWeight: '600',
-                      background: '#f6ffed',
-                      color: '#52c41a',
-                      border: '1px solid #b7eb8f'
-                    }}>
+                    <span className="admin-badge admin-badge-success">
                       Forceret
                     </span>
                   )}
                 </td>
-                <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                  <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', alignItems: 'center' }}>
-                    <Link href={`/${clubSlug}/admin/kalender/${entry.id}/rediger`} style={{ color: '#1890ff', fontSize: '0.875rem' }}>
+                <td style={{ textAlign: 'right' }}>
+                  <div style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end', alignItems: 'center' }}>
+                    <Link href={`/${clubSlug}/admin/kalender/${entry.id}/rediger`} style={{ color: '#1890ff', fontSize: '0.875rem', fontWeight: '500' }}>
                       Rediger
                     </Link>
                     <form action={toggleCalendarEntryPublishedAction.bind(null, clubSlug, entry.id, !entry.isPublished)}>
@@ -123,7 +108,8 @@ export default async function AdminCalendarPage({ params }: PageProps) {
                         color: entry.isPublished ? '#fa8c16' : '#52c41a', 
                         fontSize: '0.875rem', 
                         cursor: 'pointer',
-                        padding: 0
+                        padding: 0,
+                        fontWeight: '500'
                       }}>
                         {entry.isPublished ? 'Afpublicer' : 'Publicer'}
                       </button>
@@ -139,7 +125,8 @@ export default async function AdminCalendarPage({ params }: PageProps) {
                         color: '#ff4d4f', 
                         fontSize: '0.875rem', 
                         cursor: 'pointer',
-                        padding: 0
+                        padding: 0,
+                        fontWeight: '500'
                       }}>
                         Slet
                       </button>
@@ -149,8 +136,8 @@ export default async function AdminCalendarPage({ params }: PageProps) {
               </tr>
             )) : (
               <tr>
-                <td colSpan={5} style={{ padding: '32px', textAlign: 'center', color: '#999' }}>
-                  Ingen kalenderindslag fundet.
+                <td colSpan={5} style={{ padding: '48px', textAlign: 'center' }}>
+                  <p className="admin-form-help">Ingen kalenderindslag fundet.</p>
                 </td>
               </tr>
             )}

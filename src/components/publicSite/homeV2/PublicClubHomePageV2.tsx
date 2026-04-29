@@ -94,7 +94,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               <div className="home-v2-marquee-track">
                 {calendarMarquee.length > 0 ? (
                   <>
-                    {[...calendarMarquee, ...calendarMarquee].map((entry, idx) => {
+                    {[...calendarMarquee, ...calendarMarquee, ...calendarMarquee, ...calendarMarquee].map((entry, idx) => {
                       const dateDisplay = entry.startsAt.toLocaleDateString('da-DK', {
                         day: '2-digit',
                         month: '2-digit',

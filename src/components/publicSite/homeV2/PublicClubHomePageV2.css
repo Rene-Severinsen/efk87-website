@@ -346,7 +346,7 @@
 .home-v2-marquee-track {
   display: flex;
   white-space: nowrap;
-  animation: home-v2-marquee-scroll 40s linear infinite;
+  animation: home-v2-marquee-scroll 18s linear infinite;
   color: var(--home-v2-text);
   gap: 20px;
   align-items: center;
@@ -364,6 +364,7 @@
   color: inherit;
   font-weight: 500;
   transition: opacity 0.2s ease;
+  margin-inline: 10px;
 }
 
 .home-v2-marquee-item:hover {
@@ -389,6 +390,7 @@
 .home-v2-marquee-separator {
   display: flex;
   align-items: center;
+  margin-inline: 10px;
 }
 
 .home-v2-marquee-logo-mark {

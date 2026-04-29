@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { ArticleStatus, PublicSurfaceVisibility, ArticleTag, Article } from "../../../generated/prisma";
 import Link from "next/link";
-import ArticleRichTextEditor from "./ArticleRichTextEditor";
+
+const ArticleRichTextEditor = dynamic(() => import("./ArticleRichTextEditor"), {
+  ssr: false,
+});
 
 interface ArticleWithTags extends Article {
   tags?: { tagId: string }[];

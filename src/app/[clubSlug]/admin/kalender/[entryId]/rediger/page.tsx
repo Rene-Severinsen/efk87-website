@@ -45,8 +45,8 @@ export default async function EditCalendarEntryPage({ params }: PageProps) {
       userEmail={viewer.email}
     >
       <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>Rediger kalenderindslag</h1>
-        <p style={{ color: '#666', marginTop: '4px' }}>Opdater detaljerne for kalenderindslaget.</p>
+        <h1 className="admin-section-title" style={{ margin: 0 }}>Rediger kalenderindslag</h1>
+        <p className="admin-form-help">Opdater detaljerne for kalenderindslaget.</p>
       </div>
 
       <CalendarEntryForm 
