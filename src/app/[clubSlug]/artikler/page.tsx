@@ -137,9 +137,15 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                   <div className="featured-image" style={{ minHeight: '280px', borderRadius: '20px', background: `url(${featuredArticle.heroImageUrl}) center/cover no-repeat`, border: '1px solid var(--club-line)' }}></div>
                 )}
                 <div className="featured-copy" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <div className="tag-row" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <div className="article-card-tag-row">
                     {featuredArticle.tags.map(tag => (
-                      <span key={tag.slug} className="tag" style={{ padding: '7px 10px', borderRadius: '999px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '12px', fontWeight: 700 }}>{tag.name}</span>
+                      <Link 
+                        key={tag.slug} 
+                        href={getFilterUrl({ tag: tag.slug })} 
+                        className="article-card-tag"
+                      >
+                        {tag.name}
+                      </Link>
                     ))}
                   </div>
 
@@ -176,24 +182,32 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
             {latestToDisplay.length > 0 ? (
               <div className="article-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
                 {latestToDisplay.map(article => (
-                  <Link key={article.id} href={`/${clubSlug}/artikler/${article.slug}`}>
-                    <article className="article-card" style={{ display: 'grid', gap: '14px', padding: '16px', borderRadius: '20px', background: 'var(--club-panel-soft)', border: '1px solid var(--club-line)', minHeight: '100%' }}>
-                      {article.heroImageUrl && (
+                  <article key={article.id} className="article-card" style={{ display: 'grid', gap: '14px', padding: '16px', borderRadius: '20px', background: 'var(--club-panel-soft)', border: '1px solid var(--club-line)', minHeight: '100%' }}>
+                    {article.heroImageUrl && (
+                      <Link href={`/${clubSlug}/artikler/${article.slug}`}>
                         <div className="article-thumb" style={{ minHeight: '170px', borderRadius: '18px', border: '1px solid var(--club-line)', background: `url(${article.heroImageUrl}) center/cover no-repeat` }}></div>
-                      )}
-                      <div className="tag-row" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                        {article.tags.map(tag => (
-                          <span key={tag.slug} className="tag" style={{ padding: '7px 10px', borderRadius: '999px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '12px', fontWeight: 700 }}>{tag.name}</span>
-                        ))}
-                      </div>
+                      </Link>
+                    )}
+                    <div className="article-card-tag-row">
+                      {article.tags.map(tag => (
+                        <Link 
+                          key={tag.slug} 
+                          href={getFilterUrl({ tag: tag.slug })} 
+                          className="article-card-tag"
+                        >
+                          {tag.name}
+                        </Link>
+                      ))}
+                    </div>
+                    <Link href={`/${clubSlug}/artikler/${article.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
                       <h4 style={{ fontSize: '20px', lineHeight: '1.18' }}>{article.title}</h4>
-                      <p style={{ color: 'var(--club-muted)', lineHeight: '1.6', fontSize: '14px' }}>{article.excerpt}</p>
-                      <div className="article-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', color: 'var(--club-muted)', fontSize: '13px' }}>
-                        <span>{article.authorName || 'Redaktionen'}</span>
-                        <span>{article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('da-DK') : ''}</span>
-                      </div>
-                    </article>
-                  </Link>
+                    </Link>
+                    <p style={{ color: 'var(--club-muted)', lineHeight: '1.6', fontSize: '14px' }}>{article.excerpt}</p>
+                    <div className="article-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', color: 'var(--club-muted)', fontSize: '13px' }}>
+                      <span>{article.authorName || 'Redaktionen'}</span>
+                      <span>{article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('da-DK') : ''}</span>
+                    </div>
+                  </article>
                 ))}
               </div>
             ) : (
@@ -219,17 +233,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
             <div className="tag-cloud" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
               <Link
                 href={getFilterUrl({ tag: null })}
-                className={`cloud-tag tier-1 ${!selectedTagSlug ? 'active' : ''}`}
-                style={{
-                  padding: '6px 12px',
-                  borderRadius: '999px',
-                  background: !selectedTagSlug ? 'var(--club-accent-2)' : 'rgba(255,255,255,0.05)',
-                  border: '1px solid var(--club-line)',
-                  color: !selectedTagSlug ? 'var(--club-text-on-accent)' : '#dbe7ff',
-                  fontWeight: 600,
-                  fontSize: '13px',
-                  transition: 'all 0.2s'
-                }}
+                className={`article-tag-cloud-chip tier-1 ${!selectedTagSlug ? 'active' : ''}`}
               >
                 Alle emner
               </Link>
@@ -237,33 +241,11 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                 const tier = getTagTier(tag.articleCount);
                 const isActive = selectedTagSlug === tag.slug;
                 
-                const fontSize = 
-                  tier === 'tier-4' ? '18px' : 
-                  tier === 'tier-3' ? '16px' : 
-                  tier === 'tier-2' ? '14px' : '13px';
-                
-                const opacity = isActive ? 1 : (
-                  tier === 'tier-4' ? 1 :
-                  tier === 'tier-3' ? 0.9 :
-                  tier === 'tier-2' ? 0.8 : 0.7
-                );
-
                 return (
                   <Link
                     key={tag.id}
                     href={getFilterUrl({ tag: tag.slug })}
-                    className={`cloud-tag ${tier} ${isActive ? 'active' : ''}`}
-                    style={{
-                      padding: '6px 12px',
-                      borderRadius: '999px',
-                      background: isActive ? 'var(--club-accent-2)' : 'rgba(255,255,255,0.05)',
-                      border: '1px solid var(--club-line)',
-                      color: isActive ? 'var(--club-text-on-accent)' : '#dbe7ff',
-                      fontWeight: tier === 'tier-4' ? 700 : 600,
-                      fontSize: fontSize,
-                      opacity: opacity,
-                      transition: 'all 0.2s'
-                    }}
+                    className={`article-tag-cloud-chip ${tier} ${isActive ? 'active' : ''}`}
                   >
                     {tag.name}
                   </Link>

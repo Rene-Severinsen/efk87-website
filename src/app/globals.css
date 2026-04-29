@@ -20,6 +20,61 @@ body {
   line-height: 1.75;
 }
 
+/* Article Card Tag Chips */
+.article-card-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.article-card-tag {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.10);
+  border: 1px solid rgba(125, 211, 252, 0.20);
+  color: #dff2ff;
+  font-size: 0.72rem;
+  line-height: 1;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.article-card-tag:hover {
+  background: rgba(125, 211, 252, 0.16);
+  border-color: rgba(125, 211, 252, 0.32);
+}
+
+/* Tag Cloud Chips */
+.article-tag-cloud-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--club-line);
+  color: #dbe7ff;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.article-tag-cloud-chip.active {
+  background: var(--club-accent-2);
+  color: var(--club-text-on-accent);
+  opacity: 1 !important;
+}
+
+.article-tag-cloud-chip.tier-1 { font-size: 13px; opacity: 0.7; }
+.article-tag-cloud-chip.tier-2 { font-size: 14px; opacity: 0.8; }
+.article-tag-cloud-chip.tier-3 { font-size: 16px; opacity: 0.9; }
+.article-tag-cloud-chip.tier-4 { font-size: 18px; opacity: 1; font-weight: 700; }
+
 .article-detail-prose p {
   margin: 0 0 1rem;
 }
