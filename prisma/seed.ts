@@ -4,7 +4,8 @@ import {
   PublicSurfaceVisibility,
   ClubMailingListPurpose,
   GalleryAlbumStatus,
-  GalleryImageStatus
+  GalleryImageStatus,
+  ArticleStatus
 } from "../src/generated/prisma";
 
 async function main() {
@@ -72,12 +73,6 @@ async function main() {
       status: PublicPageStatus.PUBLISHED,
     },
     {
-      slug: "artikler",
-      title: "Artikler",
-      body: "Her kommer artikler, nyheder og klubindhold senere.",
-      status: PublicPageStatus.PUBLISHED,
-    },
-    {
       slug: "flyveskole",
       title: "Flyveskole",
       body: "Her kommer information om flyveskole, instruktører og vejen ind i modelflyvning.",
@@ -105,6 +100,76 @@ async function main() {
         ...page,
       },
     });
+  }
+
+  // Article Categories
+  const categories = [
+    { slug: "klubnyt", name: "Klubnyt", description: "Nyheder, referater, aktiviteter og det der rører sig i klubben lige nu." },
+    { slug: "flyveskole", name: "Flyveskole", description: "Artikler til elever, instruktører og alle der vil forstå skolens hverdag bedre." },
+    { slug: "teknik", name: "Teknik", description: "Udstyr, set-up, GPS, batterier, radioer og praktiske erfaringer fra medlemmerne." },
+    { slug: "ture", name: "Ture og oplevelser", description: "Skræntture, weekenddage, stævner og andre historier fra livet uden for hjemmepladsen." },
+  ];
+
+  for (const cat of categories) {
+    await prisma.articleCategory.upsert({
+      where: { clubId_slug: { clubId: efk87.id, slug: cat.slug } },
+      update: cat,
+      create: { ...cat, clubId: efk87.id },
+    });
+  }
+
+  // Article Tags
+  const tags = [
+    { slug: "skraentflyvning", name: "Skræntflyvning" },
+    { slug: "gps", name: "GPS" },
+    { slug: "weekendtur", name: "Weekendtur" },
+    { slug: "pladsen", name: "Pladsen" },
+  ];
+
+  for (const tag of tags) {
+    await prisma.articleTag.upsert({
+      where: { clubId_slug: { clubId: efk87.id, slug: tag.slug } },
+      update: tag,
+      create: { ...tag, clubId: efk87.id },
+    });
+  }
+
+  // Articles (Sample data only if in development)
+  if (process.env.APP_ENV === "development") {
+    const samples = [
+      {
+        slug: "weekend-paa-skraenten",
+        title: "Weekend på skrænten gav både vind, grin og gode starter.",
+        excerpt: "Lørdagens tur til skrænten blev en af de dage, hvor det hele gik op i en højere enhed. Vinden holdt, solen brød igennem.",
+        body: "Lørdagens tur til skrænten blev en af de dage, hvor det hele gik op i en højere enhed. Vinden holdt, solen brød igennem, og både erfarne piloter og nyere medlemmer fik masser af tid i luften.\n\nArtiklen samler billeder, erfaringer og et par læringer, der er værd at tage med videre.",
+        heroImageUrl: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1200&q=80",
+        status: ArticleStatus.PUBLISHED,
+        visibility: PublicSurfaceVisibility.PUBLIC,
+        isFeatured: true,
+        authorName: "Jesper Holm",
+        readingMinutes: 6,
+        publishedAt: new Date("2026-03-27"),
+      },
+      {
+        slug: "nyt-gps-triangle-setup",
+        title: "Nyt GPS-triangle setup til sæson 2026",
+        excerpt: "En praktisk gennemgang af årets setup, hvad der virker bedre end sidste sæson.",
+        body: "En praktisk gennemgang af årets setup, hvad der virker bedre end sidste sæson, og hvor vi stadig skal være skarpe på procedurerne.",
+        heroImageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+        status: ArticleStatus.PUBLISHED,
+        visibility: PublicSurfaceVisibility.PUBLIC,
+        authorName: "René Severinsen",
+        publishedAt: new Date("2026-03-24"),
+      }
+    ];
+
+    for (const s of samples) {
+      await prisma.article.upsert({
+        where: { clubId_slug: { clubId: efk87.id, slug: s.slug } },
+        update: s,
+        create: { ...s, clubId: efk87.id },
+      });
+    }
   }
 
   // Seed local development test member

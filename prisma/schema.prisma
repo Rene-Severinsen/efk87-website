@@ -32,6 +32,9 @@ model Club {
   mailingLists  ClubMailingList[]
   galleryAlbums GalleryAlbum[]
   galleryImages GalleryImage[]
+  articles      Article[]
+  articleCategories ArticleCategory[]
+  articleTags   ArticleTag[]
 }
 
 model PublicClubFooter {
@@ -68,6 +71,86 @@ model PublicSponsor {
 enum PublicSurfaceVisibility {
   PUBLIC
   MEMBERS_ONLY
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Article {
+  id             String                  @id @default(cuid())
+  clubId         String
+  slug           String
+  title          String
+  excerpt        String?
+  body           String
+  heroImageUrl   String?
+  status         ArticleStatus
+  visibility     PublicSurfaceVisibility
+  isFeatured     Boolean                 @default(false)
+  authorName     String?
+  readingMinutes Int?
+  publishedAt    DateTime?
+  legacySource   String?
+  legacyId       String?
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+
+  club     Club            @relation(fields: [clubId], references: [id])
+  category ArticleCategory? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  tags     ArticleTagAssignment[]
+
+  @@unique([clubId, slug])
+  @@index([clubId, status, visibility])
+  @@index([clubId, isFeatured])
+  @@index([clubId, publishedAt])
+  @@index([clubId, legacySource, legacyId])
+}
+
+model ArticleCategory {
+  id           String   @id @default(cuid())
+  clubId       String
+  slug         String
+  name         String
+  description  String?
+  sortOrder    Int      @default(0)
+  isActive     Boolean  @default(true)
+  legacySource String?
+  legacyId     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  club     Club      @relation(fields: [clubId], references: [id])
+  articles Article[]
+
+  @@unique([clubId, slug])
+}
+
+model ArticleTag {
+  id        String   @id @default(cuid())
+  clubId    String
+  slug      String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  club     Club                   @relation(fields: [clubId], references: [id])
+  articles ArticleTagAssignment[]
+
+  @@unique([clubId, slug])
+}
+
+model ArticleTagAssignment {
+  articleId String
+  tagId     String
+
+  article Article    @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag     ArticleTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, tagId])
 }
 
 model PublicHomeInfoCard {
