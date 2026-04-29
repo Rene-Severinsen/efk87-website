@@ -41,7 +41,7 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
                   className={[
                     'transition-colors duration-200',
                     mobile
-                        ? 'flex min-h-[44px] w-full items-center rounded-xl px-4 py-3 text-sm'
+                        ? 'flex min-h-[44px] w-full items-center rounded-xl px-4 py-2.5 text-sm'
                         : 'inline-flex min-h-[44px] items-center whitespace-nowrap rounded-full px-3 py-2 text-sm',
                     isActive
                         ? mobile
@@ -62,7 +62,7 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
         {actionItems.map((item) => {
           const baseClassName = [
             'flex min-h-[44px] items-center justify-center rounded-full text-sm font-semibold transition-all duration-200',
-            mobile ? 'w-full rounded-xl px-4 py-3' : 'px-4 py-2',
+            mobile ? 'w-full rounded-xl px-4 py-2.5' : 'px-4 py-2',
             item.isPrimary
                 ? 'border border-emerald-400/30 bg-gradient-to-br from-emerald-400/20 to-sky-400/20 text-emerald-300 hover:from-emerald-400/30 hover:to-sky-400/30'
                 : 'border border-white/10 bg-white/5 text-white hover:bg-white/10',
@@ -124,8 +124,8 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
         </div>
 
         {/* Mobile/Tablet Header */}
-        <details className="efk-topbar-mobile-details group min-[1100px]:hidden rounded-[24px] border border-white/10 bg-slate-950/90 px-4 py-3 shadow-2xl backdrop-blur-xl">
-          <summary className="efk-topbar-mobile-summary flex items-center justify-between cursor-pointer list-none select-none touch-manipulation min-h-[56px] [&::-webkit-details-marker]:hidden">
+        <details className="efk-topbar-mobile-details group min-[1100px]:hidden rounded-[24px] border border-white/10 bg-slate-950/90 shadow-2xl backdrop-blur-xl">
+          <summary className="efk-topbar-mobile-summary flex items-center justify-between cursor-pointer list-none select-none touch-manipulation min-h-[56px] px-4 py-3 [&::-webkit-details-marker]:hidden">
             <div className="flex min-w-0 items-center gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold text-white">
                 {clubName}
@@ -147,10 +147,14 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
             </div>
           </summary>
 
-          <nav className="efk-topbar-mobile-menu mt-3 flex flex-col gap-2 rounded-2xl border border-white/10 bg-slate-950/95 p-4 shadow-2xl">
-            {renderNavLinks(true)}
+          <nav className="efk-topbar-mobile-menu mt-3 flex flex-col gap-2 rounded-2xl border border-white/10 bg-slate-950/95 p-3 md:p-4 shadow-2xl md:max-w-2xl md:mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {renderNavLinks(true)}
+            </div>
             <div className="my-2 h-px bg-white/10" />
-            <div className="flex flex-col gap-2">{renderAuthActions(true)}</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {renderAuthActions(true)}
+            </div>
           </nav>
         </details>
       </header>
