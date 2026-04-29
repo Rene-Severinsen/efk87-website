@@ -31,6 +31,8 @@ export default async function AdminPage({ params }: AdminPageProps) {
       clubSlug={clubSlug}
       clubName={club.name}
       userName={viewer.name || viewer.email || "Admin"}
+      userRole={viewer.clubRole}
+      userEmail={viewer.email}
     >
       <AdminDashboard clubSlug={clubSlug} clubName={club.name} />
     </AdminShell>

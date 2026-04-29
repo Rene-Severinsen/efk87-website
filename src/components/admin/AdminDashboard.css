@@ -99,6 +99,18 @@
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  transition: all 0.2s;
+}
+
+.admin-btn-ghost {
+  border-color: transparent;
+  background: transparent;
+  color: #8c8c8c;
+}
+
+.admin-btn-ghost:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #333;
 }
 
 .admin-btn-primary {
@@ -244,10 +256,94 @@
   background: #e6f7ff;
 }
 
-.admin-footer {
+.admin-sidebar-footer {
   margin-top: auto;
-  padding: 24px;
-  text-align: center;
-  color: #8c8c8c;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.admin-user-card {
+  padding: 20px 24px 16px 24px;
+}
+
+.admin-user-card-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.admin-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #1890ff;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.admin-user-info {
+  overflow: hidden;
+}
+
+.admin-user-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-user-role {
   font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 2px;
+}
+
+.admin-user-email {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-user-actions {
+  display: flex;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-user-action {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.admin-user-action:hover {
+  color: #fff;
+}
+
+.admin-user-action-logout:hover {
+  color: #ff4d4f;
+}
+
+.admin-sidebar-copyright {
+  padding: 12px 24px;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.65rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }

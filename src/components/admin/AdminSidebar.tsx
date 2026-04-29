@@ -1,11 +1,29 @@
+"use client";
+
 import React from "react";
 import "./AdminDashboard.css";
+import { logoutAction } from "../../lib/auth/logout";
 
 interface AdminSidebarProps {
   clubSlug: string;
+  userName?: string;
+  userRole?: string;
+  userEmail?: string;
 }
 
-const AdminSidebar: React.FC<AdminSidebarProps> = ({ clubSlug }) => {
+const AdminSidebar: React.FC<AdminSidebarProps> = ({ 
+  clubSlug, 
+  userName, 
+  userRole, 
+  userEmail 
+}) => {
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    await logoutAction(clubSlug);
+  };
+
+  const userInitial = (userName || "A").charAt(0).toUpperCase();
+
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-header">EFK87 Admin</div>
@@ -68,8 +86,33 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ clubSlug }) => {
           </a>
         </div>
       </nav>
-      <div className="admin-footer">
-        © 2026 EFK87 Platform
+      
+      <div className="admin-sidebar-footer">
+        <div className="admin-user-card">
+          <div className="admin-user-card-main">
+            <div className="admin-user-avatar">
+              {userInitial}
+            </div>
+            <div className="admin-user-info">
+              <div className="admin-user-name">{userName || "Admin"}</div>
+              <div className="admin-user-role">
+                {userRole || "Administrator"}
+              </div>
+              {userEmail && <div className="admin-user-email">{userEmail}</div>}
+            </div>
+          </div>
+          <div className="admin-user-actions">
+            <button 
+              onClick={handleLogout}
+              className="admin-user-action admin-user-action-logout"
+            >
+              Log ud
+            </button>
+          </div>
+        </div>
+        <div className="admin-sidebar-copyright">
+          © 2026 EFK87 Platform
+        </div>
       </div>
     </aside>
   );
