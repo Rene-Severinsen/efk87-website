@@ -44,16 +44,20 @@ export default async function EditCalendarEntryPage({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div style={{ marginBottom: '24px' }}>
-        <h1 className="admin-section-title" style={{ margin: 0 }}>Rediger kalenderindslag</h1>
-        <p className="admin-form-help">Opdater detaljerne for kalenderindslaget.</p>
-      </div>
+      <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="mb-8">
+            <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">Rediger kalenderindslag</h1>
+            <p className="text-slate-400 text-lg">Opdater detaljerne for kalenderindslaget.</p>
+          </div>
 
-      <CalendarEntryForm 
-        clubSlug={clubSlug}
-        initialData={entry}
-        action={boundAction}
-      />
+          <CalendarEntryForm 
+            clubSlug={clubSlug}
+            initialData={entry}
+            action={boundAction}
+          />
+        </div>
+      </div>
     </AdminShell>
   );
 }

@@ -13,6 +13,13 @@ interface PageProps {
   }>;
 }
 
+const GlassCard = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
+  <div className={`backdrop-blur-md bg-[#121b2e]/80 border border-white/10 rounded-3xl shadow-2xl relative overflow-hidden ${className}`}>
+    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500/50 to-emerald-500/50 opacity-30" />
+    {children}
+  </div>
+);
+
 export default async function AdminCalendarPage({ params }: PageProps) {
   const { clubSlug } = await params;
 
@@ -52,97 +59,110 @@ export default async function AdminCalendarPage({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="admin-page-header" style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h1 className="admin-section-title" style={{ margin: 0 }}>Kalender</h1>
-          <p className="admin-form-help">Administrer klubbens kalenderindslag.</p>
-        </div>
-        <Link href={`/${clubSlug}/admin/kalender/ny`} className="admin-btn admin-btn-primary">
-          Opret kalenderindslag
-        </Link>
-      </div>
+      <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
+        <div className="max-w-[1600px] mx-auto">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+              <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">Kalender</h1>
+              <p className="text-slate-400 text-lg">Administrer klubbens kalenderindslag.</p>
+            </div>
+            <Link 
+              href={`/${clubSlug}/admin/kalender/ny`}
+              className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold transition-all shadow-lg shadow-sky-900/20 gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Opret kalenderindslag
+            </Link>
+          </div>
 
-      <div className="admin-card" style={{ padding: 0, overflow: 'hidden' }}>
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Dato & Tid</th>
-              <th>Titel</th>
-              <th>Status</th>
-              <th>Marquee</th>
-              <th style={{ textAlign: 'right' }}>Handling</th>
-            </tr>
-          </thead>
-          <tbody>
-            {entries.length > 0 ? entries.map((entry) => (
-              <tr key={entry.id}>
-                <td>
-                  <div style={{ fontWeight: '600' }}>{formatDate(entry.startsAt)}</div>
-                  <div className="admin-form-help">{formatTime(entry.startsAt)}</div>
-                </td>
-                <td>
-                  <div style={{ fontWeight: '600' }}>{entry.title}</div>
-                  <div className="admin-form-help">{entry.location || 'Ingen lokation'}</div>
-                </td>
-                <td>
-                  <span className={`admin-badge ${entry.isPublished ? 'admin-badge-info' : 'admin-badge-error'}`}>
-                    {entry.isPublished ? 'Publiceret' : 'Kladde'}
-                  </span>
-                </td>
-                <td>
-                  {entry.forceShowInMarquee && (
-                    <span className="admin-badge admin-badge-success">
-                      Forceret
-                    </span>
+          <GlassCard>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Dato & Tid</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Titel</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Marquee</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Handling</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {entries.length > 0 ? entries.map((entry) => (
+                    <tr key={entry.id} className="hover:bg-white/[0.02] transition-colors group">
+                      <td className="px-6 py-4">
+                        <div className="font-bold text-white group-hover:text-sky-400 transition-colors">{formatDate(entry.startsAt)}</div>
+                        <div className="text-sm text-slate-500">{formatTime(entry.startsAt)}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-slate-200 font-semibold">{entry.title}</div>
+                        <div className="text-xs text-slate-500">{entry.location || 'Ingen lokation'}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${
+                          entry.isPublished 
+                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
+                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                        }`}>
+                          {entry.isPublished ? 'Publiceret' : 'Kladde'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        {entry.forceShowInMarquee && (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                            Gennemtvinges
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-3">
+                          <Link 
+                            href={`/${clubSlug}/admin/kalender/${entry.id}/rediger`}
+                            className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-sm font-semibold transition-all border border-white/5 hover:border-white/10"
+                          >
+                            Rediger
+                          </Link>
+                          <form action={toggleCalendarEntryPublishedAction.bind(null, clubSlug, entry.id, !entry.isPublished)}>
+                            <button 
+                              type="submit" 
+                              className={`inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-sm font-semibold transition-all border ${
+                                entry.isPublished 
+                                  ? 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20' 
+                                  : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
+                              }`}
+                            >
+                              {entry.isPublished ? 'Afpublicer' : 'Publicer'}
+                            </button>
+                          </form>
+                          <DeleteCalendarEntryForm 
+                            clubSlug={clubSlug} 
+                            entryId={entry.id} 
+                            action={deleteCalendarEntryAction}
+                          >
+                            <button 
+                              type="submit" 
+                              className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 text-sm font-semibold transition-all"
+                            >
+                              Slet
+                            </button>
+                          </DeleteCalendarEntryForm>
+                        </div>
+                      </td>
+                    </tr>
+                  )) : (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
+                        Ingen kalenderindslag fundet.
+                      </td>
+                    </tr>
                   )}
-                </td>
-                <td style={{ textAlign: 'right' }}>
-                  <div style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end', alignItems: 'center' }}>
-                    <Link href={`/${clubSlug}/admin/kalender/${entry.id}/rediger`} style={{ color: '#1890ff', fontSize: '0.875rem', fontWeight: '500' }}>
-                      Rediger
-                    </Link>
-                    <form action={toggleCalendarEntryPublishedAction.bind(null, clubSlug, entry.id, !entry.isPublished)}>
-                      <button type="submit" style={{ 
-                        background: 'none', 
-                        border: 'none', 
-                        color: entry.isPublished ? '#fa8c16' : '#52c41a', 
-                        fontSize: '0.875rem', 
-                        cursor: 'pointer',
-                        padding: 0,
-                        fontWeight: '500'
-                      }}>
-                        {entry.isPublished ? 'Afpublicer' : 'Publicer'}
-                      </button>
-                    </form>
-                    <DeleteCalendarEntryForm 
-                      clubSlug={clubSlug} 
-                      entryId={entry.id} 
-                      action={deleteCalendarEntryAction}
-                    >
-                      <button type="submit" style={{ 
-                        background: 'none', 
-                        border: 'none', 
-                        color: '#ff4d4f', 
-                        fontSize: '0.875rem', 
-                        cursor: 'pointer',
-                        padding: 0,
-                        fontWeight: '500'
-                      }}>
-                        Slet
-                      </button>
-                    </DeleteCalendarEntryForm>
-                  </div>
-                </td>
-              </tr>
-            )) : (
-              <tr>
-                <td colSpan={5} style={{ padding: '48px', textAlign: 'center' }}>
-                  <p className="admin-form-help">Ingen kalenderindslag fundet.</p>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                </tbody>
+              </table>
+            </div>
+          </GlassCard>
+        </div>
       </div>
     </AdminShell>
   );
