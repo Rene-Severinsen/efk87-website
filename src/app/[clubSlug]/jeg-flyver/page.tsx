@@ -5,7 +5,10 @@ import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 import { ClubFlightIntentType, ClubFlightIntentStatus } from "../../../generated/prisma";
 import { createFlightIntentAction } from "../../../lib/flightIntents/createFlightIntentAction";
 import { cancelFlightIntentAction } from "../../../lib/flightIntents/cancelFlightIntentAction";
-import { getMemberRecentFlightIntents } from "../../../lib/flightIntents/memberFlightIntentService";
+import { 
+  getMemberRecentFlightIntents, 
+  getActiveFlightIntentForMemberDate 
+} from "../../../lib/flightIntents/memberFlightIntentService";
 
 interface JegFlyverPageProps {
   params: Promise<{
@@ -14,6 +17,7 @@ interface JegFlyverPageProps {
   searchParams: Promise<{
     created?: string;
     cancelled?: string;
+    duplicate?: string;
   }>;
 }
 
@@ -22,7 +26,7 @@ interface JegFlyverPageProps {
  */
 export default async function JegFlyverPage({ params, searchParams }: JegFlyverPageProps) {
   const { clubSlug } = await params;
-  const { created, cancelled } = await searchParams;
+  const { created, cancelled, duplicate } = await searchParams;
 
   const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
 
@@ -31,7 +35,11 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
 
   const recentIntents = await getMemberRecentFlightIntents(club.id, viewer);
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  const today = new Date();
+  const todayStr = today.toISOString().split("T")[0];
+
+  // Check if member already has an active entry for today
+  const hasActiveToday = await getActiveFlightIntentForMemberDate(club.id, viewer.userId!, today);
 
   return (
     <ThemedClubPageShell
@@ -57,6 +65,18 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
         {cancelled === "1" && (
           <div className="mb-8 p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-md">
             Din melding er aflyst.
+          </div>
+        )}
+
+        {duplicate === "1" && (
+          <div className="mb-8 p-4 bg-red-600 border border-red-500 text-white rounded-md">
+            Du har allerede en aktiv &apos;Jeg flyver&apos;-melding for den valgte dag. Aflys den først, hvis du vil oprette en ny.
+          </div>
+        )}
+
+        {hasActiveToday && (
+          <div className="mb-6 p-3 bg-blue-900/20 border border-blue-500/30 text-blue-200 text-sm rounded-md">
+            Du har allerede en aktiv melding for i dag.
           </div>
         )}
 

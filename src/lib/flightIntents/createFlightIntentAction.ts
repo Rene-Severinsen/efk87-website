@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import prisma from "../db/prisma";
 import { requireClubBySlug } from "../tenancy/tenantService";
 import { requireActiveMemberForClub } from "../auth/accessGuards";
+import { getActiveFlightIntentForMemberDate } from "./memberFlightIntentService";
 import { 
   ClubFlightIntentType, 
   ClubFlightIntentStatus, 
@@ -40,6 +41,12 @@ export async function createFlightIntentAction(formData: FormData) {
 
   if (flightDate < today) {
     throw new Error("flightDate must be today or future");
+  }
+
+  // Enforce one active entry per member per day
+  const existingActive = await getActiveFlightIntentForMemberDate(club.id, viewer.userId, flightDate);
+  if (existingActive) {
+    redirect(`/${clubSlug}/jeg-flyver?duplicate=1`);
   }
 
   // Activity type validation

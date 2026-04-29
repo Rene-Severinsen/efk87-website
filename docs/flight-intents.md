@@ -23,6 +23,14 @@ The `ClubFlightIntent` model includes:
 - `cancelledAt`: Timestamp if the intent was cancelled.
 - `createdAt` / `updatedAt`: Standard timestamps.
 
+## Domain Rules
+
+- **One Active Entry**: A member may have only one `ACTIVE` entry per `clubId` + `userId` + `flightDate`.
+- **Enforcement**: This rule is enforced server-side in the `createFlightIntentAction`.
+- **Cancelled/Expired Entries**: `CANCELLED` or `EXPIRED` entries do not block new submissions for the same date.
+- **Retention**: `CANCELLED` rows are retained for history and statistics.
+- **Future Index**: A future PostgreSQL partial unique index may be considered: `unique active row on clubId + userId + flightDate where status = 'ACTIVE'`.
+
 ## Daily Presence List Logic
 
 “Jeg flyver” is a daily presence list.
