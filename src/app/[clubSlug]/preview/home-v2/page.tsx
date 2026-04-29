@@ -5,6 +5,7 @@ import { getClubTheme } from "../../../../lib/publicSite/publicThemeService";
 import { getTodayFlightIntents } from "../../../../lib/publicSite/publicFlightIntentService";
 import { getMemberActivityStats } from "../../../../lib/memberActivity/memberActivityService";
 import { getVisiblePublicNavigation, getVisiblePublicActions } from "../../../../lib/publicSite/publicNavigation";
+import { getNewMemberHighlights } from "../../../../lib/members/newMemberHighlightService";
 import PublicClubHomePageV2 from "../../../../components/publicSite/homeV2/PublicClubHomePageV2";
 
 interface PreviewPageProps {
@@ -35,10 +36,11 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
 
   // Fetch real data
   const visibilityContext = toViewerVisibilityContext(viewer);
-  const [theme, todayFlightIntents, memberActivity] = await Promise.all([
+  const [theme, todayFlightIntents, memberActivity, newMemberHighlights] = await Promise.all([
     getClubTheme(club.id),
     getTodayFlightIntents(club.id, visibilityContext),
     getMemberActivityStats(club.id, viewer),
+    getNewMemberHighlights(club.id),
   ]);
 
   const navigationItems = getVisiblePublicNavigation(clubSlug, visibilityContext);
@@ -53,6 +55,7 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
       memberActivity={memberActivity}
       navigationItems={navigationItems}
       actionItems={actionItems}
+      newMemberHighlights={newMemberHighlights}
     />
   );
 }

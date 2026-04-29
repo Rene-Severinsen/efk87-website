@@ -65,6 +65,13 @@ The homepage content is structurally separate from generic public pages.
   - Includes description, address, email, phone, and CVR.
   - Currently seeded, but designed to be admin-manageable later.
   - **Visibility**: Currently remains `PUBLIC` for all visitors.
+- **New Member Highlight**: `newMemberHighlightService.ts` handles fetching members who joined within the last 14 days.
+  - Tenant-scoped by `clubId`.
+  - Filtered by `joinedAt` date (within last 14 days).
+  - Excludes members with status `RESIGNED`.
+  - Shows only display name and joined date.
+  - Maximum 5 members are shown.
+  - Triggers a split-layout hero on the homepage when visible.
 - **Public Sponsor Model**: `PublicSponsor` handles simple public labels/links.
   - Tenant-scoped by `clubId`.
   - Ordered by `sortOrder`.
@@ -117,6 +124,7 @@ Frontpage V2 is now the active live homepage for all clubs.
 - **Fallback**: The old homepage component (`PublicClubHomePage.tsx`) remains in the codebase temporarily as a fallback/reference.
 - **Guidelines**:
   - v2 uses real data for club, user profile, and "Jeg flyver" activity.
+  - v2 includes a "Nye medlemmer" highlight card that appears when members have joined within the last 14 days.
   - Chat, statistics, gallery, and next activities remain static placeholders.
   - v2 CSS is scoped and non-invasive.
 

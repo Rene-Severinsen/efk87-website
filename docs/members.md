@@ -57,3 +57,12 @@ Certificates are stored in a normalized `ClubMemberCertificate` model. They are 
 ## Profile Images
 
 Currently, profile images are stored as URLs in the `profileImageUrl` field. Direct image upload is planned for a future phase.
+
+## New Member Highlights (Homepage)
+
+The homepage features a "Nye medlemmer" card to welcome recent additions to the club.
+- **Criteria**: Members who joined within the last 14 days (`joinedAt`).
+- **Exclusion**: Members with status `RESIGNED` are excluded.
+- **Status NEW**: The `memberStatus = NEW` is NOT used for this highlight; it is strictly based on `joinedAt`.
+- **Privacy**: Only display name and joined date are shown publicly.
+- **Logo**: A logo placeholder is prepared for future media integration.

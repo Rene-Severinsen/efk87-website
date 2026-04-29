@@ -4,6 +4,8 @@ import { PublicFlightIntentListItem } from '../../../lib/publicSite/publicFlight
 import { MemberActivityStats } from '../../../lib/memberActivity/memberActivityService';
 import { ServerViewerContext } from '../../../lib/auth/viewer';
 import { PublicNavigationItem } from '../../../lib/publicSite/publicNavigation';
+import { NewMemberHighlightData } from '../../../lib/members/newMemberHighlightService';
+import NewMembersHighlightCard from '../../club/NewMembersHighlightCard';
 import Link from 'next/link';
 
 interface PublicClubHomePageV2Props {
@@ -22,6 +24,7 @@ interface PublicClubHomePageV2Props {
   memberActivity: MemberActivityStats;
   navigationItems: PublicNavigationItem[];
   actionItems: PublicNavigationItem[];
+  newMemberHighlights: NewMemberHighlightData;
   theme?: {
     backgroundColor: string;
     panelColor: string;
@@ -41,7 +44,7 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Isolated V2 homepage component.
  * Ported closely from the provided mockup HTML.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights }: PublicClubHomePageV2Props) {
   const clubDisplayName = club.settings?.displayName || club.name;
   const clubShortName = club.settings?.shortName || club.name;
 
@@ -110,7 +113,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           </div>
         </header>
 
-        <section className="home-v2-hero">
+        <section className={`home-v2-hero ${newMemberHighlights.visible ? 'home-v2-hero-top--split' : 'home-v2-hero-top--full'}`}>
           <article className="home-v2-card home-v2-hero-main">
             <div className="home-v2-eyebrow">
               ✈️ Sæsonstart 2026 · {new Date().toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric', month: 'long' })} · Vejr: 8°C og let sidevind
@@ -127,39 +130,28 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             </div>
           </article>
 
-          <div className="home-v2-side-stack">
-            <article className="home-v2-card home-v2-welcome-card">
-              <div className="home-v2-welcome-grid">
-                <div className="home-v2-avatar">{viewer.name ? viewer.name.split(' ').map(n => n[0]).join('').toUpperCase() : '👤'}</div>
-                <div>
-                  <h2>{viewer.name || 'Gæst'}</h2>
-                  <p className="home-v2-muted">
-                    {viewer.isMember ? (viewer.clubRole === 'ADMIN' || viewer.clubRole === 'OWNER' ? 'Administrator' : 'Medlem') : 'Besøgende'}
-                  </p>
-                  <div className="home-v2-meta-row">
-                    {viewer.isMember && <span className="home-v2-meta-chip">Aktivt medlem</span>}
-                    {viewer.isAdmin && <span className="home-v2-meta-chip">Bestyrelse</span>}
-                  </div>
-                </div>
-              </div>
-            </article>
+          {newMemberHighlights.visible ? (
+            <div className="home-v2-side-stack">
+              <NewMembersHighlightCard clubName={clubDisplayName} members={newMemberHighlights.members} />
+            </div>
+          ) : null}
+        </section>
 
-            <article className="home-v2-card home-v2-marquee-card">
-              <div className="home-v2-marquee-label">Næste aktiviteter</div>
-              <div className="home-v2-marquee">
-                <div className="home-v2-marquee-track">
-                  <span>• Søndag 10:30: Klubåbning og kaffe i skuret</span>
-                  <span>• Søndag 11:00: Skoleflyvning – El-træner på bane 2</span>
-                  <span>• Onsdag 19:00: Bestyrelsesmøde i klubhuset</span>
-                  <span>• Lørdag 09:30: Forårsoprydning på pladsen</span>
-                  <span>• Søndag 10:30: Klubåbning og kaffe i skuret</span>
-                  <span>• Søndag 11:00: Skoleflyvning – El-træner på bane 2</span>
-                  <span>• Onsdag 19:00: Bestyrelsesmøde i klubhuset</span>
-                  <span>• Lørdag 09:30: Forårsoprydning på pladsen</span>
-                </div>
+        <section className="home-v2-marquee-row">
+          <article className="home-v2-card home-v2-marquee-card">
+            <div className="home-v2-marquee">
+              <div className="home-v2-marquee-track">
+                <span>• Søndag 10:30: Klubåbning og kaffe i skuret</span>
+                <span>• Søndag 11:00: Skoleflyvning – El-træner på bane 2</span>
+                <span>• Onsdag 19:00: Bestyrelsesmøde i klubhuset</span>
+                <span>• Lørdag 09:30: Forårsoprydning på pladsen</span>
+                <span>• Søndag 10:30: Klubåbning og kaffe i skuret</span>
+                <span>• Søndag 11:00: Skoleflyvning – El-træner på bane 2</span>
+                <span>• Onsdag 19:00: Bestyrelsesmøde i klubhuset</span>
+                <span>• Lørdag 09:30: Forårsoprydning på pladsen</span>
               </div>
-            </article>
-          </div>
+            </div>
+          </article>
         </section>
 
         <section className="home-v2-stats-row">

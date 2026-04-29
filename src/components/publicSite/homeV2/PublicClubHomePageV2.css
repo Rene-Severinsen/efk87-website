@@ -116,11 +116,20 @@
   border-color: rgba(110,231,183,0.22);
 }
 
-.home-v2-hero {
+.home-v2-hero-top--split {
   margin-top: 24px;
   display: grid;
   grid-template-columns: 1.3fr 0.9fr;
   gap: 20px;
+}
+
+.home-v2-hero-top--full {
+  margin-top: 24px;
+  display: block;
+}
+
+.home-v2-hero-top--full .home-v2-hero-main {
+  width: 100%;
 }
 
 .home-v2-card {
@@ -200,12 +209,77 @@
   gap: 20px;
 }
 
-.home-v2-welcome-card,
-.home-v2-marquee-card {
+.home-v2-marquee-row {
+  margin-top: 16px;
+}
+
+.home-v2-marquee-row .home-v2-marquee-card {
+  padding: 8px 16px;
+  min-height: auto;
+  background: linear-gradient(180deg, rgba(20,29,47,0.85), rgba(17,25,41,0.85));
+  border-radius: 999px;
+}
+
+.new-members-highlight-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
   padding: 22px;
-  min-height: 170px;
-  background:
-    linear-gradient(180deg, rgba(20,29,47,0.95), rgba(17,25,41,0.95));
+  background: linear-gradient(180deg, rgba(20,29,47,0.95), rgba(17,25,41,0.95));
+}
+
+.new-members-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.new-members-logo-slot {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.new-members-content p {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.new-members-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.new-member-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.new-member-item .member-name {
+  font-weight: 500;
+  color: var(--home-v2-text);
+}
+
+.new-member-item .member-date {
+  font-size: 0.85rem;
 }
 
 .home-v2-welcome-grid {
@@ -254,19 +328,20 @@
 
 .home-v2-marquee {
   overflow: hidden;
-  border-radius: 14px;
-  border: 1px solid var(--home-v2-line);
-  background: rgba(255,255,255,0.03);
+  /* border-radius: 14px; */
+  /* border: 1px solid var(--home-v2-line); */
+  /* background: rgba(255,255,255,0.03); */
 }
 
 .home-v2-marquee-track {
   display: flex;
   gap: 40px;
-  padding: 14px 18px;
+  padding: 4px 0;
   white-space: nowrap;
   animation: home-v2-scroll 30s linear infinite;
   color: #dce7ff;
   font-weight: 600;
+  font-size: 13px;
 }
 
 @keyframes home-v2-scroll {
