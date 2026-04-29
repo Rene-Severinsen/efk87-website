@@ -99,7 +99,7 @@ export default async function FlyvemeldingerPage({ params, searchParams }: Flyve
                 <tbody style={{ borderTop: "1px solid #e5e7eb" }}>
                   {todayActive.map((item) => (
                     <tr key={item.id} style={{ borderBottom: "1px solid #f3f4f6" }}>
-                      <td style={{ padding: "1rem", fontSize: "0.875rem", color: "#6b7280" }}>{formatAdminTime(item.createdAt)}</td>
+                      <td style={{ padding: "1rem", fontSize: "0.875rem", color: "#6b7280" }}>{formatAdminDateTime(item.createdAt)}</td>
                       <td style={{ padding: "1rem", fontSize: "0.875rem" }}>{formatAdminDate(item.flightDate)}</td>
                       <td style={{ padding: "1rem" }}>{item.displayName}</td>
                       <td style={{ padding: "1rem" }}>{item.message || "-"}</td>
@@ -156,7 +156,7 @@ export default async function FlyvemeldingerPage({ params, searchParams }: Flyve
                   {todayCancelled.map((item) => (
                     <tr key={item.id} style={{ borderBottom: "1px solid #f3f4f6" }}>
                       <td style={{ padding: "1rem", fontSize: "0.875rem", color: "#6b7280" }}>
-                        {formatAdminTime(item.createdAt)}
+                        {formatAdminDateTime(item.createdAt)}
                       </td>
                       <td style={{ padding: "1rem", fontSize: "0.875rem" }}>{formatAdminDate(item.flightDate)}</td>
                       <td style={{ padding: "1rem" }}>{item.displayName}</td>
