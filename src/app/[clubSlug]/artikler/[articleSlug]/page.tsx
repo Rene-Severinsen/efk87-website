@@ -35,7 +35,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
       eyebrow={`Artikel · ${article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}`}
       subtitle={article.excerpt || undefined}
       currentPath={`/${clubSlug}/artikler/${articleSlug}`}
-      maxWidth="800px"
+      maxWidth="1120px"
     >
       {article.heroImageUrl && (
         <div 
@@ -52,29 +52,31 @@ export default async function ArticleDetailPage({ params }: PageProps) {
         />
       )}
 
-      <ThemedSectionCard>
-        <div style={{ color: 'var(--club-muted)', marginBottom: '2rem', fontSize: '14px', display: 'flex', gap: '1rem' }}>
-          <span>Af {article.authorName || 'Redaktionen'}</span>
-        </div>
-
-        <div 
-          className="prose prose-invert max-w-none" 
-          style={{ color: 'var(--club-text)', lineHeight: '1.8', fontSize: '18px' }}
-          dangerouslySetInnerHTML={{ __html: article.body }}
-        />
-
-        {article.tags.length > 0 && (
-          <div style={{ marginTop: '3rem', borderTop: '1px solid var(--club-line)', paddingTop: '1.5rem' }}>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              {article.tags.map(tag => (
-                <span key={tag.slug} className="tag" style={{ padding: '7px 10px', borderRadius: '999px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '12px', fontWeight: 700 }}>
-                  {tag.name}
-                </span>
-              ))}
-            </div>
+      <div style={{ maxWidth: '1040px', margin: '0 auto' }}>
+        <ThemedSectionCard>
+          <div style={{ color: 'var(--club-muted)', marginBottom: '2rem', fontSize: '14px', display: 'flex', gap: '1rem' }}>
+            <span>Af {article.authorName || 'Redaktionen'}</span>
           </div>
-        )}
-      </ThemedSectionCard>
+
+          <div 
+            className="article-detail-prose" 
+            style={{ color: 'var(--club-text)' }}
+            dangerouslySetInnerHTML={{ __html: article.body }}
+          />
+
+          {article.tags.length > 0 && (
+            <div style={{ marginTop: '3rem', borderTop: '1px solid var(--club-line)', paddingTop: '1.5rem' }}>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {article.tags.map(tag => (
+                  <span key={tag.slug} className="tag" style={{ padding: '7px 10px', borderRadius: '999px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '12px', fontWeight: 700 }}>
+                    {tag.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </ThemedSectionCard>
+      </div>
     </ThemedClubPageShell>
   );
 }

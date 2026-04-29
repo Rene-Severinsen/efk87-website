@@ -11,11 +11,12 @@ import sanitizeHtml from "sanitize-html";
 
 const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
   allowedTags: [
-    "p", "h2", "h3", "h4", "strong", "em", "ul", "ol", "li", "blockquote", "a", "img"
+    "p", "h1", "h2", "h3", "h4", "h5", "h6", "strong", "b", "em", "i", "ul", "ol", "li", "blockquote", "br", "a", "img", "div", "span"
   ],
   allowedAttributes: {
     "a": ["href", "target", "rel"],
-    "img": ["src", "alt", "title"]
+    "img": ["src", "alt", "title", "width", "height"],
+    "*": ["class"]
   },
   transformTags: {
     "a": (tagName, attribs) => {

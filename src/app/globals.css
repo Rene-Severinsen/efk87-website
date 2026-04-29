@@ -13,24 +13,114 @@ body {
   @apply bg-white text-slate-900;
 }
 
-/* Typography fallbacks for public article view if @tailwindcss/typography is not fully working in v4 yet */
-.prose ul {
+/* Article Detail Prose Styles */
+.article-detail-prose {
+  color: #e8eefc;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.article-detail-prose p {
+  margin: 0 0 1rem;
+}
+
+.article-detail-prose strong {
+  font-weight: 700;
+  color: #f3f7ff;
+}
+
+.article-detail-prose h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #f3f7ff;
+}
+
+.article-detail-prose h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #f3f7ff;
+}
+
+.article-detail-prose h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #f3f7ff;
+}
+
+.article-detail-prose ul,
+.article-detail-prose ol {
+  display: block;
+  margin: 0.75rem 0 1rem 1.5rem;
+  padding-left: 1.25rem;
+  list-style-position: outside;
+}
+
+.article-detail-prose ul {
   list-style-type: disc;
-  padding-left: 1.5rem;
-  margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
 }
-.prose ol {
+
+.article-detail-prose ol {
   list-style-type: decimal;
-  padding-left: 1.5rem;
-  margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
 }
-.prose li {
+
+.article-detail-prose li {
+  display: list-item;
+  margin: 0.35rem 0;
+  padding-left: 0.25rem;
+}
+
+.article-detail-prose li > p,
+.article-detail-prose li > p.bn-inline-content {
+  display: inline;
+  margin: 0;
+}
+
+.article-detail-prose li > ul,
+.article-detail-prose li > ol {
+  margin-top: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.article-detail-prose li::marker {
+  color: #7dd3fc;
+  font-weight: 700;
+}
+
+.article-detail-prose blockquote {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid #7dd3fc;
+  background: rgba(125, 211, 252, 0.08);
+  border-radius: 12px;
+  font-style: italic;
+  color: var(--club-muted);
+}
+
+/* BlockNote HTML output sometimes uses specific classes or structures */
+.article-detail-prose .bn-inline-content {
+  display: inline;
+}
+
+.article-detail-prose .bn-block {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
-.prose li > p {
-  margin-top: 0;
-  margin-bottom: 0;
+
+.article-detail-prose a {
+  color: #7dd3fc;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-detail-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  margin: 1rem 0;
 }
