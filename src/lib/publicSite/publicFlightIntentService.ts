@@ -1,11 +1,47 @@
 import prisma from "../db/prisma";
-import { ClubFlightIntentStatus, ClubFlightIntentVisibility } from "../../generated/prisma";
+import { ClubFlightIntentStatus, ClubFlightIntentVisibility, ClubFlightIntentType } from "../../generated/prisma";
 import { ViewerVisibilityContext } from "./publicVisibility";
+
+/**
+ * Public DTO for flight intent display rows.
+ * Includes only fields required for display to protect privacy.
+ */
+export interface PublicFlightIntentListItem {
+  id: string;
+  displayName: string;
+  message: string | null;
+  activityType: ClubFlightIntentType;
+  createdAt: Date;
+}
 
 /**
  * Service for public-facing flight intent data.
  * All queries are scoped by clubId and restricted by visibility.
  */
+
+/**
+ * Helper to mask display names for anonymous visitors.
+ */
+function maskFlightIntents(
+  intents: {
+    id: string;
+    displayName: string;
+    message: string | null;
+    activityType: ClubFlightIntentType;
+    createdAt: Date;
+  }[],
+  viewer: ViewerVisibilityContext
+): PublicFlightIntentListItem[] {
+  const canSeeRealNames = viewer.isAuthenticated && (viewer.isMember || viewer.isAdmin);
+
+  return intents.map((intent) => ({
+    id: intent.id,
+    displayName: canSeeRealNames ? intent.displayName : "Medlem",
+    message: intent.message,
+    activityType: intent.activityType,
+    createdAt: intent.createdAt,
+  }));
+}
 
 /**
  * Returns all active flight intents for a club, filtered by visibility.
@@ -14,13 +50,13 @@ import { ViewerVisibilityContext } from "./publicVisibility";
 export async function getActiveFlightIntents(
   clubId: string,
   viewer: ViewerVisibilityContext
-) {
+): Promise<PublicFlightIntentListItem[]> {
   const allowedVisibilities: ClubFlightIntentVisibility[] = ["PUBLIC"];
   if (viewer.isAuthenticated && (viewer.isMember || viewer.isAdmin)) {
     allowedVisibilities.push("MEMBERS_ONLY");
   }
 
-  return prisma.clubFlightIntent.findMany({
+  const intents = await prisma.clubFlightIntent.findMany({
     where: {
       clubId,
       status: ClubFlightIntentStatus.ACTIVE,
@@ -33,6 +69,8 @@ export async function getActiveFlightIntents(
     },
     take: 5,
   });
+
+  return maskFlightIntents(intents, viewer);
 }
 
 /**
@@ -41,7 +79,7 @@ export async function getActiveFlightIntents(
 export async function getTodayFlightIntents(
   clubId: string,
   viewer: ViewerVisibilityContext
-) {
+): Promise<PublicFlightIntentListItem[]> {
   const allowedVisibilities: ClubFlightIntentVisibility[] = ["PUBLIC"];
   if (viewer.isAuthenticated && (viewer.isMember || viewer.isAdmin)) {
     allowedVisibilities.push("MEMBERS_ONLY");
@@ -54,7 +92,7 @@ export async function getTodayFlightIntents(
   const endOfToday = new Date(now);
   endOfToday.setHours(23, 59, 59, 999);
 
-  return prisma.clubFlightIntent.findMany({
+  const intents = await prisma.clubFlightIntent.findMany({
     where: {
       clubId,
       status: ClubFlightIntentStatus.ACTIVE,
@@ -75,6 +113,8 @@ export async function getTodayFlightIntents(
     },
     take: 5,
   });
+
+  return maskFlightIntents(intents, viewer);
 }
 
 /**
@@ -82,8 +122,9 @@ export async function getTodayFlightIntents(
  * Only returns PUBLIC visibility intents for public-facing list.
  */
 export async function getTodayFlightIntentList(
-  clubId: string
-) {
+  clubId: string,
+  viewer: ViewerVisibilityContext
+): Promise<PublicFlightIntentListItem[]> {
   const now = new Date();
   const startOfToday = new Date(now);
   startOfToday.setHours(0, 0, 0, 0);
@@ -91,7 +132,7 @@ export async function getTodayFlightIntentList(
   const endOfToday = new Date(now);
   endOfToday.setHours(23, 59, 59, 999);
 
-  return prisma.clubFlightIntent.findMany({
+  const intents = await prisma.clubFlightIntent.findMany({
     where: {
       clubId,
       status: ClubFlightIntentStatus.ACTIVE,
@@ -109,4 +150,6 @@ export async function getTodayFlightIntentList(
       createdAt: 'desc',
     },
   });
+
+  return maskFlightIntents(intents, viewer);
 }

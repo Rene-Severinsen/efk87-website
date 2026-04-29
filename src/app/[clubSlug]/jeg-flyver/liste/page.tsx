@@ -15,9 +15,9 @@ interface JegFlyverListePageProps {
 export default async function JegFlyverListePage({ params }: JegFlyverListePageProps) {
   const { clubSlug } = await params;
 
-  const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
+  const { club, theme, footerData, navigationItems, actionItems, viewer } = await resolveClubContext(clubSlug);
 
-  const flightIntents = await getTodayFlightIntentList(club.id);
+  const flightIntents = await getTodayFlightIntentList(club.id, viewer);
 
   const activityIcons: Record<string, string> = {
     FLYING: '✈️',

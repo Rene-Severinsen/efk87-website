@@ -43,9 +43,9 @@ The `ClubFlightIntent` model includes:
 
 ### Public Access
 All public flight intent queries must go through `src/lib/publicSite/publicFlightIntentService.ts`.
-- `getTodayFlightIntents(clubId, viewer)`: Used for the daily presence list on the homepage, respecting visibility. Limited to 5 rows.
-- `getTodayFlightIntentList(clubId)`: Used for the full daily list page. Returns all today's PUBLIC ACTIVE rows without limit.
-- `getActiveFlightIntents(clubId, viewer)`: Returns all active intents, including future ones, respecting visibility. Limited to 5 rows.
+- `getTodayFlightIntents(clubId, viewer)`: Used for the daily presence list on the homepage, respecting visibility. Limited to 5 rows. Masked for anonymous visitors.
+- `getTodayFlightIntentList(clubId, viewer)`: Used for the full daily list page. Returns all today's PUBLIC ACTIVE rows without limit. Masked for anonymous visitors.
+- `getActiveFlightIntents(clubId, viewer)`: Returns all active intents, including future ones, respecting visibility. Limited to 5 rows. Masked for anonymous visitors.
 
 ### Member Access
 All member-specific flight intent queries must go through `src/lib/flightIntents/memberFlightIntentService.ts`.
@@ -54,13 +54,14 @@ All member-specific flight intent queries must go through `src/lib/flightIntents
 
 Direct Prisma queries in route pages are discouraged.
 
-## Visibility
+## Visibility & Privacy
 
 - **Foundation**: `ClubFlightIntent` uses the `ClubFlightIntentVisibility` enum.
 - **PUBLIC**: Visible to everyone (anonymous visitors).
 - **MEMBERS_ONLY**: Visible only to logged-in members or admins.
+- **Anonymous Masking**: For anonymous visitors, `displayName` is masked as “Medlem” in public views. This protects member privacy while keeping club activity visible. Stored data is unchanged.
+- **Member Access**: Logged-in active members and admins can see real display names.
 - **Anonymous Route**: The current homepage route uses `anonymousViewer` and only exposes `PUBLIC` intents.
-- **Future Actions**: The submission of new intents will require future login/member flow and will likely default to `MEMBERS_ONLY` for real activity, while demo data remains `PUBLIC` for now.
 
 For more details on visibility, see [Visibility documentation](visibility.md).
 

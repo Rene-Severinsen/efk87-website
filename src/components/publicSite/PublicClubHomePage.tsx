@@ -1,7 +1,8 @@
 import React from 'react';
 import './PublicClubHomePage.css';
-import { ClubTheme, PublicHomeFeatureTile, ClubFlightIntent, PublicHomeInfoCard, PublicClubFooter, PublicSponsor } from "../../generated/prisma";
+import { ClubTheme, PublicHomeFeatureTile, PublicHomeInfoCard, PublicClubFooter, PublicSponsor } from "../../generated/prisma";
 import { PublicNavigationItem } from "../../lib/publicSite/publicNavigation";
+import { PublicFlightIntentListItem } from "../../lib/publicSite/publicFlightIntentService";
 
 interface PublicFooterData {
   footer: PublicClubFooter | null;
@@ -22,7 +23,7 @@ interface PublicClubHomePageProps {
   theme?: ClubTheme;
   featureTiles?: PublicHomeFeatureTile[];
   infoCards?: PublicHomeInfoCard[];
-  flightIntents?: ClubFlightIntent[];
+  flightIntents?: PublicFlightIntentListItem[];
   footerData?: PublicFooterData;
   navigationItems?: PublicNavigationItem[];
   actionItems?: PublicNavigationItem[];

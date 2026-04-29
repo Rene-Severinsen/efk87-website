@@ -96,9 +96,10 @@ The resolution is handled by `getServerViewerForClub(clubId)` and converted via 
 
 ### Flight Intents
 
-Flight intents already support visibility. 
-- "Jeg flyver" submission is intended to be `MEMBERS_ONLY` in the future.
-- The public homepage display may show limited public activity depending on the visibility of individual intents.
+Flight intents support both visibility and privacy masking.
+- **Visibility**: Intents can be `PUBLIC` or `MEMBERS_ONLY`.
+- **Privacy Masking**: For anonymous visitors, `displayName` is masked as “Medlem” in public views. Logged-in active members and admins can see real display names.
+- **Submit Flow**: "Jeg flyver" submission is intended to be `MEMBERS_ONLY` in the future.
 
 ### Footer and Sponsors
 
