@@ -15,7 +15,7 @@ Admin routes are organized into several logical groups. Most routes currently ex
 - **Medlemmer** (`/admin/medlemmer`): Member list and role management (stub).
 - **Flyveskole** (`/admin/flyveskole`): School flying and instructor overview (stub).
 - **Flyvemeldinger** (`/admin/flyvemeldinger`): Moderation of flight intents.
-- **Mailinglister** (`/admin/mailinglister`): Mailing list configuration (stub).
+- **Mailinglister** (`/admin/mailinglister`): Mailing list configuration.
 
 ### Indhold
 - **Forsideindhold** (`/admin/forsideindhold`): Homepage content and section control (stub).
@@ -66,6 +66,13 @@ Located in `src/components/admin/`:
 - **Service**: `src/lib/admin/flightIntentAdminService.ts`
 - **Actions**: `src/lib/admin/cancelFlightIntentAsAdminAction.ts`
 - **Capabilities**: View today's active/cancelled intents, view recent history, and cancel active intents.
+
+### Mailinglister (Mailing Lists)
+- **Route**: `/[clubSlug]/admin/mailinglister`
+- **Purpose**: Read-only overview of mailing list configuration.
+- **Service**: `src/lib/mailingLists/clubMailingListService.ts`
+- **Capabilities**: View all configured lists, see status, and track last update time.
+- **Status**: Read-only. Editing is not yet implemented.
 
 ### Statistik (Statistics)
 - **Route**: `/[clubSlug]/admin/statistik`

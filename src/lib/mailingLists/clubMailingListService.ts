@@ -9,6 +9,8 @@ export interface ClubMailingListDto {
   emailAddress: string;
   purpose: ClubMailingListPurpose;
   isActive: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 /**
@@ -35,6 +37,38 @@ export async function getActiveClubMailingLists(clubId: string): Promise<ClubMai
   });
 
   return lists;
+}
+
+/**
+ * Returns all mailing lists for a specific club (admin view).
+ */
+export async function getAdminClubMailingLists(clubId: string): Promise<ClubMailingListDto[]> {
+  const lists = await prisma.clubMailingList.findMany({
+    where: {
+      clubId,
+    },
+    select: {
+      id: true,
+      key: true,
+      name: true,
+      description: true,
+      emailAddress: true,
+      purpose: true,
+      isActive: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    orderBy: [
+      { purpose: "asc" },
+      { name: "asc" },
+    ],
+  });
+
+  return lists.map(list => ({
+    ...list,
+    createdAt: list.createdAt,
+    updatedAt: list.updatedAt,
+  }));
 }
 
 /**

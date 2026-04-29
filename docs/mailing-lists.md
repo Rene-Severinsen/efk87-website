@@ -30,8 +30,21 @@ Mailing lists are stored in the `ClubMailingList` model:
 Use `src/lib/mailingLists/clubMailingListService.ts` to interact with mailing list configurations:
 
 - `getActiveClubMailingLists(clubId)`
+- `getAdminClubMailingLists(clubId)` (for admin overview)
 - `getClubMailingListByPurpose(clubId, purpose)`
 - `getFlightIntentMailingListForClub(clubId)`
+
+## Admin Interface
+
+Club admins can view the mailing list configuration at `/[clubSlug]/admin/mailinglister`.
+
+The interface provides:
+- Overview of all configured lists (active and inactive).
+- Key metrics (active/inactive counts).
+- Status and purpose badges.
+- Warning about mail delivery status.
+
+Note: Editing and manual synchronization are not yet implemented.
 
 ## EFK87 Default Setup
 
@@ -42,4 +55,4 @@ During initial seeding, EFK87 is configured with:
 
 ## Future Admin Implementation
 
-Club admins will eventually be able to manage these lists through an admin interface. Missing configuration must not block business logic (e.g., creating a flight intent should succeed even if no mailing list is configured).
+Club admins can view these lists through the admin interface. Editing and deletion is not yet implemented. Missing configuration must not block business logic (e.g., creating a flight intent should succeed even if no mailing list is configured).
