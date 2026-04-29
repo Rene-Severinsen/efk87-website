@@ -25,6 +25,7 @@ Located in `src/components/admin/`:
 - `AdminShell`: Layout wrapper with sidebar and topbar.
 - `AdminDashboard`: Main dashboard view.
 - `AdminSidebar`: Navigation menu.
+- `AdminStatistik`: Statistics dashboard foundation.
 - `AdminHero`: Welcome section.
 - `AdminMetricGrid`: KPI cards (currently placeholders).
 - `AdminActionTable`: Pending tasks/actions (currently placeholders).
@@ -39,6 +40,14 @@ Located in `src/components/admin/`:
 - **Service**: `src/lib/admin/flightIntentAdminService.ts`
 - **Actions**: `src/lib/admin/cancelFlightIntentAsAdminAction.ts`
 - **Capabilities**: View today's active/cancelled intents, view recent history, and cancel active intents.
+
+### Statistik (Statistics)
+- **Route**: `/[clubSlug]/admin/statistik`
+- **Purpose**: Overview of member activity and flight intents.
+- **Service**: `src/lib/admin/adminStatisticsService.ts`
+- **Capabilities**: View activity trend for the last 14 days, today's activity metrics, and annual flight intent summaries.
+- **Privacy**: Real names are shown in the admin view.
+- **Tenant Scoping**: All statistics are strictly scoped to the current club.
 
 ## Formatting Rules
 Admin views follow standardized formatting for consistency:

@@ -36,3 +36,4 @@ This document describes the member activity tracking and display features.
 - `User.lastSeenAt` is not used for this feature (it was removed to support multi-tenancy).
 - Anonymous names are masked; only members/admins see real names.
 - No detailed pageview analytics or admin graphs are implemented for this feature.
+- **Admin Statistics**: First version uses `MemberDailyActivity` to show active members today and trends over the last 14 days in the admin panel. Not real-time.

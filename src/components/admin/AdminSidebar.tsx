@@ -111,8 +111,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         <div className="admin-sidebar-group">
           <div className="admin-sidebar-group-title">Platform</div>
           <a 
-            href={`/${clubSlug}/admin/stats`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/stats` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/statistik`} 
+            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/statistik` ? "active" : ""}`}
           >
             Statistik
           </a>

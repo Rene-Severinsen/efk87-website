@@ -94,10 +94,11 @@ Note: Login and member activity analytics must be handled by a separate activity
 - [x] Member submit foundation (authenticated ACTIVE member).
 - [x] Member cancellation flow.
 - [x] Admin moderation foundation (cancel intents).
+- [x] Statistics UI/Graphs (Initial foundation).
 - [ ] Edit flow.
 - [ ] Automatic expiry logic.
 - [ ] Notifications/Emails (See Strategy below).
-- [ ] Statistics UI/Graphs.
+- [ ] Advanced Statistics UI.
 
 ## Admin Moderation
 
