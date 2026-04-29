@@ -119,7 +119,7 @@
 .home-v2-hero-top--split {
   margin-top: 24px;
   display: grid;
-  grid-template-columns: 1.3fr 0.9fr;
+  grid-template-columns: 1.4fr 0.6fr;
   gap: 20px;
 }
 
@@ -223,16 +223,16 @@
 .new-members-highlight-card {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
   height: 100%;
-  padding: 22px;
+  padding: 24px;
   background: linear-gradient(180deg, rgba(20,29,47,0.95), rgba(17,25,41,0.95));
 }
 
 .new-members-header {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  align-items: flex-start;
+  gap: 1.25rem;
 }
 
 .new-members-logo-slot {
@@ -248,7 +248,7 @@
 }
 
 .new-members-content p {
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   font-size: 0.95rem;
   line-height: 1.5;
 }
