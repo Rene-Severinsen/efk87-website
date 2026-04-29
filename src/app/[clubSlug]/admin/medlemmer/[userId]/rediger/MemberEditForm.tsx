@@ -77,19 +77,19 @@ const Toggle = ({ label, name, defaultChecked }: { label: string, name: string, 
 );
 
 const CertificateTile = ({ label, name, defaultChecked }: { label: string, name: string, defaultChecked?: boolean }) => (
-  <label className="relative flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-900/40 border border-white/10 cursor-pointer transition-all hover:bg-slate-800/60 has-[:checked]:bg-sky-500/10 has-[:checked]:border-sky-500/50 group text-center min-h-[80px]">
+  <label className="relative flex items-center p-3 rounded-xl bg-slate-900/40 border border-white/10 cursor-pointer transition-all hover:bg-slate-800/60 has-[:checked]:bg-sky-500/10 has-[:checked]:border-sky-500/50 group min-h-[56px]">
     <input 
       type="checkbox" 
       name={name} 
       defaultChecked={defaultChecked} 
       className="sr-only peer" 
     />
-    <div className="absolute top-2 right-2 w-5 h-5 rounded-full border border-white/20 peer-checked:bg-sky-500 peer-checked:border-sky-500 flex items-center justify-center transition-all">
+    <div className="w-5 h-5 shrink-0 rounded-full border border-white/20 peer-checked:bg-sky-500 peer-checked:border-sky-500 flex items-center justify-center transition-all mr-3">
       <svg className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
       </svg>
     </div>
-    <span className="text-xs font-semibold text-slate-300 peer-checked:text-sky-400 group-hover:text-white transition-colors">
+    <span className="text-[13px] leading-snug font-medium text-slate-400 peer-checked:text-sky-100 group-hover:text-white transition-colors line-clamp-2">
       {label}
     </span>
   </label>
@@ -182,7 +182,7 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
               <span className="w-1.5 h-6 bg-emerald-500 rounded-full" />
               Certifikater
             </h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {Object.entries(CERTIFICATE_LABELS).map(([cert, label]) => (
                 <CertificateTile 
                   key={cert} 
