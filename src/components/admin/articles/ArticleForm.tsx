@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { ArticleStatus, PublicSurfaceVisibility, ArticleCategory, ArticleTag, Article } from "../../../generated/prisma";
 import Link from "next/link";
 import ArticleRichTextEditor from "./ArticleRichTextEditor";
@@ -35,6 +36,9 @@ export default function ArticleForm({
     try {
       await action(formData);
     } catch (error) {
+      if (isRedirectError(error)) {
+        throw error;
+      }
       console.error(error);
       alert(error instanceof Error ? error.message : "Der skete en fejl");
       setIsPending(false);

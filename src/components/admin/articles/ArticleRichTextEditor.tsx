@@ -100,17 +100,17 @@ const ArticleRichTextEditor = ({ content, onChange }: ArticleRichTextEditorProps
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
             className={`p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-200 text-gray-900 dark:bg-gray-600 dark:text-white' : ''}`}
-            title="Overskrift 2"
+            title="Overskrift 2 (H2)"
           >
-            <span className="text-xs font-bold">H2</span>
+            <span className="text-xs font-bold pointer-events-none">H2</span>
           </button>
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
             className={`p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 ${editor.isActive('heading', { level: 3 }) ? 'bg-gray-200 text-gray-900 dark:bg-gray-600 dark:text-white' : ''}`}
-            title="Overskrift 3"
+            title="Overskrift 3 (H3)"
           >
-            <span className="text-xs font-bold">H3</span>
+            <span className="text-xs font-bold pointer-events-none">H3</span>
           </button>
           <div className="w-px h-6 bg-gray-200 dark:bg-gray-600 mx-1" />
           <button
@@ -199,10 +199,70 @@ const ArticleRichTextEditor = ({ content, onChange }: ArticleRichTextEditorProps
       </div>
       <div className="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
         <label htmlFor="wysiwyg-editor" className="sr-only">Editor</label>
-        <div className="prose prose-slate max-w-none min-h-[360px] focus:outline-none">
-          <EditorContent editor={editor} id="wysiwyg-editor" />
+        <div className="article-editor-container">
+          <div className="article-editor-content">
+            <EditorContent editor={editor} id="wysiwyg-editor" />
+          </div>
         </div>
       </div>
+      <style jsx global>{`
+        .article-editor-container {
+          resize: vertical;
+          overflow: auto;
+          min-height: 360px;
+          border: 1px solid #e5e7eb;
+          border-radius: 0.375rem;
+        }
+        .article-editor-content .ProseMirror {
+          min-height: 100%;
+          outline: none;
+          padding: 12px;
+        }
+        .article-editor-content .ProseMirror h2 {
+          font-size: 1.5em;
+          font-weight: bold;
+          margin-top: 1em;
+          margin-bottom: 0.5em;
+        }
+        .article-editor-content .ProseMirror h3 {
+          font-size: 1.25em;
+          font-weight: bold;
+          margin-top: 1em;
+          margin-bottom: 0.5em;
+        }
+        .article-editor-content .ProseMirror ul {
+          list-style-type: disc !important;
+          padding-left: 1.5em;
+          margin: 1em 0;
+        }
+        .article-editor-content .ProseMirror ol {
+          list-style-type: decimal !important;
+          padding-left: 1.5em;
+          margin: 1em 0;
+        }
+        .article-editor-content .ProseMirror li {
+          margin-bottom: 0.25em;
+        }
+        .article-editor-content .ProseMirror li p {
+          margin-bottom: 0;
+        }
+        .article-editor-content .ProseMirror blockquote {
+          border-left: 4px solid #e2e8f0;
+          padding-left: 1em;
+          font-style: italic;
+          margin: 1em 0;
+          color: #4a5568;
+        }
+        .article-editor-content .ProseMirror img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 8px;
+          margin: 1em 0;
+        }
+        .article-editor-content .ProseMirror p {
+          margin-bottom: 1em;
+        }
+      `}</style>
     </div>
   );
 };
