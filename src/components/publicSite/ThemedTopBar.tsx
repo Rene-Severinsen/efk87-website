@@ -112,10 +112,11 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
         </div>
 
         <button
-          className="w-11 h-11 flex items-center justify-center text-2xl text-white hover:bg-white/5 rounded-xl transition-colors"
+          type="button"
+          className="relative z-[120] pointer-events-auto w-11 h-11 min-h-[44px] min-w-[44px] flex items-center justify-center text-2xl text-white hover:bg-white/5 rounded-xl transition-colors min-[1100px]:hidden"
           onClick={toggleMenu}
           aria-expanded={isMenuOpen}
-          aria-controls="mobile-menu"
+          aria-controls="public-mobile-menu"
           aria-label={isMenuOpen ? "Luk menu" : "Åbn menu"}
         >
           {isMenuOpen ? '✕' : '☰'}
@@ -143,11 +144,10 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
         </div>
       </div>
 
-      {/* Mobile/Tablet Menu Panel */}
       {isMenuOpen && (
         <nav 
-          id="mobile-menu"
-          className="absolute left-0 right-0 top-[calc(100%+0.75rem)] rounded-2xl border border-white/10 bg-slate-950/95 backdrop-blur-xl p-4 shadow-2xl flex flex-col gap-2 min-[1100px]:hidden"
+          id="public-mobile-menu"
+          className="absolute left-0 right-0 top-[calc(100%+0.75rem)] z-[110] rounded-2xl border border-white/10 bg-slate-950/95 backdrop-blur-xl p-4 shadow-2xl flex flex-col gap-2 min-[1100px]:hidden"
         >
           {renderNavLinks(true)}
           <div className="h-px bg-white/10 my-2" />
