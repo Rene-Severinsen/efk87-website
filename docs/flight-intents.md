@@ -75,8 +75,26 @@ Note: Login and member activity analytics must be handled by a separate activity
 - [x] Member submit foundation (authenticated ACTIVE member).
 - [ ] Edit/Cancel flow.
 - [ ] Automatic expiry logic.
-- [ ] Notifications/Emails.
+- [ ] Notifications/Emails (See Strategy below).
 - [ ] Statistics UI/Graphs.
+
+## Notifications Strategy
+
+Future scope includes sending automated email notifications when a new flight intent is created.
+
+### Target Mailing List
+- Notifications must be sent to the **Dedicated “Jeg flyver” Mailing List** configured for the club.
+- The mailing list address must be tenant-scoped and configurable via club settings.
+
+### Notification Flow
+1.  **Submission**: Member submits the "Jeg flyver" form.
+2.  **Storage**: The `ClubFlightIntent` is saved to the database.
+3.  **Notification Trigger**: An asynchronous process (or a post-save hook) triggers the email notification.
+4.  **Content**: The email should include the member's display name, intended date/time, activity type, and optional message.
+5.  **Environment Safety**: Actual emails are only sent in `production` or when `canSendExternalNotifications` is true.
+
+### UI Feedback
+- The submission form may include a note informing the member that a message will be sent to the configured mailing list upon submission.
 
 ## Member Submission Flow
 

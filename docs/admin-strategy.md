@@ -102,7 +102,16 @@ The admin interface should be organized into the following sections:
 - **Members**: Membership list and role management.
 - **“Jeg flyver”**: Moderation and statistics for flight intents.
 - **Simple Calendar**: Overview of upcoming planned activity (not a full event system).
-- **Settings**: General club settings and domain configuration.
+- **Settings**: General club settings, mailing list configuration, and domain configuration.
+
+## Mailing List Configuration
+
+Future club settings should allow admins to configure the following mailing list addresses:
+
+1.  **General Club Mailing List**: Used for general club announcements.
+2.  **“Jeg flyver” Mailing List**: Used for activity intent notifications.
+
+These addresses must be stored per tenant and must never be hardcoded in business logic.
 
 ## Implementation Rules
 
