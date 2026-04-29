@@ -111,6 +111,8 @@ export default async function ClubPage({ params }: ClubPageProps) {
           viewer={serverViewer}
           theme={theme}
           todayFlightIntents={flightIntents}
+          navigationItems={navigationItems}
+          actionItems={actionItems}
       />
   );
 }

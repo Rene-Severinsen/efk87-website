@@ -2,6 +2,7 @@ import React from 'react';
 import './PublicClubHomePageV2.css';
 import { PublicFlightIntentListItem } from '../../../lib/publicSite/publicFlightIntentService';
 import { ServerViewerContext } from '../../../lib/auth/viewer';
+import { PublicNavigationItem } from '../../../lib/publicSite/publicNavigation';
 import Link from 'next/link';
 
 interface PublicClubHomePageV2Props {
@@ -17,6 +18,8 @@ interface PublicClubHomePageV2Props {
   };
   viewer: ServerViewerContext;
   todayFlightIntents: PublicFlightIntentListItem[];
+  navigationItems: PublicNavigationItem[];
+  actionItems: PublicNavigationItem[];
   theme?: {
     backgroundColor: string;
     panelColor: string;
@@ -36,7 +39,7 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Isolated V2 homepage component.
  * Ported closely from the provided mockup HTML.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, theme }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, navigationItems, actionItems, theme }: PublicClubHomePageV2Props) {
   const clubDisplayName = club.settings?.displayName || club.name;
   const clubShortName = club.settings?.shortName || club.name;
 
@@ -68,27 +71,40 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           </div>
 
           <nav className="home-v2-nav">
-            <Link className="home-v2-active" href={`/${club.slug}`}>Forside</Link>
-            <a href="#">Forum</a>
-            <a href="#">Galleri</a>
-            <a href="#">Artikler</a>
-            <a href="#">Flyveskole</a>
-            <a href="#">Mailinglister</a>
-            <a href="#">Om {clubShortName}</a>
+            {navigationItems.map((item) => (
+              <Link
+                key={item.key}
+                className={item.key === 'home' ? 'home-v2-active' : ''}
+                href={item.href}
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
 
           <div className="home-v2-actions">
-            {viewer.isAuthenticated ? (
-              <>
-                <Link className="home-v2-btn home-v2-chip-btn" href={`/${club.slug}/profile`}>Min profil</Link>
-                {viewer.isAdmin && (
-                  <Link className="home-v2-btn home-v2-chip-btn home-v2-primary" href={`/${club.slug}/admin`}>Admin</Link>
-                )}
-                <Link className="home-v2-btn home-v2-chip-btn" href="/api/auth/signout">Log ud</Link>
-              </>
-            ) : (
-              <Link className="home-v2-btn home-v2-chip-btn home-v2-primary" href={`/api/auth/signin?callbackUrl=/${club.slug}`}>Log ind</Link>
-            )}
+            {actionItems.map((item) => {
+              if (item.key === 'logout') {
+                return (
+                  <form key={item.key} action="/api/auth/signout" method="POST" style={{ display: 'inline' }}>
+                    <button type="submit" className="home-v2-btn home-v2-chip-btn">
+                      {item.label}
+                    </button>
+                  </form>
+                );
+              }
+
+              const isPrimary = item.isPrimary || item.key === 'admin';
+              return (
+                <Link
+                  key={item.key}
+                  className={`home-v2-btn home-v2-chip-btn ${isPrimary ? 'home-v2-primary' : ''}`}
+                  href={item.href === `/${club.slug}/login` ? `/api/auth/signin?callbackUrl=/${club.slug}` : item.href}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
         </header>
 

@@ -3,6 +3,7 @@ import { requireClubBySlug } from "../../../../lib/tenancy/tenantService";
 import { getServerViewerForClub, toViewerVisibilityContext } from "../../../../lib/auth/viewer";
 import { getClubTheme } from "../../../../lib/publicSite/publicThemeService";
 import { getTodayFlightIntents } from "../../../../lib/publicSite/publicFlightIntentService";
+import { getVisiblePublicNavigation, getVisiblePublicActions } from "../../../../lib/publicSite/publicNavigation";
 import PublicClubHomePageV2 from "../../../../components/publicSite/homeV2/PublicClubHomePageV2";
 
 interface PreviewPageProps {
@@ -38,12 +39,17 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
     getTodayFlightIntents(club.id, visibilityContext),
   ]);
 
+  const navigationItems = getVisiblePublicNavigation(clubSlug, visibilityContext);
+  const actionItems = getVisiblePublicActions(clubSlug, visibilityContext);
+
   return (
     <PublicClubHomePageV2 
       club={club}
       viewer={viewer}
       theme={theme}
       todayFlightIntents={todayFlightIntents}
+      navigationItems={navigationItems}
+      actionItems={actionItems}
     />
   );
 }
