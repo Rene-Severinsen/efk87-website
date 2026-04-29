@@ -33,6 +33,9 @@ Notifications (like those triggered by "Jeg flyver") should follow a decoupled a
 
 ### Future Implementation Flow
 
+> [!IMPORTANT]
+> **"Jeg flyver" notification sending remains blocked** until the [Mail Delivery Discovery](./mail-delivery-discovery.md) is complete and DNS/provider permissions are confirmed.
+
 1.  **Persistence**: Store the primary entity (e.g., `ClubFlightIntent`) first.
 2.  **Trigger**: Emit an event or call a notification service after successful creation.
 3.  **Queue/Async**: Enqueue the notification for asynchronous processing or send it immediately if the performance impact is negligible and it's wrapped in error handling.

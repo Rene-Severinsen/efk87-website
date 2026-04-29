@@ -14,6 +14,9 @@ The `ClubMailingList` model allows club administrators to configure where emails
 
 ## Schema
 
+> [!WARNING]
+> While `ClubMailingList` stores configuration, it **does not guarantee deliverability**. All sending must comply with the requirements in [Mail Delivery Discovery](./mail-delivery-discovery.md).
+
 Mailing lists are stored in the `ClubMailingList` model:
 
 - `clubId`: Scoped to a specific club.
