@@ -40,6 +40,83 @@
   to { transform: translateX(-50%); }
 }
 
+/* CTA Buttons & Rows */
+.home-v2-cta-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.home-v2-activity-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.home-v2-activity-cta {
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: var(--home-v2-text);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  white-space: normal;
+  width: auto;
+}
+
+.home-v2-activity-cta-primary {
+  background: linear-gradient(135deg, rgba(110,231,183,0.22), rgba(125,211,252,0.24));
+  border-color: rgba(110,231,183,0.32);
+}
+
+.home-v2-activity-cta-secondary {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.12);
+}
+
+.home-v2-pill {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+  color: var(--home-v2-text);
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.home-v2-pill:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.20);
+}
+
+.home-v2-primary {
+  background: linear-gradient(135deg, rgba(110,231,183,0.20), rgba(125,211,252,0.24));
+  border-color: rgba(110,231,183,0.28);
+}
+
+.home-v2-primary:hover {
+  background: linear-gradient(135deg, rgba(110,231,183,0.25), rgba(125,211,252,0.30));
+  border-color: rgba(110,231,183,0.40);
+}
+
 @media (max-width: 768px) {
   .home-v2-root {
     --home-v2-radius: 16px;
@@ -112,6 +189,7 @@
   }
 
   .home-v2-pill {
+    width: 100%;
     min-height: 44px;
     padding: 9px 8px;
     border-radius: 12px;
@@ -391,8 +469,28 @@
   }
 
   .home-v2-cta-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
     margin-top: 10px;
+  }
+
+  .home-v2-activity-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .home-v2-activity-cta {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 8px;
+    border-radius: 12px;
+    font-size: 13px;
   }
 
   .home-v2-chart {

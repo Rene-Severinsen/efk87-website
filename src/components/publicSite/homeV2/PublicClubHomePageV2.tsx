@@ -188,9 +188,19 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                       ? `Der er i øjeblikket ${todayFlightIntents.length} medlemmer der har meldt deres ankomst til pladsen i dag.`
                       : 'Bliv den første til at melde din ankomst til pladsen i dag.'}
                   </p>
-                  <div className="home-v2-cta-row">
-                    <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/jeg-flyver`}>Skriv “jeg flyver”</Link>
-                    <Link className="home-v2-pill" href={`/${club.slug}/jeg-flyver/liste`}>Se dagens liste</Link>
+                  <div className="home-v2-activity-actions">
+                    <Link
+                      href={`/${club.slug}/jeg-flyver`}
+                      className="home-v2-activity-cta home-v2-activity-cta-primary"
+                    >
+                      Skriv “jeg flyver”
+                    </Link>
+                    <Link
+                      href={`/${club.slug}/jeg-flyver/liste`}
+                      className="home-v2-activity-cta home-v2-activity-cta-secondary"
+                    >
+                      Se dagens liste
+                    </Link>
                   </div>
                 </div>
               </div>
