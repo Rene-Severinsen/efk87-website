@@ -134,6 +134,10 @@ export async function getPublishedArticleBySlug(
 }
 
 export async function getArticleTags(clubId: string, viewer: ViewerVisibilityContext) {
+  const visibilityWhere: Prisma.Enumerable<PublicSurfaceVisibility> = viewer.isMember 
+    ? [PublicSurfaceVisibility.PUBLIC, PublicSurfaceVisibility.MEMBERS_ONLY] 
+    : [PublicSurfaceVisibility.PUBLIC];
+
   const tags = await prisma.articleTag.findMany({
     where: {
       clubId,
@@ -145,7 +149,7 @@ export async function getArticleTags(clubId: string, viewer: ViewerVisibilityCon
             where: {
               article: {
                 status: ArticleStatus.PUBLISHED,
-                visibility: viewer.isMember ? { in: [PublicSurfaceVisibility.PUBLIC, PublicSurfaceVisibility.MEMBERS_ONLY] } : PublicSurfaceVisibility.PUBLIC,
+                visibility: { in: visibilityWhere },
               }
             }
           }

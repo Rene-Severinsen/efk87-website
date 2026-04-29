@@ -5,6 +5,8 @@ import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuilding
 import Link from "next/link";
 import React from "react";
 import ArticleSortSelect from "../../../components/articles/ArticleSortSelect";
+import ArticleTagCloud from "../../../components/articles/ArticleTagCloud";
+import ArticleCardTags from "../../../components/articles/ArticleCardTags";
 
 interface PageProps {
   params: Promise<{
@@ -56,16 +58,6 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
   };
 
   const clearFilterUrl = `/${clubSlug}/artikler`;
-
-  // Tag cloud logic
-  const maxCount = Math.max(...tags.map(t => t.articleCount), 1);
-  const getTagTier = (count: number) => {
-    const ratio = count / maxCount;
-    if (ratio > 0.75) return 'tier-4';
-    if (ratio > 0.4) return 'tier-3';
-    if (ratio > 0.15) return 'tier-2';
-    return 'tier-1';
-  };
 
   return (
     <ThemedClubPageShell
@@ -136,17 +128,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                   <div className="featured-image" style={{ minHeight: '280px', borderRadius: '20px', background: `url(${featuredArticle.heroImageUrl}) center/cover no-repeat`, border: '1px solid var(--club-line)' }}></div>
                 )}
                 <div className="featured-copy" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <div className="article-card-tag-row">
-                    {featuredArticle.tags.map(tag => (
-                      <Link 
-                        key={tag.slug} 
-                        href={getFilterUrl({ tag: tag.slug })} 
-                        className="article-card-tag"
-                      >
-                        {tag.name}
-                      </Link>
-                    ))}
-                  </div>
+                  <ArticleCardTags tags={featuredArticle.tags} getFilterUrl={getFilterUrl} />
 
                   <div className="meta" style={{ color: 'var(--club-muted)', fontSize: '14px' }}>
                     Af {featuredArticle.authorName || 'Redaktionen'} · {featuredArticle.publishedAt ? new Date(featuredArticle.publishedAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
@@ -187,17 +169,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                         <div className="article-thumb" style={{ minHeight: '170px', borderRadius: '18px', border: '1px solid var(--club-line)', background: `url(${article.heroImageUrl}) center/cover no-repeat` }}></div>
                       </Link>
                     )}
-                    <div className="article-card-tag-row">
-                      {article.tags.map(tag => (
-                        <Link 
-                          key={tag.slug} 
-                          href={getFilterUrl({ tag: tag.slug })} 
-                          className="article-card-tag"
-                        >
-                          {tag.name}
-                        </Link>
-                      ))}
-                    </div>
+                    <ArticleCardTags tags={article.tags} getFilterUrl={getFilterUrl} />
                     <Link href={`/${clubSlug}/artikler/${article.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
                       <h4 style={{ fontSize: '20px', lineHeight: '1.18' }}>{article.title}</h4>
                     </Link>
@@ -229,28 +201,11 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                 </Link>
               )}
             </div>
-            <div className="article-tag-cloud">
-              <Link
-                href={getFilterUrl({ tag: null })}
-                className={`article-tag-cloud-chip tier-1 ${!selectedTagSlug ? 'active' : ''}`}
-              >
-                Alle emner
-              </Link>
-              {tags.map(tag => {
-                const tier = getTagTier(tag.articleCount);
-                const isActive = selectedTagSlug === tag.slug;
-                
-                return (
-                  <Link
-                    key={tag.id}
-                    href={getFilterUrl({ tag: tag.slug })}
-                    className={`article-tag-cloud-chip ${tier} ${isActive ? 'active' : ''}`}
-                  >
-                    {tag.name}
-                  </Link>
-                );
-              })}
-            </div>
+            <ArticleTagCloud 
+              tags={tags} 
+              selectedTagSlug={selectedTagSlug} 
+              getFilterUrl={getFilterUrl} 
+            />
           </ThemedSectionCard>
         </div>
       </div>
