@@ -4,6 +4,7 @@ import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards"
 import AdminShell from "../../../../components/admin/AdminShell";
 import { getAdminFlightIntentOverview } from "../../../../lib/admin/flightIntentAdminService";
 import { cancelFlightIntentAsAdminAction } from "../../../../lib/admin/cancelFlightIntentAsAdminAction";
+import { formatAdminDateTime, formatAdminDate, formatAdminTime } from "../../../../lib/format/adminDateFormat";
 
 interface FlyvemeldingerPageProps {
   params: Promise<{
@@ -98,12 +99,12 @@ export default async function FlyvemeldingerPage({ params, searchParams }: Flyve
                 <tbody style={{ borderTop: "1px solid #e5e7eb" }}>
                   {todayActive.map((item) => (
                     <tr key={item.id} style={{ borderBottom: "1px solid #f3f4f6" }}>
-                      <td style={{ padding: "1rem", fontSize: "0.875rem", color: "#6b7280" }}>{new Date(item.createdAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" })}</td>
-                      <td style={{ padding: "1rem", fontSize: "0.875rem" }}>{new Date(item.flightDate).toLocaleDateString("da-DK")}</td>
+                      <td style={{ padding: "1rem", fontSize: "0.875rem", color: "#6b7280" }}>{formatAdminTime(item.createdAt)}</td>
+                      <td style={{ padding: "1rem", fontSize: "0.875rem" }}>{formatAdminDate(item.flightDate)}</td>
                       <td style={{ padding: "1rem" }}>{item.displayName}</td>
                       <td style={{ padding: "1rem" }}>{item.message || "-"}</td>
                       <td style={{ padding: "1rem" }}><span style={{ fontSize: "0.75rem", padding: "0.25rem 0.5rem", backgroundColor: "#f3f4f6", borderRadius: "9999px" }}>{item.activityType}</span></td>
-                      <td style={{ padding: "1rem" }}>{item.plannedAt ? new Date(item.plannedAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" }) : "-"}</td>
+                      <td style={{ padding: "1rem" }}>{formatAdminTime(item.plannedAt)}</td>
                       <td style={{ padding: "1rem" }}>
                         <form action={async () => {
                           "use server";
@@ -155,15 +156,15 @@ export default async function FlyvemeldingerPage({ params, searchParams }: Flyve
                   {todayCancelled.map((item) => (
                     <tr key={item.id} style={{ borderBottom: "1px solid #f3f4f6" }}>
                       <td style={{ padding: "1rem", fontSize: "0.875rem", color: "#6b7280" }}>
-                        {new Date(item.createdAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" })}
+                        {formatAdminTime(item.createdAt)}
                       </td>
-                      <td style={{ padding: "1rem", fontSize: "0.875rem" }}>{new Date(item.flightDate).toLocaleDateString("da-DK")}</td>
+                      <td style={{ padding: "1rem", fontSize: "0.875rem" }}>{formatAdminDate(item.flightDate)}</td>
                       <td style={{ padding: "1rem" }}>{item.displayName}</td>
                       <td style={{ padding: "1rem", color: "#6b7280" }}>{item.message || "-"}</td>
                       <td style={{ padding: "1rem" }}><span style={{ fontSize: "0.75rem", padding: "0.25rem 0.5rem", backgroundColor: "#f3f4f6", borderRadius: "9999px" }}>{item.activityType}</span></td>
-                      <td style={{ padding: "1rem" }}>{item.plannedAt ? new Date(item.plannedAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" }) : "-"}</td>
+                      <td style={{ padding: "1rem" }}>{formatAdminTime(item.plannedAt)}</td>
                       <td style={{ padding: "1rem", fontSize: "0.875rem", color: "#6b7280" }}>
-                        {item.cancelledAt ? new Date(item.cancelledAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" }) : "-"}
+                        {formatAdminDateTime(item.cancelledAt)}
                       </td>
                     </tr>
                   ))}
@@ -192,13 +193,13 @@ export default async function FlyvemeldingerPage({ params, searchParams }: Flyve
                 {recent.map((item) => (
                   <tr key={item.id} style={{ borderBottom: "1px solid #f3f4f6" }}>
                     <td style={{ padding: "1rem", fontSize: "0.875rem", color: "#6b7280" }}>
-                      {new Date(item.createdAt).toLocaleDateString("da-DK", { day: "2-digit", month: "2-digit" })} {new Date(item.createdAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" })}
+                      {formatAdminDateTime(item.createdAt)}
                     </td>
-                    <td style={{ padding: "1rem", fontSize: "0.875rem" }}>{new Date(item.flightDate).toLocaleDateString("da-DK")}</td>
+                    <td style={{ padding: "1rem", fontSize: "0.875rem" }}>{formatAdminDate(item.flightDate)}</td>
                     <td style={{ padding: "1rem" }}>{item.displayName}</td>
                     <td style={{ padding: "1rem", maxWidth: "300px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.message || "-"}</td>
                     <td style={{ padding: "1rem" }}><span style={{ fontSize: "0.75rem", padding: "0.25rem 0.5rem", backgroundColor: "#f3f4f6", borderRadius: "9999px" }}>{item.activityType}</span></td>
-                    <td style={{ padding: "1rem" }}>{item.plannedAt ? new Date(item.plannedAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" }) : "-"}</td>
+                    <td style={{ padding: "1rem" }}>{formatAdminTime(item.plannedAt)}</td>
                     <td style={{ padding: "1rem" }}>
                       <span style={{ 
                         fontSize: "0.75rem", 

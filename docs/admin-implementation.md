@@ -40,6 +40,15 @@ Located in `src/components/admin/`:
 - **Actions**: `src/lib/admin/cancelFlightIntentAsAdminAction.ts`
 - **Capabilities**: View today's active/cancelled intents, view recent history, and cancel active intents.
 
+## Formatting Rules
+Admin views follow standardized formatting for consistency:
+
+- **Full timestamps**: `dd.mm.yyyy tt:mm:ss` (e.g., `29.04.2026 11:07:00`).
+- **Date only**: `dd.mm.yyyy` (e.g., `29.04.2026`).
+- **Time only**: `tt:mm:ss` where the date is shown separately.
+- **Utility**: All admin pages must use `src/lib/format/adminDateFormat.ts`.
+- **Empty values**: Display as `-`.
+
 ## Development Seed
 A test admin user is provided for local development:
 - **Email:** `admin@efk87.local`
