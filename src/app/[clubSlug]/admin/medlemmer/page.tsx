@@ -123,7 +123,7 @@ export default async function Page({ params }: PageProps) {
               <tbody>
                 {members.map((member) => (
                   <tr key={member.userId}>
-                    <td style={{ fontWeight: '500' }}>{member.firstName} {member.lastName}</td>
+                    <td style={{ fontWeight: '500' }}>{member.displayName}</td>
                     <td>{member.email}</td>
                     <td>{member.mobilePhone || '—'}</td>
                     <td>{member.mdkNumber || '—'}</td>

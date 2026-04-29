@@ -1,4 +1,5 @@
 import prisma from "../db/prisma";
+import { getMemberDisplayName } from "../members/memberUtils";
 
 export interface AdminMemberOverviewDTO {
   userId: string;
@@ -58,7 +59,7 @@ export async function getAdminMemberOverview(clubId: string): Promise<AdminMembe
 
   return members.map((m) => ({
     userId: m.userId,
-    displayName: m.user.name,
+    displayName: getMemberDisplayName(m, m.user),
     email: m.user.email,
     firstName: m.firstName,
     lastName: m.lastName,
@@ -107,7 +108,7 @@ export async function getAdminMemberByUserId(clubId: string, userId: string) {
   return {
     ...profile,
     email: profile.user.email,
-    displayName: profile.user.name,
+    displayName: getMemberDisplayName(profile, profile.user),
     certificates: certificates.map((c) => c.certificateType),
   };
 }

@@ -159,7 +159,7 @@ export default async function Page({ params }: PageProps) {
           <div className="mb-10 text-center md:text-left">
             <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">Rediger medlem</h1>
             <p className="text-slate-400 text-lg">
-              Opdater stamdata og indstillinger for <span className="text-sky-400 font-semibold">{member.displayName || member.email}</span>
+              Opdater stamdata og indstillinger for <span className="text-sky-400 font-semibold">{member.displayName}</span>
             </p>
           </div>
 
