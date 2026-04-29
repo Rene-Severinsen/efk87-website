@@ -63,7 +63,7 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
                   return;
                 }
                 const email = formData.get("email") as string;
-                await signIn("nodemailer", { email, redirectTo: `/${clubSlug}` });
+                await signIn("email", { email, redirectTo: `/${clubSlug}` });
               }}
               className="space-y-4"
             >
