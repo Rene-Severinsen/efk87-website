@@ -86,7 +86,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               {todayFlightIntents.length} medlemmer har allerede meldt “jeg flyver”, skoleflyvning er <strong>aktiv fra kl. 11:00</strong>, og forumtråden om forårsoprydning har fået 9 nye svar siden i går.
             </p>
             <div className="home-v2-inline-actions">
-              <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/jeg-flyver`}>Jeg flyver i dag</Link>
+              <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/jeg-flyver`}>Jeg flyver</Link>
               <a className="home-v2-pill" href="#">Åbn kalender</a>
               <a className="home-v2-pill" href="#">Gå til flyveskole</a>
               <a className="home-v2-pill" href="#">Upload billeder</a>
@@ -117,113 +117,10 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           </article>
         </section>
 
-        <section className="home-v2-stats-row">
-
-          <article className="home-v2-card home-v2-stat">
-            <div className="home-v2-top">
-              <small>“Jeg flyver” i dag</small>
-              <span className="home-v2-status-badge home-v2-ok">Aktiv</span>
-            </div>
-            <div className="home-v2-value">{todayFlightIntents.length}</div>
-            <small>Seneste opdatering kl. {new Date().toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}</small>
-          </article>
-          <article className="home-v2-card home-v2-stat">
-            <div className="home-v2-top">
-              <small>Skoleflyvning</small>
-              <span className="home-v2-status-badge home-v2-ok">I gang</span>
-            </div>
-            <div className="home-v2-value">4</div>
-            <small>Elever tilmeldt dagens session</small>
-          </article>
-          <article className="home-v2-card home-v2-stat">
-            <div className="home-v2-top">
-              <small>Nye forumindlæg</small>
-              <span className="home-v2-status-badge home-v2-warn">+9</span>
-            </div>
-            <div className="home-v2-value">18</div>
-            <small>Seneste 24 timer på tværs af 5 tråde</small>
-          </article>
-
-          <article className="home-v2-card home-v2-stat">
-            <div className="home-v2-top">
-              <small>Senest online</small>
-              <span className="home-v2-status-badge home-v2-info">I dag</span>
-            </div>
-
-            <div className="home-v2-online-list">
-              {memberActivity.latestMembers.length > 0 ? (
-                  memberActivity.latestMembers.map((member, idx) => (
-                      <div key={idx} className="home-v2-online-row">
-                    <span className="home-v2-online-time">
-                      {member.lastSeenAt.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                        <span className="home-v2-online-name">
-                      {member.displayName}
-                    </span>
-                      </div>
-                  ))
-              ) : (
-                  <div className="home-v2-compact-empty">Ingen aktivitet endnu</div>
-              )}
-            </div>
-
-            <div className="home-v2-stat-footer">
-              <small>{memberActivity.todayActiveCount} medlemmer aktive i dag</small>
-            </div>
-          </article>
-        </section>
 
         <section className="home-v2-layout">
           <div className="home-v2-stack">
-            <article className="home-v2-card home-v2-section-card">
-              <div className="home-v2-section-head">
-                <h2>Aktivitet på pladsen</h2>
-                <Link className="home-v2-link-soft" href={`/${club.slug}/jeg-flyver/liste`}>Se alle flyvemeddelser</Link>
-              </div>
 
-              <div className="home-v2-griffin">
-                <div className="home-v2-griffin-emoji">{todayFlightIntents.length > 0 ? '🦅' : '💤'}</div>
-                <div>
-                  <h3>{todayFlightIntents.length > 0 ? 'Gribben basker – der er aktivitet i dag' : 'Gribben sover – ingen har meldt deres ankomst endnu'}</h3>
-                  <p className="home-v2-row-sub">
-                    {todayFlightIntents.length > 0 
-                      ? `Der er i øjeblikket ${todayFlightIntents.length} medlemmer der har meldt deres ankomst til pladsen i dag.`
-                      : 'Bliv den første til at melde din ankomst til pladsen i dag.'}
-                  </p>
-                  <div className="home-v2-activity-actions">
-                    <Link
-                      href={`/${club.slug}/jeg-flyver`}
-                      className="home-v2-activity-cta home-v2-activity-cta-primary"
-                    >
-                      Skriv “jeg flyver”
-                    </Link>
-                    <Link
-                      href={`/${club.slug}/jeg-flyver/liste`}
-                      className="home-v2-activity-cta home-v2-activity-cta-secondary"
-                    >
-                      Se dagens liste
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              <div className="home-v2-activity-list">
-                {todayFlightIntents.length > 0 ? (
-                  todayFlightIntents.map((intent) => (
-                    <div key={intent.id} className="home-v2-row-item">
-                      <div className="home-v2-row-icon">{getEmojiForActivity(intent.activityType)}</div>
-                      <div>
-                        <div className="home-v2-row-title">{intent.displayName}</div>
-                        <div className="home-v2-row-sub">{intent.message || 'Kommer på pladsen.'}</div>
-                      </div>
-                      <span className="home-v2-status-badge home-v2-info">{formatDate(new Date(intent.createdAt))}</span>
-                    </div>
-                  ))
-                ) : (
-                  <div className="home-v2-muted" style={{ padding: '20px', textAlign: 'center' }}>Ingen aktivitet meldt endnu</div>
-                )}
-              </div>
-            </article>
 
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
@@ -255,6 +152,30 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                   </div>
                   <span className="home-v2-status-badge home-v2-ok">Ny</span>
                 </div>
+                <div className="home-v2-row-item">
+                  <div className="home-v2-row-icon">🔋</div>
+                  <div>
+                    <div className="home-v2-row-title">Bedste lader til 12V i klubhuset?</div>
+                    <div className="home-v2-row-sub">Ny tråd oprettet i dag · 3 svar · Teknik</div>
+                  </div>
+                  <span className="home-v2-status-badge home-v2-ok">Ny</span>
+                </div>
+                <div className="home-v2-row-item">
+                  <div className="home-v2-row-icon">🔋</div>
+                  <div>
+                    <div className="home-v2-row-title">Bedste lader til 12V i klubhuset?</div>
+                    <div className="home-v2-row-sub">Ny tråd oprettet i dag · 3 svar · Teknik</div>
+                  </div>
+                  <span className="home-v2-status-badge home-v2-ok">Ny</span>
+                </div>
+                <div className="home-v2-row-item">
+                  <div className="home-v2-row-icon">🔋</div>
+                  <div>
+                    <div className="home-v2-row-title">Bedste lader til 12V i klubhuset?</div>
+                    <div className="home-v2-row-sub">Ny tråd oprettet i dag · 3 svar · Teknik</div>
+                  </div>
+                  <span className="home-v2-status-badge home-v2-ok">Ny</span>
+                </div>
               </div>
             </article>
 
@@ -275,6 +196,70 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           </div>
 
           <div className="home-v2-stack">
+
+
+
+            <article className="home-v2-card home-v2-section-card">
+              <div className="home-v2-section-head">
+                <h2>Aktivitet på pladsen</h2>
+                <Link className="home-v2-link-soft" href={`/${club.slug}/jeg-flyver/liste`}>Se alle flyvemeddelser</Link>
+              </div>
+
+              <div className="home-v2-griffin">
+                <div className="home-v2-griffin-emoji">{todayFlightIntents.length > 0 ? '🦅' : '💤'}</div>
+                <div>
+                  <h3>{todayFlightIntents.length > 0 ? 'Gribben basker – der er aktivitet i dag' : 'Gribben sover – ingen har meldt deres ankomst endnu'}</h3>
+                  <p className="home-v2-row-sub">
+                    {todayFlightIntents.length > 0
+                        ? `Der er i øjeblikket ${todayFlightIntents.length} medlemmer der har meldt deres ankomst til pladsen i dag.`
+                        : 'Bliv den første til at melde din ankomst til pladsen i dag.'}
+                  </p>
+                  <div className="home-v2-activity-actions">
+                    <Link
+                        href={`/${club.slug}/jeg-flyver`}
+                        className="home-v2-activity-cta home-v2-activity-cta-primary"
+                    >
+                      Skriv “jeg flyver”
+                    </Link>
+                    <Link
+                        href={`/${club.slug}/jeg-flyver/liste`}
+                        className="home-v2-activity-cta home-v2-activity-cta-secondary"
+                    >
+                      Se dagens indtjekninger
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article className="home-v2-card home-v2-stat">
+              <div className="home-v2-section-head">
+                <h2>Senest online</h2>
+                <span className="home-v2-status-badge home-v2-info">I dag</span>
+              </div>
+
+              <div className="home-v2-online-list">
+                {memberActivity.latestMembers.length > 0 ? (
+                    memberActivity.latestMembers.map((member, idx) => (
+                        <div key={idx} className="home-v2-online-row">
+                    <span className="home-v2-online-time">
+                      {member.lastSeenAt.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                          <span className="home-v2-online-name">
+                      {member.displayName}
+                    </span>
+                        </div>
+                    ))
+                ) : (
+                    <div className="home-v2-compact-empty">Ingen aktivitet endnu</div>
+                )}
+              </div>
+
+              <div className="home-v2-stat-footer">
+                <small>{memberActivity.todayActiveCount} medlemmer aktive i dag</small>
+              </div>
+            </article>
+
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Skoleflyvning i dag</h2>
