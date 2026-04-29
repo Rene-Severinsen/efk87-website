@@ -1,5 +1,5 @@
 import prisma from "../db/prisma";
-import { ArticleStatus, PublicSurfaceVisibility, Article, ArticleCategory, ArticleTag, ArticleTagAssignment } from "../../generated/prisma";
+import { ArticleStatus, PublicSurfaceVisibility, Article, ArticleTag, ArticleTagAssignment } from "../../generated/prisma";
 import { ViewerVisibilityContext } from "../publicSite/publicVisibility";
 
 export interface ArticleDTO {
@@ -10,8 +10,6 @@ export interface ArticleDTO {
   heroImageUrl: string | null;
   authorName: string | null;
   publishedAt: Date | null;
-  categoryName: string | null;
-  categorySlug: string | null;
   tags: { name: string; slug: string }[];
 }
 
@@ -20,7 +18,6 @@ export interface ArticleDetailDTO extends ArticleDTO {
 }
 
 type ArticleWithRelations = Article & {
-  category: ArticleCategory | null;
   tags: (ArticleTagAssignment & {
     tag: ArticleTag;
   })[];
@@ -29,20 +26,18 @@ type ArticleWithRelations = Article & {
 export async function getPublishedArticles(
   clubId: string,
   viewer: ViewerVisibilityContext,
-  options?: { categorySlug?: string; tagSlug?: string; limit?: number }
+  options?: { tagSlug?: string; limit?: number }
 ): Promise<ArticleDTO[]> {
-  const { categorySlug, tagSlug, limit } = options || {};
+  const { tagSlug, limit } = options || {};
 
   const articles = await prisma.article.findMany({
     where: {
       clubId,
       status: ArticleStatus.PUBLISHED,
       visibility: viewer.isMember ? { in: [PublicSurfaceVisibility.PUBLIC, PublicSurfaceVisibility.MEMBERS_ONLY] } : PublicSurfaceVisibility.PUBLIC,
-      ...(categorySlug ? { category: { slug: categorySlug } } : {}),
       ...(tagSlug ? { tags: { some: { tag: { slug: tagSlug } } } } : {}),
     },
     include: {
-      category: true,
       tags: {
         include: {
           tag: true,
@@ -70,7 +65,6 @@ export async function getFeaturedArticle(
       visibility: viewer.isMember ? { in: [PublicSurfaceVisibility.PUBLIC, PublicSurfaceVisibility.MEMBERS_ONLY] } : PublicSurfaceVisibility.PUBLIC,
     },
     include: {
-      category: true,
       tags: {
         include: {
           tag: true,
@@ -98,7 +92,6 @@ export async function getPublishedArticleBySlug(
       visibility: viewer.isMember ? { in: [PublicSurfaceVisibility.PUBLIC, PublicSurfaceVisibility.MEMBERS_ONLY] } : PublicSurfaceVisibility.PUBLIC,
     },
     include: {
-      category: true,
       tags: {
         include: {
           tag: true,
@@ -113,18 +106,6 @@ export async function getPublishedArticleBySlug(
     ...mapToArticleDTO(article),
     body: article.body,
   };
-}
-
-export async function getArticleCategories(clubId: string) {
-  return prisma.articleCategory.findMany({
-    where: {
-      clubId,
-      isActive: true,
-    },
-    orderBy: {
-      sortOrder: "asc",
-    },
-  });
 }
 
 export async function getArticleTags(clubId: string) {
@@ -147,8 +128,6 @@ function mapToArticleDTO(article: ArticleWithRelations): ArticleDTO {
     heroImageUrl: article.heroImageUrl,
     authorName: article.authorName,
     publishedAt: article.publishedAt,
-    categoryName: article.category?.name || null,
-    categorySlug: article.category?.slug || null,
     tags: article.tags?.map((t) => ({ name: t.tag.name, slug: t.tag.slug })) || [],
   };
 }

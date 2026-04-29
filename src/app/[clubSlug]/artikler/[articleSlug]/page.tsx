@@ -32,7 +32,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title={article.title}
-      eyebrow={`${article.categoryName || 'Artikel'} · ${article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}`}
+      eyebrow={`Artikel · ${article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}`}
       subtitle={article.excerpt || undefined}
       currentPath={`/${clubSlug}/artikler/${articleSlug}`}
       maxWidth="800px"

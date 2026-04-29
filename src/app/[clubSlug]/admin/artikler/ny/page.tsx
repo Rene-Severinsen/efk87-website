@@ -26,7 +26,7 @@ export default async function Page({ params }: PageProps) {
   }
 
   const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin/artikler/ny`);
-  const { categories, tags } = await getAdminArticleFormOptions(club.id);
+  const { tags } = await getAdminArticleFormOptions(club.id);
 
   const boundAction = createArticleAction.bind(null, clubSlug);
 
@@ -45,7 +45,6 @@ export default async function Page({ params }: PageProps) {
 
       <ArticleForm 
         clubSlug={clubSlug}
-        categories={categories}
         tags={tags}
         action={boundAction}
       />

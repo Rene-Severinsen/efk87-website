@@ -5,9 +5,6 @@ export async function getAdminArticleOverview(clubId: string) {
     where: {
       clubId,
     },
-    include: {
-      category: true,
-    },
     orderBy: {
       updatedAt: "desc",
     },
@@ -33,7 +30,6 @@ export async function getAdminArticleById(clubId: string, articleId: string) {
       clubId,
     },
     include: {
-      category: true,
       tags: {
         include: {
           tag: true,
@@ -44,19 +40,12 @@ export async function getAdminArticleById(clubId: string, articleId: string) {
 }
 
 export async function getAdminArticleFormOptions(clubId: string) {
-  const [categories, tags] = await Promise.all([
-    prisma.articleCategory.findMany({
-      where: { clubId, isActive: true },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.articleTag.findMany({
-      where: { clubId },
-      orderBy: { name: "asc" },
-    }),
-  ]);
+  const tags = await prisma.articleTag.findMany({
+    where: { clubId },
+    orderBy: { name: "asc" },
+  });
 
   return {
-    categories,
     tags,
   };
 }

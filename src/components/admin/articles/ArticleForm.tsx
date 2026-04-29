@@ -2,7 +2,7 @@
 
 import React from "react";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
-import { ArticleStatus, PublicSurfaceVisibility, ArticleCategory, ArticleTag, Article } from "../../../generated/prisma";
+import { ArticleStatus, PublicSurfaceVisibility, ArticleTag, Article } from "../../../generated/prisma";
 import Link from "next/link";
 import ArticleRichTextEditor from "./ArticleRichTextEditor";
 
@@ -13,7 +13,6 @@ interface ArticleWithTags extends Article {
 interface ArticleFormProps {
   clubSlug: string;
   initialData?: ArticleWithTags;
-  categories: ArticleCategory[];
   tags: ArticleTag[];
   action: (formData: FormData) => Promise<void>;
 }
@@ -21,7 +20,6 @@ interface ArticleFormProps {
 export default function ArticleForm({
   clubSlug,
   initialData,
-  categories,
   tags,
   action,
 }: ArticleFormProps) {
@@ -122,20 +120,6 @@ export default function ArticleForm({
         </div>
 
         <div className="admin-card" style={{ padding: '24px', background: '#fff', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '8px' }}>Kategori</label>
-            <select
-              name="categoryId"
-              defaultValue={initialData?.categoryId || ""}
-              style={{ width: '100%', padding: '8px 12px', borderRadius: '4px', border: '1px solid #d9d9d9' }}
-            >
-              <option value="">Ingen kategori</option>
-              {categories.map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
-          </div>
-
           <div style={{ marginBottom: '16px' }}>
             <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '8px' }}>Tags</label>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '150px', overflowY: 'auto', padding: '8px', border: '1px solid #d9d9d9', borderRadius: '4px' }}>

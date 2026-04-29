@@ -40,7 +40,6 @@ export async function createArticleAction(clubSlug: string, formData: FormData) 
   const rawBody = formData.get("body") as string;
   const heroImageUrl = formData.get("heroImageUrl") as string;
   const authorName = formData.get("authorName") as string;
-  const categoryId = formData.get("categoryId") as string;
   const status = formData.get("status") as ArticleStatus;
   const visibility = formData.get("visibility") as PublicSurfaceVisibility;
   const isFeatured = formData.get("isFeatured") === "true";
@@ -65,7 +64,6 @@ export async function createArticleAction(clubSlug: string, formData: FormData) 
       body,
       heroImageUrl: heroImageUrl || null,
       authorName,
-      categoryId: categoryId || null,
       status,
       visibility,
       isFeatured,
@@ -92,7 +90,6 @@ export async function updateArticleAction(clubSlug: string, articleId: string, f
   const rawBody = formData.get("body") as string;
   const heroImageUrl = formData.get("heroImageUrl") as string;
   const authorName = formData.get("authorName") as string;
-  const categoryId = formData.get("categoryId") as string;
   const status = formData.get("status") as ArticleStatus;
   const visibility = formData.get("visibility") as PublicSurfaceVisibility;
   const isFeatured = formData.get("isFeatured") === "true";
@@ -140,7 +137,6 @@ export async function updateArticleAction(clubSlug: string, articleId: string, f
         body,
         heroImageUrl: heroImageUrl || null,
         authorName,
-        categoryId: categoryId || null,
         status,
         visibility,
         isFeatured,

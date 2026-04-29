@@ -102,22 +102,6 @@ async function main() {
     });
   }
 
-  // Article Categories
-  const categories = [
-    { slug: "klubnyt", name: "Klubnyt", description: "Nyheder, referater, aktiviteter og det der rører sig i klubben lige nu." },
-    { slug: "flyveskole", name: "Flyveskole", description: "Artikler til elever, instruktører og alle der vil forstå skolens hverdag bedre." },
-    { slug: "teknik", name: "Teknik", description: "Udstyr, set-up, GPS, batterier, radioer og praktiske erfaringer fra medlemmerne." },
-    { slug: "ture", name: "Ture og oplevelser", description: "Skræntture, weekenddage, stævner og andre historier fra livet uden for hjemmepladsen." },
-  ];
-
-  for (const cat of categories) {
-    await prisma.articleCategory.upsert({
-      where: { clubId_slug: { clubId: efk87.id, slug: cat.slug } },
-      update: cat,
-      create: { ...cat, clubId: efk87.id },
-    });
-  }
-
   // Article Tags
   const tags = [
     { slug: "skraentflyvning", name: "Skræntflyvning" },
@@ -163,11 +147,33 @@ async function main() {
     ];
 
     for (const s of samples) {
-      await prisma.article.upsert({
+      const article = await prisma.article.upsert({
         where: { clubId_slug: { clubId: efk87.id, slug: s.slug } },
         update: s,
         create: { ...s, clubId: efk87.id },
       });
+
+      // Assign tags to sample articles
+      if (s.slug === "weekend-paa-skraenten") {
+        const tag = await prisma.articleTag.findFirst({ where: { clubId: efk87.id, slug: "skraentflyvning" } });
+        if (tag) {
+          await prisma.articleTagAssignment.upsert({
+            where: { articleId_tagId: { articleId: article.id, tagId: tag.id } },
+            update: {},
+            create: { articleId: article.id, tagId: tag.id }
+          });
+        }
+      }
+      if (s.slug === "nyt-gps-triangle-setup") {
+        const tag = await prisma.articleTag.findFirst({ where: { clubId: efk87.id, slug: "gps" } });
+        if (tag) {
+          await prisma.articleTagAssignment.upsert({
+            where: { articleId_tagId: { articleId: article.id, tagId: tag.id } },
+            update: {},
+            create: { articleId: article.id, tagId: tag.id }
+          });
+        }
+      }
     }
   }
 

@@ -33,7 +33,6 @@ model Club {
   galleryAlbums GalleryAlbum[]
   galleryImages GalleryImage[]
   articles      Article[]
-  articleCategories ArticleCategory[]
   articleTags   ArticleTag[]
 }
 
@@ -98,8 +97,6 @@ model Article {
   updatedAt      DateTime                @updatedAt
 
   club     Club            @relation(fields: [clubId], references: [id])
-  category ArticleCategory? @relation(fields: [categoryId], references: [id])
-  categoryId String?
   tags     ArticleTagAssignment[]
 
   @@unique([clubId, slug])
@@ -107,25 +104,6 @@ model Article {
   @@index([clubId, isFeatured])
   @@index([clubId, publishedAt])
   @@index([clubId, legacySource, legacyId])
-}
-
-model ArticleCategory {
-  id           String   @id @default(cuid())
-  clubId       String
-  slug         String
-  name         String
-  description  String?
-  sortOrder    Int      @default(0)
-  isActive     Boolean  @default(true)
-  legacySource String?
-  legacyId     String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  club     Club      @relation(fields: [clubId], references: [id])
-  articles Article[]
-
-  @@unique([clubId, slug])
 }
 
 model ArticleTag {

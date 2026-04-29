@@ -4,15 +4,14 @@ This document describes the implementation of the article foundation for the EFK
 
 ## Overview
 
-Articles are tenant-scoped content pieces that can be published on the club's website. They support a draft/published/archived workflow and can be categorized and tagged.
+Articles are tenant-scoped content pieces that can be published on the club's website. They support a draft/published/archived workflow and are organized by tags. Categorization is not used as the legacy system relies on tags only.
 
 ## Data Model
 
 The article foundation consists of the following Prisma models:
 
 - `Article`: The main content model.
-- `ArticleCategory`: Hierarchical (sortable) categories for articles.
-- `ArticleTag`: Flat tags for articles.
+- `ArticleTag`: Flat tags for articles. Used for all content organization.
 - `ArticleTagAssignment`: Many-to-many join model between articles and tags.
 
 ### Tenancy
@@ -44,6 +43,6 @@ All models are scoped by `clubId`. Every query and write operation must ensure t
 ## Future Scopes
 
 - Image upload and storage (currently external URLs only).
-- Legacy import scripts.
+- Legacy import scripts (mapping old tags into `ArticleTag`).
 - Comments.
 - Approval workflow.

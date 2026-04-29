@@ -71,7 +71,6 @@ export default async function Page({ params }: PageProps) {
               <th style={{ padding: '12px 16px', fontWeight: '600' }}>Titel</th>
               <th style={{ padding: '12px 16px', fontWeight: '600' }}>Status</th>
               <th style={{ padding: '12px 16px', fontWeight: '600' }}>Synlighed</th>
-              <th style={{ padding: '12px 16px', fontWeight: '600' }}>Kategori</th>
               <th style={{ padding: '12px 16px', fontWeight: '600' }}>Publiceret</th>
               <th style={{ padding: '12px 16px', fontWeight: '600' }}>Opdateret</th>
               <th style={{ padding: '12px 16px', fontWeight: '600', textAlign: 'right' }}>Handling</th>
@@ -97,7 +96,6 @@ export default async function Page({ params }: PageProps) {
                   </span>
                 </td>
                 <td style={{ padding: '12px 16px' }}>{article.visibility}</td>
-                <td style={{ padding: '12px 16px' }}>{article.category?.name || '-'}</td>
                 <td style={{ padding: '12px 16px' }}>{article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('da-DK') : '-'}</td>
                 <td style={{ padding: '12px 16px' }}>{new Date(article.updatedAt).toLocaleDateString('da-DK')}</td>
                 <td style={{ padding: '12px 16px', textAlign: 'right' }}>
@@ -108,7 +106,7 @@ export default async function Page({ params }: PageProps) {
               </tr>
             )) : (
               <tr>
-                <td colSpan={7} style={{ padding: '32px', textAlign: 'center', color: '#999' }}>
+                <td colSpan={6} style={{ padding: '32px', textAlign: 'center', color: '#999' }}>
                   Ingen artikler fundet.
                 </td>
               </tr>

@@ -28,7 +28,7 @@ export default async function Page({ params }: PageProps) {
 
   const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin/artikler/${articleId}/rediger`);
   
-  const [article, { categories, tags }] = await Promise.all([
+  const [article, { tags }] = await Promise.all([
     getAdminArticleById(club.id, articleId),
     getAdminArticleFormOptions(club.id),
   ]);
@@ -55,7 +55,6 @@ export default async function Page({ params }: PageProps) {
       <ArticleForm 
         clubSlug={clubSlug}
         initialData={article}
-        categories={categories}
         tags={tags}
         action={boundAction}
       />

@@ -1,6 +1,6 @@
 import { resolveClubContext } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
-import { getPublishedArticles, getFeaturedArticle, getArticleCategories, getArticleTags } from "../../../lib/articles/articleService";
+import { getPublishedArticles, getFeaturedArticle, getArticleTags } from "../../../lib/articles/articleService";
 import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
 import Link from "next/link";
 
@@ -15,10 +15,9 @@ export default async function ArtiklerPage({ params }: PageProps) {
   const context = await resolveClubContext(clubSlug);
   const { club, theme, footerData, navigationItems, actionItems, viewer } = context;
 
-  const [featuredArticle, latestArticles, categories, tags] = await Promise.all([
+  const [featuredArticle, latestArticles, tags] = await Promise.all([
     getFeaturedArticle(club.id, viewer),
     getPublishedArticles(club.id, viewer, { limit: 10 }),
-    getArticleCategories(club.id),
     getArticleTags(club.id),
   ]);
 
@@ -49,9 +48,9 @@ export default async function ArtiklerPage({ params }: PageProps) {
           </div>
         </article>
         <article className="card toolbar-card" style={{ padding: '18px 20px', minHeight: '84px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'var(--club-panel)' }}>
-          <label style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--club-accent-2)', marginBottom: '8px' }}>Kategori</label>
+          <label style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--club-accent-2)', marginBottom: '8px' }}>Emne (Tag)</label>
           <div className="select-box" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', padding: '12px 14px', borderRadius: '14px', background: 'var(--club-panel-soft)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '15px' }}>
-            Alle kategorier <span>⌄</span>
+            Alle emner <span>⌄</span>
           </div>
         </article>
         <article className="card toolbar-card" style={{ padding: '18px 20px', minHeight: '84px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'var(--club-panel)' }}>
@@ -75,7 +74,6 @@ export default async function ArtiklerPage({ params }: PageProps) {
                 <div className="featured-image" style={{ minHeight: '280px', borderRadius: '20px', background: featuredArticle.heroImageUrl ? `url(${featuredArticle.heroImageUrl}) center/cover no-repeat` : 'var(--club-panel-soft)', border: '1px solid var(--club-line)' }}></div>
                 <div className="featured-copy" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <div className="tag-row" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    {featuredArticle.categoryName && <span className="tag" style={{ padding: '7px 10px', borderRadius: '999px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '12px', fontWeight: 700 }}>{featuredArticle.categoryName}</span>}
                     {featuredArticle.tags.map(tag => (
                       <span key={tag.slug} className="tag" style={{ padding: '7px 10px', borderRadius: '999px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '12px', fontWeight: 700 }}>{tag.name}</span>
                     ))}
@@ -111,7 +109,9 @@ export default async function ArtiklerPage({ params }: PageProps) {
                     <article className="article-card" style={{ display: 'grid', gap: '14px', padding: '16px', borderRadius: '20px', background: 'var(--club-panel-soft)', border: '1px solid var(--club-line)', minHeight: '100%' }}>
                       <div className="article-thumb" style={{ minHeight: '170px', borderRadius: '18px', border: '1px solid var(--club-line)', background: article.heroImageUrl ? `url(${article.heroImageUrl}) center/cover no-repeat` : 'var(--club-panel-soft)' }}></div>
                       <div className="tag-row" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                        {article.categoryName && <span className="tag" style={{ padding: '7px 10px', borderRadius: '999px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '12px', fontWeight: 700 }}>{article.categoryName}</span>}
+                        {article.tags.map(tag => (
+                          <span key={tag.slug} className="tag" style={{ padding: '7px 10px', borderRadius: '999px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '12px', fontWeight: 700 }}>{tag.name}</span>
+                        ))}
                       </div>
                       <h4 style={{ fontSize: '20px', lineHeight: '1.18' }}>{article.title}</h4>
                       <p style={{ color: 'var(--club-muted)', lineHeight: '1.6', fontSize: '14px' }}>{article.excerpt}</p>
@@ -132,21 +132,7 @@ export default async function ArtiklerPage({ params }: PageProps) {
         <div className="stack" style={{ display: 'grid', gap: '20px' }}>
           <ThemedSectionCard>
             <div className="section-head">
-              <h2 style={{ fontSize: '22px' }}>Kategorier</h2>
-            </div>
-            <div className="side-list" style={{ display: 'grid', gap: '12px' }}>
-              {categories.map(category => (
-                <div key={category.id} className="list-item" style={{ padding: '14px', borderRadius: '18px', background: 'var(--club-panel-soft)', border: '1px solid var(--club-line)' }}>
-                  <h4 style={{ fontSize: '16px', lineHeight: '1.3', marginBottom: '8px' }}>{category.name}</h4>
-                  <p style={{ color: 'var(--club-muted)', lineHeight: '1.55', fontSize: '13px' }}>{category.description}</p>
-                </div>
-              ))}
-            </div>
-          </ThemedSectionCard>
-
-          <ThemedSectionCard>
-            <div className="section-head">
-              <h2 style={{ fontSize: '22px' }}>Mest brugte tags</h2>
+              <h2 style={{ fontSize: '22px' }}>Emner (Tags)</h2>
             </div>
             <div className="tag-cloud" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               {tags.map(tag => (
