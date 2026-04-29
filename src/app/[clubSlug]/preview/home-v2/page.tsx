@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { requireClubBySlug } from "../../../../lib/tenancy/tenantService";
-import { getServerViewerForClub } from "../../../../lib/auth/viewer";
+import { getServerViewerForClub, toViewerVisibilityContext } from "../../../../lib/auth/viewer";
+import { getClubTheme } from "../../../../lib/publicSite/publicThemeService";
+import { getTodayFlightIntents } from "../../../../lib/publicSite/publicFlightIntentService";
 import PublicClubHomePageV2 from "../../../../components/publicSite/homeV2/PublicClubHomePageV2";
 
 interface PreviewPageProps {
@@ -25,9 +27,23 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
   const isDev = process.env.NODE_ENV === "development";
   
   if (!viewer.isMember && !isDev) {
-    // If not a member and not in dev, we don\"t want to show the preview.
+    // If not a member and not in dev, we don't want to show the preview.
     notFound();
   }
 
-  return <PublicClubHomePageV2 />;
+  // Fetch real data
+  const visibilityContext = toViewerVisibilityContext(viewer);
+  const [theme, todayFlightIntents] = await Promise.all([
+    getClubTheme(club.id),
+    getTodayFlightIntents(club.id, visibilityContext),
+  ]);
+
+  return (
+    <PublicClubHomePageV2 
+      club={club}
+      viewer={viewer}
+      theme={theme}
+      todayFlightIntents={todayFlightIntents}
+    />
+  );
 }

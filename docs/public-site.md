@@ -109,12 +109,14 @@ A second version of the homepage is being built in isolation to improve the memb
 
 - **Component**: `src/components/publicSite/homeV2/PublicClubHomePageV2.tsx`
 - **CSS**: `src/components/publicSite/homeV2/PublicClubHomePageV2.css` (Scoped with `.home-v2-` prefix)
-- **Status**: In development. Built in isolation.
+- **Status**: In development. Built in isolation. V2 preview now binds existing real data (club info, viewer context, today's flight intents) where available.
 - **Preview Route**: `/[clubSlug]/preview/home-v2`
 - **Guidelines**:
   - v2 must not replace the active homepage until manually approved.
   - v2 CSS must be scoped and non-invasive to ensure it doesn't affect the rest of the site.
-  - v2 uses static placeholder data during the initial porting phase.
+  - v2 uses real data for club, user profile, and "Jeg flyver" activity.
+  - Chat, statistics, gallery, and next activities remain static placeholders.
+  - v2 is still not live; the live homepage remains unchanged.
   - Underscore-prefixed route folders (`_preview`) must not be used for public-facing preview routes in Next.js App Router as they are treated as private.
 
 ## Components

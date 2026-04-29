@@ -1,49 +1,108 @@
 import React from 'react';
 import './PublicClubHomePageV2.css';
+import { PublicFlightIntentListItem } from '../../../lib/publicSite/publicFlightIntentService';
+import { ServerViewerContext } from '../../../lib/auth/viewer';
+import Link from 'next/link';
+
+interface PublicClubHomePageV2Props {
+  club: {
+    id: string;
+    name: string;
+    slug: string;
+    settings?: {
+      displayName: string;
+      shortName: string;
+      publicEmail: string | null;
+    } | null;
+  };
+  viewer: ServerViewerContext;
+  todayFlightIntents: PublicFlightIntentListItem[];
+  theme?: {
+    backgroundColor: string;
+    panelColor: string;
+    panelSoftColor: string;
+    lineColor: string;
+    textColor: string;
+    mutedTextColor: string;
+    accentColor: string;
+    accentColor2: string;
+    shadowValue: string;
+    radiusValue: string;
+    heroImageUrl: string | null;
+  } | null;
+}
 
 /**
  * PublicClubHomePageV2 - Isolated V2 homepage component.
  * Ported closely from the provided mockup HTML.
  */
-export default function PublicClubHomePageV2() {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, theme }: PublicClubHomePageV2Props) {
+  const clubDisplayName = club.settings?.displayName || club.name;
+  const clubShortName = club.settings?.shortName || club.name;
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const getEmojiForActivity = (type: string) => {
+    switch (type) {
+      case 'FLYING': return '✈️';
+      case 'MAINTENANCE': return '🛠️';
+      case 'WEATHER_DEPENDENT': return '🌬️';
+      case 'TRAINING': return '🎓';
+      case 'SOCIAL': return '☕';
+      default: return '📍';
+    }
+  };
+
   return (
     <div className="home-v2-root">
       <div className="home-v2-shell">
         <header className="home-v2-topbar">
           <div className="home-v2-brand">
-            <div className="home-v2-brand-mark">EFK87</div>
+            <div className="home-v2-brand-mark">{clubShortName}</div>
             <div>
-              <div>EFK87 Medlemsportal</div>
-              <div className="home-v2-small">Østsjællands Flyveklub 87</div>
+              <div>{clubDisplayName} Medlemsportal</div>
+              <div className="home-v2-small">{clubDisplayName}</div>
             </div>
           </div>
 
           <nav className="home-v2-nav">
-            <a className="home-v2-active" href="#">Forside</a>
+            <Link className="home-v2-active" href={`/${club.slug}/preview/home-v2`}>Forside</Link>
             <a href="#">Forum</a>
             <a href="#">Galleri</a>
             <a href="#">Artikler</a>
             <a href="#">Flyveskole</a>
             <a href="#">Mailinglister</a>
-            <a href="#">Om EFK87</a>
+            <a href="#">Om {clubShortName}</a>
           </nav>
 
           <div className="home-v2-actions">
-            <a className="home-v2-btn home-v2-chip-btn" href="#">Min profil</a>
-            <a className="home-v2-btn home-v2-chip-btn home-v2-primary" href="#">Admin</a>
-            <a className="home-v2-btn home-v2-chip-btn" href="#">Log ud</a>
+            {viewer.isAuthenticated ? (
+              <>
+                <Link className="home-v2-btn home-v2-chip-btn" href={`/${club.slug}/profile`}>Min profil</Link>
+                {viewer.isAdmin && (
+                  <Link className="home-v2-btn home-v2-chip-btn home-v2-primary" href={`/${club.slug}/admin`}>Admin</Link>
+                )}
+                <Link className="home-v2-btn home-v2-chip-btn" href="/api/auth/signout">Log ud</Link>
+              </>
+            ) : (
+              <Link className="home-v2-btn home-v2-chip-btn home-v2-primary" href={`/api/auth/signin?callbackUrl=/${club.slug}/preview/home-v2`}>Log ind</Link>
+            )}
           </div>
         </header>
 
         <section className="home-v2-hero">
           <article className="home-v2-card home-v2-hero-main">
-            <div className="home-v2-eyebrow">✈️ Sæsonstart 2026 · Søndag 29. marts · Vejr: 8°C og let sidevind</div>
-            <h1>Hej René. Der er liv på pladsen i dag.</h1>
+            <div className="home-v2-eyebrow">
+              ✈️ Sæsonstart 2026 · {new Date().toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric', month: 'long' })} · Vejr: 8°C og let sidevind
+            </div>
+            <h1>Hej {viewer.name?.split(' ')[0] || 'Gæst'}. Der er liv på pladsen i dag.</h1>
             <p className="home-v2-hero-copy">
-              7 medlemmer har allerede meldt “jeg flyver”, skoleflyvning er <strong>aktiv fra kl. 11:00</strong>, og forumtråden om forårsoprydning har fået 9 nye svar siden i går.
+              {todayFlightIntents.length} medlemmer har allerede meldt “jeg flyver”, skoleflyvning er <strong>aktiv fra kl. 11:00</strong>, og forumtråden om forårsoprydning har fået 9 nye svar siden i går.
             </p>
             <div className="home-v2-inline-actions">
-              <a className="home-v2-pill home-v2-primary" href="#">Jeg flyver i dag</a>
+              <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/jeg-flyver`}>Jeg flyver i dag</Link>
               <a className="home-v2-pill" href="#">Åbn kalender</a>
               <a className="home-v2-pill" href="#">Gå til flyveskole</a>
               <a className="home-v2-pill" href="#">Upload billeder</a>
@@ -53,14 +112,15 @@ export default function PublicClubHomePageV2() {
           <div className="home-v2-side-stack">
             <article className="home-v2-card home-v2-welcome-card">
               <div className="home-v2-welcome-grid">
-                <div className="home-v2-avatar">RS</div>
+                <div className="home-v2-avatar">{viewer.name ? viewer.name.split(' ').map(n => n[0]).join('').toUpperCase() : '👤'}</div>
                 <div>
-                  <h2>René Severinsen</h2>
-                  <p className="home-v2-muted">Senior medlem · Instruktør · Bestyrelse</p>
+                  <h2>{viewer.name || 'Gæst'}</h2>
+                  <p className="home-v2-muted">
+                    {viewer.isMember ? (viewer.clubRole === 'ADMIN' || viewer.clubRole === 'OWNER' ? 'Administrator' : 'Medlem') : 'Besøgende'}
+                  </p>
                   <div className="home-v2-meta-row">
-                    <span className="home-v2-meta-chip">A-certifikat</span>
-                    <span className="home-v2-meta-chip">S-kontrollant</span>
-                    <span className="home-v2-meta-chip">3 mailinglister</span>
+                    {viewer.isMember && <span className="home-v2-meta-chip">Aktivt medlem</span>}
+                    {viewer.isAdmin && <span className="home-v2-meta-chip">Bestyrelse</span>}
                   </div>
                 </div>
               </div>
@@ -98,8 +158,8 @@ export default function PublicClubHomePageV2() {
               <small>“Jeg flyver” i dag</small>
               <span className="home-v2-status-badge home-v2-ok">Aktiv</span>
             </div>
-            <div className="home-v2-value">7</div>
-            <small>Mail udsendt til Flyvermeddelelser kl. 09:12</small>
+            <div className="home-v2-value">{todayFlightIntents.length}</div>
+            <small>Seneste opdatering kl. {new Date().toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}</small>
           </article>
           <article className="home-v2-card home-v2-stat">
             <div className="home-v2-top">
@@ -124,46 +184,40 @@ export default function PublicClubHomePageV2() {
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Aktivitet på pladsen</h2>
-                <a className="home-v2-link-soft" href="#">Se alle flyvemeddelser</a>
+                <Link className="home-v2-link-soft" href={`/${club.slug}/jeg-flyver/liste`}>Se alle flyvemeddelser</Link>
               </div>
 
               <div className="home-v2-griffin">
-                <div className="home-v2-griffin-emoji">🦅</div>
+                <div className="home-v2-griffin-emoji">{todayFlightIntents.length > 0 ? '🦅' : '💤'}</div>
                 <div>
-                  <h3>Gribben basker – der er aktivitet i dag</h3>
-                  <p className="home-v2-row-sub">Når mindst ét medlem melder ind, skifter forsiden status. Her vises din eksisterende grib-funktion med dagens mockup-data.</p>
+                  <h3>{todayFlightIntents.length > 0 ? 'Gribben basker – der er aktivitet i dag' : 'Gribben sover – ingen har meldt deres ankomst endnu'}</h3>
+                  <p className="home-v2-row-sub">
+                    {todayFlightIntents.length > 0 
+                      ? `Der er i øjeblikket ${todayFlightIntents.length} medlemmer der har meldt deres ankomst til pladsen i dag.`
+                      : 'Bliv den første til at melde din ankomst til pladsen i dag.'}
+                  </p>
                   <div className="home-v2-cta-row">
-                    <a className="home-v2-pill home-v2-primary" href="#">Skriv “jeg flyver”</a>
-                    <a className="home-v2-pill" href="#">Se dagens liste</a>
+                    <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/jeg-flyver`}>Skriv “jeg flyver”</Link>
+                    <Link className="home-v2-pill" href={`/${club.slug}/jeg-flyver/liste`}>Se dagens liste</Link>
                   </div>
                 </div>
               </div>
 
               <div className="home-v2-activity-list">
-                <div className="home-v2-row-item">
-                  <div className="home-v2-row-icon">✈️</div>
-                  <div>
-                    <div className="home-v2-row-title">René Severinsen</div>
-                    <div className="home-v2-row-sub">“Kommer ca. 11:15 med DG-800.”</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-info">09:07</span>
-                </div>
-                <div className="home-v2-row-item">
-                  <div className="home-v2-row-icon">🛠️</div>
-                  <div>
-                    <div className="home-v2-row-title">Lars Mikkelsen</div>
-                    <div className="home-v2-row-sub">“Er på pladsen fra 10:30. Tager lader med til 6S hvis nogen mangler.”</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-info">08:48</span>
-                </div>
-                <div className="home-v2-row-item">
-                  <div className="home-v2-row-icon">🌬️</div>
-                  <div>
-                    <div className="home-v2-row-title">Søren Østergaard</div>
-                    <div className="home-v2-row-sub">“Ser vinden an – hvis den holder sig under 6 m/s kommer jeg skræntkassen.”</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-info">08:12</span>
-                </div>
+                {todayFlightIntents.length > 0 ? (
+                  todayFlightIntents.map((intent) => (
+                    <div key={intent.id} className="home-v2-row-item">
+                      <div className="home-v2-row-icon">{getEmojiForActivity(intent.activityType)}</div>
+                      <div>
+                        <div className="home-v2-row-title">{intent.displayName}</div>
+                        <div className="home-v2-row-sub">{intent.message || 'Kommer på pladsen.'}</div>
+                      </div>
+                      <span className="home-v2-status-badge home-v2-info">{formatDate(new Date(intent.createdAt))}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="home-v2-muted" style={{ padding: '20px', textAlign: 'center' }}>Ingen aktivitet meldt endnu</div>
+                )}
               </div>
             </article>
 
@@ -328,7 +382,7 @@ export default function PublicClubHomePageV2() {
 
         <footer className="home-v2-card home-v2-footer">
           <div>
-            <h3>EFK87</h3>
+            <h3>{clubShortName}</h3>
             <p className="home-v2-small" style={{marginTop: '10px'}}>Mockup af medlemsforside med realistisk klubstruktur. Designet er tænkt mobile first på medlemsdelen og mere informationsrigt på desktop.</p>
             <div className="home-v2-sponsors">
               <span className="home-v2-sponsor">Ellehammerfonden</span>
@@ -339,8 +393,8 @@ export default function PublicClubHomePageV2() {
           </div>
           <div>
             <h3>Kontakt</h3>
-            <p className="home-v2-small" style={{marginTop: '10px'}}>EFK87, Flyvestation Værløse, Shelter 331, 3500 Værløse</p>
-            <p className="home-v2-small" style={{marginTop: '10px'}}>kontakt@efk87.dk<br/>CVR 12345678</p>
+            <p className="home-v2-small" style={{marginTop: '10px'}}>{clubDisplayName}</p>
+            <p className="home-v2-small" style={{marginTop: '10px'}}>{club.settings?.publicEmail || 'kontakt@efk87.dk'}<br/>CVR 12345678</p>
           </div>
           <div>
             <h3>Links</h3>
