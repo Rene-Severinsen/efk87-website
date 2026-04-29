@@ -32,23 +32,18 @@
   padding: 20px;
 }
 
-.home-v2-topbar {
+.home-v2-efk-neutralized-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   padding: 14px 18px;
-  /* background: rgba(11,18,32,0.74); */
-  /* backdrop-filter: blur(12px); */
-  /* border: 1px solid var(--home-v2-line); */
-  /* border-radius: 999px; */
   position: sticky;
   top: 16px;
   z-index: 100;
-  /* box-shadow: var(--home-v2-shadow); */
 }
 
-.home-v2-brand {
+.home-v2-efk-neutralized-brand {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -67,14 +62,14 @@
   font-size: 14px;
 }
 
-.home-v2-nav {
+.home-v2-efk-neutralized-nav {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.home-v2-nav a,
+.home-v2-efk-neutralized-nav a,
 .home-v2-btn {
   padding: 10px 14px;
   border-radius: 999px;
@@ -84,16 +79,16 @@
   transition: 0.2s ease;
 }
 
-.home-v2-nav a:hover,
+.home-v2-efk-neutralized-nav a:hover,
 .home-v2-btn:hover { background: rgba(255,255,255,0.05); color: var(--home-v2-text); }
 
-.home-v2-nav a.home-v2-active {
+.home-v2-efk-neutralized-nav a.home-v2-active {
   background: rgba(125,211,252,0.12);
   border-color: rgba(125,211,252,0.25);
   color: var(--home-v2-text);
 }
 
-.home-v2-actions {
+.home-v2-efk-neutralized-actions {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -661,8 +656,8 @@
 
 @media (max-width: 760px) {
   .home-v2-shell { padding: 14px; }
-  /* .home-v2-topbar { border-radius: 24px; align-items: flex-start; }
-  .home-v2-topbar, .home-v2-nav, .home-v2-actions { flex-direction: column; align-items: stretch; } */
+  /* .home-v2-efk-neutralized-topbar { border-radius: 24px; align-items: flex-start; }
+  .home-v2-efk-neutralized-topbar, .home-v2-efk-neutralized-nav, .home-v2-efk-neutralized-actions { flex-direction: column; align-items: stretch; } */
   .home-v2-stats-row, .home-v2-mini-grid, .home-v2-gallery-grid { grid-template-columns: 1fr; }
   .home-v2-griffin, .home-v2-welcome-grid, .home-v2-row-item { grid-template-columns: 1fr; }
   .home-v2-hero-main { min-height: 320px; }

@@ -38,7 +38,7 @@
   align-items: center;
 }
 
-.public-home .nav a, .public-home .actions .btn, .public-home .hero-actions .pill {
+.public-home .efk-neutralized-nav a, .public-home .efk-neutralized-actions .btn, .public-home .hero-actions .pill {
   min-height: 44px;
 }
 
@@ -50,23 +50,19 @@
   padding: 20px;
 }
 
-.public-home .topbar {
+/* Topbar neutralized to prevent Tailwind collisions */
+.public-home .efk-neutralized-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   padding: 14px 18px;
-  /* background: rgba(11,18,32,0.74); */
-  /* backdrop-filter: blur(12px); */
-  /* border: 1px solid var(--club-line); */
-  /* border-radius: 999px; */
   position: sticky;
   top: 16px;
   z-index: 100;
-  /* box-shadow: var(--club-shadow); */
 }
 
-.public-home .brand {
+.public-home .efk-neutralized-brand {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -86,13 +82,13 @@
   flex-shrink: 0;
 }
 
-.public-home .nav {
+.public-home .efk-neutralized-nav {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.public-home .nav a, .public-home .btn {
+.public-home .efk-neutralized-nav a, .public-home .btn {
   padding: 10px 14px;
   border-radius: 999px;
   border: 1px solid transparent;
@@ -101,14 +97,14 @@
   transition: .2s ease;
 }
 
-.public-home .nav a:hover, .public-home .btn:hover { background: rgba(255,255,255,0.05); color: var(--club-text); }
-.public-home .nav a.active {
+.public-home .efk-neutralized-nav a:hover, .public-home .btn:hover { background: rgba(255,255,255,0.05); color: var(--club-text); }
+.public-home .efk-neutralized-nav a.active {
   background: rgba(125,211,252,0.12);
   border-color: rgba(125,211,252,0.25);
   color: var(--club-text);
 }
 
-.public-home .actions {
+.public-home .efk-neutralized-actions {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -126,8 +122,8 @@
   border-color: rgba(110,231,183,0.22);
 }
 
-/* Mobile Nav Toggle */
-.public-home .nav-toggle {
+/* Mobile Nav Toggle neutralized */
+.public-home .efk-neutralized-nav-toggle {
   display: none;
   background: none;
   border: none;
@@ -533,7 +529,7 @@
 @media (max-width: 767px) {
   .public-home .shell { padding: 12px; }
   
-  .public-home .topbar {
+  .public-home .efk-neutralized-topbar {
     border-radius: 24px;
     padding: 10px 16px;
     top: 12px;
