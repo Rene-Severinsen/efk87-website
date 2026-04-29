@@ -116,7 +116,7 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
   return (
       <header className="efk-topbar-root sticky top-4 z-[900] relative isolation-isolate mx-auto w-full max-w-[1400px] rounded-[24px] border border-white/10 bg-slate-950/90 px-4 py-3 shadow-2xl backdrop-blur-xl min-[1100px]:rounded-full pointer-events-auto">
         {/* Mobile/Tablet Header */}
-        <div className="efk-topbar-mobile flex items-center justify-between gap-3 pointer-events-auto pr-16 min-[1100px]:hidden">
+        <div className="efk-topbar-mobile grid grid-cols-[minmax(0,1fr)_48px] items-center gap-3 min-[1100px]:hidden">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold text-white">
               {clubName}
@@ -132,21 +132,17 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-          </div>
+          <button
+              type="button"
+              onClick={toggleMenu}
+              className="efk-topbar-burger justify-self-end h-12 w-12 min-h-[48px] min-w-[48px] rounded-xl border border-white/10 bg-slate-900/90 text-white flex items-center justify-center cursor-pointer touch-manipulation select-none pointer-events-auto z-10 transition-colors hover:bg-white/5 active:bg-white/10"
+              aria-expanded={isMenuOpen}
+              aria-controls="public-mobile-menu"
+              aria-label={isMenuOpen ? 'Luk menu' : 'Åbn menu'}
+          >
+            <span aria-hidden="true">{isMenuOpen ? '✕' : '☰'}</span>
+          </button>
         </div>
-
-        {/* Burger button: absolute top-layer hit area */}
-        <button
-            type="button"
-            onClick={toggleMenu}
-            className="efk-topbar-burger absolute right-4 top-1/2 -translate-y-1/2 z-[9999] pointer-events-auto touch-manipulation select-none cursor-pointer flex h-12 w-12 min-h-[48px] min-w-[48px] items-center justify-center rounded-xl bg-slate-900/90 border border-white/10 text-white transition-colors hover:bg-white/5 active:bg-white/10 min-[1100px]:hidden"
-            aria-expanded={isMenuOpen}
-            aria-controls="public-mobile-menu"
-            aria-label={isMenuOpen ? 'Luk menu' : 'Åbn menu'}
-        >
-          <span aria-hidden="true">{isMenuOpen ? '✕' : '☰'}</span>
-        </button>
 
         {/* Desktop Header */}
         <div className="efk-topbar-desktop hidden items-center justify-between gap-6 min-[1100px]:flex">
@@ -177,7 +173,7 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
         {isMenuOpen && (
             <nav
                 id="public-mobile-menu"
-                className="efk-topbar-menu absolute left-0 right-0 top-[calc(100%+0.75rem)] z-[9998] flex flex-col gap-2 rounded-2xl border border-white/10 bg-slate-950/95 p-4 shadow-2xl backdrop-blur-xl min-[1100px]:hidden"
+                className="efk-topbar-menu absolute left-0 right-0 top-[calc(100%+0.75rem)] z-[950] flex flex-col gap-2 rounded-2xl border border-white/10 bg-slate-950/95 p-4 shadow-2xl backdrop-blur-xl min-[1100px]:hidden"
             >
               {renderNavLinks(true)}
               <div className="my-2 h-px bg-white/10" />
