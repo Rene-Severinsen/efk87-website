@@ -37,26 +37,26 @@ export default async function GalleriPage({ params }: PageProps) {
       subtitle="Billeder og albums fra klubbens liv."
       currentPath={`/${clubSlug}/galleri`}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {albums.length > 0 ? (
           albums.map((album) => (
             <Link key={album.id} href={`/${clubSlug}/galleri/${album.slug}`} className="no-underline group">
-              <ThemedSectionCard className="h-full hover:scale-[1.02] transition-transform duration-200">
+              <ThemedSectionCard className="h-full p-4 sm:p-6 hover:scale-[1.01] transition-transform duration-200">
                 {album.coverImageUrl && (
                   <div 
-                    className="w-full h-48 bg-cover bg-center rounded-t-lg -mx-6 -mt-6 mb-6" 
+                    className="w-full h-40 sm:h-48 bg-cover bg-center rounded-xl -mx-4 -mt-4 sm:-mx-6 sm:-mt-6 mb-4 sm:mb-6" 
                     style={{ backgroundImage: `url(${album.coverImageUrl})` }}
                   />
                 )}
-                <h3 className="text-xl font-bold mb-2 group-hover:text-[var(--club-accent)] transition-colors">
+                <h3 className="text-lg sm:text-xl font-bold mb-1.5 sm:mb-2 group-hover:text-[var(--club-accent)] transition-colors leading-tight">
                   {album.title}
                 </h3>
                 {album.description && (
-                  <p className="text-sm opacity-80 line-clamp-2 mb-4">
+                  <p className="text-xs sm:text-sm opacity-70 line-clamp-2 mb-4">
                     {album.description}
                   </p>
                 )}
-                <div className="mt-auto flex justify-between items-center text-xs opacity-60">
+                <div className="mt-auto flex justify-between items-center text-[10px] sm:text-xs opacity-50">
                   <span>{album.imageCount} billeder</span>
                   {album.publishedAt && (
                     <span>{new Date(album.publishedAt).toLocaleDateString('da-DK')}</span>

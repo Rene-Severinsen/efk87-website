@@ -40,29 +40,29 @@ export default async function AlbumDetailPage({ params }: PageProps) {
       subtitle={album.description || undefined}
       currentPath={`/${clubSlug}/galleri/${albumSlug}`}
     >
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <Link 
           href={`/${clubSlug}/galleri`}
-          className="text-sm opacity-70 hover:opacity-100 hover:text-[var(--club-accent)] no-underline flex items-center gap-2 mb-4"
+          className="text-xs sm:text-sm opacity-70 hover:opacity-100 hover:text-[var(--club-accent)] no-underline flex items-center gap-2 mb-4 transition-opacity"
         >
           ← Tilbage til galleri
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
         {album.images.length > 0 ? (
           album.images.map((image) => (
             <div key={image.id} className="group">
-              <ThemedSectionCard className="p-0 overflow-hidden h-full">
+              <ThemedSectionCard className="p-0 overflow-hidden h-full border-[var(--club-line)] hover:border-[var(--club-accent)] transition-colors">
                 <div 
                   className="aspect-square bg-cover bg-center cursor-pointer hover:scale-105 transition-transform duration-300"
                   style={{ backgroundImage: `url(${image.thumbnailUrl || image.imageUrl})` }}
                   title={image.title || ""}
                 />
                 {(image.title || image.caption) && (
-                  <div className="p-3">
-                    {image.title && <h4 className="text-sm font-semibold truncate">{image.title}</h4>}
-                    {image.caption && <p className="text-xs opacity-70 line-clamp-1">{image.caption}</p>}
+                  <div className="p-2 sm:p-3">
+                    {image.title && <h4 className="text-xs sm:text-sm font-semibold truncate">{image.title}</h4>}
+                    {image.caption && <p className="text-[10px] sm:text-xs opacity-60 line-clamp-1">{image.caption}</p>}
                   </div>
                 )}
               </ThemedSectionCard>

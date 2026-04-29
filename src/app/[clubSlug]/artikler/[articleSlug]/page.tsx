@@ -39,30 +39,35 @@ export default async function ArticleDetailPage({ params }: PageProps) {
     >
       {article.heroImageUrl && (
         <div 
-          className="article-hero-container"
+          className="article-hero-container h-[200px] sm:h-[300px] md:h-[400px] rounded-[20px] sm:rounded-[32px] mb-6 sm:mb-10 bg-center bg-cover bg-no-repeat border border-[var(--club-line)]"
           style={{ 
             backgroundImage: `url(${article.heroImageUrl})`,
           }} 
         />
       )}
 
-      <div style={{ maxWidth: '1040px', margin: '0 auto' }}>
-        <ThemedSectionCard>
-          <div style={{ color: 'var(--club-muted)', marginBottom: '2rem', fontSize: '14px', display: 'flex', gap: '1rem' }}>
+      <div className="max-w-[1040px] mx-auto">
+        <ThemedSectionCard className="p-5 sm:p-8 md:p-12">
+          <div className="flex flex-wrap gap-4 items-center mb-6 sm:mb-8 text-xs sm:text-sm text-[var(--club-muted)]">
             <span>Af {article.authorName || 'Redaktionen'}</span>
+            {article.publishedAt && (
+               <span className="opacity-50">·</span>
+            )}
+            {article.publishedAt && (
+               <span>{new Date(article.publishedAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+            )}
           </div>
 
           <div 
-            className="article-detail-prose" 
-            style={{ color: 'var(--club-text)' }}
+            className="article-detail-prose text-[var(--club-text)] text-base sm:text-lg leading-relaxed" 
             dangerouslySetInnerHTML={{ __html: article.body }}
           />
 
           {article.tags.length > 0 && (
-            <div style={{ marginTop: '3rem', borderTop: '1px solid var(--club-line)', paddingTop: '1.5rem' }}>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-[var(--club-line)]">
+              <div className="flex flex-wrap gap-2">
                 {article.tags.map(tag => (
-                  <span key={tag.slug} className="tag" style={{ padding: '7px 10px', borderRadius: '999px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '12px', fontWeight: 700 }}>
+                  <span key={tag.slug} className="tag px-3 py-1.5 rounded-full bg-white/5 border border-[var(--club-line)] text-[#dbe7ff] text-[11px] sm:text-xs font-bold uppercase tracking-wider">
                     {tag.name}
                   </span>
                 ))}

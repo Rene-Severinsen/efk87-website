@@ -50,25 +50,25 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
       currentPath={`/${clubSlug}/jeg-flyver/liste`}
       maxWidth="800px"
     >
-      <ThemedSectionCard>
+      <ThemedSectionCard className="p-4 sm:p-8">
         {flightIntents.length > 0 ? (
-          <div className="list">
+          <div className="list flex flex-col gap-3">
             {flightIntents.map((intent) => (
-              <div className="row-item" key={intent.id}>
-                <div className="row-icon">
+              <div className="row-item flex items-center gap-3 p-3 rounded-xl bg-[var(--club-panel-soft)] border border-[var(--club-line)]" key={intent.id}>
+                <div className="row-icon w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-white/5 text-xl">
                   {activityIcons[intent.activityType] || '•'}
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div className="row-item-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-                    <div className="row-title">
+                <div className="flex-1 min-w-0">
+                  <div className="row-item-header flex justify-between items-center gap-2">
+                    <div className="row-title font-semibold text-sm sm:text-base truncate">
                       {intent.displayName}
                     </div>
-                    <span className="status-badge info">
+                    <span className="status-badge info text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-400 font-medium">
                       {formatTime(intent.createdAt)}
                     </span>
                   </div>
                   {intent.message && (
-                    <div className="row-sub" style={{ marginTop: '0.25rem', fontStyle: 'italic', opacity: 0.8 }}>
+                    <div className="row-sub mt-1 text-xs sm:text-sm italic opacity-70 truncate">
                       “{intent.message}”
                     </div>
                   )}
@@ -77,19 +77,19 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
             ))}
           </div>
         ) : (
-          <div style={{ padding: '3rem', textAlign: 'center', opacity: 0.6 }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✈️</div>
-            <p style={{ fontSize: '1.1rem' }}>
+          <div className="py-12 text-center opacity-60">
+            <div className="text-4xl sm:text-5xl mb-4">✈️</div>
+            <p className="text-base sm:text-lg">
               Der er endnu ingen flyvemeldinger for i dag.
             </p>
           </div>
         )}
       </ThemedSectionCard>
       
-      <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+      <div className="mt-8 flex justify-center">
         <a 
           href={`/${clubSlug}/jeg-flyver`}
-          className="pill primary"
+          className="pill primary px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all hover:scale-[1.02]"
         >
           Skriv jeg flyver
         </a>

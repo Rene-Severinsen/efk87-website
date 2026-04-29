@@ -55,35 +55,35 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
       currentPath={`/${clubSlug}/jeg-flyver`}
       maxWidth="800px"
     >
-      <ThemedSectionCard>
+      <ThemedSectionCard className="p-4 sm:p-8">
         {created === "1" && (
-          <div className="mb-8 p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-md">
+          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-lg text-sm sm:text-base">
             Din flyvemelding er oprettet!
           </div>
         )}
 
         {cancelled === "1" && (
-          <div className="mb-8 p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-md">
+          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-lg text-sm sm:text-base">
             Din melding er aflyst.
           </div>
         )}
 
         {duplicate === "1" && (
-          <div className="mb-8 p-4 bg-red-600 border border-red-500 text-white rounded-md">
+          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-red-600 border border-red-500 text-white rounded-lg text-sm sm:text-base">
             Du har allerede en aktiv &apos;Jeg flyver&apos;-melding for den valgte dag. Aflys den først, hvis du vil oprette en ny.
           </div>
         )}
 
         {hasActiveToday && (
-          <div className="mb-6 p-3 bg-blue-900/20 border border-blue-500/30 text-blue-200 text-sm rounded-md">
+          <div className="mb-5 sm:mb-6 p-3 bg-blue-900/20 border border-blue-500/30 text-blue-200 text-sm rounded-lg">
             Du har allerede en aktiv melding for i dag.
           </div>
         )}
 
-        <form action={createFlightIntentAction} className="space-y-6">
+        <form action={createFlightIntentAction} className="space-y-4 sm:space-y-6">
           <input type="hidden" name="clubSlug" value={clubSlug} />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label htmlFor="flightDate" className="block text-sm font-medium opacity-80 mb-2">
                 Dato *
@@ -149,25 +149,25 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
 
           <button
             type="submit"
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-base font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+            className="w-full flex justify-center py-2.5 sm:py-3 px-4 border border-transparent rounded-lg shadow-lg text-sm sm:text-base font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
           >
             Meld ankomst
           </button>
         </form>
 
-        <div className="mt-12 pt-8 border-t border-white/5">
-          <h2 className="text-xl font-semibold mb-6">Dine seneste meldinger</h2>
+        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/5">
+          <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Dine seneste meldinger</h2>
           
           {recentIntents.length === 0 ? (
-            <p className="opacity-50 italic">
+            <p className="opacity-50 italic text-sm">
               Du har endnu ikke oprettet nogen &apos;Jeg flyver&apos;-meldinger.
             </p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {recentIntents.map((intent) => (
-                <div key={intent.id} className="p-4 rounded-lg border border-white/5 bg-white/5">
+                <div key={intent.id} className="p-3 sm:p-4 rounded-lg border border-white/5 bg-white/5">
                   <div className="flex justify-between items-start mb-2">
-                    <div className="font-medium">
+                    <div className="font-medium text-sm sm:text-base">
                       {new Date(intent.flightDate).toLocaleDateString("da-DK", { 
                         weekday: 'short', 
                         day: 'numeric', 

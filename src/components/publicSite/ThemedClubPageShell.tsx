@@ -73,7 +73,7 @@ export default function ThemedClubPageShell({
           currentPath={currentPath}
         />
 
-        <main style={{ padding: '2rem 1rem', minHeight: '60vh' }}>
+        <main className="px-4 py-6 sm:px-6 sm:py-12 min-h-[60vh]">
           <div style={{ maxWidth: maxWidth, margin: '0 auto' }}>
             {!currentPath?.endsWith('/profil') && (
               <ThemedPageHeader 

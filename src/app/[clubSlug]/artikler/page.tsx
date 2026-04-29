@@ -73,10 +73,10 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
       currentPath={`/${clubSlug}/artikler`}
       maxWidth="1440px"
     >
-      <section className="toolbar-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-        <article className="card toolbar-card" style={{ padding: '18px 20px', minHeight: '84px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'var(--club-panel)' }}>
-          <label htmlFor="search-input" style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--club-accent-2)', marginBottom: '8px' }}>Søg i artikler</label>
-          <form action={`/${clubSlug}/artikler`} method="GET" style={{ position: 'relative' }}>
+      <section className="toolbar-grid grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+        <article className="card toolbar-card p-4 sm:p-5 min-h-[84px] flex flex-col justify-center bg-[var(--club-panel)] rounded-2xl border border-[var(--club-line)]">
+          <label htmlFor="search-input" className="text-[10px] sm:text-xs uppercase tracking-widest color-[var(--club-accent-2)] mb-2 opacity-80">Søg i artikler</label>
+          <form action={`/${clubSlug}/artikler`} method="GET" className="relative">
             {selectedTagSlug && <input type="hidden" name="tag" value={selectedTagSlug} />}
             {sortOption && <input type="hidden" name="sort" value={sortOption} />}
             <input 
@@ -85,96 +85,83 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
               type="text"
               defaultValue={searchQuery || ''}
               placeholder="Søg efter emne, forfatter eller titel..."
-              style={{ 
-                width: '100%',
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'space-between', 
-                gap: '12px', 
-                padding: '12px 14px', 
-                borderRadius: '14px', 
-                background: 'var(--club-panel-soft)', 
-                border: '1px solid var(--club-line)', 
-                color: '#dbe7ff', 
-                fontSize: '15px',
-                outline: 'none'
-              }} 
+              className="w-full flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-[14px] bg-[var(--club-panel-soft)] border border-[var(--club-line)] text-[#dbe7ff] text-sm sm:text-[15px] outline-none"
             />
-            <button type="submit" style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer' }}>
+            <button type="submit" className="absolute right-3.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer opacity-70 hover:opacity-100">
               🔎
             </button>
           </form>
         </article>
-        <article className="card toolbar-card" style={{ padding: '18px 20px', minHeight: '84px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'var(--club-panel)' }}>
-          <label style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--club-accent-2)', marginBottom: '8px' }}>Sortering</label>
-          <div className="select-box" style={{ position: 'relative' }}>
+        <article className="card toolbar-card p-4 sm:p-5 min-h-[84px] flex flex-col justify-center bg-[var(--club-panel)] rounded-2xl border border-[var(--club-line)]">
+          <label className="text-[10px] sm:text-xs uppercase tracking-widest color-[var(--club-accent-2)] mb-2 opacity-80">Sortering</label>
+          <div className="select-box relative">
              <ArticleSortSelect currentSort={sortOption || 'newest'} clubSlug={clubSlug} />
-             <span style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>⌄</span>
+             <span className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">⌄</span>
           </div>
         </article>
       </section>
 
-      <div className="artikler-layout" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
-        <div className="stack" style={{ display: 'grid', gap: '20px' }}>
+      <div className="artikler-layout grid grid-cols-1 gap-5 mt-5">
+        <div className="stack grid gap-5">
           {showFeatured && featuredArticle && (
-            <ThemedSectionCard>
-              <div className="section-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-                <h2 style={{ fontSize: '22px', letterSpacing: '-0.02em' }}>Fremhævet artikel</h2>
-                <Link className="link-soft" href={`/${clubSlug}/artikler/${featuredArticle.slug}`} style={{ color: 'var(--club-accent-2)', fontSize: '14px', fontWeight: 600 }}>Åbn artikel</Link>
+            <ThemedSectionCard className="p-4 sm:p-6">
+              <div className="section-head flex justify-between items-center mb-4 sm:mb-5">
+                <h2 className="text-xl sm:text-[22px] tracking-tight">Fremhævet artikel</h2>
+                <Link className="link-soft text-sm font-semibold text-[var(--club-accent-2)]" href={`/${clubSlug}/artikler/${featuredArticle.slug}`}>Åbn artikel</Link>
               </div>
 
-              <div className="featured" style={{ display: 'grid', gridTemplateColumns: featuredArticle.heroImageUrl ? 'repeat(auto-fit, minmax(300px, 1fr))' : '1fr', gap: '18px' }}>
+              <div className={`featured grid gap-5 ${featuredArticle.heroImageUrl ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
                 {featuredArticle.heroImageUrl && (
-                  <div className="featured-image" style={{ minHeight: '280px', borderRadius: '20px', background: `url(${featuredArticle.heroImageUrl}) center/cover no-repeat`, border: '1px solid var(--club-line)' }}></div>
+                  <div className="featured-image min-h-[200px] sm:min-h-[280px] rounded-[18px] sm:rounded-[20px] bg-center bg-cover bg-no-repeat border border-[var(--club-line)]" style={{ backgroundImage: `url(${featuredArticle.heroImageUrl})` }}></div>
                 )}
-                <div className="featured-copy" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div className="featured-copy flex flex-col gap-4">
                   <ArticleCardTags tags={featuredArticle.tags} getFilterUrl={getFilterUrl} />
 
-                  <div className="meta" style={{ color: 'var(--club-muted)', fontSize: '14px' }}>
+                  <div className="meta text-xs sm:text-sm text-[var(--club-muted)]">
                     Af {featuredArticle.authorName || 'Redaktionen'} · {featuredArticle.publishedAt ? new Date(featuredArticle.publishedAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
                   </div>
 
-                  <h3 style={{ fontSize: '30px', lineHeight: '1.08', letterSpacing: '-0.03em' }}>{featuredArticle.title}</h3>
+                  <h3 className="text-2xl sm:text-3xl leading-[1.1] tracking-tight">{featuredArticle.title}</h3>
 
-                  <p style={{ color: '#d7e2fb', lineHeight: '1.65', fontSize: '15px' }}>
+                  <p className="text-[#d7e2fb] leading-relaxed text-sm sm:text-[15px]">
                     {featuredArticle.excerpt}
                   </p>
 
-                  <div className="hero-actions" style={{ display: 'flex', gap: '12px', marginTop: 'auto' }}>
-                    <Link className="pill primary" href={`/${clubSlug}/artikler/${featuredArticle.slug}`} style={{ padding: '12px 16px', borderRadius: '14px', background: 'linear-gradient(135deg, rgba(110,231,183,0.20), rgba(125,211,252,0.24))', border: '1px solid rgba(110,231,183,0.28)', color: 'var(--club-text)', fontWeight: 600, fontSize: '14px' }}>Læs hele artiklen</Link>
+                  <div className="hero-actions flex gap-3 mt-auto pt-2">
+                    <Link className="pill primary inline-flex items-center px-4 py-3 rounded-xl bg-gradient-to-br from-emerald-400/20 to-sky-400/25 border border-emerald-400/30 text-[var(--club-text)] font-semibold text-sm transition-all hover:scale-[1.02]" href={`/${clubSlug}/artikler/${featuredArticle.slug}`}>Læs hele artiklen</Link>
                   </div>
                 </div>
               </div>
             </ThemedSectionCard>
           )}
 
-          <ThemedSectionCard>
-            <div className="section-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-              <h2 style={{ fontSize: '22px', letterSpacing: '-0.02em' }}>
+          <ThemedSectionCard className="p-4 sm:p-6">
+            <div className="section-head flex justify-between items-center mb-4 sm:mb-5">
+              <h2 className="text-xl sm:text-[22px] tracking-tight">
                 {isFilterActive ? 'Søgeresultater' : 'Seneste artikler'}
               </h2>
               {isFilterActive && (
-                <Link href={clearFilterUrl} className="link-soft" style={{ fontSize: '13px', color: 'var(--club-accent-2)', fontWeight: 600 }}>
+                <Link href={clearFilterUrl} className="link-soft text-xs sm:text-[13px] text-[var(--club-accent-2)] font-semibold">
                   Ryd filter
                 </Link>
               )}
             </div>
 
             {latestToDisplay.length > 0 ? (
-              <div className="article-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+              <div className="article-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {latestToDisplay.map(article => (
-                  <article key={article.id} className="article-card" style={{ display: 'grid', gap: '14px', padding: '16px', borderRadius: '20px', background: 'var(--club-panel-soft)', border: '1px solid var(--club-line)', minHeight: '100%' }}>
+                  <article key={article.id} className="article-card flex flex-col gap-3.5 p-4 rounded-[18px] sm:rounded-[20px] bg-[var(--club-panel-soft)] border border-[var(--club-line)] hover:border-[var(--club-line-bright)] transition-colors">
                     {article.heroImageUrl && (
                       <Link href={`/${clubSlug}/artikler/${article.slug}`}>
-                        <div className="article-thumb" style={{ minHeight: '170px', borderRadius: '18px', border: '1px solid var(--club-line)', background: `url(${article.heroImageUrl}) center/cover no-repeat` }}></div>
+                        <div className="article-thumb min-h-[160px] rounded-2xl border border-[var(--club-line)] bg-center bg-cover bg-no-repeat" style={{ backgroundImage: `url(${article.heroImageUrl})` }}></div>
                       </Link>
                     )}
                     <ArticleCardTags tags={article.tags} getFilterUrl={getFilterUrl} />
-                    <Link href={`/${clubSlug}/artikler/${article.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                      <h4 style={{ fontSize: '20px', lineHeight: '1.18' }}>{article.title}</h4>
+                    <Link href={`/${clubSlug}/artikler/${article.slug}`} className="text-inherit no-underline group">
+                      <h4 className="text-lg sm:text-xl leading-[1.2] group-hover:text-[var(--club-accent)] transition-colors">{article.title}</h4>
                     </Link>
-                    <p style={{ color: 'var(--club-muted)', lineHeight: '1.6', fontSize: '14px' }}>{article.excerpt}</p>
-                    <div className="article-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', color: 'var(--club-muted)', fontSize: '13px' }}>
+                    <p className="text-[var(--club-muted)] leading-relaxed text-sm line-clamp-3">{article.excerpt}</p>
+                    <div className="article-footer flex justify-between items-center mt-auto pt-2 text-[13px] text-[var(--club-muted)]">
                       <span>{article.authorName || 'Redaktionen'}</span>
                       <span>{article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('da-DK') : ''}</span>
                     </div>
@@ -182,7 +169,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                 ))}
               </div>
             ) : (
-              <p style={{ color: 'var(--club-muted)' }}>
+              <p className="text-[var(--club-muted)]">
                 {isFilterActive 
                   ? 'Ingen artikler matcher din søgning.' 
                   : 'Der er endnu ingen publicerede artikler.'}
@@ -191,12 +178,12 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
           </ThemedSectionCard>
         </div>
 
-        <div className="stack" style={{ display: 'grid', gap: '20px' }}>
-          <ThemedSectionCard>
-            <div className="section-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-              <h2 style={{ fontSize: '22px' }}>Emner (Tags)</h2>
+        <div className="stack grid gap-5">
+          <ThemedSectionCard className="p-4 sm:p-6">
+            <div className="section-head flex justify-between items-center mb-4 sm:mb-5">
+              <h2 className="text-xl sm:text-[22px]">Emner (Tags)</h2>
               {selectedTagSlug && (
-                <Link href={getFilterUrl({ tag: null })} className="link-soft" style={{ fontSize: '13px', color: 'var(--club-accent-2)' }}>
+                <Link href={getFilterUrl({ tag: null })} className="link-soft text-[13px] text-[var(--club-accent-2)]">
                   Nulstil filter
                 </Link>
               )}

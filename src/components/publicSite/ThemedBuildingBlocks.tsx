@@ -30,10 +30,10 @@ export interface ThemedPageHeaderProps {
 
 export const ThemedPageHeader: React.FC<ThemedPageHeaderProps> = ({ title, subtitle, eyebrow }) => {
   return (
-    <header className="themed-page-header" style={{ marginBottom: '2.5rem' }}>
-      {eyebrow && <div className="eyebrow" style={{ marginBottom: '0.75rem' }}>{eyebrow}</div>}
-      <h1 className="themed-h1">{title}</h1>
-      {subtitle && <p className="hero-copy" style={{ fontSize: 'clamp(1.1rem, 3vw, 1.25rem)', opacity: 0.9 }}>{subtitle}</p>}
+    <header className="themed-page-header mb-6 sm:mb-10">
+      {eyebrow && <div className="eyebrow mb-2 sm:mb-3">{eyebrow}</div>}
+      <h1 className="themed-h1 text-3xl sm:text-4xl lg:text-5xl">{title}</h1>
+      {subtitle && <p className="hero-copy mt-3 sm:mt-4 text-base sm:text-lg lg:text-xl opacity-90 leading-relaxed">{subtitle}</p>}
     </header>
   );
 };

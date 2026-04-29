@@ -19,10 +19,10 @@ export default function ArticleTagCloud({ tags, selectedTagSlug, getFilterUrl }:
   
   const getTagTierClasses = (count: number) => {
     const ratio = count / maxCount;
-    if (ratio > 0.75) return 'px-4 py-2.5 text-lg'; // tier-4
-    if (ratio > 0.4) return 'px-3.5 py-2 text-base'; // tier-3
-    if (ratio > 0.15) return 'px-3 py-1.5 text-sm'; // tier-2
-    return 'px-2.5 py-1.5 text-xs'; // tier-1
+    if (ratio > 0.75) return 'px-3 sm:px-4 py-1.5 sm:py-2.5 text-base sm:text-lg'; // tier-4
+    if (ratio > 0.4) return 'px-2.5 sm:px-3.5 py-1 sm:py-2 text-sm sm:text-base'; // tier-3
+    if (ratio > 0.15) return 'px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm'; // tier-2
+    return 'px-2 sm:px-2.5 py-1 sm:py-1.5 text-[10px] sm:text-xs'; // tier-1
   };
 
   const baseChipClasses = "inline-flex items-center rounded-full border border-sky-300/25 bg-sky-300/10 text-sky-50 font-bold no-underline whitespace-nowrap transition hover:bg-sky-300/20 hover:border-sky-300/40";
