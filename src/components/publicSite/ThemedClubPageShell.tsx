@@ -75,11 +75,13 @@ export default function ThemedClubPageShell({
 
         <main style={{ padding: '2rem 1rem', minHeight: '60vh' }}>
           <div style={{ maxWidth: maxWidth, margin: '0 auto' }}>
-            <ThemedPageHeader 
-              title={title}
-              subtitle={subtitle}
-              eyebrow={eyebrow}
-            />
+            {!currentPath?.endsWith('/profil') && (
+              <ThemedPageHeader 
+                title={title}
+                subtitle={subtitle}
+                eyebrow={eyebrow}
+              />
+            )}
             {children}
           </div>
         </main>

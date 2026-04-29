@@ -76,6 +76,15 @@ The `ServerViewerContext` includes:
 
 This guard is used to protect member-only routes at the page level.
 
+## Member Routes
+
+### Profile Page (`/[clubSlug]/profil`)
+The member profile page is protected by the `requireActiveMemberForClub` guard. It renders the member's personal information, certificates, and mailing list subscriptions.
+
+- **Data**: Uses real identity and membership data from the `ServerViewerContext`.
+- **Mockup**: Follows the approved "Min profil" mockup visually.
+- **V1 Status**: Editing, profile image upload, password change, and mailing list/certificate synchronization are not implemented in V1 and remain as visual placeholders.
+
 ### Visibility Conversion
 
 `toViewerVisibilityContext(viewer: ServerViewerContext)`:

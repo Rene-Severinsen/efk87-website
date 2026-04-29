@@ -1,7 +1,7 @@
 import { resolveClubContext } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
-import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
 import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
+import { MemberProfile } from "../../../components/member/MemberProfile";
 
 interface ProfilePageProps {
   params: Promise<{
@@ -10,16 +10,16 @@ interface ProfilePageProps {
 }
 
 /**
- * Placeholder for the future member profile page.
- * This route is now protected to require an ACTIVE member.
+ * Member profile page.
+ * Renders the "Min profil" mockup with real viewer data.
  */
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const { clubSlug } = await params;
 
   const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
 
-  // Ensure user is an active member
-  await requireActiveMemberForClub(club.id, club.slug);
+  // Ensure user is an active member and get viewer data
+  const viewer = await requireActiveMemberForClub(club.id, club.slug);
 
   return (
     <ThemedClubPageShell
@@ -32,14 +32,16 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       actionItems={actionItems}
       title="Min profil"
       currentPath={`/${clubSlug}/profil`}
+      maxWidth="1440px"
     >
-      <ThemedSectionCard>
-        <div className="prose prose-invert max-w-none">
-          <p className="text-lg opacity-90 leading-relaxed">
-            Medlemsprofil bliver tilføjet senere.
-          </p>
-        </div>
-      </ThemedSectionCard>
+      <MemberProfile 
+        viewer={{
+          name: viewer.name || "Medlem",
+          email: viewer.email || "",
+          clubRole: viewer.clubRole || "Member",
+          membershipStatus: viewer.membershipStatus || "Active",
+        }}
+      />
     </ThemedClubPageShell>
   );
 }

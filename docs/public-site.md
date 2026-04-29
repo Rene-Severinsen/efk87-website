@@ -20,7 +20,7 @@ Currently, the public club navigation is defined statically in `src/lib/publicSi
 - **Log ind**: `/{clubSlug}/login` (PUBLIC)
 
 ### Member-only Areas
-- **Min profil**: `/{clubSlug}/profil` (MEMBERS_ONLY) - Placeholder only.
+- **Min profil**: `/{clubSlug}/profil` (MEMBERS_ONLY) - Protected member profile page based on the approved mockup.
 - **Forum**: `/{clubSlug}/forum` (MEMBERS_ONLY) - Placeholder only.
 - **Jeg flyver**: `/{clubSlug}/jeg-flyver` (MEMBERS_ONLY)
 - **Jeg flyver liste**: `/{clubSlug}/jeg-flyver/liste` (PUBLIC)
