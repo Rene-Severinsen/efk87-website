@@ -59,8 +59,8 @@ const Select = ({ label, name, options, defaultValue }: { label: string, name: s
 
 const Toggle = ({ label, name, defaultChecked }: { label: string, name: string, defaultChecked?: boolean }) => (
   <div className="md:col-span-1 flex items-center justify-between p-4 rounded-xl bg-slate-900/30 border border-white/5 group transition-all hover:bg-slate-900/40 shadow-inner">
-    <label htmlFor={name} className="text-sm font-medium text-slate-400 cursor-pointer">{label}</label>
-    <div className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:ring-offset-2 focus:ring-offset-slate-900 bg-slate-700 peer-checked:bg-emerald-500 has-[:checked]:bg-emerald-600">
+    <label htmlFor={name} className="text-sm font-medium text-slate-400 cursor-pointer flex-grow">{label}</label>
+    <label className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-within:outline-none focus-within:ring-2 focus-within:ring-sky-500/40 focus-within:ring-offset-2 focus-within:ring-offset-slate-900 bg-slate-700 has-[:checked]:bg-emerald-600">
       <input 
         type="checkbox" 
         name={name} 
@@ -69,7 +69,7 @@ const Toggle = ({ label, name, defaultChecked }: { label: string, name: string, 
         className="sr-only peer"
       />
       <span className="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out translate-x-0 peer-checked:translate-x-5" />
-    </div>
+    </label>
   </div>
 );
 

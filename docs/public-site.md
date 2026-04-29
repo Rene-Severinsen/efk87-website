@@ -13,6 +13,7 @@ Currently, the public club navigation is defined statically in `src/lib/publicSi
 - **Artikler**: `/{clubSlug}/artikler` (PUBLIC)
 - **Flyveskole**: `/{clubSlug}/flyveskole` (PUBLIC)
 - **Om [Club]**: `/{clubSlug}/about` (PUBLIC)
+- **Kontakt**: `/{clubSlug}/om/kontakt` (PUBLIC)
 
 ### Current Topbar Actions (Visibility Aware)
 - **Min profil**: `/{clubSlug}/profil` (MEMBERS_ONLY)
@@ -156,6 +157,7 @@ Reusable small themed components for consistent internal page styling:
 - **Route List**:
   - `/[clubSlug]`: Forside (Home)
   - `/[clubSlug]/about`: Om klubben (PublicPage content)
+  - `/[clubSlug]/om/kontakt`: Kontakt (Instructor contact page)
   - `/[clubSlug]/galleri`: Galleri (PublicPage content stub)
   - `/[clubSlug]/artikler`: Artikler (PublicPage content stub)
   - `/[clubSlug]/flyveskole`: Flyveskole (PublicPage content stub)
