@@ -22,7 +22,8 @@ Currently, the public club navigation is defined statically in `src/lib/publicSi
 ### Member-only Areas
 - **Min profil**: `/{clubSlug}/profil` (MEMBERS_ONLY) - Placeholder only.
 - **Forum**: `/{clubSlug}/forum` (MEMBERS_ONLY) - Placeholder only.
-- **Jeg flyver**: `/{clubSlug}/jeg-flyver` (MEMBERS_ONLY) - Placeholder only.
+- **Jeg flyver**: `/{clubSlug}/jeg-flyver` (MEMBERS_ONLY)
+- **Jeg flyver liste**: `/{clubSlug}/jeg-flyver/liste` (PUBLIC)
 
 These routes are reserved for future member-only functionality. Currently, they render a placeholder title and text stating that login and access control are not yet implemented. They are hidden from navigation for anonymous viewers.
 
@@ -134,6 +135,7 @@ Visual settings are managed per club through the `ClubTheme` model.
   - `/[clubSlug]/artikler`: Artikler (PublicPage content stub)
   - `/[clubSlug]/flyveskole`: Flyveskole (PublicPage content stub)
   - `/[clubSlug]/bliv-medlem`: Bliv medlem (PublicPage content stub)
+  - `/[clubSlug]/jeg-flyver/liste`: Jeg flyver (Full today list)
   - `/[clubSlug]/login`: Log ind (Placeholder only, no auth implementation)
 
 ### Public Route Details

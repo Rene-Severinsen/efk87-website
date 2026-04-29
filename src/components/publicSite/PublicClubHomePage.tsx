@@ -26,6 +26,8 @@ interface PublicClubHomePageProps {
   footerData?: PublicFooterData;
   navigationItems?: PublicNavigationItem[];
   actionItems?: PublicNavigationItem[];
+  submitFlightIntentHref?: string;
+  viewAllFlightIntentsHref?: string;
 }
 
 /**
@@ -44,7 +46,9 @@ export default function PublicClubHomePage({
   flightIntents, 
   footerData,
   navigationItems = [],
-  actionItems = []
+  actionItems = [],
+  submitFlightIntentHref = "#",
+  viewAllFlightIntentsHref = "#"
 }: PublicClubHomePageProps) {
   // Use existing dynamic data where it fits, otherwise use mockup defaults
   const heroTitle = content.heroTitle || "En klubside med mere liv og bedre overblik.";
@@ -250,7 +254,7 @@ export default function PublicClubHomePage({
           <article className="card section-card">
             <div className="section-head">
               <h2>Aktivitet på pladsen</h2>
-              <a className="link-soft" href="#">Se alle flyvemeddelser</a>
+              <a className="link-soft" href={viewAllFlightIntentsHref}>Se alle flyvemeddelser</a>
             </div>
 
             <div className="griffin-box">
@@ -261,8 +265,8 @@ export default function PublicClubHomePage({
                 <div className="hero-actions" style={{ marginTop: '14px' }}>
                   {/* Submit flow requires future auth/member implementation */}
                   {/* Future submit flow must allow selecting today or a future date */}
-                  <a className="pill primary" href="#">Skriv “jeg flyver”</a>
-                  <a className="pill" href="#">Se dagens liste</a>
+                  <a className="pill primary" href={submitFlightIntentHref}>Skriv “jeg flyver”</a>
+                  <a className="pill" href={viewAllFlightIntentsHref}>Se dagens liste</a>
                 </div>
               </div>
             </div>

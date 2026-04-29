@@ -117,6 +117,8 @@ export default async function ClubPage({ params }: ClubPageProps) {
           footerData={footerData}
           navigationItems={navigationItems}
           actionItems={actionItems}
+          submitFlightIntentHref={`/${clubSlug}/jeg-flyver`}
+          viewAllFlightIntentsHref={`/${clubSlug}/jeg-flyver/liste`}
       />
   );
 }

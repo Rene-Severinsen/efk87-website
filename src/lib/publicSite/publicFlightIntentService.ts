@@ -76,3 +76,37 @@ export async function getTodayFlightIntents(
     take: 5,
   });
 }
+
+/**
+ * Returns all active flight intents for today's daily presence list.
+ * Only returns PUBLIC visibility intents for public-facing list.
+ */
+export async function getTodayFlightIntentList(
+  clubId: string
+) {
+  const now = new Date();
+  const startOfToday = new Date(now);
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const endOfToday = new Date(now);
+  endOfToday.setHours(23, 59, 59, 999);
+
+  return prisma.clubFlightIntent.findMany({
+    where: {
+      clubId,
+      status: ClubFlightIntentStatus.ACTIVE,
+      visibility: "PUBLIC",
+      flightDate: {
+        gte: startOfToday,
+        lte: endOfToday,
+      },
+      OR: [
+        { expiresAt: null },
+        { expiresAt: { gt: now } },
+      ],
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+}

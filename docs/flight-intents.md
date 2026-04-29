@@ -29,7 +29,10 @@ The `ClubFlightIntent` model includes:
 
 - **Intended Date:** `flightDate` represents the calendar day the member intends to be active. 
 - **Timezone:** Timezone handling must respect `Europe/Copenhagen`.
-- **Homepage Visibility**: The public homepage currently shows today's list only. It filters based on the viewer's visibility context. 
+- **Homepage Visibility**: The public homepage shows latest 5 today entries only, respecting visibility. 
+- **Full List Route**: A full public read-only list for today is available at `/[clubSlug]/jeg-flyver/liste`.
+- **Title/Subtitle**: The full list page has the title “Jeg flyver” and subtitle “Her kan du se dagens flyvemeldinger.”.
+- **Empty State**: Displays “Der er endnu ingen flyvemeldinger for i dag.” if no entries exist.
     - For anonymous visitors, it only shows rows where `visibility` is `PUBLIC`.
     - It also filters for `status` is `ACTIVE`, `flightDate` is the current date, and `expiresAt` is null or in the future.
 - **Retention:** Past rows remain stored for future statistics. Do not delete old rows.
@@ -40,8 +43,9 @@ The `ClubFlightIntent` model includes:
 
 ### Public Access
 All public flight intent queries must go through `src/lib/publicSite/publicFlightIntentService.ts`.
-- `getTodayFlightIntents(clubId, viewer)`: Used for the daily presence list on the homepage, respecting visibility.
-- `getActiveFlightIntents(clubId, viewer)`: Returns all active intents, including future ones, respecting visibility.
+- `getTodayFlightIntents(clubId, viewer)`: Used for the daily presence list on the homepage, respecting visibility. Limited to 5 rows.
+- `getTodayFlightIntentList(clubId)`: Used for the full daily list page. Returns all today's PUBLIC ACTIVE rows without limit.
+- `getActiveFlightIntents(clubId, viewer)`: Returns all active intents, including future ones, respecting visibility. Limited to 5 rows.
 
 ### Member Access
 All member-specific flight intent queries must go through `src/lib/flightIntents/memberFlightIntentService.ts`.
