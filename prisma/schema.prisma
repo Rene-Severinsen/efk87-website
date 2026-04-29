@@ -30,6 +30,8 @@ model Club {
   publicSponsors PublicSponsor[]
   dailyActivity MemberDailyActivity[]
   mailingLists  ClubMailingList[]
+  galleryAlbums GalleryAlbum[]
+  galleryImages GalleryImage[]
 }
 
 model PublicClubFooter {
@@ -117,6 +119,66 @@ model ClubFlightIntent {
   @@index([clubId, activityType, createdAt])
   @@index([clubId, source, createdAt])
   @@index([userId])
+}
+
+model GalleryAlbum {
+  id            String             @id @default(cuid())
+  clubId        String
+  slug          String
+  title         String
+  description   String?
+  coverImageUrl String?
+  status        GalleryAlbumStatus
+  visibility    PublicSurfaceVisibility @default(PUBLIC)
+  sortOrder     Int                @default(0)
+  legacySource  String?
+  legacyId      String?
+  publishedAt   DateTime?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  club   Club           @relation(fields: [clubId], references: [id])
+  images GalleryImage[]
+
+  @@unique([clubId, slug])
+  @@index([clubId, status, visibility])
+  @@index([clubId, legacySource, legacyId])
+}
+
+model GalleryImage {
+  id           String             @id @default(cuid())
+  clubId       String
+  albumId      String
+  title        String?
+  caption      String?
+  imageUrl     String
+  thumbnailUrl String?
+  sortOrder    Int                @default(0)
+  status       GalleryImageStatus
+  legacySource String?
+  legacyId     String?
+  takenAt      DateTime?
+  uploadedAt   DateTime?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  club  Club         @relation(fields: [clubId], references: [id])
+  album GalleryAlbum @relation(fields: [albumId], references: [id])
+
+  @@index([clubId, albumId, status])
+  @@index([clubId, legacySource, legacyId])
+}
+
+enum GalleryAlbumStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum GalleryImageStatus {
+  ACTIVE
+  HIDDEN
+  ARCHIVED
 }
 
 enum ClubFlightIntentType {

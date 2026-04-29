@@ -21,7 +21,7 @@ Admin routes are organized into several logical groups. Most routes currently ex
 - **Forsideindhold** (`/admin/forsideindhold`): Homepage content and section control (stub).
 - **Artikler** (`/admin/artikler`): News and article publishing (stub).
 - **Forum** (`/admin/forum`): Forum moderation and settings (stub).
-- **Galleri** (`/admin/galleri`): Photo gallery management (stub).
+- **Galleri** (`/admin/galleri`): Photo gallery management (read-only foundation).
 
 ### Platform
 - **Statistik** (`/admin/statistik`): Activity metrics and flight reports.

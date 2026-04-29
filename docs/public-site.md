@@ -168,7 +168,7 @@ Reusable small themed components for consistent internal page styling:
 - **Login Placeholder**: The login page is a visual placeholder only. It does not implement real authentication, session handling, or form fields. A code comment indicates that auth/session handling is intentionally skipped in this scope.
 - **Member-only Areas**: Forum (`/[clubSlug]/forum`) and My Profile (`/[clubSlug]/profil`) are intended for members only and are hidden from anonymous visitors in the navigation.
 - **Scope Limitations**:
-  - Gallery and Articles do not have a backend feature or media library yet.
+  - Gallery is now implemented as a read-only foundation with tenant-scoping.
   - Calendar and event logic are not implemented.
   - Forum backend is not implemented.
   - No CMS editor or Admin UI for managing these pages yet.

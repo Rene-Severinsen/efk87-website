@@ -2,7 +2,9 @@ import prisma from "../src/lib/db/prisma";
 import { 
   PublicPageStatus, 
   PublicSurfaceVisibility,
-  ClubMailingListPurpose 
+  ClubMailingListPurpose,
+  GalleryAlbumStatus,
+  GalleryImageStatus
 } from "../src/generated/prisma";
 
 async function main() {
@@ -433,6 +435,116 @@ async function main() {
         ...list,
       },
     });
+  }
+
+  // Seed Gallery for EFK87
+  if (process.env.APP_ENV === "development") {
+    console.log("Seeding development gallery sample...");
+    
+    const galleryAlbums = [
+      {
+        slug: "sommer-2025",
+        title: "Sommer flyvning 2025",
+        description: "Billeder fra en fantastisk sommer på pladsen.",
+        coverImageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80",
+        status: GalleryAlbumStatus.PUBLISHED,
+        visibility: PublicSurfaceVisibility.PUBLIC,
+        sortOrder: 1,
+        publishedAt: new Date(),
+        images: [
+          {
+            title: "Morgenflyvning",
+            caption: "Klar til start i den tidlige morgensol.",
+            imageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80",
+            status: GalleryImageStatus.ACTIVE,
+            sortOrder: 1,
+          },
+          {
+            title: "Landing",
+            caption: "Perfekt landing på bane 2.",
+            imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+            status: GalleryImageStatus.ACTIVE,
+            sortOrder: 2,
+          }
+        ]
+      },
+      {
+        slug: "klubaften-maj",
+        title: "Klubaften Maj",
+        description: "Hygge og teknik i shelteren.",
+        coverImageUrl: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+        status: GalleryAlbumStatus.PUBLISHED,
+        visibility: PublicSurfaceVisibility.PUBLIC,
+        sortOrder: 2,
+        publishedAt: new Date(),
+        images: [
+          {
+            title: "Tekniksnak",
+            caption: "Nye motorer bliver diskuteret.",
+            imageUrl: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1200&q=80",
+            status: GalleryImageStatus.ACTIVE,
+            sortOrder: 1,
+          }
+        ]
+      },
+      {
+        slug: "medlems-album",
+        title: "Kun for medlemmer",
+        description: "Dette album er kun synligt for medlemmer.",
+        coverImageUrl: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80",
+        status: GalleryAlbumStatus.PUBLISHED,
+        visibility: PublicSurfaceVisibility.MEMBERS_ONLY,
+        sortOrder: 3,
+        publishedAt: new Date(),
+        images: [
+          {
+            title: "Hemmelig testflyvning",
+            caption: "Nyt projekt under udvikling.",
+            imageUrl: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80",
+            status: GalleryImageStatus.ACTIVE,
+            sortOrder: 1,
+          }
+        ]
+      }
+    ];
+
+    for (const albumData of galleryAlbums) {
+      const { images, ...albumInfo } = albumData;
+      const album = await prisma.galleryAlbum.upsert({
+        where: {
+          clubId_slug: {
+            clubId: efk87.id,
+            slug: albumInfo.slug,
+          },
+        },
+        update: albumInfo,
+        create: {
+          clubId: efk87.id,
+          ...albumInfo,
+        },
+      });
+
+      for (const imageData of images) {
+        const existingImage = await prisma.galleryImage.findFirst({
+          where: {
+            clubId: efk87.id,
+            albumId: album.id,
+            imageUrl: imageData.imageUrl,
+          },
+        });
+
+        if (!existingImage) {
+          await prisma.galleryImage.create({
+            data: {
+              clubId: efk87.id,
+              albumId: album.id,
+              ...imageData,
+            },
+          });
+        }
+      }
+    }
+    console.log("Gallery samples seeded.");
   }
 
   console.log({ efk87 });
