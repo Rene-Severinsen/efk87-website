@@ -107,6 +107,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
 
   return (
       <PublicClubHomePage
+          clubSlug={clubSlug}
           clubName={club.settings?.shortName || club.name}
           clubDisplayName={club.settings?.displayName || club.name}
           content={content}

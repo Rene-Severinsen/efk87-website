@@ -23,6 +23,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
   return (
     <ThemedClubPageShell
+      clubSlug={clubSlug}
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}

@@ -29,6 +29,7 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
 
   return (
     <ThemedClubPageShell
+      clubSlug={clubSlug}
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}

@@ -82,6 +82,12 @@ Converts the full server-side context to the minimal `ViewerVisibilityContext` u
 
 ## Operational Requirements
 
+### Logout
+
+Logout is implemented using a server action (`logoutAction` in `src/lib/auth/logout.ts`) that calls Auth.js `signOut`.
+- **Redirect**: After logout, the user is redirected back to the club's home page (`/[clubSlug]`).
+- **CSRF Safety**: Handled automatically by Auth.js through the use of server actions and forms.
+
 ### Local Test Member
 
 For development and verification of protected member routes, a local test member is seeded when `APP_ENV=development`.

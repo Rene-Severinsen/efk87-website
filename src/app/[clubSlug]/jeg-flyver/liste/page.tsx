@@ -38,6 +38,7 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
 
   return (
     <ThemedClubPageShell
+      clubSlug={clubSlug}
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}

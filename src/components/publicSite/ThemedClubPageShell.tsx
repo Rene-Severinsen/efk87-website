@@ -12,6 +12,7 @@ interface PublicFooterData {
 }
 
 interface ThemedClubPageShellProps {
+  clubSlug: string;
   clubName: string;
   clubDisplayName: string;
   theme?: ClubTheme;
@@ -32,6 +33,7 @@ interface ThemedClubPageShellProps {
  * Uses the same visual language as the approved homepage.
  */
 export default function ThemedClubPageShell({ 
+  clubSlug,
   clubName, 
   clubDisplayName, 
   theme, 
@@ -63,6 +65,7 @@ export default function ThemedClubPageShell({
     <div className="public-home" style={themeStyles}>
       <div className="shell">
         <ThemedTopBar 
+          clubSlug={clubSlug}
           clubName={clubName}
           clubDisplayName={clubDisplayName}
           navigationItems={navigationItems}

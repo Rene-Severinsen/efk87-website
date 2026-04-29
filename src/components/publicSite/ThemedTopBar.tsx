@@ -1,7 +1,9 @@
 import React from 'react';
 import { PublicNavigationItem } from "../../lib/publicSite/publicNavigation";
+import { logoutAction } from "../../lib/auth/logout";
 
 export interface ThemedTopBarProps {
+  clubSlug: string;
   clubName: string;
   clubDisplayName: string;
   navigationItems: PublicNavigationItem[];
@@ -10,6 +12,7 @@ export interface ThemedTopBarProps {
 }
 
 export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
+  clubSlug,
   clubName,
   clubDisplayName,
   navigationItems,
@@ -42,15 +45,33 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
       </nav>
 
       <div className="actions">
-        {actionItems.map((item) => (
-          <a 
-            key={item.key} 
-            href={item.href}
-            className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
-          >
-            {item.label}
-          </a>
-        ))}
+        {actionItems.map((item) => {
+          if (item.key === 'logout') {
+            return (
+              <form key={item.key} action={async () => {
+                "use server";
+                await logoutAction(clubSlug);
+              }}>
+                <button 
+                  type="submit"
+                  className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
+                >
+                  {item.label}
+                </button>
+              </form>
+            );
+          }
+
+          return (
+            <a 
+              key={item.key} 
+              href={item.href}
+              className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
+            >
+              {item.label}
+            </a>
+          );
+        })}
       </div>
     </header>
   );

@@ -76,29 +76,50 @@ export function getVisiblePublicActions(
   clubSlug: string,
   viewer: ViewerVisibilityContext
 ): PublicNavigationItem[] {
-  const allActions: PublicNavigationItem[] = [
-    {
-      label: 'Min profil',
-      href: `/${clubSlug}/profil`,
-      key: 'profile',
-      visibility: 'MEMBERS_ONLY',
-    },
-    {
+  const allActions: PublicNavigationItem[] = [];
+
+  if (viewer.isAuthenticated) {
+    if (viewer.isMember || viewer.isAdmin) {
+      allActions.push({
+        label: 'Min profil',
+        href: `/${clubSlug}/profil`,
+        key: 'profile',
+        visibility: 'MEMBERS_ONLY',
+      });
+    } else {
+      allActions.push({
+        label: 'Bliv medlem',
+        href: `/${clubSlug}/bliv-medlem`,
+        key: 'join',
+        visibility: 'PUBLIC',
+        isPrimary: true,
+      });
+    }
+
+    allActions.push({
+      label: 'Log ud',
+      href: `/${clubSlug}/logout`, // Handled via form action in UI
+      key: 'logout',
+      visibility: 'PUBLIC',
+    });
+  } else {
+    allActions.push({
       label: 'Bliv medlem',
       href: `/${clubSlug}/bliv-medlem`,
       key: 'join',
       visibility: 'PUBLIC',
       isPrimary: true,
-    },
-    {
+    });
+
+    allActions.push({
       label: 'Log ind',
       href: `/${clubSlug}/login`,
       key: 'login',
       visibility: 'PUBLIC',
-    },
-  ];
+    });
+  }
 
-  return allActions.filter(item => canViewSurface(item.visibility, viewer));
+  return allActions;
 }
 
 /**

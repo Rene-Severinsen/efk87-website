@@ -3,6 +3,7 @@ import './PublicClubHomePage.css';
 import { ClubTheme, PublicHomeFeatureTile, PublicHomeInfoCard, PublicClubFooter, PublicSponsor } from "../../generated/prisma";
 import { PublicNavigationItem } from "../../lib/publicSite/publicNavigation";
 import { PublicFlightIntentListItem } from "../../lib/publicSite/publicFlightIntentService";
+import { logoutAction } from "../../lib/auth/logout";
 
 interface PublicFooterData {
   footer: PublicClubFooter | null;
@@ -17,6 +18,7 @@ interface PublicHomePageData {
 }
 
 interface PublicClubHomePageProps {
+  clubSlug: string;
   clubName: string;
   clubDisplayName: string;
   content: PublicHomePageData;
@@ -38,6 +40,7 @@ interface PublicClubHomePageProps {
  * of the approved HTML/CSS mockup.
  */
 export default function PublicClubHomePage({ 
+  clubSlug,
   clubName, 
   clubDisplayName, 
   content, 
@@ -120,15 +123,33 @@ export default function PublicClubHomePage({
           </nav>
 
           <div className="actions">
-            {actionItems.map((item) => (
-              <a 
-                key={item.key} 
-                href={item.href}
-                className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
-              >
-                {item.label}
-              </a>
-            ))}
+            {actionItems.map((item) => {
+              if (item.key === 'logout') {
+                return (
+                  <form key={item.key} action={async () => {
+                    "use server";
+                    await logoutAction(clubSlug);
+                  }}>
+                    <button 
+                      type="submit"
+                      className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
+                    >
+                      {item.label}
+                    </button>
+                  </form>
+                );
+              }
+
+              return (
+                <a 
+                  key={item.key} 
+                  href={item.href}
+                  className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
           </div>
         </header>
 

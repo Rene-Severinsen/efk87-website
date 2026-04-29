@@ -40,8 +40,19 @@ Public navigation and topbar actions support visibility rules. This ensures that
 
 - **Centralized Definition**: Navigation items and actions are defined in `src/lib/publicSite/publicNavigation.ts`.
 - **Visibility Aware**: Each item has a `visibility` property (`PUBLIC` or `MEMBERS_ONLY`).
-- **Filtering**: Items are filtered using `getVisiblePublicNavigation` and `getVisiblePublicActions` which utilize the `canViewSurface` helper.
-- **Anonymous View**: The public homepage uses `anonymousViewer`, so only `PUBLIC` items like "Bliv medlem" and "Log ind" are visible, while "Min profil" and "Forum" are hidden until authentication is implemented.
+- **Filtering**: Items are filtered using `getVisiblePublicNavigation` and `getVisiblePublicActions`.
+
+#### Topbar Action Behavior
+
+| State | Bliv medlem | Log ind | Min profil | Log ud |
+|-------|-------------|---------|------------|--------|
+| **Anonymous** | Visible | Visible | Hidden | Hidden |
+| **Active Member / Admin** | Hidden | Hidden | Visible | Visible |
+| **Authenticated Non-member** | Visible | Hidden | Hidden | Visible |
+
+- **Log ud**: Logout is handled via an Auth.js `signOut` server action.
+- **Bliv medlem**: Hidden for active members to avoid confusion.
+- **Min profil**: Only visible to active members and admins.
 
 ### Member-only Area Placeholders
 
