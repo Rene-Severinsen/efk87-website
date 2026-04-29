@@ -14,57 +14,43 @@ export interface PublicCalendarEntry {
  * Returns upcoming published calendar entries for the marquee.
  * 
  * Logic:
- * 1. Published upcoming entries ordered by startsAt ascending.
- * 2. Limit to 8 upcoming entries.
- * 3. Also include entries with forceShowInMarquee=true even if they are beyond the first 8.
- * 4. Past entries are hidden unless forceShowInMarquee=true and startsAt is still "relevant" 
- *    (for simplicity, we show them if startsAt is today or later, OR if forced).
+ * 1. Published upcoming entries (startsAt >= today).
+ * 2. entries within the next 3 months from today.
+ * 3. entries with forceShowInMarquee=true (even if beyond 3 months).
+ * 4. Past entries are never shown.
+ * 5. Sort by startsAt ascending.
  */
 export async function getHomepageMarqueeCalendarEntries(clubId: string): Promise<PublicCalendarEntry[]> {
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  
+  const threeMonthsAhead = new Date(startOfToday);
+  threeMonthsAhead.setMonth(threeMonthsAhead.getMonth() + 3);
 
-  // 1. Get first 8 upcoming
-  const upcoming = await prisma.clubCalendarEntry.findMany({
+  const entries = await prisma.clubCalendarEntry.findMany({
     where: {
       clubId,
       isPublished: true,
       startsAt: {
         gte: startOfToday
-      }
-    },
-    orderBy: {
-      startsAt: 'asc'
-    },
-    take: 8
-  });
-
-  // 2. Get forced entries that might be beyond the first 8 or in the past but still relevant
-  // For "relevant", we'll include forced entries that are not older than 24 hours
-  const forcedLimit = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  const forced = await prisma.clubCalendarEntry.findMany({
-    where: {
-      clubId,
-      isPublished: true,
-      forceShowInMarquee: true,
-      startsAt: {
-        gte: forcedLimit
       },
-      // Avoid fetching what we already have if possible, but easier to filter in JS
+      OR: [
+        {
+          startsAt: {
+            lte: threeMonthsAhead
+          }
+        },
+        {
+          forceShowInMarquee: true
+        }
+      ]
     },
     orderBy: {
       startsAt: 'asc'
     }
   });
 
-  // Combine and deduplicate
-  const allEntries = [...upcoming, ...forced];
-  const uniqueEntries = Array.from(new Map(allEntries.map(item => [item.id, item])).values());
-
-  // Re-sort by startsAt ascending
-  uniqueEntries.sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime());
-
-  return uniqueEntries.map(mapToPublicEntry);
+  return entries.map(mapToPublicEntry);
 }
 
 /**

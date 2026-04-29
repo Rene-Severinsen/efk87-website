@@ -134,6 +134,9 @@ Frontpage V2 is now the active live homepage for all clubs.
   - v2 uses real data for club, user profile, and "Jeg flyver" activity.
   - v2 includes a "Nye medlemmer" highlight card that appears when members have joined within the last 14 days.
   - v2 uses the `ClubCalendarEntry` model to populate the homepage marquee (ticker).
+    - Marquee shows published upcoming entries (startsAt >= today) up to 3 months ahead.
+    - Entries marked “Gennemtving visning i marquee” (forceShowInMarquee) are included even if further out.
+    - Past entries never show in marquee.
   - Chat, statistics, and gallery remain static placeholders.
   - v2 CSS is scoped and non-invasive.
 
