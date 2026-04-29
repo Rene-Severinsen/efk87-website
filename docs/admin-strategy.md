@@ -134,7 +134,7 @@ These addresses must be stored per tenant and must never be hardcoded in busines
 2.  **Session Resolution**: Implement viewer/session resolution logic.
 3.  **Route Protection**: Protect the `/[clubSlug]/admin` route using middleware or layout-level checks.
 4.  **Admin Shell**: Create the basic admin layout and navigation.
-5.  **Read-only Dashboard**: Implement a dashboard showing current public site data in a read-only format.
+5.  **Read-only Dashboard**: Implement a dashboard showing current public site data in a read-only format. (COMPLETED v1 foundation)
 6.  **Homepage Editor**: Add the ability to edit the homepage hero and intro content.
 7.  **Theme Editor**: Implement the theme token editor.
 8.  **Surface Editors**: Implement editors for feature tiles, info cards, pages, and footer/sponsors.

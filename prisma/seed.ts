@@ -139,9 +139,39 @@ async function main() {
         role: "MEMBER",
       },
     });
-    console.log("Development test member seeded.");
+
+    console.log("Seeding development admin member...");
+    const adminMember = await prisma.user.upsert({
+      where: { email: "admin@efk87.local" },
+      update: {},
+      create: {
+        email: "admin@efk87.local",
+        name: "Test Admin",
+      },
+    });
+
+    await prisma.clubMembership.upsert({
+      where: {
+        clubId_userId: {
+          clubId: efk87.id,
+          userId: adminMember.id,
+        },
+      },
+      update: {
+        status: "ACTIVE",
+        role: "ADMIN",
+      },
+      create: {
+        clubId: efk87.id,
+        userId: adminMember.id,
+        status: "ACTIVE",
+        role: "ADMIN",
+      },
+    });
+
+    console.log("Development members seeded.");
   } else {
-    console.log(`Skipping development test member seed (APP_ENV: ${process.env.APP_ENV || 'not set'})`);
+    console.log(`Skipping development members seed (APP_ENV: ${process.env.APP_ENV || 'not set'})`);
   }
 
   // Seed feature tiles for EFK87
@@ -216,7 +246,7 @@ async function main() {
     update: {},
     create: {
       email: "admin@efk87.local",
-      name: "Admin User",
+      name: "Test Admin",
     },
   });
 
