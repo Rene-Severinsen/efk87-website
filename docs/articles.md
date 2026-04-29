@@ -37,7 +37,9 @@ All models are scoped by `clubId`. Every query and write operation must ensure t
 - **Sanitization**: All HTML content is sanitized before storage and rendering to prevent XSS.
 - **Services**: Located in `src/lib/articles/` (public) and `src/lib/admin/` (admin).
 - **Actions**: Located in `src/lib/admin/articleActions.ts`.
-- **Public UI**: The public articles overview (`/artikler`) features a weighted tag cloud where tag sizes (4 tiers) reflect article counts. Filtering by tag is handled via URL search parameters.
+- **Public UI**: The public articles overview (`/artikler`) features a weighted tag cloud where tag sizes (4 tiers) reflect article counts.
+- **Search & Filtering**: Articles can be searched by title, excerpt, body, and author name. Filtering by tag is handled via URL search parameters (`tag`). Sorting is supported by newest, oldest, and title (`sort`).
+- **Featured Article**: A featured article is shown prominently on the overview page, but hidden when search or filters are active to prioritize results.
 - **Article Cards**: Cards (featured and regular) are text-first if no hero image is provided, removing empty placeholders for a cleaner layout.
 - **Admin UI**: Integrated into the existing admin shell using the standard admin design language.
 

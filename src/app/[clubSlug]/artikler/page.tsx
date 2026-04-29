@@ -3,6 +3,8 @@ import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageSh
 import { getPublishedArticles, getFeaturedArticle, getArticleTags } from "../../../lib/articles/articleService";
 import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
 import Link from "next/link";
+import React from "react";
+import ArticleSortSelect from "../../../components/articles/ArticleSortSelect";
 
 interface PageProps {
   params: Promise<{
@@ -10,28 +12,50 @@ interface PageProps {
   }>;
   searchParams: Promise<{
     tag?: string;
+    q?: string;
+    sort?: "newest" | "oldest" | "title";
   }>;
 }
 
 export default async function ArtiklerPage({ params, searchParams }: PageProps) {
   const { clubSlug } = await params;
-  const { tag: selectedTagSlug } = await searchParams;
+  const { tag: selectedTagSlug, q: searchQuery, sort: sortOption } = await searchParams;
   const context = await resolveClubContext(clubSlug);
   const { club, theme, footerData, navigationItems, actionItems, viewer } = context;
 
+  const isFilterActive = !!(selectedTagSlug || (searchQuery && searchQuery.trim()) || (sortOption && sortOption !== "newest"));
+
   const [featuredArticle, latestArticles, tags] = await Promise.all([
     getFeaturedArticle(club.id, viewer),
-    getPublishedArticles(club.id, viewer, { limit: 10, tagSlug: selectedTagSlug }),
+    getPublishedArticles(club.id, viewer, { 
+      limit: 100, 
+      tagSlug: selectedTagSlug,
+      query: searchQuery,
+      sort: sortOption
+    }),
     getArticleTags(club.id, viewer),
   ]);
 
-  const activeTag = selectedTagSlug ? tags.find(t => t.slug === selectedTagSlug) : null;
-
-  // Filter out featured article if no tag is selected
-  // If tag is selected, we show everything that matches the tag, including featured if it matches
-  const latestWithoutFeatured = (featuredArticle && !selectedTagSlug)
+  // Show featured only if no search/filter is active
+  const showFeatured = featuredArticle && !isFilterActive;
+  
+  // If we show featured, filter it out from the latest list to avoid duplication
+  const latestToDisplay = (showFeatured && featuredArticle)
     ? latestArticles.filter(a => a.id !== featuredArticle.id)
     : latestArticles;
+
+  // Helper to build URLs preserving other params
+  const getFilterUrl = (newParams: Record<string, string | null>) => {
+    const current = { tag: selectedTagSlug, q: searchQuery, sort: sortOption };
+    const merged = { ...current, ...newParams };
+    const search = new URLSearchParams();
+    Object.entries(merged).forEach(([key, value]) => {
+      if (value) search.set(key, value);
+    });
+    return `/${clubSlug}/artikler?${search.toString()}`;
+  };
+
+  const clearFilterUrl = `/${clubSlug}/artikler`;
 
   // Tag cloud logic
   const maxCount = Math.max(...tags.map(t => t.articleCount), 1);
@@ -60,22 +84,48 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
     >
       <section className="toolbar" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
         <article className="card toolbar-card" style={{ padding: '18px 20px', minHeight: '84px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'var(--club-panel)' }}>
-          <label style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--club-accent-2)', marginBottom: '8px' }}>Søg i artikler</label>
-          <div className="search-box" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', padding: '12px 14px', borderRadius: '14px', background: 'var(--club-panel-soft)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '15px' }}>
-            Søg efter emne, forfatter eller titel <span>🔎</span>
-          </div>
+          <label htmlFor="search-input" style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--club-accent-2)', marginBottom: '8px' }}>Søg i artikler</label>
+          <form action={`/${clubSlug}/artikler`} method="GET" style={{ position: 'relative' }}>
+            {selectedTagSlug && <input type="hidden" name="tag" value={selectedTagSlug} />}
+            {sortOption && <input type="hidden" name="sort" value={sortOption} />}
+            <input 
+              id="search-input"
+              name="q"
+              type="text"
+              defaultValue={searchQuery || ''}
+              placeholder="Søg efter emne, forfatter eller titel..."
+              style={{ 
+                width: '100%',
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between', 
+                gap: '12px', 
+                padding: '12px 14px', 
+                borderRadius: '14px', 
+                background: 'var(--club-panel-soft)', 
+                border: '1px solid var(--club-line)', 
+                color: '#dbe7ff', 
+                fontSize: '15px',
+                outline: 'none'
+              }} 
+            />
+            <button type="submit" style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer' }}>
+              🔎
+            </button>
+          </form>
         </article>
         <article className="card toolbar-card" style={{ padding: '18px 20px', minHeight: '84px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'var(--club-panel)' }}>
           <label style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--club-accent-2)', marginBottom: '8px' }}>Sortering</label>
-          <div className="select-box" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', padding: '12px 14px', borderRadius: '14px', background: 'var(--club-panel-soft)', border: '1px solid var(--club-line)', color: '#dbe7ff', fontSize: '15px' }}>
-            Nyeste først <span>⌄</span>
+          <div className="select-box" style={{ position: 'relative' }}>
+             <ArticleSortSelect currentSort={sortOption || 'newest'} clubSlug={clubSlug} />
+             <span style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>⌄</span>
           </div>
         </article>
       </section>
 
       <div className="layout" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
         <div className="stack" style={{ display: 'grid', gap: '20px', gridColumn: 'span 2' }}>
-          {featuredArticle && (
+          {showFeatured && featuredArticle && (
             <ThemedSectionCard>
               <div className="section-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
                 <h2 style={{ fontSize: '22px', letterSpacing: '-0.02em' }}>Fremhævet artikel</h2>
@@ -113,12 +163,19 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
 
           <ThemedSectionCard>
             <div className="section-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-              <h2 style={{ fontSize: '22px', letterSpacing: '-0.02em' }}>Seneste artikler</h2>
+              <h2 style={{ fontSize: '22px', letterSpacing: '-0.02em' }}>
+                {isFilterActive ? 'Søgeresultater' : 'Seneste artikler'}
+              </h2>
+              {isFilterActive && (
+                <Link href={clearFilterUrl} className="link-soft" style={{ fontSize: '13px', color: 'var(--club-accent-2)', fontWeight: 600 }}>
+                  Ryd filter
+                </Link>
+              )}
             </div>
 
-            {latestWithoutFeatured.length > 0 ? (
+            {latestToDisplay.length > 0 ? (
               <div className="article-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
-                {latestWithoutFeatured.map(article => (
+                {latestToDisplay.map(article => (
                   <Link key={article.id} href={`/${clubSlug}/artikler/${article.slug}`}>
                     <article className="article-card" style={{ display: 'grid', gap: '14px', padding: '16px', borderRadius: '20px', background: 'var(--club-panel-soft)', border: '1px solid var(--club-line)', minHeight: '100%' }}>
                       {article.heroImageUrl && (
@@ -140,7 +197,11 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                 ))}
               </div>
             ) : (
-              <p style={{ color: 'var(--club-muted)' }}>Der er endnu ingen publicerede artikler.</p>
+              <p style={{ color: 'var(--club-muted)' }}>
+                {isFilterActive 
+                  ? 'Ingen artikler matcher din søgning.' 
+                  : 'Der er endnu ingen publicerede artikler.'}
+              </p>
             )}
           </ThemedSectionCard>
         </div>
@@ -150,14 +211,14 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
             <div className="section-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
               <h2 style={{ fontSize: '22px' }}>Emner (Tags)</h2>
               {selectedTagSlug && (
-                <Link href={`/${clubSlug}/artikler`} className="link-soft" style={{ fontSize: '13px', color: 'var(--club-accent-2)' }}>
+                <Link href={getFilterUrl({ tag: null })} className="link-soft" style={{ fontSize: '13px', color: 'var(--club-accent-2)' }}>
                   Nulstil filter
                 </Link>
               )}
             </div>
             <div className="tag-cloud" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
               <Link
-                href={`/${clubSlug}/artikler`}
+                href={getFilterUrl({ tag: null })}
                 className={`cloud-tag tier-1 ${!selectedTagSlug ? 'active' : ''}`}
                 style={{
                   padding: '6px 12px',
@@ -190,7 +251,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                 return (
                   <Link
                     key={tag.id}
-                    href={`/${clubSlug}/artikler?tag=${tag.slug}`}
+                    href={getFilterUrl({ tag: tag.slug })}
                     className={`cloud-tag ${tier} ${isActive ? 'active' : ''}`}
                     style={{
                       padding: '6px 12px',

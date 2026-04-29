@@ -1,5 +1,5 @@
 import prisma from "../db/prisma";
-import { ArticleStatus, PublicSurfaceVisibility, Article, ArticleTag, ArticleTagAssignment } from "../../generated/prisma";
+import { ArticleStatus, PublicSurfaceVisibility, Article, ArticleTag, ArticleTagAssignment, Prisma } from "../../generated/prisma";
 import { ViewerVisibilityContext } from "../publicSite/publicVisibility";
 
 export interface ArticleDTO {
@@ -26,17 +26,44 @@ type ArticleWithRelations = Article & {
 export async function getPublishedArticles(
   clubId: string,
   viewer: ViewerVisibilityContext,
-  options?: { tagSlug?: string; limit?: number }
+  options?: { 
+    tagSlug?: string; 
+    query?: string; 
+    sort?: "newest" | "oldest" | "title";
+    limit?: number 
+  }
 ): Promise<ArticleDTO[]> {
-  const { tagSlug, limit } = options || {};
+  const { tagSlug, query, sort, limit } = options || {};
+
+  const where: Prisma.ArticleWhereInput = {
+    clubId,
+    status: ArticleStatus.PUBLISHED,
+    visibility: viewer.isMember ? { in: [PublicSurfaceVisibility.PUBLIC, PublicSurfaceVisibility.MEMBERS_ONLY] } : PublicSurfaceVisibility.PUBLIC,
+  };
+
+  if (tagSlug) {
+    where.tags = { some: { tag: { slug: tagSlug } } };
+  }
+
+  if (query && query.trim()) {
+    const searchTerm = query.trim();
+    where.OR = [
+      { title: { contains: searchTerm, mode: 'insensitive' } },
+      { excerpt: { contains: searchTerm, mode: 'insensitive' } },
+      { body: { contains: searchTerm, mode: 'insensitive' } },
+      { authorName: { contains: searchTerm, mode: 'insensitive' } },
+    ];
+  }
+
+  let orderBy: Prisma.ArticleOrderByWithRelationInput = { publishedAt: "desc" };
+  if (sort === "oldest") {
+    orderBy = { publishedAt: "asc" };
+  } else if (sort === "title") {
+    orderBy = { title: "asc" };
+  }
 
   const articles = await prisma.article.findMany({
-    where: {
-      clubId,
-      status: ArticleStatus.PUBLISHED,
-      visibility: viewer.isMember ? { in: [PublicSurfaceVisibility.PUBLIC, PublicSurfaceVisibility.MEMBERS_ONLY] } : PublicSurfaceVisibility.PUBLIC,
-      ...(tagSlug ? { tags: { some: { tag: { slug: tagSlug } } } } : {}),
-    },
+    where,
     include: {
       tags: {
         include: {
@@ -44,9 +71,7 @@ export async function getPublishedArticles(
         },
       },
     },
-    orderBy: {
-      publishedAt: "desc",
-    },
+    orderBy,
     take: limit,
   });
 
