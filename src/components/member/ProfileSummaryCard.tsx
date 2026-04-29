@@ -87,73 +87,41 @@ export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({
           {memberNumber && ` · Medlemsnr. ${memberNumber}`}
         </p>
 
-        <div className="meta-row">
-          {membershipType && (
-            <span className="meta-chip" style={{ background: 'rgba(255,255,255,0.1)' }}>{getMembershipLabel(membershipType)}</span>
-          )}
-          {certificates.slice(0, 3).map(cert => (
-            <span key={cert} className="meta-chip">{getCertLabel(cert)}</span>
-          ))}
-          {certificates.length > 3 && (
-            <span className="meta-chip">+{certificates.length - 3}</span>
-          )}
-        </div>
-      </ThemedSectionCard>
 
-      <ThemedSectionCard>
-        <div className="section-head">
-          <h2>Profilbillede</h2>
-        </div>
-
-        <div className="info-list">
-          <div className="info-item">
-            <h4>Håndtering af profilbillede</h4>
-            <p>Du kan i øjeblikket ikke uploade dit eget profilbillede. Kontakt en administrator hvis du ønsker at få tilføjet eller ændret dit billede.</p>
-          </div>
-        </div>
-      </ThemedSectionCard>
-
-      <ThemedSectionCard>
-        <div className="section-head">
-          <h2>Adgang og sikkerhed</h2>
-        </div>
-        <div className="profile-list">
-          <div className="profile-list-item">
-            <h4>Sikkerhed</h4>
-            <p>Din adgang styres via dit login. Password kan ikke ændres direkte herfra endnu.</p>
-          </div>
-        </div>
-      </ThemedSectionCard>
-
-      <ThemedSectionCard>
-        <div className="section-head">
-          <h2>Medlemskort</h2>
-        </div>
-        <div className="info-list">
+        <div className="info-list" style={{ marginTop: '1.5rem' }}>
           <div className="info-item">
             <h4>Udskriv medlemskort</h4>
             <p>Her kan du udskrive dit medlemskort til brug i klubben.</p>
             <div style={{ marginTop: '1rem' }}>
-              <Link 
-                href={`/${clubSlug}/profil/medlemskort`}
-                className="themed-button"
-                style={{
-                  display: 'inline-block',
-                  padding: '0.5rem 1rem',
-                  backgroundColor: 'var(--club-accent)',
-                  color: 'white',
-                  borderRadius: '4px',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  fontWeight: 'bold'
-                }}
+              <Link
+                  href={`/${clubSlug}/profil/medlemskort`}
+                  className="themed-button"
+                  style={{
+                    display: 'inline-block',
+                    padding: '0.5rem 1rem',
+                    backgroundColor: 'var(--club-accent)',
+                    color: 'white',
+                    borderRadius: '4px',
+                    textDecoration: 'none',
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                  }}
               >
                 Gå til medlemskort
               </Link>
             </div>
           </div>
+          <div className="info-item">
+            <h4>Skift adgangskode</h4>
+            <p>Her kan du skifte din adgangskode.</p>
+            <div style={{ marginTop: '1rem' }}>
+
+            </div>
+          </div>
         </div>
       </ThemedSectionCard>
+
+
     </>
   );
 };

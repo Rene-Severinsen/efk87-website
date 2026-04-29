@@ -28,12 +28,7 @@ export const ProfileHero: React.FC = () => {
       }}>
         Her vedligeholder du dine egne oplysninger, skifter password, uploader profilbillede, markerer certifikater og vælger hvilke mailinglister du vil være med på.
       </p>
-      <div className="hero-actions" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-        <span className="pill primary disabled">Gem ændringer</span>
-        <span className="pill disabled">Skift password</span>
-        <span className="pill disabled">Upload profilbillede</span>
-        <span className="pill disabled">Print medlemskort</span>
-      </div>
+
     </section>
   );
 };
