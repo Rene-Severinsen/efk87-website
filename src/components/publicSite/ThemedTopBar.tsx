@@ -45,50 +45,52 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
         {isMenuOpen ? '✕' : '☰'}
       </button>
 
-      <nav className={`nav ${isMenuOpen ? 'mobile-open' : ''}`}>
-        {navigationItems.map((item) => {
-           const isActive = currentPath === item.href || (item.key === 'home' && (currentPath === `/${item.href.split('/')[1]}` || currentPath === `/${clubSlug}`));
-           return (
-            <a 
-              key={item.key} 
-              href={item.href}
-              className={isActive ? 'active' : ''}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {item.label}
-            </a>
-          );
-        })}
-      </nav>
-
-      <div className={`actions ${isMenuOpen ? 'mobile-open' : ''}`}>
-        {actionItems.map((item) => {
-          if (item.key === 'logout') {
-            return (
-              <form key={item.key} action={async () => {
-                await logoutAction(clubSlug);
-              }}>
-                <button 
-                  type="submit"
-                  className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
-                >
-                  {item.label}
-                </button>
-              </form>
+      <div className={`nav-menu ${isMenuOpen ? 'mobile-open' : ''}`}>
+        <nav className="nav">
+          {navigationItems.map((item) => {
+             const isActive = currentPath === item.href || (item.key === 'home' && (currentPath === `/${item.href.split('/')[1]}` || currentPath === `/${clubSlug}`));
+             return (
+              <a 
+                key={item.key} 
+                href={item.href}
+                className={isActive ? 'active' : ''}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.label}
+              </a>
             );
-          }
+          })}
+        </nav>
 
-          return (
-            <a 
-              key={item.key} 
-              href={item.href}
-              className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {item.label}
-            </a>
-          );
-        })}
+        <div className="actions">
+          {actionItems.map((item) => {
+            if (item.key === 'logout') {
+              return (
+                <form key={item.key} action={async () => {
+                  await logoutAction(clubSlug);
+                }}>
+                  <button 
+                    type="submit"
+                    className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
+                  >
+                    {item.label}
+                  </button>
+                </form>
+              );
+            }
+
+            return (
+              <a 
+                key={item.key} 
+                href={item.href}
+                className={`btn chip-btn ${item.isPrimary ? 'primary' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.label}
+              </a>
+            );
+          })}
+        </div>
       </div>
     </header>
   );

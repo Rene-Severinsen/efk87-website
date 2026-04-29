@@ -7,6 +7,7 @@ import { PublicNavigationItem } from '../../../lib/publicSite/publicNavigation';
 import { NewMemberHighlightData } from '../../../lib/members/newMemberHighlightService';
 import NewMembersHighlightCard from '../../club/NewMembersHighlightCard';
 import Link from 'next/link';
+import { ThemedTopBarV2 } from './ThemedTopBarV2';
 
 interface PublicClubHomePageV2Props {
   club: {
@@ -66,52 +67,13 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
   return (
     <div className="home-v2-root">
       <div className="home-v2-shell">
-        <header className="home-v2-topbar">
-          <div className="home-v2-brand">
-            <div className="home-v2-brand-mark">{clubShortName}</div>
-            <div>
-              <div>{clubDisplayName} Medlemsportal</div>
-              <div className="home-v2-small">{clubDisplayName}</div>
-            </div>
-          </div>
-
-          <nav className="home-v2-nav">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.key}
-                className={item.key === 'home' ? 'home-v2-active' : ''}
-                href={item.href}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="home-v2-actions">
-            {actionItems.map((item) => {
-              if (item.key === 'logout') {
-                return (
-                  <form key={item.key} action="/api/auth/signout" method="POST" style={{ display: 'inline' }}>
-                    <button type="submit" className="home-v2-btn home-v2-chip-btn">
-                      {item.label}
-                    </button>
-                  </form>
-                );
-              }
-
-              const isPrimary = item.isPrimary || item.key === 'admin';
-              return (
-                <Link
-                  key={item.key}
-                  className={`home-v2-btn home-v2-chip-btn ${isPrimary ? 'home-v2-primary' : ''}`}
-                  href={item.href === `/${club.slug}/login` ? `/api/auth/signin?callbackUrl=/${club.slug}` : item.href}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-        </header>
+        <ThemedTopBarV2
+          clubSlug={club.slug}
+          clubShortName={clubShortName}
+          clubDisplayName={clubDisplayName}
+          navigationItems={navigationItems}
+          actionItems={actionItems}
+        />
 
         <section className={`home-v2-hero ${newMemberHighlights.visible ? 'home-v2-hero-top--split' : 'home-v2-hero-top--full'}`}>
           <article className="home-v2-card home-v2-hero-main">
