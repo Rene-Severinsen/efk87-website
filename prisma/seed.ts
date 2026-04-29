@@ -210,12 +210,23 @@ async function main() {
     }
   }
 
+  // Seed public home info cards for EFK87
+  const adminUser = await prisma.user.upsert({
+    where: { email: "admin@efk87.local" },
+    update: {},
+    create: {
+      email: "admin@efk87.local",
+      name: "Admin User",
+    },
+  });
+
   // Seed mockup-style active flight intents for EFK87
   // These are demo/homepage seed data
   // Current local date in this context is 2026-04-29
   // Note: "Jeg flyver" submit action is members-only later, but for now we seed demo data as PUBLIC.
   const flightIntents = [
     {
+      userId: adminUser.id,
       displayName: "René Severinsen",
       message: "Kommer ca. 11:15 med DG-800.",
       activityType: ClubFlightIntentType.FLYING,
@@ -228,6 +239,7 @@ async function main() {
       expiresAt: new Date("2026-04-29T20:00:00Z"),
     },
     {
+      userId: adminUser.id,
       displayName: "Lars Mikkelsen",
       message: "Er på pladsen fra 10:30. Tager lader med til 6S hvis nogen mangler.",
       activityType: ClubFlightIntentType.MAINTENANCE,
@@ -240,6 +252,7 @@ async function main() {
       expiresAt: new Date("2026-04-29T20:00:00Z"),
     },
     {
+      userId: adminUser.id,
       displayName: "Søren Østergaard",
       message: "Ser vinden an – hvis den holder sig under 6 m/s kommer jeg med skræntkassen.",
       activityType: ClubFlightIntentType.WEATHER_DEPENDENT,
@@ -252,6 +265,7 @@ async function main() {
       expiresAt: new Date("2026-04-29T20:00:00Z"),
     },
     {
+      userId: adminUser.id,
       displayName: "Erik Jensen",
       message: "Planlægger flyvning i morgen tidlig.",
       activityType: ClubFlightIntentType.FLYING,

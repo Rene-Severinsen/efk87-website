@@ -9,9 +9,37 @@ const prismaClientSingleton = () => {
     connectionString: env.DATABASE_URL,
   });
   const adapter = new PrismaPg(pool);
-  return new PrismaClient({
+  const client = new PrismaClient({
     adapter,
     log: ["query", "info", "warn", "error"],
+  });
+
+  return client.$extends({
+    query: {
+      session: {
+        async delete({ model, operation, args, query }) {
+          try {
+            return await query(args);
+          } catch (error: any) {
+            // P2025: An operation failed because it depends on one or more records that were required but not found.
+            if (error.code === 'P2025') {
+              return null;
+            }
+            throw error;
+          }
+        },
+        async deleteMany({ model, operation, args, query }) {
+          try {
+            return await query(args);
+          } catch (error: any) {
+            if (error.code === 'P2025') {
+              return { count: 0 };
+            }
+            throw error;
+          }
+        }
+      }
+    }
   });
 };
 

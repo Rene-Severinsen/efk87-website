@@ -50,7 +50,7 @@ All public flight intent queries must go through `src/lib/publicSite/publicFligh
 ### Member Access
 All member-specific flight intent queries must go through `src/lib/flightIntents/memberFlightIntentService.ts`.
 - `getMemberRecentFlightIntents(clubId, viewer)`: Returns the member's own recent flight intents (limit 10), ordered by `flightDate` and `createdAt` descending.
-- **Ownership Identity Strategy (Current Implementation)**: Due to the current lack of a `userId` relation on `ClubFlightIntent`, ownership is determined by matching `displayName` against the viewer's `name` or `email` (fallback to "Medlem"). This is temporary and will be replaced by a `userId` relation in a future iteration.
+- **Ownership Identity Strategy**: Ownership is determined by the `userId` relation on `ClubFlightIntent`, linking the intent to the member who created it.
 
 Direct Prisma queries in route pages are discouraged.
 
@@ -84,7 +84,8 @@ Note: Login and member activity analytics must be handled by a separate activity
 - [x] Homepage rendering from real data.
 - [x] Idempotent seed data for EFK87 demo.
 - [x] Member submit foundation (authenticated ACTIVE member).
-- [ ] Edit/Cancel flow.
+- [x] Member cancellation flow.
+- [ ] Edit flow.
 - [ ] Automatic expiry logic.
 - [ ] Notifications/Emails (See Strategy below).
 - [ ] Statistics UI/Graphs.
@@ -121,6 +122,7 @@ Submission of new flight intents requires an authenticated **ACTIVE** `ClubMembe
   - `displayName` is derived from the user's name or email.
   - `expiresAt` is set to the end of the `flightDate`.
 - **Overview**: The member page shows their own recent (up to 10) flight intents below the form.
-- **Edit/Cancel**: Not yet implemented. Future scope.
+- **Edit Flow**: Not yet implemented. Future scope.
+- **Cancellation**: Members can cancel their own ACTIVE flight intents. Cancellation sets `status` to `CANCELLED` and `cancelledAt` to the current time. Cancelled rows are hidden from public views but remain in the member's own recent list for reference and future statistics.
 - **Retention**: Data is retained for future statistics even after expiry.
 - **Analytics**: The model supports future analytics for activity volume, categorization, and engagement.

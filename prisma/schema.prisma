@@ -91,6 +91,7 @@ model PublicHomeInfoCard {
 model ClubFlightIntent {
   id           String                 @id @default(cuid())
   clubId       String
+  userId       String
   displayName  String
   message      String?
   activityType ClubFlightIntentType
@@ -105,6 +106,7 @@ model ClubFlightIntent {
   updatedAt    DateTime               @updatedAt
 
   club Club @relation(fields: [clubId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@index([clubId, status, createdAt])
   @@index([clubId, flightDate, status])
@@ -112,6 +114,7 @@ model ClubFlightIntent {
   @@index([clubId, plannedAt])
   @@index([clubId, activityType, createdAt])
   @@index([clubId, source, createdAt])
+  @@index([userId])
 }
 
 enum ClubFlightIntentType {
@@ -205,6 +208,7 @@ model User {
   memberships   ClubMembership[]
   accounts      Account[]
   sessions      Session[]
+  flightIntents ClubFlightIntent[]
 }
 
 model Account {

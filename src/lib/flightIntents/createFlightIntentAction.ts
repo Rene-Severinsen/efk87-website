@@ -23,6 +23,10 @@ export async function createFlightIntentAction(formData: FormData) {
   const club = await requireClubBySlug(clubSlug);
   const viewer = await requireActiveMemberForClub(club.id, club.slug);
 
+  if (!viewer.userId) {
+    throw new Error("Viewer must have a userId");
+  }
+
   // Validation
   if (!flightDateStr) throw new Error("Missing flightDate");
   if (!activityTypeStr) throw new Error("Missing activityType");
@@ -63,6 +67,7 @@ export async function createFlightIntentAction(formData: FormData) {
   await prisma.clubFlightIntent.create({
     data: {
       clubId: club.id,
+      userId: viewer.userId,
       displayName,
       message,
       activityType,

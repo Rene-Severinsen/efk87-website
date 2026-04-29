@@ -9,17 +9,14 @@ export async function getMemberRecentFlightIntents(
   clubId: string,
   viewer: ServerViewerContext
 ): Promise<ClubFlightIntent[]> {
-  if (!viewer.isMember) {
+  if (!viewer.isMember || !viewer.userId) {
     throw new Error("Unauthorized: Only active members can access this.");
   }
-
-  // Identity strategy: use the same displayName logic as createFlightIntentAction
-  const displayName = viewer.name || viewer.email || "Medlem";
 
   return prisma.clubFlightIntent.findMany({
     where: {
       clubId,
-      displayName: displayName,
+      userId: viewer.userId,
     },
     orderBy: [
       { flightDate: "desc" },

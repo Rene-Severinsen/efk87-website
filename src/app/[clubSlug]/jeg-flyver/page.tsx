@@ -2,8 +2,9 @@ import { resolveClubContext } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
 import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
 import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
-import { ClubFlightIntentType } from "../../../generated/prisma";
+import { ClubFlightIntentType, ClubFlightIntentStatus } from "../../../generated/prisma";
 import { createFlightIntentAction } from "../../../lib/flightIntents/createFlightIntentAction";
+import { cancelFlightIntentAction } from "../../../lib/flightIntents/cancelFlightIntentAction";
 import { getMemberRecentFlightIntents } from "../../../lib/flightIntents/memberFlightIntentService";
 
 interface JegFlyverPageProps {
@@ -12,6 +13,7 @@ interface JegFlyverPageProps {
   }>;
   searchParams: Promise<{
     created?: string;
+    cancelled?: string;
   }>;
 }
 
@@ -20,7 +22,7 @@ interface JegFlyverPageProps {
  */
 export default async function JegFlyverPage({ params, searchParams }: JegFlyverPageProps) {
   const { clubSlug } = await params;
-  const { created } = await searchParams;
+  const { created, cancelled } = await searchParams;
 
   const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
 
@@ -48,6 +50,12 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
         {created === "1" && (
           <div className="mb-8 p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-md">
             Din flyvemelding er oprettet!
+          </div>
+        )}
+
+        {cancelled === "1" && (
+          <div className="mb-8 p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-md">
+            Din melding er aflyst.
           </div>
         )}
 
@@ -154,23 +162,42 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                       )}
                     </div>
                     <span className={`text-xs px-2 py-1 rounded-full ${
-                      intent.status === 'ACTIVE' ? 'bg-green-500/20 text-green-400' : 'bg-white/10 text-white/50'
+                      intent.status === ClubFlightIntentStatus.ACTIVE ? 'bg-green-500/20 text-green-400' : 
+                      intent.status === ClubFlightIntentStatus.CANCELLED ? 'bg-red-500/20 text-red-400' :
+                      'bg-white/10 text-white/50'
                     }`}>
-                      {intent.status}
+                      {intent.status === ClubFlightIntentStatus.CANCELLED ? 'AFLYST' : intent.status}
                     </span>
                   </div>
-                  <div className="text-sm opacity-90 mb-1">
-                    <span className="font-semibold">{getActivityLabel(intent.activityType)}</span>
-                  </div>
-                  {intent.message && (
-                    <div className="text-sm opacity-70 italic">
-                      &ldquo;{intent.message}&rdquo;
+                  <div className="flex justify-between items-end">
+                    <div className="flex-1">
+                      <div className="text-sm opacity-90 mb-1">
+                        <span className="font-semibold">{getActivityLabel(intent.activityType)}</span>
+                      </div>
+                      {intent.message && (
+                        <div className="text-sm opacity-70 italic">
+                          &ldquo;{intent.message}&rdquo;
+                        </div>
+                      )}
                     </div>
-                  )}
+
+                    {intent.status === ClubFlightIntentStatus.ACTIVE && (
+                      <form action={cancelFlightIntentAction}>
+                        <input type="hidden" name="clubSlug" value={clubSlug} />
+                        <input type="hidden" name="flightIntentId" value={intent.id} />
+                        <button 
+                          type="submit"
+                          className="text-xs px-3 py-1 bg-red-600/20 hover:bg-red-600/40 text-red-300 border border-red-500/30 rounded transition-colors"
+                        >
+                          Aflys
+                        </button>
+                      </form>
+                    )}
+                  </div>
                 </div>
               ))}
               <p className="text-xs opacity-40 mt-6">
-                Redigering og sletning er planlagt til en fremtidig opdatering.
+                Redigering er planlagt til en fremtidig opdatering.
               </p>
             </div>
           )}
