@@ -7,7 +7,7 @@ import { PublicNavigationItem } from '../../../lib/publicSite/publicNavigation';
 import { NewMemberHighlightData } from '../../../lib/members/newMemberHighlightService';
 import NewMembersHighlightCard from '../../club/NewMembersHighlightCard';
 import Link from 'next/link';
-import { ThemedTopBarV2 } from './ThemedTopBarV2';
+import { ThemedTopBar } from '../ThemedTopBar';
 
 interface PublicClubHomePageV2Props {
   club: {
@@ -67,12 +67,13 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
   return (
     <div className="home-v2-root">
       <div className="home-v2-shell">
-        <ThemedTopBarV2
+        <ThemedTopBar
           clubSlug={club.slug}
-          clubShortName={clubShortName}
+          clubName={clubShortName}
           clubDisplayName={clubDisplayName}
           navigationItems={navigationItems}
           actionItems={actionItems}
+          currentPath={`/${club.slug}`}
         />
 
         <section className={`home-v2-hero ${newMemberHighlights.visible ? 'home-v2-hero-top--split' : 'home-v2-hero-top--full'}`}>
