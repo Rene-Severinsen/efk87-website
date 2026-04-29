@@ -169,14 +169,14 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               <span className="home-v2-status-badge home-v2-info">I dag</span>
             </div>
             
-            <div className="home-v2-compact-list">
+            <div className="home-v2-online-list">
               {memberActivity.latestMembers.length > 0 ? (
                 memberActivity.latestMembers.map((member, idx) => (
-                  <div key={idx} className="home-v2-compact-item">
-                    <span className="home-v2-time">
+                  <div key={idx} className="home-v2-online-row">
+                    <span className="home-v2-online-time">
                       {member.lastSeenAt.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
                     </span>
-                    <span className="home-v2-name">
+                    <span className="home-v2-online-name">
                       {member.displayName}
                     </span>
                   </div>
