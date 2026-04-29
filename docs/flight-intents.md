@@ -93,10 +93,22 @@ Note: Login and member activity analytics must be handled by a separate activity
 - [x] Idempotent seed data for EFK87 demo.
 - [x] Member submit foundation (authenticated ACTIVE member).
 - [x] Member cancellation flow.
+- [x] Admin moderation foundation (cancel intents).
 - [ ] Edit flow.
 - [ ] Automatic expiry logic.
 - [ ] Notifications/Emails (See Strategy below).
 - [ ] Statistics UI/Graphs.
+
+## Admin Moderation
+
+Admins with `ADMIN` or `OWNER` roles can moderate flight intents via the admin panel at `/[clubSlug]/admin/flyvemeldinger`.
+
+### Features
+- **Overview**: View all active and cancelled intents for the current day.
+- **History**: View recent 25 intents across all statuses.
+- **Cancellation**: Admins can cancel any `ACTIVE` flight intent. This is intended for moderation purposes.
+- **Retention**: Cancelled rows are retained for historical reference and future statistics.
+- **Notifications**: Admin cancellations do not trigger notifications or emails in the current foundation.
 
 ## Notifications Strategy
 

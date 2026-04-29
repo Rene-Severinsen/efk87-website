@@ -31,6 +31,15 @@ Located in `src/components/admin/`:
 - `AdminActivityStream`: Recent system activity (currently placeholders).
 - `AdminQuickLinks`: Shortcuts to common tasks.
 
+## Admin Features
+
+### Flyvemeldinger (Flight Intents)
+- **Route**: `/[clubSlug]/admin/flyvemeldinger`
+- **Purpose**: Moderation of member flight intents.
+- **Service**: `src/lib/admin/flightIntentAdminService.ts`
+- **Actions**: `src/lib/admin/cancelFlightIntentAsAdminAction.ts`
+- **Capabilities**: View today's active/cancelled intents, view recent history, and cancel active intents.
+
 ## Development Seed
 A test admin user is provided for local development:
 - **Email:** `admin@efk87.local`
