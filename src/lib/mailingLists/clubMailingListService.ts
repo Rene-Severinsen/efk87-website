@@ -1,4 +1,4 @@
-import prisma from "@/lib/db/prisma";
+import prisma from "../db/prisma";
 import { ClubMailingListPurpose } from "@/generated/prisma";
 
 export interface ClubMailingListDto {

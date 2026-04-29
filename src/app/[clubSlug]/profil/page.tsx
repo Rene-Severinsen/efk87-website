@@ -2,6 +2,7 @@ import { resolveClubContext } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
 import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 import { MemberProfile } from "../../../components/member/MemberProfile";
+import { getOrCreateOwnMemberProfile } from "../../../lib/members/memberProfileService";
 
 interface ProfilePageProps {
   params: Promise<{
@@ -21,6 +22,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   // Ensure user is an active member and get viewer data
   const viewer = await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/profil`);
 
+  const profile = await getOrCreateOwnMemberProfile(club.id, viewer.userId!);
+
   return (
     <ThemedClubPageShell
       clubSlug={clubSlug}
@@ -36,11 +39,13 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     >
       <MemberProfile 
         viewer={{
+          userId: viewer.userId!,
           name: viewer.name || "Medlem",
           email: viewer.email || "",
           clubRole: viewer.clubRole || "Member",
           membershipStatus: viewer.membershipStatus || "Active",
         }}
+        profile={profile}
       />
     </ThemedClubPageShell>
   );

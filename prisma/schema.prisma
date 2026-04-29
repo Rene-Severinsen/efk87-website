@@ -34,6 +34,8 @@ model Club {
   galleryImages GalleryImage[]
   articles      Article[]
   articleTags   ArticleTag[]
+  memberProfiles ClubMemberProfile[]
+  memberCertificates ClubMemberCertificate[]
 }
 
 model PublicClubFooter {
@@ -334,6 +336,8 @@ model User {
   sessions      Session[]
   flightIntents ClubFlightIntent[]
   dailyActivity MemberDailyActivity[]
+  memberProfiles ClubMemberProfile[]
+  memberCertificates ClubMemberCertificate[]
 }
 
 model Account {
@@ -481,4 +485,98 @@ enum ClubMailingListPurpose {
   SCHOOL
   TRIP
   OTHER
+}
+
+enum ClubMemberMembershipType {
+  SENIOR
+  JUNIOR
+  PASSIVE
+}
+
+enum ClubMemberRoleType {
+  REGULAR
+  BOARD_MEMBER
+  BOARD_SUPPLEANT
+  TREASURER
+  CHAIRMAN
+  VICE_CHAIRMAN
+}
+
+enum ClubMemberSchoolStatus {
+  APPROVED
+  STUDENT
+  NOT_APPROVED
+}
+
+enum ClubMemberStatus {
+  ACTIVE
+  RESIGNED
+  NEW
+}
+
+enum ClubMemberCertificateType {
+  A_CERTIFICATE
+  A_CONTROLLER
+  A_LARGE_MODEL
+  A_LARGE_MODEL_CONTROLLER
+  S_CERTIFICATE
+  S_CONTROLLER
+  S_LARGE_MODEL
+  S_LARGE_MODEL_CONTROLLER
+  H_CERTIFICATE
+  H_CONTROLLER
+  H_LARGE_MODEL
+  H_LARGE_MODEL_CONTROLLER
+  J_LARGE_MODEL
+  J_LARGE_MODEL_CONTROLLER
+}
+
+model ClubMemberProfile {
+  id              String                  @id @default(cuid())
+  clubId          String
+  userId          String
+  firstName       String?
+  lastName        String?
+  addressLine     String?
+  postalCode      String?
+  city            String?
+  mobilePhone     String?
+  mdkNumber       String?
+  profileImageUrl String?
+  membershipType  ClubMemberMembershipType @default(SENIOR)
+  memberRoleType  ClubMemberRoleType       @default(REGULAR)
+  schoolStatus    ClubMemberSchoolStatus   @default(NOT_APPROVED)
+  memberStatus    ClubMemberStatus         @default(NEW)
+  isInstructor    Boolean                  @default(false)
+  birthDate       DateTime?
+  joinedAt        DateTime?
+  legacySource    String?
+  legacyId        String?
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([clubId, userId])
+  @@index([clubId, memberStatus])
+  @@index([clubId, membershipType])
+  @@index([clubId, schoolStatus])
+  @@index([clubId, memberRoleType])
+  @@index([clubId, legacySource, legacyId])
+}
+
+model ClubMemberCertificate {
+  id              String                    @id @default(cuid())
+  clubId          String
+  userId          String
+  certificateType ClubMemberCertificateType
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([clubId, userId, certificateType])
+  @@index([clubId, certificateType])
 }

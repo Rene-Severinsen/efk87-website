@@ -68,6 +68,17 @@ Tenant-scoped activity tracking. Each record represents one user's activity for 
 - **Constraints**: Unique combination of `clubId` + `userId` + `activityDate`.
 - **Purpose**: Power "Senest online" and future per-club activity statistics without exposing cross-club activity.
 
+#### ClubMemberProfile
+Stores club-specific member stamdata (profile information).
+- **Constraints**: Unique combination of `clubId` + `userId`.
+- **Fields**: Name, address, phone, MDK number, profile image URL, membership type, club role, school status, member status.
+- **Privacy**: Contains private member data, strictly tenant-scoped.
+
+#### ClubMemberCertificate
+Normalized storage for member certificates.
+- **Constraints**: Unique combination of `clubId` + `userId` + `certificateType`.
+- **Enum**: `ClubMemberCertificateType` (A_CERTIFICATE, S_CONTROLLER, etc.).
+
 > **Note**: Authentication (login, password management, etc.) is not yet implemented. The `User` model currently only serves as a profile and membership anchor.
 
 ### Environment Separation

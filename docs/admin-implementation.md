@@ -12,7 +12,7 @@ Admin routes are organized into several logical groups. Most routes currently ex
 - **Systemstatus** (`/admin/systemstatus`): Operational health and delivery status (stub).
 
 ### Klubdrift
-- **Medlemmer** (`/admin/medlemmer`): Member list and role management (stub).
+- **Medlemmer** (`/admin/medlemmer`): Member overview with statistics and profile management.
 - **Flyveskole** (`/admin/flyveskole`): School flying and instructor overview (stub).
 - **Flyvemeldinger** (`/admin/flyvemeldinger`): Moderation of flight intents.
 - **Mailinglister** (`/admin/mailinglister`): Mailing list configuration.
@@ -73,6 +73,22 @@ Located in `src/components/admin/`:
 - **Service**: `src/lib/mailingLists/clubMailingListService.ts`
 - **Capabilities**: View all configured lists, see status, and track last update time.
 - **Status**: Read-only. Editing is not yet implemented.
+
+### Medlemshåndtering (Member Management)
+- **Routes**: 
+  - `/[clubSlug]/admin/medlemmer` (Overview)
+  - `/[clubSlug]/admin/medlemmer/[userId]/rediger` (Edit)
+- **Purpose**: Manage member profiles, club roles, and certificates.
+- **Services**: 
+  - `src/lib/admin/memberAdminService.ts`
+  - `src/lib/members/memberProfileService.ts`
+- **Actions**: `src/lib/admin/memberAdminActions.ts`
+- **Capabilities**: 
+  - Statistics dashboard for member statuses and roles.
+  - Comprehensive member list with search/filter (planned).
+  - Full profile editing (stamdata, contact info, membership type).
+  - Certificate management (normalized model).
+- **Privacy**: All data is strictly tenant-scoped.
 
 ### Statistik (Statistics)
 - **Route**: `/[clubSlug]/admin/statistik`

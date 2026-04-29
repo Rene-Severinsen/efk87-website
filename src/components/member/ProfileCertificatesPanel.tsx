@@ -1,54 +1,61 @@
 import React from 'react';
 import { ThemedSectionCard } from '../publicSite/ThemedBuildingBlocks';
+import { ClubMemberCertificateType } from '@/generated/prisma';
 
-export const ProfileCertificatesPanel: React.FC = () => {
+interface ProfileCertificatesPanelProps {
+  certificates?: ClubMemberCertificateType[];
+}
+
+const CertItem = ({ type, label, certificates }: { type: ClubMemberCertificateType, label: string, certificates: ClubMemberCertificateType[] }) => {
+  const hasCert = certificates.includes(type);
+  return (
+    <div className="cert-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--club-line)' }}>
+      <span>{label}</span>
+      {hasCert ? (
+        <span style={{ color: 'var(--club-accent)', fontSize: '12px', fontWeight: 'bold' }}>✓ AKTIV</span>
+      ) : (
+        <span style={{ opacity: 0.3, fontSize: '12px' }}>—</span>
+      )}
+    </div>
+  );
+};
+
+export const ProfileCertificatesPanel: React.FC<ProfileCertificatesPanelProps> = ({ certificates = [] }) => {
   return (
     <ThemedSectionCard>
       <div className="section-head">
         <h2>Certifikater</h2>
-        <span>Markér det du har taget</span>
       </div>
 
       <div className="cert-grid">
-        {/* Certificate data model/persistence is future scope */}
         <div className="cert-card">
           <h4>A-kategori</h4>
-          <p>A-certifikat · A-kontrollant · A-stormodel · A-stormodel kontrollant</p>
-          <div className="toggle-row">
-            <span className="small">Markeret på profil</span>
-            <div className="fake-switch"></div>
-          </div>
+          <CertItem type="A_CERTIFICATE" label="A-certifikat" certificates={certificates} />
+          <CertItem type="A_CONTROLLER" label="A-kontrollant" certificates={certificates} />
+          <CertItem type="A_LARGE_MODEL" label="A-stormodel" certificates={certificates} />
+          <CertItem type="A_LARGE_MODEL_CONTROLLER" label="A-stormodel kontrollant" certificates={certificates} />
         </div>
 
         <div className="cert-card">
           <h4>S-kategori</h4>
-          <p>S-certifikat · S-kontrollant · S-stormodel · S-stormodel kontrollant</p>
-          <div className="toggle-row">
-            <span className="small">Markeret på profil</span>
-            <div className="fake-switch"></div>
-          </div>
+          <CertItem type="S_CERTIFICATE" label="S-certifikat" certificates={certificates} />
+          <CertItem type="S_CONTROLLER" label="S-kontrollant" certificates={certificates} />
+          <CertItem type="S_LARGE_MODEL" label="S-stormodel" certificates={certificates} />
+          <CertItem type="S_LARGE_MODEL_CONTROLLER" label="S-stormodel kontrollant" certificates={certificates} />
         </div>
 
         <div className="cert-card">
           <h4>H-kategori</h4>
-          <p>H-certifikat · H-kontrollant · H-stormodel · H-stormodel kontrollant</p>
-          <div className="toggle-row">
-            <span className="small">Kan opdateres</span>
-            <div className="fake-switch" style={{ background: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.1)' }}>
-              <div style={{ background: 'rgba(255,255,255,0.2)', left: '2px', right: 'auto', position: 'absolute', top: '2px', width: '22px', height: '22px', borderRadius: '50%' }}></div>
-            </div>
-          </div>
+          <CertItem type="H_CERTIFICATE" label="H-certifikat" certificates={certificates} />
+          <CertItem type="H_CONTROLLER" label="H-kontrollant" certificates={certificates} />
+          <CertItem type="H_LARGE_MODEL" label="H-stormodel" certificates={certificates} />
+          <CertItem type="H_LARGE_MODEL_CONTROLLER" label="H-stormodel kontrollant" certificates={certificates} />
         </div>
 
         <div className="cert-card">
           <h4>J-kategori</h4>
-          <p>J-stormodel · J-stormodel kontrollant</p>
-          <div className="toggle-row">
-            <span className="small">Kan opdateres</span>
-            <div className="fake-switch" style={{ background: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.1)' }}>
-              <div style={{ background: 'rgba(255,255,255,0.2)', left: '2px', right: 'auto', position: 'absolute', top: '2px', width: '22px', height: '22px', borderRadius: '50%' }}></div>
-            </div>
-          </div>
+          <CertItem type="J_LARGE_MODEL" label="J-stormodel" certificates={certificates} />
+          <CertItem type="J_LARGE_MODEL_CONTROLLER" label="J-stormodel kontrollant" certificates={certificates} />
         </div>
       </div>
     </ThemedSectionCard>

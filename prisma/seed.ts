@@ -5,7 +5,12 @@ import {
   ClubMailingListPurpose,
   GalleryAlbumStatus,
   GalleryImageStatus,
-  ArticleStatus
+  ArticleStatus,
+  ClubMemberMembershipType,
+  ClubMemberRoleType,
+  ClubMemberSchoolStatus,
+  ClubMemberStatus,
+  ClubMemberCertificateType
 } from "../src/generated/prisma";
 
 async function main() {
@@ -232,6 +237,40 @@ async function main() {
       },
     });
 
+    // Seed ClubMemberProfile for testMember
+    await prisma.clubMemberProfile.upsert({
+      where: { clubId_userId: { clubId: efk87.id, userId: testMember.id } },
+      update: {},
+      create: {
+        clubId: efk87.id,
+        userId: testMember.id,
+        firstName: "Test",
+        lastName: "Member",
+        membershipType: ClubMemberMembershipType.SENIOR,
+        memberRoleType: ClubMemberRoleType.REGULAR,
+        schoolStatus: ClubMemberSchoolStatus.STUDENT,
+        memberStatus: ClubMemberStatus.ACTIVE,
+        joinedAt: new Date("2024-01-01"),
+      },
+    });
+
+    // Seed Certificates for testMember
+    await prisma.clubMemberCertificate.upsert({
+      where: {
+        clubId_userId_certificateType: {
+          clubId: efk87.id,
+          userId: testMember.id,
+          certificateType: ClubMemberCertificateType.A_CERTIFICATE,
+        },
+      },
+      update: {},
+      create: {
+        clubId: efk87.id,
+        userId: testMember.id,
+        certificateType: ClubMemberCertificateType.A_CERTIFICATE,
+      },
+    });
+
     console.log("Seeding development admin member...");
     const adminMember = await prisma.user.upsert({
       where: { email: "admin@efk87.local" },
@@ -278,6 +317,56 @@ async function main() {
         userId: adminMember.id,
         status: "ACTIVE",
         role: "ADMIN",
+      },
+    });
+
+    // Seed ClubMemberProfile for adminMember
+    await prisma.clubMemberProfile.upsert({
+      where: { clubId_userId: { clubId: efk87.id, userId: adminMember.id } },
+      update: {},
+      create: {
+        clubId: efk87.id,
+        userId: adminMember.id,
+        firstName: "Test",
+        lastName: "Admin",
+        membershipType: ClubMemberMembershipType.SENIOR,
+        memberRoleType: ClubMemberRoleType.CHAIRMAN,
+        schoolStatus: ClubMemberSchoolStatus.APPROVED,
+        memberStatus: ClubMemberStatus.ACTIVE,
+        isInstructor: true,
+        joinedAt: new Date("2020-01-01"),
+      },
+    });
+
+    // Seed Certificates for adminMember
+    await prisma.clubMemberCertificate.upsert({
+      where: {
+        clubId_userId_certificateType: {
+          clubId: efk87.id,
+          userId: adminMember.id,
+          certificateType: ClubMemberCertificateType.A_CERTIFICATE,
+        },
+      },
+      update: {},
+      create: {
+        clubId: efk87.id,
+        userId: adminMember.id,
+        certificateType: ClubMemberCertificateType.A_CERTIFICATE,
+      },
+    });
+    await prisma.clubMemberCertificate.upsert({
+      where: {
+        clubId_userId_certificateType: {
+          clubId: efk87.id,
+          userId: adminMember.id,
+          certificateType: ClubMemberCertificateType.A_CONTROLLER,
+        },
+      },
+      update: {},
+      create: {
+        clubId: efk87.id,
+        userId: adminMember.id,
+        certificateType: ClubMemberCertificateType.A_CONTROLLER,
       },
     });
 

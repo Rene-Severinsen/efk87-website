@@ -5,21 +5,22 @@ import { ProfileSummaryCard } from './ProfileSummaryCard';
 import { ProfileDetailsPanel } from './ProfileDetailsPanel';
 import { ProfileCertificatesPanel } from './ProfileCertificatesPanel';
 import { ProfileMailingListsPanel } from './ProfileMailingListsPanel';
+import { MemberProfileDTO } from '@/lib/members/memberProfileService';
 
 interface ProfilePageContentProps {
   viewer: {
+    userId: string;
     name: string;
     email: string;
     clubRole: string;
     membershipStatus: string;
   };
+  profile: MemberProfileDTO;
 }
 
-export const MemberProfile: React.FC<ProfilePageContentProps> = ({ viewer }) => {
-  // Split name for form fields if possible
-  const nameParts = viewer.name.split(' ');
-  const firstName = nameParts[0] || '';
-  const lastName = nameParts.slice(1).join(' ') || '';
+export const MemberProfile: React.FC<ProfilePageContentProps> = ({ viewer, profile }) => {
+  const firstName = profile.firstName || '';
+  const lastName = profile.lastName || '';
 
   return (
     <div className="member-profile-content">
@@ -28,9 +29,12 @@ export const MemberProfile: React.FC<ProfilePageContentProps> = ({ viewer }) => 
       <div className="profile-layout">
         <div className="profile-stack">
           <ProfileSummaryCard 
-            name={viewer.name}
-            role={viewer.clubRole}
-            status={viewer.membershipStatus}
+            name={profile.firstName && profile.lastName ? `${profile.firstName} ${profile.lastName}` : viewer.name}
+            role={profile.memberRoleType}
+            status={profile.memberStatus}
+            profileImageUrl={profile.profileImageUrl}
+            membershipType={profile.membershipType}
+            certificates={profile.certificates}
           />
         </div>
 
@@ -39,9 +43,13 @@ export const MemberProfile: React.FC<ProfilePageContentProps> = ({ viewer }) => 
             firstName={firstName}
             lastName={lastName}
             email={viewer.email}
+            mobilePhone={profile.mobilePhone || ''}
+            addressLine={profile.addressLine || ''}
+            postalCode={profile.postalCode || ''}
+            city={profile.city || ''}
           />
           
-          <ProfileCertificatesPanel />
+          <ProfileCertificatesPanel certificates={profile.certificates} />
           
           <ProfileMailingListsPanel />
         </div>
