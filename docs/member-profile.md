@@ -46,7 +46,15 @@ The following features are visual placeholders only and are NOT implemented in V
 - Password change (uses magic link login).
 - Real-time mailing list synchronization.
 - Real-time certificate verification or updates.
-- Printing of membership cards.
+- Printing of membership cards (Implemented).
+
+## Features
+
+### Member Card Printing
+Members can access a printable version of their membership card from the profile page. This card matches the legacy EFK87 physical design and is intended to be cut out and used in the physical card holders at the club.
+- **Route**: `/[clubSlug]/profil/medlemskort`
+- **Logic**: Based on membership type and flying status.
+- **Sizing**: ISO ID-1 standard (85.6 x 54 mm).
 
 ## Future Integration
 

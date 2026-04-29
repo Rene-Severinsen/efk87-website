@@ -41,6 +41,7 @@ export const MemberProfile: React.FC<ProfilePageContentProps> = ({
       <div className="profile-layout">
         <div className="profile-stack">
           <ProfileSummaryCard 
+            clubSlug={clubSlug}
             name={displayName}
             role={profile.memberRoleType}
             status={profile.memberStatus}

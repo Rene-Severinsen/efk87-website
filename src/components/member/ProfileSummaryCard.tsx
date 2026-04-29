@@ -1,8 +1,10 @@
 import React from 'react';
+import Link from 'next/link';
 import { ThemedSectionCard } from '../publicSite/ThemedBuildingBlocks';
 import { ClubMemberCertificateType } from '@/generated/prisma';
 
 interface ProfileSummaryCardProps {
+  clubSlug: string;
   name: string;
   role: string;
   status: string;
@@ -13,6 +15,7 @@ interface ProfileSummaryCardProps {
 }
 
 export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({ 
+  clubSlug,
   name, 
   role, 
   status,
@@ -118,6 +121,36 @@ export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({
           <div className="profile-list-item">
             <h4>Sikkerhed</h4>
             <p>Din adgang styres via dit login. Password kan ikke ændres direkte herfra endnu.</p>
+          </div>
+        </div>
+      </ThemedSectionCard>
+
+      <ThemedSectionCard>
+        <div className="section-head">
+          <h2>Medlemskort</h2>
+        </div>
+        <div className="info-list">
+          <div className="info-item">
+            <h4>Udskriv medlemskort</h4>
+            <p>Her kan du udskrive dit medlemskort til brug i klubben.</p>
+            <div style={{ marginTop: '1rem' }}>
+              <Link 
+                href={`/${clubSlug}/profil/medlemskort`}
+                className="themed-button"
+                style={{
+                  display: 'inline-block',
+                  padding: '0.5rem 1rem',
+                  backgroundColor: 'var(--club-accent)',
+                  color: 'white',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  fontWeight: 'bold'
+                }}
+              >
+                Gå til medlemskort
+              </Link>
+            </div>
           </div>
         </div>
       </ThemedSectionCard>
