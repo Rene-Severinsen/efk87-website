@@ -87,5 +87,7 @@ export async function createFlightIntentAction(formData: FormData) {
     },
   });
 
+  // Future: lookup getFlightIntentMailingListForClub(club.id) and enqueue notification after successful create.
+
   redirect(`/${clubSlug}/jeg-flyver?created=1`);
 }

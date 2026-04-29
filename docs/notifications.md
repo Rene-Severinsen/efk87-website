@@ -15,9 +15,10 @@ The platform identifies at least two primary mailing list concepts required by c
 
 ### Configuration
 
-- Mailing list addresses and details must not be hardcoded in the business logic (e.g., no `EFK87` specific addresses in code).
-- Addresses must be stored as part of the club settings or a dedicated `MailingList` model (future).
-- Future admin UI should allow authorized club admins to configure these addresses.
+- Mailing list addresses and details are stored in the `ClubMailingList` model.
+- Addresses must not be hardcoded in the business logic (e.g., no `EFK87` specific addresses in code).
+- Future admin UI will allow authorized club admins to configure these addresses.
+- See [Mailing Lists](./mailing-lists.md) for technical implementation details.
 
 ## Notification Strategy
 

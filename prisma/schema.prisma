@@ -29,6 +29,7 @@ model Club {
   publicFooter  PublicClubFooter?
   publicSponsors PublicSponsor[]
   dailyActivity MemberDailyActivity[]
+  mailingLists  ClubMailingList[]
 }
 
 model PublicClubFooter {
@@ -331,4 +332,31 @@ model MemberDailyActivity {
   @@unique([clubId, userId, activityDate])
   @@index([clubId, activityDate])
   @@index([userId, activityDate])
+}
+
+model ClubMailingList {
+  id           String                  @id @default(cuid())
+  clubId       String
+  key          String
+  name         String
+  description  String?
+  emailAddress String
+  purpose      ClubMailingListPurpose
+  isActive     Boolean                 @default(true)
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+
+  @@unique([clubId, key])
+  @@index([clubId, purpose])
+  @@index([clubId, isActive])
+}
+
+enum ClubMailingListPurpose {
+  GENERAL
+  FLIGHT_INTENT
+  SCHOOL
+  TRIP
+  OTHER
 }

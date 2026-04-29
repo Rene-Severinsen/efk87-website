@@ -115,8 +115,10 @@ Admins with `ADMIN` or `OWNER` roles can moderate flight intents via the admin p
 Future scope includes sending automated email notifications when a new flight intent is created.
 
 ### Target Mailing List
-- Notifications must be sent to the **Dedicated “Jeg flyver” Mailing List** configured for the club.
-- The mailing list address must be tenant-scoped and configurable via club settings.
+- Notifications must be sent to the **FLIGHT_INTENT** mailing list configured for the club.
+- Use `getFlightIntentMailingListForClub(clubId)` from `src/lib/mailingLists/clubMailingListService.ts` to find the target.
+- The mailing list address is tenant-scoped and configurable via club settings.
+- Missing mailing list configuration must not block flight intent creation.
 
 ### Notification Flow
 1.  **Submission**: Member submits the "Jeg flyver" form.

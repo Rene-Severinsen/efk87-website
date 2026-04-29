@@ -5,7 +5,8 @@ import {
   ClubFlightIntentStatus, 
   ClubFlightIntentSource, 
   ClubFlightIntentVisibility,
-  PublicSurfaceVisibility 
+  PublicSurfaceVisibility,
+  ClubMailingListPurpose 
 } from "../src/generated/prisma";
 
 async function main() {
@@ -485,6 +486,40 @@ async function main() {
         },
       });
     }
+  }
+
+  // Seed mailing lists for EFK87
+  const mailingLists = [
+    {
+      key: "general",
+      name: "EFK87",
+      purpose: ClubMailingListPurpose.GENERAL,
+      emailAddress: "efk87@efk87.dk",
+      isActive: true,
+    },
+    {
+      key: "flight-intents",
+      name: "Flyvermeddelelser",
+      purpose: ClubMailingListPurpose.FLIGHT_INTENT,
+      emailAddress: "website@efk87.dk",
+      isActive: true,
+    },
+  ];
+
+  for (const list of mailingLists) {
+    await prisma.clubMailingList.upsert({
+      where: {
+        clubId_key: {
+          clubId: efk87.id,
+          key: list.key,
+        },
+      },
+      update: list,
+      create: {
+        clubId: efk87.id,
+        ...list,
+      },
+    });
   }
 
   console.log({ efk87 });
