@@ -49,7 +49,7 @@ A reusable server-side viewer resolution is implemented in `src/lib/auth/viewer.
 The `ServerViewerContext` includes:
 - `isAuthenticated`: `boolean`
 - `isMember`: `boolean` (True if authenticated AND has `ACTIVE` membership in the current club)
-- `isAdmin`: `boolean` (True if authenticated AND has `ACTIVE` membership AND role is `ADMIN` or `OWNER`)
+- `isAdmin`: `boolean` (True if authenticated AND (has `ACTIVE` membership AND role is `ADMIN` or `OWNER` OR has `ACTIVE` ClubMemberProfile AND eligible board role))
 - `userId?`: `string`
 - `email?`: `string`
 - `name?`: `string | null`
@@ -65,7 +65,7 @@ The `ServerViewerContext` includes:
 2. If no session/user/email, returns an anonymous viewer.
 3. Finds the `User` by email and checks for `ClubMembership` in the specified `clubId`.
 4. If an `ACTIVE` membership exists, `isMember` is set to `true`.
-5. If the membership is `ACTIVE` and the role is `ADMIN` or `OWNER`, `isAdmin` is set to `true`.
+8. If the membership is `ACTIVE` and the role is `ADMIN` or `OWNER`, OR if the user has an `ACTIVE` `ClubMemberProfile` with an eligible board role (`CHAIRMAN`, `VICE_CHAIRMAN`, `BOARD_MEMBER`, `TREASURER`), `isAdmin` is set to `true`.
 
 ### Access Guards
 

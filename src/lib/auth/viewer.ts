@@ -2,9 +2,11 @@ import { auth } from "../../auth";
 import prisma from "../db/prisma";
 import { 
   MembershipStatus, 
-  ClubRole 
+  ClubRole,
+  ClubMemberStatus
 } from "../../generated/prisma";
 import { ViewerVisibilityContext } from "../publicSite/publicVisibility";
+import { isAdminEligibleMemberRole } from "./adminAccess";
 
 export type ServerViewerContext = {
   isAuthenticated: boolean;
@@ -77,7 +79,14 @@ export async function getServerViewerForClub(clubId: string): Promise<ServerView
   }
 
   const isMember = membership.status === MembershipStatus.ACTIVE;
-  const isAdmin = isMember && (membership.role === ClubRole.ADMIN || membership.role === ClubRole.OWNER);
+  
+  // Admin if legacy ClubRole is ADMIN/OWNER OR if they have an eligible board role in ClubMemberProfile
+  const hasLegacyAdminRole = isMember && (membership.role === ClubRole.ADMIN || membership.role === ClubRole.OWNER);
+  const hasBoardAdminRole = profile && 
+                            profile.memberStatus === ClubMemberStatus.ACTIVE && 
+                            isAdminEligibleMemberRole(profile.memberRoleType);
+
+  const isAdmin = hasLegacyAdminRole || !!hasBoardAdminRole;
 
   return {
     isAuthenticated: true,

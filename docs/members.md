@@ -47,8 +47,9 @@ The public instructor contact page (`/[clubSlug]/om/kontakt`) displays contact i
 
 ## Club Roles vs System Roles
 
-- **System Roles (`ClubMembership.role`)**: Controls technical access to the platform (e.g., who can access `/admin`).
-- **Club Roles (`ClubMemberProfile.memberRoleType`)**: Describes the member's function within the club (e.g., Chairman, Treasurer). These do not grant technical permissions on their own.
+- **System Roles (`ClubMembership.role`)**: Legacy controls for technical access to the platform (ADMIN, OWNER).
+- **Club Roles (`ClubMemberProfile.memberRoleType`)**: Describes the member's function within the club (e.g., Chairman, Treasurer).
+- **Role-Based Access Control (RBAC)**: Eligible club roles (CHAIRMAN, VICE_CHAIRMAN, BOARD_MEMBER, TREASURER) now grant full admin access for their respective club, equivalent to the legacy ADMIN system role.
 
 ## Certificates
 

@@ -79,6 +79,15 @@ export function getVisiblePublicActions(
   const allActions: PublicNavigationItem[] = [];
 
   if (viewer.isAuthenticated) {
+    if (viewer.isAdmin) {
+      allActions.push({
+        label: 'Admin',
+        href: `/${clubSlug}/admin`,
+        key: 'admin',
+        visibility: 'MEMBERS_ONLY',
+      });
+    }
+
     if (viewer.isMember || viewer.isAdmin) {
       allActions.push({
         label: 'Min profil',

@@ -34,10 +34,13 @@ Admin routes are protected by `requireClubAdminForClub` guard located in `src/li
 
 ### Rules:
 - **Authenticated:** User must be logged in.
-- **Active Membership:** User must have an `ACTIVE` status in their `ClubMembership` for the current club.
-- **Admin/Owner Role:** User must have either `ADMIN` or `OWNER` role.
+- **Tenant-Scoped Access:** Access is evaluated per club based on the user's role in that specific club.
+- **Access Paths:**
+  - **Legacy Role:** User has an `ACTIVE` `ClubMembership` with `ADMIN` or `OWNER` role.
+  - **Board Role:** User has an `ACTIVE` `ClubMemberProfile` with an eligible board role (`CHAIRMAN`, `VICE_CHAIRMAN`, `BOARD_MEMBER`, `TREASURER`).
+- **Platform Admin:** Reserved for future use (currently `isPlatformAdmin` defaults to `false`).
 - **Redirection:** 
-  - Anonymous users or non-admin members are redirected to `/[clubSlug]/login?reason=admin-required`.
+  - Anonymous users or non-authorized members are redirected to `/[clubSlug]/login?reason=admin-required`.
 
 ## Visual Identity
 The admin area uses a "Dark Premium Glass" theme:

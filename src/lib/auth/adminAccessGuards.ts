@@ -6,10 +6,10 @@ import { getServerViewerForClub, ServerViewerContext } from "./viewer";
  * 
  * Access rules:
  * - User must be authenticated.
- * - User must have ACTIVE ClubMembership for current club.
- * - User must have ClubRole ADMIN or OWNER.
- * - MEMBER role is denied.
- * - INVITED/DISABLED status is denied.
+ * - User must have ACTIVE status in current club.
+ * - Access granted if:
+ *   a) User has legacy ClubRole ADMIN or OWNER in ClubMembership.
+ *   b) User has an eligible board role in ClubMemberProfile (CHAIRMAN, TREASURER, etc.).
  * 
  * If not authorized, redirects:
  * - Anonymous: /{clubSlug}/login?reason=admin-required
