@@ -19,7 +19,26 @@ export default async function BlivMedlemPage({ params }: PageProps) {
     notFound();
   }
 
-  const proseText = "Udfyld formularen herunder, hvis du ønsker at blive medlem af EFK87. Når vi har modtaget din ansøgning, gennemgår vi oplysningerne og kontakter dig med næste skridt. Har du spørgsmål, er du altid velkommen til at kontakte klubben.";
+   // const proseText = "Udfyld formularen herunder, hvis du ønsker at blive medlem af EFK87. Når vi har modtaget din ansøgning, gennemgår vi oplysningerne og kontakter dig med næste skridt. Har du spørgsmål, er du altid velkommen til at kontakte klubben.";
+  const proseText = (
+      <>
+        Velkommen til EFK87. Udfyld formularen herunder, hvis du ønsker at blive medlem af klubben.
+        <br />
+        Før du kan blive medlem af EFK87, skal du først have oprettet medlemskab hos{" "}
+        <a
+            href="https://modelflyvningdanmark.dk"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+          Modelflyvning Danmark
+        </a>
+        <br />
+            Her får du dit MDK medlemsnummer, som skal bruges i formularen, hvis du søger Senior- eller Juniormedlemskab.
+
+        <br />
+        Når formularen er udfyldt, sender vi dig en mail med en faktura. Når fakturaen er betalt, gennemføres indmeldelsen automatisk, og du modtager en velkomstmail med yderligere information om klubben.
+      </>
+  );
 
   return (
     <ThemedClubPageShell
@@ -34,11 +53,11 @@ export default async function BlivMedlemPage({ params }: PageProps) {
       currentPath={`/${clubSlug}/bliv-medlem`}
     >
       <div className="max-w-3xl mx-auto">
-        <ThemedPageHeader 
-          title={`Bliv medlem af ${club.settings?.shortName || club.name}`}
-          subtitle={proseText}
+
+        <ThemedPageHeader
+           subtitle={proseText}
         />
-        
+
         <MemberApplicationForm clubSlug={clubSlug} />
       </div>
     </ThemedClubPageShell>

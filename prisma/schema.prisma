@@ -755,6 +755,7 @@ model PublicMemberApplication {
   clubId          String
   firstName       String
   lastName        String
+  email           String?
   address         String
   postalCode      String
   city            String

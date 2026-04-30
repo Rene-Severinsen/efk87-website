@@ -196,7 +196,7 @@ Reusable small themed components for consistent internal page styling:
 
 ### Public Route Details
 - **Content Stubs**: Galleri, Artikler, and Flyveskole use the `PublicPage` model via `publicPageService`. They currently contain seed content for EFK87 and serve as visual/structural stubs.
-- **Bliv medlem**: Implements a functional membership application form that saves to `PublicMemberApplication`.
+- **Bliv medlem**: Implements a functional membership application form that saves to `PublicMemberApplication`. Requires e-mail, mobile, and other basic contact info.
 - **Login Placeholder**: The login page is a visual placeholder only. It does not implement real authentication, session handling, or form fields. A code comment indicates that auth/session handling is intentionally skipped in this scope.
 - **Member-only Areas**: Forum (`/[clubSlug]/forum`) and My Profile (`/[clubSlug]/profil`) are intended for members only and are hidden from anonymous visitors in the navigation.
 - **Scope Limitations**:

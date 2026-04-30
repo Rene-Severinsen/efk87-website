@@ -110,6 +110,8 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
           </div>
         </div>
 
+
+
         {/* Adresse */}
         <div>
           <label htmlFor="address" className="block text-sm font-medium opacity-80 mb-2">
@@ -164,6 +166,43 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* E-mail */}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium opacity-80 mb-2">
+              E-mail *
+            </label>
+            <input
+                type="email"
+                name="email"
+                id="email"
+                required
+                autoComplete="email"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
+            />
+            {state.fieldErrors?.email && (
+                <p className="mt-1 text-xs text-red-400">{state.fieldErrors.email}</p>
+            )}
+          </div>
+
+          {/* Mobilnummer */}
+          <div>
+            <label htmlFor="mobilePhone" className="block text-sm font-medium opacity-80 mb-2">
+              Mobilnummer *
+            </label>
+            <input
+                type="tel"
+                name="mobilePhone"
+                id="mobilePhone"
+                required
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
+            />
+            {state.fieldErrors?.mobilePhone && (
+                <p className="mt-1 text-xs text-red-400">{state.fieldErrors.mobilePhone}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Fødselsdato */}
           <div>
             <label htmlFor="birthDate" className="block text-sm font-medium opacity-80 mb-2">
@@ -180,51 +219,6 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
             />
             {state.fieldErrors?.birthDate && (
               <p className="mt-1 text-xs text-red-400">{state.fieldErrors.birthDate}</p>
-            )}
-          </div>
-
-          {/* Mobilnummer */}
-          <div>
-            <label htmlFor="mobilePhone" className="block text-sm font-medium opacity-80 mb-2">
-              Mobilnummer *
-            </label>
-            <input
-              type="tel"
-              name="mobilePhone"
-              id="mobilePhone"
-              required
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
-            />
-            {state.fieldErrors?.mobilePhone && (
-              <p className="mt-1 text-xs text-red-400">{state.fieldErrors.mobilePhone}</p>
-            )}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Medlemskab */}
-          <div>
-            <label htmlFor="membershipType" className="block text-sm font-medium opacity-80 mb-2">
-              Medlemskab *
-            </label>
-            <select
-              name="membershipType"
-              id="membershipType"
-              required
-              value={membershipType}
-              onChange={(e) => setMembershipType(e.target.value)}
-              className="w-full px-4 py-3 bg-[#1e293b] border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white appearance-none"
-            >
-              <option value="" disabled>Vælg medlemskab</option>
-              <option value={ClubMemberMembershipType.SENIOR}>Senior</option>
-              <option value={ClubMemberMembershipType.JUNIOR}>Junior</option>
-              <option value={ClubMemberMembershipType.PASSIVE}>Passiv</option>
-            </select>
-            {ageError && (
-              <p className="mt-1 text-xs text-red-400">{ageError}</p>
-            )}
-            {state.fieldErrors?.membershipType && (
-              <p className="mt-1 text-xs text-red-400">{state.fieldErrors.membershipType}</p>
             )}
           </div>
 
@@ -249,13 +243,39 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
           </div>
         </div>
 
+        {/* Medlemskab */}
+        <div>
+          <label htmlFor="membershipType" className="block text-sm font-medium opacity-80 mb-2">
+            Medlemskab *
+          </label>
+          <select
+            name="membershipType"
+            id="membershipType"
+            required
+            value={membershipType}
+            onChange={(e) => setMembershipType(e.target.value)}
+            className="w-full px-4 py-3 bg-[#1e293b] border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white appearance-none"
+          >
+            <option value="" disabled>Vælg medlemskab</option>
+            <option value={ClubMemberMembershipType.SENIOR}>Senior</option>
+            <option value={ClubMemberMembershipType.JUNIOR}>Junior</option>
+            <option value={ClubMemberMembershipType.PASSIVE}>Passiv</option>
+          </select>
+          {ageError && (
+            <p className="mt-1 text-xs text-red-400">{ageError}</p>
+          )}
+          {state.fieldErrors?.membershipType && (
+            <p className="mt-1 text-xs text-red-400">{state.fieldErrors.membershipType}</p>
+          )}
+        </div>
+
         <div className="pt-6">
           <button
             type="submit"
             disabled={isPending || !!ageError}
             className="w-full py-4 px-6 bg-sky-600 hover:bg-sky-500 disabled:bg-sky-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg shadow-lg shadow-sky-900/20 transition-all transform active:scale-[0.98]"
           >
-            {isPending ? "Sender ansøgning..." : "Indsend ansøgning"}
+            {isPending ? "Sender ansøgning..." : "Indsend indmeldelse"}
           </button>
         </div>
       </form>

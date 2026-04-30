@@ -121,7 +121,7 @@ export async function getAdminMemberRows(clubId: string): Promise<AdminMemberOve
     userId: null,
     applicationId: a.id,
     displayName: `${a.firstName} ${a.lastName}`,
-    email: null,
+    email: a.email,
     firstName: a.firstName,
     lastName: a.lastName,
     mobilePhone: a.mobilePhone,

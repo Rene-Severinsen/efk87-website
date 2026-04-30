@@ -20,7 +20,7 @@ Prospective members can apply via a public form at `/[clubSlug]/bliv-medlem`.
 The `PublicMemberApplication` model exists because public membership applications can be submitted without a login or user account. It serves as a **pending application model**, not a second permanent member table.
 
 - **Status "Under oprettelse"**: Applications are created with `memberStatus = NEW`, appearing as "Under oprettelse" in the admin UI.
-- **No User/Account**: Unlike active members, applications do not have a linked `User` record or login credentials. We do not create "fake" users during the application phase.
+- **No User/Account**: Unlike active members, applications do not have a linked `User` record or login credentials. We do not create "fake" users during the application phase. The email address provided is saved on the application record itself.
 - **Member Number Reservation**: To ensure consistency, applications reserve a `memberNumber` immediately upon submission using the same sequential logic as active members.
 - **Future Approval Flow**: A future approval flow will handle the conversion of an application into a real member:
     - Creation of a `ClubMemberProfile`.
@@ -33,9 +33,10 @@ The `PublicMemberApplication` model exists because public membership application
 3. **Data Model**: Applications use `PublicMemberApplication`, while active members use `ClubMemberProfile`.
 
 ### Validation
+- **Email**: Required for all applications. Validated for format and used for duplicate checking.
 - **Birth year vs Membership Type**: Senior if >= 18 in current calendar year, else Junior.
 - **MDK nr.**: Required for Senior and Junior, optional for Passive.
-- **Duplicate Check**: Basic check based on name, mobile, and birthdate across both applications and existing profiles.
+- **Duplicate Check**: Check based on email, or name + mobile + birthdate across both applications and existing profiles.
 
 ## Medlemsnummer (Member Number)
 

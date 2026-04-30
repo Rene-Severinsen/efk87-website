@@ -85,6 +85,7 @@ Stores club-specific member stamdata (profile information) for active members wh
 #### PublicMemberApplication
 Stores public membership applications for individuals who do not yet have a platform account.
 - **Purpose**: Acts as a temporary storage for pending applications. It is NOT a permanent member table.
+- **Fields**: Name, email, address, phone, birthdate, membership type, MDK number, member number.
 - **Status**: Applications use `memberStatus = NEW` (displayed as "Under oprettelse").
 - **Independence**: Not linked to a `User` or `ClubMembership`.
 - **Member Number Reservation**: Reserves a `memberNumber` upon creation to ensure sequential integrity even before approval.

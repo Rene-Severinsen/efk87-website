@@ -37,6 +37,7 @@ export async function submitPublicMemberApplicationAction(
   const postalCode = formData.get("postalCode")?.toString().trim() || "";
   const city = formData.get("city")?.toString().trim() || "";
   const mobilePhone = formData.get("mobilePhone")?.toString().trim() || "";
+  const email = formData.get("email")?.toString().trim().toLowerCase() || "";
   const birthDateStr = formData.get("birthDate")?.toString() || "";
   const membershipTypeStr = formData.get("membershipType")?.toString() || "";
   const mdkNumber = formData.get("mdkNumber")?.toString().trim() || "";
@@ -49,6 +50,11 @@ export async function submitPublicMemberApplicationAction(
   if (!address) fieldErrors.address = "Adresse er påkrævet";
   if (!postalCode) fieldErrors.postalCode = "Postnummer er påkrævet";
   if (!city) fieldErrors.city = "By er påkrævet";
+  if (!email) {
+    fieldErrors.email = "E-mail er påkrævet";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    fieldErrors.email = "Indtast en gyldig e-mailadresse.";
+  }
   if (!mobilePhone) fieldErrors.mobilePhone = "Mobilnummer er påkrævet";
   if (!birthDateStr) fieldErrors.birthDate = "Fødselsdato er påkrævet";
   if (!membershipTypeStr) fieldErrors.membershipType = "Medlemskab er påkrævet";
@@ -85,32 +91,50 @@ export async function submitPublicMemberApplicationAction(
   }
 
   // 4. Duplicate Check
-  // mobile number + firstName + lastName + birthDate
+  // Check by email first (new requirement) or existing composite
   const existingApp = await prisma.publicMemberApplication.findFirst({
     where: {
       clubId: club.id,
-      mobilePhone,
-      firstName,
-      lastName,
-      birthDate: {
-        equals: birthDate
-      }
+      OR: [
+        { email },
+        {
+          mobilePhone,
+          firstName,
+          lastName,
+          birthDate: { equals: birthDate }
+        }
+      ]
     }
   });
 
   const existingProfile = await prisma.clubMemberProfile.findFirst({
     where: {
       clubId: club.id,
-      mobilePhone,
-      firstName,
-      lastName,
-      birthDate: {
-        equals: birthDate
+      OR: [
+        { user: { email } },
+        {
+          mobilePhone,
+          firstName,
+          lastName,
+          birthDate: { equals: birthDate }
+        }
+      ]
+    },
+    include: {
+      user: {
+        select: { email: true }
       }
     }
   });
 
   if (existingApp || existingProfile) {
+    const isEmailDuplicate = 
+      (existingApp && existingApp.email === email) || 
+      (existingProfile && existingProfile.user.email === email);
+
+    if (isEmailDuplicate) {
+      return { error: "Der findes allerede en ansøgning eller et medlem med samme e-mailadresse. Kontakt klubben, hvis du er i tvivl." };
+    }
     return { error: "Der findes allerede en ansøgning eller et medlem med tilsvarende oplysninger. Kontakt klubben, hvis du er i tvivl." };
   }
 
@@ -124,6 +148,7 @@ export async function submitPublicMemberApplicationAction(
         clubId: club.id,
         firstName,
         lastName,
+        email,
         address,
         postalCode,
         city,
