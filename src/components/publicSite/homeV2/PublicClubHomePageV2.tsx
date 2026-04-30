@@ -78,6 +78,8 @@ interface PublicClubHomePageV2Props {
 export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity }: PublicClubHomePageV2Props) {
   const clubDisplayName = club.settings?.displayName || club.name;
   const clubShortName = club.settings?.shortName || club.name;
+  const firstName = viewer.firstName || viewer.name?.split(' ')[0] || 'Gæst';
+  const todayFlyingCount = todayFlightIntents.length;
 
 
   return (
@@ -97,9 +99,9 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             <div className="home-v2-eyebrow">
               ✈️ Sæsonstart 2026 · {new Date().toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric', month: 'long' })} · Vejr: 8°C og let sidevind
             </div>
-            <h1>Hej {viewer.name?.split(' ')[0] || 'Gæst'}. Der er liv på pladsen i dag.</h1>
+            <h1>Hej {firstName}.{todayFlyingCount > 0 ? ' Der er liv på pladsen i dag.' : ''}</h1>
             <p className="home-v2-hero-copy">
-              {todayFlightIntents.length} medlemmer har allerede meldt “jeg flyver”, skoleflyvning er <strong>aktiv fra kl. 11:00</strong>, og forumtråden om forårsoprydning har fået 9 nye svar siden i går.
+              {todayFlightIntents.length} medlemmer har allerede meldt “jeg flyver”.
             </p>
             <div className="home-v2-inline-actions">
               <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/jeg-flyver`}>Jeg flyver</Link>

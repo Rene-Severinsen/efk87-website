@@ -13,6 +13,7 @@ export type ServerViewerContext = {
   userId?: string;
   email?: string;
   name?: string | null;
+  firstName?: string | null;
   clubId?: string;
   membershipStatus?: MembershipStatus;
   clubRole?: ClubRole;
@@ -39,6 +40,9 @@ export async function getServerViewerForClub(clubId: string): Promise<ServerView
       memberships: {
         where: { clubId },
       },
+      memberProfiles: {
+        where: { clubId },
+      },
     },
   });
 
@@ -50,11 +54,13 @@ export async function getServerViewerForClub(clubId: string): Promise<ServerView
       userId: session.user.id,
       email: session.user.email,
       name: session.user.name,
+      firstName: null,
       isPlatformAdmin: false,
     };
   }
 
   const membership = user.memberships[0];
+  const profile = user.memberProfiles[0];
 
   if (!membership) {
     return {
@@ -64,6 +70,7 @@ export async function getServerViewerForClub(clubId: string): Promise<ServerView
       userId: user.id,
       email: user.email,
       name: user.name,
+      firstName: profile?.firstName || null,
       clubId,
       isPlatformAdmin: false,
     };
@@ -79,6 +86,7 @@ export async function getServerViewerForClub(clubId: string): Promise<ServerView
     userId: user.id,
     email: user.email,
     name: user.name,
+    firstName: profile?.firstName || null,
     clubId,
     membershipStatus: membership.status,
     clubRole: membership.role,
