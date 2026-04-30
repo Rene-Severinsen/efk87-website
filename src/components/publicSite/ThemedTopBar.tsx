@@ -20,10 +20,17 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
                                                             currentPath,
                                                           }) => {
   const isActiveItem = (item: PublicNavigationItem) => {
+    if (!currentPath) return false;
+
     if (currentPath === item.href) return true;
 
     if (item.key === 'home') {
       return currentPath === `/${clubSlug}`;
+    }
+
+    // Active state for forum and its subpages
+    if (item.key === 'forum') {
+      return currentPath.startsWith(`${item.href}/`);
     }
 
     return false;

@@ -34,7 +34,7 @@ export function getVisiblePublicNavigation(
       label: 'Forum',
       href: `/${clubSlug}/forum`,
       key: 'forum',
-      visibility: 'MEMBERS_ONLY',
+      visibility: 'PUBLIC',
     },
     {
       label: 'Galleri',
