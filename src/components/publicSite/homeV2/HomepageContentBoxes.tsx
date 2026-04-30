@@ -83,7 +83,7 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
             <div className="home-v2-signup-status">
               <Info size={20} className="text-blue-400" />
               <span style={{ flex: 1 }}>Log ind for at {signupLabel.toLowerCase()}.</span>
-              <Link href={`/${clubSlug}/login`} className="home-v2-pill home-v2-primary" style={{ gap: '8px' }}>
+              <Link href={`/${clubSlug}/login`} className="home-v2-pill home-v2-primary">
                 <LogIn size={18} />
                 Log ind
               </Link>
@@ -109,7 +109,7 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
                   <div style={{ fontSize: '14px', color: 'var(--home-v2-muted)' }}>Antal: {mySignup.quantity}</div>
                 )}
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div className="home-v2-signup-actions">
                 {content.signupMode === HomepageContentSignupMode.QUANTITY && (
                   <button 
                     onClick={() => setIsUpdating(true)}
@@ -154,7 +154,7 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
                   className="home-v2-signup-input"
                 />
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div className="home-v2-signup-actions">
                 {isUpdating && (
                   <button 
                     type="button" 

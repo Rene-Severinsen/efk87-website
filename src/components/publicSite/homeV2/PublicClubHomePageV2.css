@@ -113,16 +113,19 @@
 
 /* Homepage Content Boxes */
 .home-v2-content-boxes {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
   margin-top: 24px;
   margin-bottom: 24px;
 }
 
 .home-v2-content-box {
+  width: 100%;
+  max-width: none;
   padding: 24px;
-  overflow: hidden;
+  border-radius: 24px;
   display: flex;
   flex-direction: column;
 }
@@ -130,7 +133,7 @@
 .home-v2-content-box h2 {
   font-size: 22px;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   color: #fff;
 }
 
@@ -138,8 +141,10 @@
   color: var(--home-v2-text);
   line-height: 1.65;
   font-size: 16px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
+  width: 100%;
 }
 
 .home-v2-content-body p {
@@ -154,20 +159,25 @@
 }
 
 .home-v2-signup-area {
-  margin-top: 18px;
+  margin-top: 20px;
   padding-top: 16px;
   border-top: 1px solid var(--home-v2-line);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .home-v2-signup-status {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px;
+  padding: 16px;
   border-radius: 16px;
   background: rgba(255,255,255,0.035);
   border: 1px solid var(--home-v2-line);
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .home-v2-signup-form {
@@ -175,10 +185,11 @@
   align-items: flex-end;
   gap: 12px;
   flex-wrap: wrap;
-  padding: 14px;
+  padding: 16px;
   border-radius: 16px;
   background: rgba(255,255,255,0.035);
   border: 1px solid var(--home-v2-line);
+  width: 100%;
 }
 
 .home-v2-signup-input-group {
@@ -206,6 +217,12 @@
 .home-v2-signup-input:focus {
   border-color: #7dd3fc;
   box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.2);
+}
+
+.home-v2-signup-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .home-v2-participant-summary {
@@ -585,6 +602,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   border: 1px solid rgba(255,255,255,0.10);
   background: rgba(255,255,255,0.06);
   color: var(--home-v2-text);
@@ -636,6 +654,17 @@
   .home-v2-card {
     border-radius: var(--home-v2-radius);
     box-shadow: var(--home-v2-shadow);
+  }
+
+  .home-v2-content-box {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .home-v2-signup-status,
+  .home-v2-signup-form {
+    padding: 12px;
+    gap: 10px;
   }
 
   /*
