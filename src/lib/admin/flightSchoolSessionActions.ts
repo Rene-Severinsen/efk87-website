@@ -110,3 +110,13 @@ export async function deactivateTimeSlotAction(clubSlug: string, id: string) {
   revalidatePath(`/${clubSlug}/admin/flyveskole`);
   return { success: true };
 }
+
+export async function deleteOrCancelSessionAction(clubSlug: string, id: string) {
+  const club = await requireClubBySlug(clubSlug);
+  await requireClubAdminForClub(club.id, clubSlug);
+
+  await flightSchoolBookingService.deleteOrCancelFlightSchoolSession(club.id, id);
+
+  revalidatePath(`/${clubSlug}/admin/flyveskole`);
+  return { success: true };
+}

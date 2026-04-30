@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Plus, Edit2, Clock, User, CheckCircle, ChevronRight, ChevronDown } from "lucide-react";
+import { Plus, Edit2, Clock, User, CheckCircle, ChevronRight, ChevronDown, Trash2, XCircle } from "lucide-react";
 import { formatAdminDate, formatAdminTime, formatAdminDateTime } from "../../../lib/format/adminDateFormat";
 import FlightSchoolSessionForm from "./FlightSchoolSessionForm";
 import { FlightSchoolSessionStatus, FlightSchoolSession, FlightSchoolTimeSlot, FlightSchoolBooking, ClubMemberProfile } from "../../../generated/prisma";
+import { deleteOrCancelSessionAction } from "../../../lib/admin/flightSchoolSessionActions";
 
 type SessionWithIncludes = FlightSchoolSession & {
   instructor: ClubMemberProfile;
@@ -40,6 +41,7 @@ const FlightSchoolCalendarTab: React.FC<FlightSchoolCalendarTabProps> = ({
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingSession, setEditingSession] = useState<SessionWithIncludes | null>(null);
   const [expandedSessionId, setExpandedSessionId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   const handleCreate = () => {
     setEditingSession(null);
@@ -49,6 +51,25 @@ const FlightSchoolCalendarTab: React.FC<FlightSchoolCalendarTabProps> = ({
   const handleEdit = (session: SessionWithIncludes) => {
     setEditingSession(session);
     setIsFormOpen(true);
+  };
+
+  const handleDelete = async (session: SessionWithIncludes, totalBookings: number) => {
+    const actionText = totalBookings > 0 ? "aflyse" : "slette";
+    const confirmMessage = totalBookings > 0 
+      ? `Er du sikker på, at du vil aflyse denne session? Der er ${totalBookings} aktive bookinger, som vil blive aflyst. Instruktøren og eleverne skal have besked manuelt.`
+      : `Er du sikker på, at du vil slette denne session? Dette kan ikke fortrydes.`;
+
+    if (!window.confirm(confirmMessage)) return;
+
+    setIsDeleting(session.id);
+    try {
+      await deleteOrCancelSessionAction(clubSlug, session.id);
+    } catch (error) {
+      console.error(`Failed to ${actionText} session:`, error);
+      alert(`Der skete en fejl under forsøget på at ${actionText} sessionen.`);
+    } finally {
+      setIsDeleting(null);
+    }
   };
 
   const toggleExpand = (sessionId: string) => {
@@ -155,6 +176,24 @@ const FlightSchoolCalendarTab: React.FC<FlightSchoolCalendarTabProps> = ({
                             title="Rediger session"
                           >
                             <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(session, totalBookings)}
+                            disabled={isDeleting === session.id}
+                            className={`p-2 transition-colors ${
+                              isDeleting === session.id 
+                                ? "text-slate-600 cursor-not-allowed" 
+                                : totalBookings > 0 
+                                  ? "text-slate-400 hover:text-amber-500" 
+                                  : "text-slate-400 hover:text-rose-500"
+                            }`}
+                            title={totalBookings > 0 ? "Aflys session" : "Slet session"}
+                          >
+                            {totalBookings > 0 ? (
+                              <XCircle className="w-4 h-4" />
+                            ) : (
+                              <Trash2 className="w-4 h-4" />
+                            )}
                           </button>
                         </div>
                       </td>

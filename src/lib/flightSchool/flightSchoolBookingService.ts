@@ -144,6 +144,87 @@ export async function cancelSession(id: string) {
 }
 
 /**
+ * Deletes or cancels a flight school session based on whether it has bookings.
+ */
+export async function deleteOrCancelFlightSchoolSession(clubId: string, sessionId: string) {
+  // 1. Validate session belongs to the club and get its booking count
+  const session = await prisma.flightSchoolSession.findUnique({
+    where: { id: sessionId, clubId },
+    include: {
+      timeSlots: {
+        include: {
+          bookings: {
+            where: { status: "BOOKED" },
+          },
+        },
+      },
+    },
+  });
+
+  if (!session) {
+    throw new Error("Session not found or access denied");
+  }
+
+  const activeBookings = session.timeSlots.flatMap((slot) => slot.bookings);
+  const hasBookings = activeBookings.length > 0;
+
+  if (!hasBookings) {
+    // 2. No bookings: hard delete the session and its slots
+    // Prisma handles the deletion of slots via onDelete: Cascade if configured, 
+    // but based on the schema it doesn't seem to have Cascade for timeSlots on session deletion (it only has it on ArticleTagAssignment).
+    // Let's check schema again. 
+    // Actually, FlightSchoolTimeSlot has: session FlightSchoolSession @relation(fields: [flightSchoolSessionId], references: [id])
+    // No onDelete: Cascade there. So we must delete slots manually if we want to be safe and avoid orphans or FK errors.
+    
+    return await prisma.$transaction(async (tx) => {
+      // Delete slots first to avoid FK constraints
+      await tx.flightSchoolTimeSlot.deleteMany({
+        where: { flightSchoolSessionId: sessionId },
+      });
+
+      return await tx.flightSchoolSession.delete({
+        where: { id: sessionId },
+      });
+    });
+  } else {
+    // 3. Has bookings: set status to CANCELLED and deactivate slots/bookings
+    return await prisma.$transaction(async (tx) => {
+      // Set session status to CANCELLED
+      await tx.flightSchoolSession.update({
+        where: { id: sessionId },
+        data: { status: "CANCELLED" },
+      });
+
+      // Deactivate all underlying slots
+      await tx.flightSchoolTimeSlot.updateMany({
+        where: { flightSchoolSessionId: sessionId },
+        data: { isActive: false },
+      });
+
+      // Mark active bookings as CANCELLED
+      // FLIGHT_SCHOOL_SESSION_CANCELLED: Seam for email sending to activeBookings.
+      // Booked students must receive cancellation email when real mail integration is implemented.
+      // Use the generic mail service in src/lib/email/mailService.ts.
+      // Do not hardcode email body here; consider adding a template concept under an appropriate admin/settings area later.
+      await tx.flightSchoolBooking.updateMany({
+        where: {
+          flightSchoolTimeSlot: {
+            flightSchoolSessionId: sessionId,
+          },
+          status: "BOOKED",
+        },
+        data: {
+          status: "CANCELLED",
+          cancelledAt: new Date(),
+        },
+      });
+
+      return { cancelled: true, bookingCount: activeBookings.length };
+    });
+  }
+}
+
+/**
  * Create a new time slot.
  * Includes overlap check for the instructor.
  */
