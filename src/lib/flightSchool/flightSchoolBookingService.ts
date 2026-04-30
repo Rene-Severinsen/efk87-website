@@ -58,6 +58,42 @@ export async function getTodayPublishedSessions(clubId: string) {
 }
 
 /**
+ * List all published sessions from today and forward.
+ * Grouped by date in the UI later.
+ */
+export async function listPublishedSessionsFromToday(clubId: string) {
+  const today = startOfDay(new Date());
+  
+  return prisma.flightSchoolSession.findMany({
+    where: {
+      clubId,
+      date: {
+        gte: today,
+      },
+      status: FlightSchoolSessionStatus.PUBLISHED,
+    },
+    include: {
+      instructor: true,
+      timeSlots: {
+        include: {
+          bookings: {
+            where: { status: FlightSchoolBookingStatus.BOOKED },
+            include: {
+              member: true
+            }
+          }
+        },
+        orderBy: { sortOrder: 'asc' }
+      }
+    },
+    orderBy: [
+      { date: 'asc' },
+      { startsAt: 'asc' }
+    ]
+  });
+}
+
+/**
  * List all slots for a session with their booking state.
  */
 export async function listSlotsWithBookingState(sessionId: string) {
@@ -206,11 +242,14 @@ export async function deleteOrCancelFlightSchoolSession(clubId: string, sessionI
       // Booked students must receive cancellation email when real mail integration is implemented.
       // Use the generic mail service in src/lib/email/mailService.ts.
       // Do not hardcode email body here; consider adding a template concept under an appropriate admin/settings area later.
+      const slotIds = (await tx.flightSchoolTimeSlot.findMany({
+        where: { flightSchoolSessionId: sessionId },
+        select: { id: true }
+      })).map(s => s.id);
+
       await tx.flightSchoolBooking.updateMany({
         where: {
-          flightSchoolTimeSlot: {
-            flightSchoolSessionId: sessionId,
-          },
+          flightSchoolTimeSlotId: { in: slotIds },
           status: "BOOKED",
         },
         data: {

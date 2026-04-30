@@ -2,6 +2,30 @@
 
 This document describes the foundation for the flight school booking system.
 
+## Public Booking System
+
+The public booking system allows club members to view the school calendar and book flight times.
+
+### Public Route
+- `/[clubSlug]/flyveskole/skolekalender`: The main page for the school calendar.
+- Linked from the flyveskole landing page with the text: "Se skolekalender og book tid".
+
+### Access Rules
+- **Guests**: Can view the calendar but cannot book or cancel. They see a prompt to log in.
+- **Members**: Can book available slots and cancel their own bookings.
+- **Non-members/Logged-out users**: Cannot book.
+
+### Booking & Cancellation Rules
+- Only `PUBLISHED` sessions from today and forward are shown.
+- `CANCELLED` sessions or sessions in `DRAFT` status are not visible to the public.
+- Members can only book active slots (`isActive: true`).
+- A member cannot book a slot that is already booked by another member (one student per slot).
+- Members can only cancel their own active bookings.
+- After cancellation, the slot becomes available for others immediately.
+
+### Instructor Notification Seam
+- A TODO/service seam has been added in `src/lib/flightSchool/flightSchoolActions.ts` for later implementation of instructor notifications upon successful booking.
+
 ## Data Model
 
 The booking system is built around three main models, all of which are tenant-scoped by `clubId`:
