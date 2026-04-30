@@ -140,3 +140,16 @@ export async function getMemberProfileCertificates(clubId: string, userId: strin
 
   return certificates.map((c) => c.certificateType);
 }
+
+export async function getMemberProfileId(clubId: string, userId: string): Promise<string | null> {
+  const profile = await prisma.clubMemberProfile.findUnique({
+    where: {
+      clubId_userId: {
+        clubId,
+        userId,
+      },
+    },
+    select: { id: true },
+  });
+  return profile?.id ?? null;
+}

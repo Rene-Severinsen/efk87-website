@@ -1,12 +1,12 @@
 import { resolveClubContext } from "../../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPageShell";
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
-import { listPublishedSessionsFromToday } from "../../../../lib/flightSchool/flightSchoolBookingService";
+import { listPublishedSessionsFromTodayView, FlightSchoolCalendarSessionView } from "../../../../lib/flightSchool/flightSchoolBookingService";
 import { getServerViewerForClub } from "../../../../lib/auth/viewer";
 import { format, startOfDay, isSameDay } from "date-fns";
 import { da } from "date-fns/locale";
 import FlightSchoolCalendarClient from "./FlightSchoolCalendarClient";
-import prisma from "../../../../lib/db/prisma";
+import { getMemberProfileId } from "../../../../lib/members/memberProfileService";
 
 interface PageProps {
   params: Promise<{
@@ -19,25 +19,16 @@ export default async function SkolekalenderPage({ params }: PageProps) {
   const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
   const viewer = await getServerViewerForClub(club.id);
 
-  const sessions = await listPublishedSessionsFromToday(club.id);
-
   // Get member profile for the viewer to identify their own bookings
-  let memberProfileId: string | undefined;
+  let memberProfileId: string | null = null;
   if (viewer.userId) {
-    const profile = await prisma.clubMemberProfile.findUnique({
-      where: {
-        clubId_userId: {
-          clubId: club.id,
-          userId: viewer.userId,
-        },
-      },
-      select: { id: true },
-    });
-    memberProfileId = profile?.id;
+    memberProfileId = await getMemberProfileId(club.id, viewer.userId);
   }
 
+  const sessions = await listPublishedSessionsFromTodayView(club.id, memberProfileId);
+
   // Group sessions by date
-  const groupedSessions: Record<string, typeof sessions> = {};
+  const groupedSessions: Record<string, FlightSchoolCalendarSessionView[]> = {};
   sessions.forEach((session) => {
     const dateKey = startOfDay(session.date).toISOString();
     if (!groupedSessions[dateKey]) {

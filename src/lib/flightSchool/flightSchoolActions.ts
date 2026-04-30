@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getServerViewerForClub } from "../auth/viewer";
 import { bookSlot, cancelOwnBooking } from "./flightSchoolBookingService";
-import prisma from "../db/prisma";
+import { getMemberProfileId } from "../members/memberProfileService";
 
 /**
  * Public server action to book a flight school slot.
@@ -12,36 +12,29 @@ export async function bookFlightSchoolSlotAction(clubId: string, clubSlug: strin
   const viewer = await getServerViewerForClub(clubId);
 
   if (!viewer.isAuthenticated || !viewer.isMember || !viewer.userId) {
-    throw new Error("Du skal være logget ind som aktivt medlem for at booke en skoletid.");
+    return { error: "Du skal være logget ind som aktivt medlem for at booke en skoletid." };
   }
 
-  // Get member profile ID
-  const profile = await prisma.clubMemberProfile.findUnique({
-    where: {
-      clubId_userId: {
-        clubId,
-        userId: viewer.userId,
-      },
-    },
-    select: { id: true },
-  });
+  // Get member profile ID using service helper instead of direct prisma
+  const profileId = await getMemberProfileId(clubId, viewer.userId);
 
-  if (!profile) {
-    throw new Error("Kunne ikke finde din medlemsprofil.");
+  if (!profileId) {
+    return { error: "Kunne ikke finde din medlemsprofil." };
   }
 
   try {
-    await bookSlot(clubId, profile.id, slotId);
+    await bookSlot(clubId, profileId, slotId);
     
     // TODO: Add notification seam for instructor here.
     // Point 37 of requirements.
     
     revalidatePath(`/${clubSlug}/flyveskole/skolekalender`);
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Booking error:", error);
+    const message = error instanceof Error ? error.message : "Der opstod en uventet fejl.";
     return { 
-      error: error.message || "Der opstod en fejl ved booking af tiden. Prøv venligst igen." 
+      error: message || "Der opstod en fejl ved booking af tiden. Prøv venligst igen." 
     };
   }
 }
@@ -53,33 +46,26 @@ export async function cancelOwnFlightSchoolBookingAction(clubId: string, clubSlu
   const viewer = await getServerViewerForClub(clubId);
 
   if (!viewer.isAuthenticated || !viewer.userId) {
-    throw new Error("Du skal være logget ind for at afmelde en booking.");
+    return { error: "Du skal være logget ind for at afmelde en booking." };
   }
 
-  // Get member profile ID
-  const profile = await prisma.clubMemberProfile.findUnique({
-    where: {
-      clubId_userId: {
-        clubId,
-        userId: viewer.userId,
-      },
-    },
-    select: { id: true },
-  });
+  // Get member profile ID using service helper instead of direct prisma
+  const profileId = await getMemberProfileId(clubId, viewer.userId);
 
-  if (!profile) {
-    throw new Error("Kunne ikke finde din medlemsprofil.");
+  if (!profileId) {
+    return { error: "Kunne ikke finde din medlemsprofil." };
   }
 
   try {
-    await cancelOwnBooking(bookingId, profile.id);
+    await cancelOwnBooking(bookingId, profileId);
     
     revalidatePath(`/${clubSlug}/flyveskole/skolekalender`);
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Cancellation error:", error);
+    const message = error instanceof Error ? error.message : "Der opstod en uventet fejl.";
     return { 
-      error: error.message || "Der opstod en fejl ved afmelding af tiden. Prøv venligst igen." 
+      error: message || "Der opstod en fejl ved afmelding af tiden. Prøv venligst igen." 
     };
   }
 }

@@ -2,6 +2,30 @@ import prisma from "../db/prisma";
 import { FlightSchoolBookingStatus, FlightSchoolSessionStatus, Prisma } from "../../generated/prisma";
 import { startOfDay, endOfDay } from "date-fns";
 
+export type FlightSchoolCalendarBookingStatus = "FREE" | "BOOKED_BY_ME" | "OCCUPIED" | "INACTIVE";
+
+export interface FlightSchoolCalendarSlotView {
+  id: string;
+  startsAt: Date;
+  endsAt: Date | null;
+  isActive: boolean;
+  status: FlightSchoolCalendarBookingStatus;
+  bookingId?: string;
+}
+
+export interface FlightSchoolCalendarSessionView {
+  id: string;
+  date: Date;
+  startsAt: Date | null;
+  endsAt: Date | null;
+  note: string | null;
+  instructor: {
+    firstName: string | null;
+    lastName: string | null;
+  };
+  timeSlots: FlightSchoolCalendarSlotView[];
+}
+
 /**
  * List all sessions for a club.
  */
@@ -91,6 +115,51 @@ export async function listPublishedSessionsFromToday(clubId: string) {
       { startsAt: 'asc' }
     ]
   });
+}
+
+/**
+ * List all published sessions from today and forward, mapped to view models.
+ */
+export async function listPublishedSessionsFromTodayView(
+  clubId: string, 
+  currentMemberProfileId?: string | null
+): Promise<FlightSchoolCalendarSessionView[]> {
+  const sessions = await listPublishedSessionsFromToday(clubId);
+
+  return sessions.map((session) => ({
+    id: session.id,
+    date: session.date,
+    startsAt: session.startsAt,
+    endsAt: session.endsAt,
+    note: session.note,
+    instructor: {
+      firstName: session.instructor.firstName,
+      lastName: session.instructor.lastName,
+    },
+    timeSlots: session.timeSlots.map((slot) => {
+      const activeBooking = slot.bookings[0];
+      
+      let status: FlightSchoolCalendarBookingStatus = "FREE";
+      if (!slot.isActive) {
+        status = "INACTIVE";
+      } else if (activeBooking) {
+        if (currentMemberProfileId && activeBooking.memberProfileId === currentMemberProfileId) {
+          status = "BOOKED_BY_ME";
+        } else {
+          status = "OCCUPIED";
+        }
+      }
+
+      return {
+        id: slot.id,
+        startsAt: slot.startsAt,
+        endsAt: slot.endsAt,
+        isActive: slot.isActive,
+        status,
+        bookingId: status === "BOOKED_BY_ME" ? activeBooking?.id : undefined,
+      };
+    }),
+  }));
 }
 
 /**

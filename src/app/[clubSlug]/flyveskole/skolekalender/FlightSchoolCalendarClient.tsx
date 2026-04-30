@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { bookFlightSchoolSlotAction, cancelOwnFlightSchoolBookingAction } from "../../../../lib/flightSchool/flightSchoolActions";
+import { FlightSchoolCalendarSessionView } from "../../../../lib/flightSchool/flightSchoolBookingService";
 
 interface FlightSchoolCalendarClientProps {
-  session: any;
+  session: FlightSchoolCalendarSessionView;
   clubId: string;
   clubSlug: string;
-  memberProfileId?: string;
+  memberProfileId?: string | null;
   isMember: boolean;
 }
 
@@ -32,8 +33,9 @@ export default function FlightSchoolCalendarClient({
       if (result.error) {
         setError(result.error);
       }
-    } catch (e: any) {
-      setError(e.message || "Der opstod en fejl.");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Der opstod en uventet fejl.";
+      setError(message || "Der opstod en fejl.");
     } finally {
       setLoadingSlotId(null);
     }
@@ -47,8 +49,9 @@ export default function FlightSchoolCalendarClient({
       if (result.error) {
         setError(result.error);
       }
-    } catch (e: any) {
-      setError(e.message || "Der opstod en fejl.");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Der opstod en uventet fejl.";
+      setError(message || "Der opstod en fejl.");
     } finally {
       setLoadingSlotId(null);
     }
@@ -63,11 +66,10 @@ export default function FlightSchoolCalendarClient({
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {session.timeSlots.map((slot: any) => {
-          const booking = slot.bookings[0]; // Each slot has max 1 active booking based on rules
-          const isBookedByMe = memberProfileId && booking?.memberProfileId === memberProfileId;
-          const isOccupied = booking && !isBookedByMe;
-          const isInactive = !slot.isActive;
+        {session.timeSlots.map((slot) => {
+          const isBookedByMe = slot.status === "BOOKED_BY_ME";
+          const isOccupied = slot.status === "OCCUPIED";
+          const isInactive = slot.status === "INACTIVE";
           const isLoading = loadingSlotId === slot.id;
 
           let statusLabel = "Ledig";
@@ -105,9 +107,9 @@ export default function FlightSchoolCalendarClient({
               </div>
 
               <div className="mt-auto">
-                {isBookedByMe ? (
+                {isBookedByMe && slot.bookingId ? (
                   <button
-                    onClick={() => handleCancel(booking.id, slot.id)}
+                    onClick={() => handleCancel(slot.bookingId!, slot.id)}
                     disabled={!!loadingSlotId}
                     className="w-full py-2 px-4 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-200 text-sm font-semibold transition-colors disabled:opacity-50"
                   >
