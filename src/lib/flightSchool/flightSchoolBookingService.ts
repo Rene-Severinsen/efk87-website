@@ -86,6 +86,13 @@ export async function createSession(data: {
   status?: FlightSchoolSessionStatus;
   note?: string | null;
 }) {
+  await checkInstructorSessionConflict({
+    clubId: data.clubId,
+    date: data.date,
+    instructorId: data.instructorMemberProfileId,
+    status: data.status,
+  });
+
   return prisma.flightSchoolSession.create({
     data: {
       date: data.date,
@@ -103,6 +110,23 @@ export async function createSession(data: {
  * Update an existing session.
  */
 export async function updateSession(id: string, data: Prisma.FlightSchoolSessionUncheckedUpdateInput) {
+  const existing = await prisma.flightSchoolSession.findUniqueOrThrow({
+    where: { id },
+  });
+
+  const clubId = (data.clubId as string) || existing.clubId;
+  const date = (data.date as Date) || existing.date;
+  const instructorId = (data.instructorMemberProfileId as string) || existing.instructorMemberProfileId;
+  const status = (data.status as FlightSchoolSessionStatus) || existing.status;
+
+  await checkInstructorSessionConflict({
+    clubId,
+    date,
+    instructorId,
+    excludeSessionId: id,
+    status,
+  });
+
   return prisma.flightSchoolSession.update({
     where: { id },
     data
@@ -186,6 +210,39 @@ export async function updateTimeSlot(id: string, data: Prisma.FlightSchoolTimeSl
     where: { id },
     data
   });
+}
+
+/**
+ * Check if an instructor already has a session on the same date.
+ */
+async function checkInstructorSessionConflict(params: {
+  clubId: string;
+  date: Date;
+  instructorId: string;
+  excludeSessionId?: string;
+  status?: FlightSchoolSessionStatus;
+}) {
+  // If the new status is CANCELLED, it doesn't conflict with anything
+  if (params.status === FlightSchoolSessionStatus.CANCELLED) {
+    return;
+  }
+
+  const existingSession = await prisma.flightSchoolSession.findFirst({
+    where: {
+      clubId: params.clubId,
+      date: {
+        gte: startOfDay(params.date),
+        lte: endOfDay(params.date),
+      },
+      instructorMemberProfileId: params.instructorId,
+      status: { not: FlightSchoolSessionStatus.CANCELLED },
+      id: params.excludeSessionId ? { not: params.excludeSessionId } : undefined,
+    },
+  });
+
+  if (existingSession) {
+    throw new Error("Instruktøren har allerede en skoledag på denne dato. Tilføj flere tider på den eksisterende skoledag.");
+  }
 }
 
 /**
