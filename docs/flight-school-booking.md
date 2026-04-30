@@ -43,3 +43,25 @@ A seam for instructor notifications has been prepared in the service layer (`TOD
 ## Homepage Integration
 
 The `getTodayPublishedSessions` helper in `flightSchoolBookingService.ts` is provided for future integration with the homepage "Skoleflyvning i dag" box.
+
+## Admin Maintenance Flow
+
+The flight school booking system is managed via **Admin → Flyveskole → Skolekalender**.
+
+### Managing Sessions
+- Admins can create new sessions for any active club member marked as an instructor (`isInstructor: true`).
+- A session must have a date, start/end time, and instructor.
+- Use the **Status** field to control visibility:
+  - `DRAFT`: Visible only to admins.
+  - `PUBLISHED`: Visible to students for booking (when public pages are implemented).
+  - `CANCELLED`: Session is cancelled, bookings are preserved but inactive.
+
+### Managing Time Slots
+- Once a session is saved, click **Rediger** and then **Tilføj tid** to add slots.
+- Each slot defines a specific interval (e.g., 09:00 - 10:00) and capacity.
+- **Overlap Protection**: The system prevents an instructor from having overlapping active slots across all their sessions in the club.
+- **Deactivating Slots**: If a slot has bookings, it should be deactivated (`isActive: false`) rather than deleted to preserve history.
+
+### Viewing Bookings
+- In the **Skolekalender** list, click the expand icon (chevron) to see all time slots and the students booked for each slot.
+- Booking status and member names are displayed read-only in this iteration.

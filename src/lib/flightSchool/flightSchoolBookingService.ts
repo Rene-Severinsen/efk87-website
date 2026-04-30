@@ -77,9 +77,25 @@ export async function listSlotsWithBookingState(sessionId: string) {
 /**
  * Create a new flight school session.
  */
-export async function createSession(data: Prisma.FlightSchoolSessionUncheckedCreateInput) {
+export async function createSession(data: {
+  clubId: string;
+  date: Date;
+  startsAt?: Date | null;
+  endsAt?: Date | null;
+  instructorMemberProfileId: string;
+  status?: FlightSchoolSessionStatus;
+  note?: string | null;
+}) {
   return prisma.flightSchoolSession.create({
-    data
+    data: {
+      date: data.date,
+      startsAt: data.startsAt,
+      endsAt: data.endsAt,
+      instructorMemberProfileId: data.instructorMemberProfileId,
+      status: data.status,
+      note: data.note,
+      clubId: data.clubId
+    } as Prisma.FlightSchoolSessionUncheckedCreateInput
   });
 }
 
@@ -107,7 +123,15 @@ export async function cancelSession(id: string) {
  * Create a new time slot.
  * Includes overlap check for the instructor.
  */
-export async function createTimeSlot(data: Prisma.FlightSchoolTimeSlotUncheckedCreateInput) {
+export async function createTimeSlot(data: {
+  clubId: string;
+  flightSchoolSessionId: string;
+  startsAt: Date;
+  endsAt?: Date | null;
+  capacity?: number;
+  sortOrder?: number;
+  isActive?: boolean;
+}) {
   await checkInstructorOverlap(
     data.clubId,
     data.flightSchoolSessionId,
@@ -116,7 +140,15 @@ export async function createTimeSlot(data: Prisma.FlightSchoolTimeSlotUncheckedC
   );
 
   return prisma.flightSchoolTimeSlot.create({
-    data
+    data: {
+      flightSchoolSessionId: data.flightSchoolSessionId,
+      startsAt: data.startsAt,
+      endsAt: data.endsAt,
+      capacity: data.capacity,
+      sortOrder: data.sortOrder,
+      isActive: data.isActive,
+      clubId: data.clubId
+    } as Prisma.FlightSchoolTimeSlotUncheckedCreateInput
   });
 }
 
@@ -134,12 +166,14 @@ export async function updateTimeSlot(id: string, data: Prisma.FlightSchoolTimeSl
   const sessionId = typeof data.flightSchoolSessionId === 'string' ? data.flightSchoolSessionId : existingSlot.flightSchoolSessionId;
 
   // Helper to extract date from possible update operations or direct value
-  const getDate = (val: any, fallback: Date | null): Date | null => {
+  const getDate = (val: unknown, fallback: Date | null): Date | null => {
     if (val === undefined) return fallback;
     if (val === null) return null;
     if (val instanceof Date) return val;
     if (typeof val === 'string') return new Date(val);
-    if (typeof val === 'object' && 'set' in val) return getDate(val.set, fallback);
+    if (typeof val === 'object' && val !== null && 'set' in val) {
+      return getDate((val as { set: unknown }).set, fallback);
+    }
     return fallback;
   };
 

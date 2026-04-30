@@ -26,10 +26,11 @@ export default async function Page({ params }: PageProps) {
 
   const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin/flyveskole`);
 
-  const [page, documents, instructors] = await Promise.all([
+  const [page, documents, instructors, sessions] = await Promise.all([
     flightSchoolAdminService.getAdminFlightSchoolPage(club.id),
     flightSchoolAdminService.getAdminFlightSchoolDocuments(club.id),
     flightSchoolAdminService.getFlightSchoolInstructors(club.id),
+    flightSchoolAdminService.getAdminFlightSchoolSessions(club.id),
   ]);
 
   return (
@@ -45,6 +46,7 @@ export default async function Page({ params }: PageProps) {
         page={page}
         documents={documents}
         instructors={instructors}
+        sessions={sessions}
       />
     </AdminShell>
   );

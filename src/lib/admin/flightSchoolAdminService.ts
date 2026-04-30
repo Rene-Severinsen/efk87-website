@@ -137,3 +137,48 @@ export async function getFlightSchoolInstructors(clubId: string) {
     }
   });
 }
+
+export async function getAdminFlightSchoolSessions(clubId: string) {
+  return prisma.flightSchoolSession.findMany({
+    where: { clubId },
+    include: {
+      instructor: true,
+      timeSlots: {
+        include: {
+          bookings: {
+            include: {
+              member: true,
+            },
+          },
+        },
+        orderBy: { sortOrder: "asc" },
+      },
+      _count: {
+        select: { timeSlots: true, }
+      }
+    },
+    orderBy: [
+      { date: "asc" },
+      { startsAt: "asc" },
+    ],
+  });
+}
+
+export async function getAdminFlightSchoolSessionById(clubId: string, id: string) {
+  return prisma.flightSchoolSession.findFirst({
+    where: { id, clubId },
+    include: {
+      instructor: true,
+      timeSlots: {
+        include: {
+          bookings: {
+            include: {
+              member: true,
+            },
+          },
+        },
+        orderBy: { sortOrder: "asc" },
+      },
+    },
+  });
+}
