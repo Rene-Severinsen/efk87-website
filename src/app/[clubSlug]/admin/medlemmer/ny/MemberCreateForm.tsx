@@ -129,9 +129,9 @@ export function MemberCreateForm({ clubSlug, nextMemberNumber, createAction }: M
             <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-4">Standard værdier</h3>
             <ul className="space-y-3">
               {[
-                { label: 'Status', value: 'Ny' },
+                { label: 'Status', value: 'Under oprettelse' },
                 { label: 'Klubrolle', value: 'Almindelig medlem' },
-                { label: 'Skolestatus', value: 'Ikke godkendt' },
+                { label: 'Skolestatus', value: 'Elev i flyveskolen' },
                 { label: 'Instruktør', value: 'Nej' }
               ].map(item => (
                 <li key={item.label} className="flex justify-between items-center text-sm border-b border-white/5 pb-2 last:border-0 last:pb-0">

@@ -9,6 +9,11 @@ interface PageProps {
   params: Promise<{
     clubSlug: string;
   }>;
+  searchParams: Promise<{
+    sort?: string;
+    direction?: string;
+    filter?: string;
+  }>;
 }
 
 const GlassCard = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
@@ -18,15 +23,52 @@ const GlassCard = ({ children, className = "" }: { children: React.ReactNode, cl
   </div>
 );
 
-const StatCard = ({ label, value, colorClass = "text-white" }: { label: string, value: number, colorClass?: string }) => (
-  <GlassCard className="p-5 flex-1 min-w-[140px]">
-    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{label}</div>
-    <div className={`text-2xl font-bold ${colorClass}`}>{value}</div>
-  </GlassCard>
+const StatCard = ({ label, value, colorClass = "text-white", href, isActive }: { label: string, value: number, colorClass?: string, href: string, isActive: boolean }) => (
+  <Link href={href} className="flex-1 min-w-[140px] group">
+    <GlassCard className={`p-5 h-full transition-all duration-300 hover:bg-white/10 ${isActive ? 'ring-2 ring-sky-500/50 bg-sky-500/20 border-sky-500/30' : 'hover:border-white/20'}`}>
+      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1 group-hover:text-slate-300 transition-colors">{label}</div>
+      <div className={`text-3xl font-black ${colorClass} tracking-tight`}>{value}</div>
+      {isActive && (
+        <div className="absolute top-3 right-3">
+          <div className="w-2 h-2 rounded-full bg-sky-500 shadow-[0_0_12px_rgba(14,165,233,0.8)] animate-pulse" />
+        </div>
+      )}
+    </GlassCard>
+  </Link>
 );
 
-export default async function Page({ params }: PageProps) {
+const SortableHeader = ({ label, sortKey, currentSort, currentDirection, clubSlug, currentFilter, className = "" }: { label: string, sortKey: string, currentSort: string, currentDirection: string, clubSlug: string, currentFilter?: string, className?: string }) => {
+  const isActive = currentSort === sortKey;
+  const newDirection = isActive && currentDirection === 'asc' ? 'desc' : 'asc';
+  
+  const searchParams = new URLSearchParams();
+  searchParams.set('sort', sortKey);
+  searchParams.set('direction', newDirection);
+  if (currentFilter) searchParams.set('filter', currentFilter);
+  
+  const href = `/${clubSlug}/admin/medlemmer?${searchParams.toString()}`;
+  
+  return (
+    <th className={`px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider ${className}`}>
+      <Link href={href} className="inline-flex items-center gap-1.5 hover:text-white transition-colors group">
+        {label}
+        <span className={`transition-all duration-200 ${isActive ? 'text-sky-500 scale-110' : 'text-slate-600 opacity-0 group-hover:opacity-100'}`}>
+          {isActive ? (currentDirection === 'asc' ? (
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 15l7-7 7 7" /></svg>
+          ) : (
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" /></svg>
+          )) : (
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M7 10l5 5 5-5" /></svg>
+          )}
+        </span>
+      </Link>
+    </th>
+  );
+};
+
+export default async function Page({ params, searchParams }: PageProps) {
   const { clubSlug } = await params;
+  const { sort = "name", direction = "asc", filter } = await searchParams;
 
   let club;
   try {
@@ -40,7 +82,11 @@ export default async function Page({ params }: PageProps) {
 
   const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin/medlemmer`);
 
-  const members = await getAdminMemberOverview(club.id);
+  const members = await getAdminMemberOverview(club.id, { 
+    sort, 
+    direction: direction as "asc" | "desc", 
+    filter 
+  });
   const stats = await getAdminMemberStats(club.id);
 
   const getRoleLabel = (r: string) => {
@@ -59,7 +105,7 @@ export default async function Page({ params }: PageProps) {
     switch (s) {
       case 'ACTIVE': return 'Aktiv';
       case 'RESIGNED': return 'Udmeldt';
-      case 'NEW': return 'Ny';
+      case 'NEW': return 'Oprettelse';
       default: return s;
     }
   };
@@ -76,11 +122,25 @@ export default async function Page({ params }: PageProps) {
   const getSchoolStatusLabel = (s: string) => {
     switch (s) {
       case 'APPROVED': return 'Godkendt';
-      case 'STUDENT': return 'Elev';
+      case 'STUDENT': return 'Elev i flyveskolen';
       case 'NOT_APPROVED': return 'Ikke godkendt';
       default: return s;
     }
   };
+
+  const tiles = [
+    { label: "Aktive", value: stats.active, filterKey: "active", colorClass: "text-emerald-400" },
+    { label: "Senior", value: stats.senior, filterKey: "senior" },
+    { label: "Junior", value: stats.junior, filterKey: "junior" },
+    { label: "Passive", value: stats.passive, filterKey: "passive" },
+    { label: "Godkendte", value: stats.approved, filterKey: "approved", colorClass: "text-emerald-400" },
+    { label: "Ikke godk.", value: stats.notApproved, filterKey: "not_approved", colorClass: "text-rose-400" },
+    { label: "Elever", value: stats.student, filterKey: "student", colorClass: "text-amber-400" },
+    { label: "Instruktør", value: stats.instructors, filterKey: "instructor", colorClass: "text-violet-400" },
+    { label: "Udmeldte", value: stats.resigned, filterKey: "resigned", colorClass: "text-rose-400" },
+    { label: "Oprettelse", value: stats.new, filterKey: "under_creation", colorClass: "text-sky-400" },
+
+  ];
 
   return (
     <AdminShell
@@ -109,16 +169,28 @@ export default async function Page({ params }: PageProps) {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-4 mb-8">
-            <StatCard label="Aktive" value={stats.active} colorClass="text-emerald-400" />
-            <StatCard label="Nye" value={stats.new} colorClass="text-sky-400" />
-            <StatCard label="Udmeldte" value={stats.resigned} colorClass="text-rose-400" />
-            <StatCard label="Senior" value={stats.senior} />
-            <StatCard label="Junior" value={stats.junior} />
-            <StatCard label="Passive" value={stats.passive} />
-            <StatCard label="Godkendte" value={stats.approved} colorClass="text-emerald-400" />
-            <StatCard label="Elever" value={stats.student} colorClass="text-amber-400" />
-            <StatCard label="Ikke godk." value={stats.notApproved} colorClass="text-rose-400" />
-            <StatCard label="Instruktør" value={stats.instructors} colorClass="text-violet-400" />
+            {tiles.map((tile) => {
+              const isActive = filter === tile.filterKey;
+              const newFilter = isActive ? undefined : tile.filterKey;
+              
+              const searchParams = new URLSearchParams();
+              if (newFilter) searchParams.set('filter', newFilter);
+              if (sort) searchParams.set('sort', sort);
+              if (direction) searchParams.set('direction', direction);
+              
+              const href = `/${clubSlug}/admin/medlemmer${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+              
+              return (
+                <StatCard 
+                  key={tile.filterKey}
+                  label={tile.label} 
+                  value={tile.value} 
+                  colorClass={tile.colorClass}
+                  isActive={isActive}
+                  href={href}
+                />
+              );
+            })}
           </div>
 
           <GlassCard>
@@ -126,12 +198,15 @@ export default async function Page({ params }: PageProps) {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-white/10">
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Navn / Info</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Medlemsnr. / MDK</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Type / Rolle</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Skole / Instruktør</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Cert.</th>
+                    <SortableHeader label="Navn / Info" sortKey="name" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
+                    <SortableHeader label="Medlemsnr." sortKey="memberNumber" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
+                    <SortableHeader label="MDK" sortKey="mdkNumber" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
+                    <SortableHeader label="Type" sortKey="membershipType" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
+                    <SortableHeader label="Klubrolle" sortKey="memberRoleType" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
+                    <SortableHeader label="Skole" sortKey="schoolStatus" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
+                    <SortableHeader label="Instruktør" sortKey="instructorStatus" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
+                    <SortableHeader label="Status" sortKey="memberStatus" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
+                    <SortableHeader label="Cert." sortKey="certificateCount" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Handling</th>
                   </tr>
                 </thead>
@@ -144,20 +219,26 @@ export default async function Page({ params }: PageProps) {
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-slate-300 font-mono text-sm">{member.memberNumber || '—'}</div>
-                        <div className="text-xs text-slate-500 font-mono">{member.mdkNumber ? `MDK: ${member.mdkNumber}` : 'Ingen MDK'}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-xs text-slate-500 font-mono">{member.mdkNumber || '—'}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-slate-300 text-sm font-medium">{getMembershipLabel(member.membershipType)}</div>
+                      </td>
+                      <td className="px-6 py-4">
                         <div className="text-xs text-slate-500">{getRoleLabel(member.memberRoleType)}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className={`text-sm font-medium ${member.schoolStatus === 'APPROVED' ? 'text-emerald-400' : member.schoolStatus === 'STUDENT' ? 'text-amber-400' : 'text-slate-400'}`}>
                           {getSchoolStatusLabel(member.schoolStatus)}
                         </div>
-                        {member.isInstructor && (
-                          <div className="mt-1">
-                            <span className="text-[10px] font-bold bg-violet-500/20 text-violet-400 px-2 py-0.5 rounded-full uppercase tracking-tighter border border-violet-500/30">Instruktør</span>
-                          </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        {member.isInstructor ? (
+                          <span className="text-[10px] font-bold bg-violet-500/20 text-violet-400 px-2 py-0.5 rounded-full uppercase tracking-tighter border border-violet-500/30">Instruktør</span>
+                        ) : (
+                          <span className="text-slate-600">—</span>
                         )}
                       </td>
                       <td className="px-6 py-4">

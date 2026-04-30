@@ -1,3 +1,4 @@
+import { Prisma } from "@/generated/prisma";
 import prisma from "../db/prisma";
 import { getMemberDisplayName } from "../members/memberUtils";
 
@@ -33,9 +34,93 @@ export interface AdminMemberStatsDTO {
   instructors: number;
 }
 
-export async function getAdminMemberOverview(clubId: string): Promise<AdminMemberOverviewDTO[]> {
+export async function getAdminMemberOverview(
+  clubId: string,
+  options: {
+    sort?: string;
+    direction?: "asc" | "desc";
+    filter?: string;
+  } = {}
+): Promise<AdminMemberOverviewDTO[]> {
+  const { sort = "name", direction = "asc", filter } = options;
+
+  const where: Prisma.ClubMemberProfileWhereInput = { clubId };
+
+  if (filter) {
+    switch (filter) {
+      case "active":
+        where.memberStatus = "ACTIVE";
+        break;
+      case "under_creation":
+        where.memberStatus = "NEW";
+        break;
+      case "resigned":
+        where.memberStatus = "RESIGNED";
+        break;
+      case "senior":
+        where.membershipType = "SENIOR";
+        break;
+      case "junior":
+        where.membershipType = "JUNIOR";
+        break;
+      case "passive":
+        where.membershipType = "PASSIVE";
+        break;
+      case "approved":
+        where.schoolStatus = "APPROVED";
+        break;
+      case "student":
+        where.schoolStatus = "STUDENT";
+        break;
+      case "not_approved":
+        where.schoolStatus = "NOT_APPROVED";
+        break;
+      case "instructor":
+        where.isInstructor = true;
+        break;
+    }
+  }
+
+  // Define order by
+  let orderBy: Prisma.ClubMemberProfileOrderByWithRelationInput[] = [];
+
+  switch (sort) {
+    case "name":
+      orderBy = [{ firstName: direction }, { lastName: direction }];
+      break;
+    case "memberNumber":
+      orderBy = [{ memberNumber: direction }];
+      break;
+    case "mdkNumber":
+      orderBy = [{ mdkNumber: direction }];
+      break;
+    case "membershipType":
+      orderBy = [{ membershipType: direction }];
+      break;
+    case "memberRoleType":
+      orderBy = [{ memberRoleType: direction }];
+      break;
+    case "schoolStatus":
+      orderBy = [{ schoolStatus: direction }];
+      break;
+    case "memberStatus":
+      orderBy = [{ memberStatus: direction }];
+      break;
+    case "instructorStatus":
+      orderBy = [{ isInstructor: direction }];
+      break;
+    default:
+      // Default sort: member full name ascending A-Z
+      orderBy = [{ firstName: "asc" }, { lastName: "asc" }];
+  }
+
+  // Always add stable fallback order
+  orderBy.push({ firstName: "asc" });
+  orderBy.push({ memberNumber: "asc" });
+  orderBy.push({ id: "asc" });
+
   const members = await prisma.clubMemberProfile.findMany({
-    where: { clubId },
+    where,
     include: {
       user: {
         select: {
@@ -44,6 +129,7 @@ export async function getAdminMemberOverview(clubId: string): Promise<AdminMembe
         },
       },
     },
+    orderBy,
   });
 
   // Prisma doesn't support direct counting of related certificates easily in this structure without more complex query
@@ -58,7 +144,7 @@ export async function getAdminMemberOverview(clubId: string): Promise<AdminMembe
 
   const countMap = new Map(certificateCounts.map((c) => [c.userId, c._count.id]));
 
-  return members.map((m) => ({
+  const result = members.map((m) => ({
     userId: m.userId,
     displayName: getMemberDisplayName(m, m.user),
     email: m.user.email,
@@ -75,6 +161,15 @@ export async function getAdminMemberOverview(clubId: string): Promise<AdminMembe
     certificateCount: countMap.get(m.userId) || 0,
     updatedAt: m.updatedAt,
   }));
+
+  if (sort === "certificateCount") {
+    result.sort((a, b) => {
+      const diff = a.certificateCount - b.certificateCount;
+      return direction === "asc" ? diff : -diff;
+    });
+  }
+
+  return result;
 }
 
 export async function getAdminMemberByUserId(clubId: string, userId: string) {
@@ -140,11 +235,17 @@ export async function getAdminMemberStats(clubId: string): Promise<AdminMemberSt
 
   for (const s of stats) {
     const count = s._count.id;
+    
+    // "Under oprettelse" (NEW) members are counted separately and NOT included in other counts or total
+    if (s.memberStatus === "NEW") {
+      result.new += count;
+      continue;
+    }
+
     result.total += count;
 
     if (s.memberStatus === "ACTIVE") result.active += count;
     if (s.memberStatus === "RESIGNED") result.resigned += count;
-    if (s.memberStatus === "NEW") result.new += count;
 
     if (s.membershipType === "SENIOR") result.senior += count;
     if (s.membershipType === "JUNIOR") result.junior += count;

@@ -41,7 +41,7 @@ export const ROLE_TYPE_LABELS: Record<ClubMemberRoleType, string> = {
 export const MEMBER_STATUS_LABELS: Record<ClubMemberStatus, string> = {
   [ClubMemberStatus.ACTIVE]: "Aktiv",
   [ClubMemberStatus.RESIGNED]: "Udmeldt",
-  [ClubMemberStatus.NEW]: "Ny",
+  [ClubMemberStatus.NEW]: "Under oprettelse",
 };
 
 export const ALL_CERTIFICATE_TYPES = Object.values(ClubMemberCertificateType);
