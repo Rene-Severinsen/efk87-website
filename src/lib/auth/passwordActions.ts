@@ -2,7 +2,7 @@
 
 import prisma from "../db/prisma";
 import { cryptoUtils } from "./cryptoUtils";
-import { sendPasswordResetEmail } from "./emailService";
+import { sendPasswordResetEmail } from "../email/mailService";
 import { passwordUtils } from "./passwordUtils";
 
 /**

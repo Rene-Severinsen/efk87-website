@@ -15,6 +15,13 @@ interface EnvConfig {
   AUTH_SECRET: string;
   AUTH_EMAIL_SERVER?: string;
   AUTH_EMAIL_FROM?: string;
+  SMTP_HOST?: string;
+  SMTP_PORT?: number;
+  SMTP_SECURE?: boolean;
+  SMTP_USER?: string;
+  SMTP_PASSWORD?: string;
+  MAIL_FROM?: string;
+  APP_BASE_URL?: string;
   isDevelopment: boolean;
   isQa: boolean;
   isProduction: boolean;
@@ -43,6 +50,13 @@ function validateEnv(): EnvConfig {
   const AUTH_SECRET = process.env.AUTH_SECRET;
   const AUTH_EMAIL_SERVER = process.env.AUTH_EMAIL_SERVER;
   const AUTH_EMAIL_FROM = process.env.AUTH_EMAIL_FROM;
+  const SMTP_HOST = process.env.SMTP_HOST;
+  const SMTP_PORT = process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : undefined;
+  const SMTP_SECURE = process.env.SMTP_SECURE === 'true';
+  const SMTP_USER = process.env.SMTP_USER;
+  const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
+  const MAIL_FROM = process.env.MAIL_FROM;
+  const APP_BASE_URL = process.env.APP_BASE_URL;
   const AUTH_EMAIL_LOGIN_ENABLED = process.env.AUTH_EMAIL_LOGIN_ENABLED === 'true';
   const DEV_LOGIN_ENABLED = process.env.DEV_LOGIN_ENABLED === 'true';
 
@@ -75,6 +89,13 @@ function validateEnv(): EnvConfig {
     AUTH_SECRET,
     AUTH_EMAIL_SERVER,
     AUTH_EMAIL_FROM,
+    SMTP_HOST,
+    SMTP_PORT,
+    SMTP_SECURE,
+    SMTP_USER,
+    SMTP_PASSWORD,
+    MAIL_FROM,
+    APP_BASE_URL,
     isDevelopment,
     isQa,
     isProduction,

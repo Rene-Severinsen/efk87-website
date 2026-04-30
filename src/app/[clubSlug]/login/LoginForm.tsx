@@ -23,6 +23,7 @@ export default function LoginForm({
   const [isPending, startTransition] = useTransition();
 
   const [mode, setMode] = useState<"password" | "magic-link">("password");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(authError === "CredentialsSignin" ? "E-mail eller adgangskode er forkert." : null);
   const [success, setSuccess] = useState<string | null>(authSuccess || null);
 
@@ -31,12 +32,12 @@ export default function LoginForm({
   async function handlePasswordLogin(formData: FormData) {
     setError(null);
     setSuccess(null);
-    const email = formData.get("email") as string;
+    const emailValue = formData.get("email") as string;
     const password = formData.get("password") as string;
 
     startTransition(async () => {
       const result = await signIn("credentials", {
-        email,
+        email: emailValue,
         password,
         redirect: false,
         callbackUrl,
@@ -54,11 +55,11 @@ export default function LoginForm({
   async function handleMagicLinkLogin(formData: FormData) {
     setError(null);
     setSuccess(null);
-    const email = formData.get("email") as string;
+    const emailValue = formData.get("email") as string;
 
     startTransition(async () => {
       const result = await signIn("email", {
-        email,
+        email: emailValue,
         redirect: false,
         callbackUrl,
       });
@@ -66,7 +67,7 @@ export default function LoginForm({
       if (result?.error) {
         setError("Der skete en fejl ved afsendelse af login-link.");
       } else {
-        setSuccess("Vi har sendt et login-link til din e-mail.");
+        setSuccess("Hvis e-mailadressen findes, sender vi et loginlink.");
       }
     });
   }
@@ -103,6 +104,8 @@ export default function LoginForm({
               id="email"
               required
               placeholder="din@email.dk"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-white/30"
             />
           </div>
@@ -129,7 +132,11 @@ export default function LoginForm({
           <div className="flex flex-col space-y-4 pt-4 text-center">
             <button
               type="button"
-              onClick={() => setMode("magic-link")}
+              onClick={() => {
+                setError(null);
+                setSuccess(null);
+                setMode("magic-link");
+              }}
               className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
             >
               Send loginlink i stedet
@@ -154,6 +161,8 @@ export default function LoginForm({
               id="email"
               required
               placeholder="din@email.dk"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-white/30"
             />
           </div>
@@ -168,7 +177,11 @@ export default function LoginForm({
           <div className="flex flex-col pt-4 text-center">
             <button
               type="button"
-              onClick={() => setMode("password")}
+              onClick={() => {
+                setError(null);
+                setSuccess(null);
+                setMode("password");
+              }}
               className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
             >
               Log ind med adgangskode i stedet

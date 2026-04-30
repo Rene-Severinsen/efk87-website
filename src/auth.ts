@@ -6,6 +6,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "./lib/db/prisma";
 import { env } from "./lib/config/env";
 import { passwordUtils } from "./lib/auth/passwordUtils";
+import { sendMagicLinkEmail } from "./lib/email/mailService";
 
 declare module "next-auth" {
   interface Session {
@@ -68,11 +69,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           }),
         ]
       : []),
-    ...(env.AUTH_EMAIL_SERVER && env.AUTH_EMAIL_FROM
+    ...((env.SMTP_HOST || env.AUTH_EMAIL_SERVER) && (env.MAIL_FROM || env.AUTH_EMAIL_FROM)
       ? [
           Email({
             server: env.AUTH_EMAIL_SERVER,
-            from: env.AUTH_EMAIL_FROM,
+            from: env.MAIL_FROM || env.AUTH_EMAIL_FROM,
+            sendVerificationRequest: sendMagicLinkEmail,
           }),
         ]
       : []),
