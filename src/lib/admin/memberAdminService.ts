@@ -1,6 +1,7 @@
 import { Prisma } from "@/generated/prisma";
 import prisma from "../db/prisma";
 import { getMemberDisplayName } from "../members/memberUtils";
+import { MemberFilterKey, MEMBER_FILTER_DEFINITIONS } from "./memberAdminFilters";
 
 export interface AdminMemberOverviewDTO {
   userId: string;
@@ -46,39 +47,9 @@ export async function getAdminMemberOverview(
 
   const where: Prisma.ClubMemberProfileWhereInput = { clubId };
 
-  if (filter) {
-    switch (filter) {
-      case "active":
-        where.memberStatus = "ACTIVE";
-        break;
-      case "under_creation":
-        where.memberStatus = "NEW";
-        break;
-      case "resigned":
-        where.memberStatus = "RESIGNED";
-        break;
-      case "senior":
-        where.membershipType = "SENIOR";
-        break;
-      case "junior":
-        where.membershipType = "JUNIOR";
-        break;
-      case "passive":
-        where.membershipType = "PASSIVE";
-        break;
-      case "approved":
-        where.schoolStatus = "APPROVED";
-        break;
-      case "student":
-        where.schoolStatus = "STUDENT";
-        break;
-      case "not_approved":
-        where.schoolStatus = "NOT_APPROVED";
-        break;
-      case "instructor":
-        where.isInstructor = true;
-        break;
-    }
+  if (filter && filter in MEMBER_FILTER_DEFINITIONS) {
+    const filterDef = MEMBER_FILTER_DEFINITIONS[filter as MemberFilterKey];
+    Object.assign(where, filterDef.where);
   }
 
   // Define order by
@@ -211,52 +182,41 @@ export async function getAdminMemberByUserId(clubId: string, userId: string) {
 }
 
 export async function getAdminMemberStats(clubId: string): Promise<AdminMemberStatsDTO> {
-  const stats = await prisma.clubMemberProfile.groupBy({
-    by: ["memberStatus", "membershipType", "schoolStatus", "isInstructor"],
-    where: { clubId },
-    _count: {
-      id: true,
-    },
-  });
+  const [
+    active,
+    newCount,
+    resigned,
+    senior,
+    junior,
+    passive,
+    approved,
+    student,
+    notApproved,
+    instructors
+  ] = await Promise.all([
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.active.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.under_creation.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.resigned.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.senior.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.junior.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.passive.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.approved.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.student.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.not_approved.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.instructor.where } }),
+  ]);
 
-  const result: AdminMemberStatsDTO = {
-    total: 0,
-    active: 0,
-    resigned: 0,
-    new: 0,
-    senior: 0,
-    junior: 0,
-    passive: 0,
-    approved: 0,
-    student: 0,
-    notApproved: 0,
-    instructors: 0,
+  return {
+    total: active + resigned, // Total active + resigned (excluding under creation)
+    active,
+    resigned,
+    new: newCount,
+    senior,
+    junior,
+    passive,
+    approved,
+    student,
+    notApproved,
+    instructors,
   };
-
-  for (const s of stats) {
-    const count = s._count.id;
-    
-    // "Under oprettelse" (NEW) members are counted separately and NOT included in other counts or total
-    if (s.memberStatus === "NEW") {
-      result.new += count;
-      continue;
-    }
-
-    result.total += count;
-
-    if (s.memberStatus === "ACTIVE") result.active += count;
-    if (s.memberStatus === "RESIGNED") result.resigned += count;
-
-    if (s.membershipType === "SENIOR") result.senior += count;
-    if (s.membershipType === "JUNIOR") result.junior += count;
-    if (s.membershipType === "PASSIVE") result.passive += count;
-
-    if (s.schoolStatus === "APPROVED") result.approved += count;
-    if (s.schoolStatus === "STUDENT") result.student += count;
-    if (s.schoolStatus === "NOT_APPROVED") result.notApproved += count;
-
-    if (s.isInstructor) result.instructors += count;
-  }
-
-  return result;
 }

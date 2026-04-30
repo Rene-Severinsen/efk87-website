@@ -4,6 +4,7 @@ import { requireClubAdminForClub } from "@/lib/auth/adminAccessGuards";
 import AdminShell from "@/components/admin/AdminShell";
 import Link from "next/link";
 import { getAdminMemberOverview, getAdminMemberStats } from "@/lib/admin/memberAdminService";
+import { MEMBER_FILTER_DEFINITIONS, MemberFilterKey } from "@/lib/admin/memberAdminFilters";
 
 interface PageProps {
   params: Promise<{
@@ -89,6 +90,10 @@ export default async function Page({ params, searchParams }: PageProps) {
   });
   const stats = await getAdminMemberStats(club.id);
 
+  const activeFilterDef = filter && filter in MEMBER_FILTER_DEFINITIONS 
+    ? MEMBER_FILTER_DEFINITIONS[filter as MemberFilterKey] 
+    : null;
+
   const getRoleLabel = (r: string) => {
     switch (r) {
       case 'REGULAR': return 'Almindelig';
@@ -129,17 +134,16 @@ export default async function Page({ params, searchParams }: PageProps) {
   };
 
   const tiles = [
-    { label: "Aktive", value: stats.active, filterKey: "active", colorClass: "text-emerald-400" },
-    { label: "Senior", value: stats.senior, filterKey: "senior" },
-    { label: "Junior", value: stats.junior, filterKey: "junior" },
-    { label: "Passive", value: stats.passive, filterKey: "passive" },
-    { label: "Godkendte", value: stats.approved, filterKey: "approved", colorClass: "text-emerald-400" },
-    { label: "Ikke godk.", value: stats.notApproved, filterKey: "not_approved", colorClass: "text-rose-400" },
-    { label: "Elever", value: stats.student, filterKey: "student", colorClass: "text-amber-400" },
-    { label: "Instruktør", value: stats.instructors, filterKey: "instructor", colorClass: "text-violet-400" },
-    { label: "Udmeldte", value: stats.resigned, filterKey: "resigned", colorClass: "text-rose-400" },
-    { label: "Oprettelse", value: stats.new, filterKey: "under_creation", colorClass: "text-sky-400" },
-
+    { ...MEMBER_FILTER_DEFINITIONS.active, value: stats.active },
+    { ...MEMBER_FILTER_DEFINITIONS.senior, value: stats.senior },
+    { ...MEMBER_FILTER_DEFINITIONS.junior, value: stats.junior },
+    { ...MEMBER_FILTER_DEFINITIONS.passive, value: stats.passive },
+    { ...MEMBER_FILTER_DEFINITIONS.approved, value: stats.approved },
+    { ...MEMBER_FILTER_DEFINITIONS.not_approved, value: stats.notApproved },
+    { ...MEMBER_FILTER_DEFINITIONS.student, value: stats.student },
+    { ...MEMBER_FILTER_DEFINITIONS.instructor, value: stats.instructors },
+    { ...MEMBER_FILTER_DEFINITIONS.resigned, value: stats.resigned },
+    { ...MEMBER_FILTER_DEFINITIONS.under_creation, value: stats.new },
   ];
 
   return (
@@ -170,8 +174,8 @@ export default async function Page({ params, searchParams }: PageProps) {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-4 mb-8">
             {tiles.map((tile) => {
-              const isActive = filter === tile.filterKey;
-              const newFilter = isActive ? undefined : tile.filterKey;
+              const isActive = filter === tile.key;
+              const newFilter = isActive ? undefined : tile.key;
               
               const searchParams = new URLSearchParams();
               if (newFilter) searchParams.set('filter', newFilter);
@@ -182,7 +186,7 @@ export default async function Page({ params, searchParams }: PageProps) {
               
               return (
                 <StatCard 
-                  key={tile.filterKey}
+                  key={tile.key}
                   label={tile.label} 
                   value={tile.value} 
                   colorClass={tile.colorClass}
@@ -191,6 +195,34 @@ export default async function Page({ params, searchParams }: PageProps) {
                 />
               );
             })}
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 px-1">
+            <div className="flex items-center gap-3">
+              {filter ? (
+                <div className="flex items-center gap-2 bg-sky-500/10 px-3 py-1.5 rounded-xl border border-sky-500/20">
+                  <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Filter:</span>
+                  <span className={`text-sm font-black ${activeFilterDef?.colorClass || 'text-white'}`}>
+                    {activeFilterDef?.label || filter}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
+                  <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">Viser:</span>
+                  <span className="text-sm font-black text-slate-300">Alle medlemmer</span>
+                </div>
+              )}
+              {filter && (
+                <Link
+                  href={`/${clubSlug}/admin/medlemmer?sort=${sort}&direction=${direction}`}
+                  className="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 underline decoration-slate-700 underline-offset-4 hover:decoration-sky-500"
+                >
+                  Nulstil
+                </Link>
+              )}
+            </div>
+
+
           </div>
 
           <GlassCard>
