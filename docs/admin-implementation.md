@@ -18,7 +18,7 @@ Admin routes are organized into several logical groups. Most routes currently ex
 - **Mailinglister** (`/admin/mailinglister`): Mailing list configuration.
 
 ### Indhold
-- **Forsideindhold** (`/admin/forsideindhold`): Homepage content and section control (stub).
+- **Forsideindhold** (`/admin/forside-indhold`): Manage announcements, messages, and signups on the club's homepage. Supports visibility periods, audience control (PUBLIC/MEMBERS_ONLY), and optional signups with quantity and notes.
 - **Artikler** (`/admin/artikler`): News and article publishing. Supports rich text editing (BlockNote), server-side slug generation, and external image URL insertion. Articles are organized by tags; categories are not used. Reading time has been removed. Image upload is not implemented.
 - **Forum** (`/admin/forum`): Forum category management. Allows admins to create, edit, and deactivate forum categories.
 - **Galleri** (`/admin/galleri`): Photo gallery management (read-only foundation).
@@ -40,11 +40,12 @@ Admin routes are protected by `requireClubAdminForClub` guard located in `src/li
   - Anonymous users or non-admin members are redirected to `/[clubSlug]/login?reason=admin-required`.
 
 ## Visual Identity
-The admin area uses a distinct visual theme compared to the public/member site:
-- **Sidebar:** Dark navy fixed sidebar (`#001529`).
-- **Workspace:** Light grey background (`#f4f7f9`) with white operational cards.
-- **Typography:** Standard system sans-serif for a clean, operational feel.
-- **Components:** Scoped under `.admin-*` CSS classes to avoid global style leakage.
+The admin area uses a "Dark Premium Glass" theme:
+- **Background:** Deep dark navy/black (`#060a12`).
+- **Cards & Panels:** Semi-transparent glass panels with subtle borders and backdrop blur.
+- **Typography:** High-contrast text (`#eef5ff`) with muted variants for secondary info.
+- **Accents:** Vibrant blue for primary actions and success/warning colors for status badges.
+- **Components:** Scoped under `.admin-*` CSS classes and using CSS variables for theme consistency.
 
 ## Components
 Located in `src/components/admin/`:
@@ -129,6 +130,19 @@ Located in `src/components/admin/`:
   - **Notifikationsmail**: Admin-managed email address per category. If set, an email is sent to this address on every new thread and reply in the category.
   - List all categories with thread counts.
   - Quick links to view categories on the public site.
+
+### Forsideindhold (Homepage Content)
+- **Route**: `/[clubSlug]/admin/forside-indhold`
+- **Purpose**: Manage announcements and signups on the homepage.
+- **Actions**: `src/lib/homepageContent/homepageContentActions.ts`
+- **Service**: `src/lib/homepageContent/homepageContentService.ts`
+- **Capabilities**:
+  - CRUD for homepage content blocks with Rich Text support.
+  - Scheduling (visibleFrom/visibleUntil).
+  - Visibility control (Public vs Members Only).
+  - Signup management: NONE, ONE_PER_MEMBER, QUANTITY.
+  - Participant management: View list of signups, and cancel signups as admin.
+  - Sorting: Manual sort order control.
 
 ## Formatting Rules
 Admin views follow standardized formatting for consistency:

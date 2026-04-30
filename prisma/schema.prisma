@@ -40,6 +40,7 @@ model Club {
   forumCategories ClubForumCategory[]
   forumThreads    ClubForumThread[]
   forumReplies    ClubForumReply[]
+  homepageContent HomepageContent[]
 }
 
 model PublicClubFooter {
@@ -369,6 +370,7 @@ model User {
   forumThreads       ClubForumThread[]
   forumReplies       ClubForumReply[]
   passwordResetTokens PasswordResetToken[]
+  homepageContentSignups HomepageContentSignup[]
 }
 
 model PasswordResetToken {
@@ -461,7 +463,58 @@ model ClubForumThread {
 
   @@unique([clubId, categoryId, slug])
   @@index([clubId, categoryId, lastActivityAt])
-  @@index([authorUserId])
+}
+
+enum HomepageContentVisibility {
+  PUBLIC
+  MEMBERS_ONLY
+}
+
+enum HomepageContentSignupMode {
+  NONE
+  ONE_PER_MEMBER
+  QUANTITY
+}
+
+model HomepageContent {
+  id           String                    @id @default(cuid())
+  clubId       String
+  title        String
+  bodyHtml     String
+  isActive     Boolean                   @default(false)
+  visibility   HomepageContentVisibility @default(PUBLIC)
+  visibleFrom  DateTime?
+  visibleUntil DateTime?
+  sortOrder    Int                       @default(0)
+  signupMode   HomepageContentSignupMode @default(NONE)
+  signupLabel  String?
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
+
+  club    Club                    @relation(fields: [clubId], references: [id])
+  signups HomepageContentSignup[]
+
+  @@index([clubId, isActive, sortOrder])
+}
+
+model HomepageContentSignup {
+  id                String    @id @default(cuid())
+  clubId            String
+  contentId         String
+  userId            String
+  quantity          Int       @default(1)
+  note              String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  cancelledAt       DateTime?
+  cancelledByUserId String?
+
+  content HomepageContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  user    User            @relation(fields: [userId], references: [id])
+
+  @@unique([contentId, userId])
+  @@index([clubId])
+  @@index([contentId])
 }
 
 model ClubForumReply {

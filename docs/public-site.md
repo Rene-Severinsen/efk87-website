@@ -133,6 +133,11 @@ Frontpage V2 is now the active live homepage for all clubs.
 - **Guidelines**:
   - v2 uses real data for club, user profile, and "Jeg flyver" activity.
   - v2 includes a "Nye medlemmer" highlight card that appears when members have joined within the last 14 days.
+  - v2 includes "Forsideindhold" boxes for announcements and optional signups.
+    - Content is managed via Admin UI.
+    - Visibility rules (Public vs Members Only) are respected.
+    - Optional signups with quantity and notes.
+    - Display order follows manual sortOrder.
   - v2 uses the `ClubCalendarEntry` model to populate the homepage marquee (ticker).
     - Marquee shows published upcoming entries (startsAt >= today) up to 3 months ahead.
     - Entries marked “Gennemtving visning i marquee” (forceShowInMarquee) are included even if further out.

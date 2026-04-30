@@ -10,7 +10,9 @@ import {
   ClubMemberRoleType,
   ClubMemberSchoolStatus,
   ClubMemberStatus,
-  ClubMemberCertificateType
+  ClubMemberCertificateType,
+  HomepageContentVisibility,
+  HomepageContentSignupMode
 } from "../src/generated/prisma";
 
 async function main() {
@@ -826,6 +828,48 @@ async function main() {
     }
     console.log("Forum samples seeded.");
   }
+
+  console.log("Seeding homepage content...");
+  const homepageContents = [
+    {
+      id: "seed-cutzilla",
+      title: "CutZilla er tilbage.",
+      bodyHtml: "<p>Vores elskede plæneklipper CutZilla er nu tilbage fra service og klar til kamp på pladsen. Husk at tjekke forhindringer før start.</p>",
+      isActive: true,
+      visibility: HomepageContentVisibility.MEMBERS_ONLY,
+      sortOrder: 1,
+      signupMode: HomepageContentSignupMode.NONE,
+    },
+    {
+      id: "seed-flaeskesteg",
+      title: "Flæskestegsburger torsdag – tilmelding senest onsdag kl 18",
+      bodyHtml: "<p>Vi tænder op i grillen og serverer flæskestegsburgere med det hele. Pris: 45 kr. pr. stk.</p>",
+      isActive: true,
+      visibility: HomepageContentVisibility.MEMBERS_ONLY,
+      sortOrder: 2,
+      signupMode: HomepageContentSignupMode.QUANTITY,
+      signupLabel: "Bestil burger",
+      visibleUntil: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7), // 7 days from now
+    },
+    {
+      id: "seed-velkommen",
+      title: "Velkommen til EFK87",
+      bodyHtml: "<p>Vi er en klub for alle med interesse for modelflyvning. Kom og besøg os på pladsen.</p>",
+      isActive: true,
+      visibility: HomepageContentVisibility.PUBLIC,
+      sortOrder: 3,
+      signupMode: HomepageContentSignupMode.NONE,
+    }
+  ];
+
+  for (const c of homepageContents) {
+    await prisma.homepageContent.upsert({
+      where: { id: c.id },
+      update: c,
+      create: { ...c, clubId: efk87.id },
+    });
+  }
+  console.log("Homepage content seeded.");
 
   console.log({ efk87 });
   console.log("Seed finished.");

@@ -83,8 +83,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         <div className="admin-sidebar-group">
           <div className="admin-sidebar-group-title">Indhold</div>
           <a 
-            href={`/${clubSlug}/admin/forsideindhold`} 
-            className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/forsideindhold` ? "active" : ""}`}
+            href={`/${clubSlug}/admin/forside-indhold`} 
+            className={`admin-sidebar-item ${pathname?.startsWith(`/${clubSlug}/admin/forside-indhold`) ? "active" : ""}`}
           >
             Forsideindhold
           </a>

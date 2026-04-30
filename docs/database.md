@@ -82,6 +82,18 @@ Stores club-specific member stamdata (profile information).
 - **Automatic Assignment**: `memberNumber` is assigned automatically when a new profile is created for a club, using a max+1 logic scoped to that club.
 - **Privacy**: Contains private member data, strictly tenant-scoped.
 
+#### Homepage Content
+Tenant-scoped module for announcements and messages on the club's homepage.
+- **HomepageContent**: Manageable content boxes.
+  - `isActive`: Boolean flag for immediate control.
+  - `visibility`: `PUBLIC` (everyone) or `MEMBERS_ONLY` (logged-in members).
+  - `visibleFrom` / `visibleUntil`: Optional date range for scheduled visibility.
+  - `signupMode`: `NONE`, `ONE_PER_MEMBER` (once per user), or `QUANTITY` (user enters quantity).
+- **HomepageContentSignup**: User registrations for specific homepage content.
+  - Scoped by `clubId`, `contentId`, and `userId`.
+  - Supports `quantity` (default 1) and optional `note`.
+  - Tracks `cancelledAt` and `cancelledByUserId` for administrative management.
+
 #### ClubMemberCertificate
 Normalized storage for member certificates.
 - **Constraints**: Unique combination of `clubId` + `userId` + `certificateType`.

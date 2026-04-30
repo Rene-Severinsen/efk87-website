@@ -15,6 +15,8 @@ import ForumIcon from '../../forum/ForumIcon';
 import ForumReplyBadge from '../../forum/ForumReplyBadge';
 import { ClubForumThread, ClubForumCategory } from '../../../generated/prisma';
 import { WeatherData } from '../../../lib/weather/openMeteoWeatherService';
+import { HomepageContentWithSignups } from '../../../lib/homepageContent/homepageContentService';
+import HomepageContentBoxes from './HomepageContentBoxes';
 
 type ThreadWithRelations = ClubForumThread & {
   category: ClubForumCategory;
@@ -57,6 +59,7 @@ interface PublicClubHomePageV2Props {
   newMemberHighlights: NewMemberHighlightData;
   calendarMarquee: PublicCalendarEntry[];
   latestForumActivity: ThreadWithRelations[];
+  homepageContents: HomepageContentWithSignups[];
   weather?: WeatherData | null;
   theme?: {
     backgroundColor: string;
@@ -77,7 +80,7 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Isolated V2 homepage component.
  * Ported closely from the provided mockup HTML.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, weather, theme }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, weather, theme }: PublicClubHomePageV2Props) {
   const clubDisplayName = club.settings?.displayName || club.name;
   const clubShortName = club.settings?.shortName || club.name;
   const firstName = viewer.firstName || viewer.name?.split(' ')[0] || 'Gæst';
@@ -165,6 +168,11 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           </article>
         </section>
 
+        <HomepageContentBoxes 
+          clubSlug={club.slug} 
+          contents={homepageContents} 
+          viewer={viewer} 
+        />
 
         <section className="home-v2-layout">
           <div className="home-v2-stack">
