@@ -45,6 +45,9 @@ model Club {
 
   flightSchoolPage      FlightSchoolPage?
   flightSchoolDocuments FlightSchoolDocument[]
+  flightSchoolSessions  FlightSchoolSession[]
+  flightSchoolTimeSlots FlightSchoolTimeSlot[]
+  flightSchoolBookings  FlightSchoolBooking[]
 }
 
 model PublicClubFooter {
@@ -87,6 +90,17 @@ enum ArticleStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+enum FlightSchoolSessionStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
+enum FlightSchoolBookingStatus {
+  BOOKED
+  CANCELLED
 }
 
 model Article {
@@ -190,6 +204,67 @@ model FlightSchoolDocument {
 
   @@unique([clubId, slug])
   @@index([clubId, sortOrder])
+}
+
+model FlightSchoolSession {
+  id                        String                    @id @default(cuid())
+  clubId                    String
+  date                      DateTime
+  startsAt                  DateTime?
+  endsAt                    DateTime?
+  instructorMemberProfileId String
+  status                    FlightSchoolSessionStatus @default(DRAFT)
+  note                      String?
+  createdAt                 DateTime                  @default(now())
+  updatedAt                 DateTime                  @updatedAt
+
+  club       Club              @relation(fields: [clubId], references: [id])
+  instructor ClubMemberProfile @relation("InstructorSessions", fields: [instructorMemberProfileId], references: [id])
+  timeSlots  FlightSchoolTimeSlot[]
+
+  @@index([clubId, date])
+  @@index([clubId, instructorMemberProfileId])
+  @@index([clubId, status])
+}
+
+model FlightSchoolTimeSlot {
+  id                    String              @id @default(cuid())
+  clubId                String
+  flightSchoolSessionId String
+  startsAt              DateTime
+  endsAt                DateTime?
+  capacity              Int                 @default(1)
+  sortOrder             Int                 @default(0)
+  isActive              Boolean             @default(true)
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+
+  club     Club                @relation(fields: [clubId], references: [id])
+  session  FlightSchoolSession @relation(fields: [flightSchoolSessionId], references: [id])
+  bookings FlightSchoolBooking[]
+
+  @@index([clubId, flightSchoolSessionId])
+  @@index([clubId, startsAt])
+}
+
+model FlightSchoolBooking {
+  id                     String                    @id @default(cuid())
+  clubId                 String
+  flightSchoolTimeSlotId String
+  memberProfileId        String
+  status                 FlightSchoolBookingStatus @default(BOOKED)
+  cancelledAt            DateTime?
+  cancelledById          String?
+  createdAt              DateTime                  @default(now())
+  updatedAt              DateTime                  @updatedAt
+
+  club     Club                 @relation(fields: [clubId], references: [id])
+  timeSlot FlightSchoolTimeSlot @relation(fields: [flightSchoolTimeSlotId], references: [id])
+  member   ClubMemberProfile    @relation("MemberBookings", fields: [memberProfileId], references: [id])
+
+  @@index([clubId, flightSchoolTimeSlotId])
+  @@index([clubId, memberProfileId])
+  @@unique([flightSchoolTimeSlotId, memberProfileId, status])
 }
 
 model PublicHomeInfoCard {
@@ -755,6 +830,9 @@ model ClubMemberProfile {
 
   club Club @relation(fields: [clubId], references: [id])
   user User @relation(fields: [userId], references: [id])
+
+  instructorSessions   FlightSchoolSession[] @relation("InstructorSessions")
+  flightSchoolBookings FlightSchoolBooking[] @relation("MemberBookings")
 
   @@unique([clubId, userId])
   @@unique([clubId, memberNumber])
