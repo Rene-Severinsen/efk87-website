@@ -29,9 +29,13 @@ export default function LoginForm({
 
   const isMemberRequired = reason === "member-required";
 
-  async function handlePasswordLogin(formData: FormData) {
+  async function handlePasswordLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    console.info("[AUTH FORM] password submit");
     setError(null);
     setSuccess(null);
+    
+    const formData = new FormData(e.currentTarget);
     const emailValue = formData.get("email") as string;
     const password = formData.get("password") as string;
 
@@ -52,9 +56,13 @@ export default function LoginForm({
     });
   }
 
-  async function handleMagicLinkLogin(formData: FormData) {
+  async function handleMagicLinkLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    console.info("[AUTH FORM] magic-link submit");
     setError(null);
     setSuccess(null);
+    
+    const formData = new FormData(e.currentTarget);
     const emailValue = formData.get("email") as string;
 
     startTransition(async () => {
@@ -93,7 +101,7 @@ export default function LoginForm({
       )}
 
       {mode === "password" ? (
-        <form action={handlePasswordLogin} className="space-y-6">
+        <form onSubmit={handlePasswordLogin} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium opacity-80 mb-2">
               E-mail adresse
@@ -150,7 +158,7 @@ export default function LoginForm({
           </div>
         </form>
       ) : (
-        <form action={handleMagicLinkLogin} className="space-y-6">
+        <form onSubmit={handleMagicLinkLogin} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium opacity-80 mb-2">
               E-mail adresse

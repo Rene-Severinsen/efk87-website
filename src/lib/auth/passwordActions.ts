@@ -9,6 +9,7 @@ import { passwordUtils } from "./passwordUtils";
  * Handles the forgot password request.
  */
 export async function forgotPasswordAction(clubSlug: string, email: string) {
+  console.info("[AUTH FORM] forgot-password action", { clubSlug, email });
   // Always return a generic success message even if email doesn't exist
   const genericSuccess = { 
     success: true, 

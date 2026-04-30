@@ -16,7 +16,10 @@ export default function ForgotPasswordPage({ params }: PageProps) {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    console.info("[AUTH FORM] forgot-password submit");
+    const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
     
     startTransition(async () => {
@@ -46,7 +49,7 @@ export default function ForgotPasswordPage({ params }: PageProps) {
               </div>
             </div>
           ) : (
-            <form action={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <p className="text-sm opacity-80 leading-relaxed">
                 Indtast din e-mailadresse nedenfor, så sender vi dig et link til at vælge en ny adgangskode.
               </p>
