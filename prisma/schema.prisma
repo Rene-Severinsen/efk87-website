@@ -348,22 +348,38 @@ model ClubSettings {
 }
 
 model User {
-  id            String           @id @default(cuid())
-  email         String           @unique
-  name          String?
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  memberships   ClubMembership[]
-  accounts      Account[]
-  sessions      Session[]
-  flightIntents ClubFlightIntent[]
-  dailyActivity MemberDailyActivity[]
-  memberProfiles ClubMemberProfile[]
+  id                 String                  @id @default(cuid())
+  email              String                  @unique
+  name               String?
+  passwordHash       String?
+  passwordUpdatedAt  DateTime?
+  emailVerified      DateTime?
+  image              String?
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+  memberships        ClubMembership[]
+  accounts           Account[]
+  sessions           Session[]
+  flightIntents      ClubFlightIntent[]
+  dailyActivity      MemberDailyActivity[]
+  memberProfiles     ClubMemberProfile[]
   memberCertificates ClubMemberCertificate[]
-  forumThreads    ClubForumThread[]
-  forumReplies    ClubForumReply[]
+  forumThreads       ClubForumThread[]
+  forumReplies       ClubForumReply[]
+  passwordResetTokens PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model Account {
