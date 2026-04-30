@@ -86,19 +86,19 @@ export default async function FlyveskolePage({ params }: PageProps) {
                     <div className="flex-1 min-w-0">
                       <div className="font-bold text-lg truncate text-white mb-1">{instructor.displayName}</div>
                       
-                      <div className="flex flex-col gap-1.5 mt-3 text-sm">
+                      <div className="flex flex-col gap-1 mt-3 text-sm">
                         {instructor.email && (
                           <div className="flex gap-2 items-baseline">
-                            <span className="opacity-50 flex-shrink-0 w-[55px]">E-mail:</span>
-                            <a href={`mailto:${instructor.email}`} className="opacity-90 hover:opacity-100 hover:text-sky-400 transition-colors truncate block h-auto min-h-0">
+                            <span className="opacity-50 flex-shrink-0 whitespace-nowrap">E-mail:</span>
+                            <a href={`mailto:${instructor.email}`} className="opacity-90 hover:opacity-100 hover:text-sky-400 transition-colors truncate block">
                               {instructor.email}
                             </a>
                           </div>
                         )}
                         {instructor.mobilePhone && (
                           <div className="flex gap-2 items-baseline">
-                            <span className="opacity-50 flex-shrink-0 w-[55px]">Telefon:</span>
-                            <a href={`tel:${instructor.mobilePhone}`} className="opacity-90 hover:opacity-100 hover:text-sky-400 transition-colors block h-auto min-h-0">
+                            <span className="opacity-50 flex-shrink-0 whitespace-nowrap">Telefon:</span>
+                            <a href={`tel:${instructor.mobilePhone}`} className="opacity-90 hover:opacity-100 hover:text-sky-400 transition-colors truncate block">
                               {instructor.mobilePhone}
                             </a>
                           </div>

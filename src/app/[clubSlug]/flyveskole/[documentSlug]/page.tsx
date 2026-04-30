@@ -49,20 +49,22 @@ export default async function FlightSchoolDocumentPage({ params }: PageProps) {
         <PrintButton />
       </div>
 
-      <ThemedSectionCard className="print:m-0 print:p-0 print:border-none print:shadow-none print:bg-white print:text-black">
-        <div className="prose prose-invert max-w-none print:prose-neutral print:max-w-none">
-          {document.excerpt && (
-            <p className="text-xl opacity-90 leading-relaxed mb-8 italic border-l-4 border-sky-500 print:border-slate-300 pl-6 py-2">
+      <div className="space-y-8">
+        {document.excerpt && (
+          <ThemedSectionCard className="border-l-4 border-l-sky-400/50 print:border-l-slate-300 print:m-0 print:p-0 print:border-none">
+            <p className="text-xl sm:text-2xl font-medium text-sky-100/90 leading-relaxed print:text-black print:text-lg">
               {document.excerpt}
             </p>
-          )}
-          
+          </ThemedSectionCard>
+        )}
+
+        <ThemedSectionCard className="print:m-0 print:p-0 print:border-none print:shadow-none print:bg-white print:text-black">
           <div 
+            className="article-detail-prose"
             dangerouslySetInnerHTML={{ __html: document.contentHtml }} 
-            className="print:text-black"
           />
-        </div>
-      </ThemedSectionCard>
+        </ThemedSectionCard>
+      </div>
       
       <style dangerouslySetInnerHTML={{ __html: `
         @media print {
@@ -111,14 +113,14 @@ export default async function FlightSchoolDocumentPage({ params }: PageProps) {
           .themed-page-header .eyebrow {
             color: #666 !important;
           }
-          .prose {
+          .article-detail-prose {
              color: black !important;
              max-width: 100% !important;
           }
-          .prose h1, .prose h2, .prose h3, .prose h4 {
+          .article-detail-prose h1, .article-detail-prose h2, .article-detail-prose h3, .article-detail-prose h4 {
              color: black !important;
           }
-          .prose a {
+          .article-detail-prose a {
              color: black !important;
              text-decoration: underline;
           }
