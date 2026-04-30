@@ -1,5 +1,6 @@
+import { getMemberDisplayName } from "../members/memberUtils";
 import prisma from "../db/prisma";
-import { ClubFlightIntentStatus, ClubFlightIntentVisibility, ClubFlightIntentType } from "../../generated/prisma";
+import { ClubFlightIntentStatus, ClubFlightIntentVisibility, ClubFlightIntentType, ClubFlightIntent } from "../../generated/prisma";
 import { ViewerVisibilityContext } from "./publicVisibility";
 
 /**
@@ -23,24 +24,37 @@ export interface PublicFlightIntentListItem {
  * Helper to mask display names for anonymous visitors.
  */
 function maskFlightIntents(
-  intents: {
-    id: string;
-    displayName: string;
-    message: string | null;
-    activityType: ClubFlightIntentType;
-    createdAt: Date;
-  }[],
+  intents: (ClubFlightIntent & {
+    user: {
+      name: string | null;
+      email: string;
+      memberProfiles: {
+        firstName: string | null;
+        lastName: string | null;
+      }[];
+    };
+  })[],
   viewer: ViewerVisibilityContext
 ): PublicFlightIntentListItem[] {
   const canSeeRealNames = viewer.isAuthenticated && (viewer.isMember || viewer.isAdmin);
 
-  return intents.map((intent) => ({
-    id: intent.id,
-    displayName: canSeeRealNames ? intent.displayName : "Medlem",
-    message: intent.message,
-    activityType: intent.activityType,
-    createdAt: intent.createdAt,
-  }));
+  return intents.map((intent) => {
+    let displayName = "Medlem";
+
+    if (canSeeRealNames) {
+      // Use the helper to get the real display name from profile/user
+      const profile = intent.user.memberProfiles[0] || { firstName: null, lastName: null };
+      displayName = getMemberDisplayName(profile, intent.user);
+    }
+
+    return {
+      id: intent.id,
+      displayName,
+      message: intent.message,
+      activityType: intent.activityType,
+      createdAt: intent.createdAt,
+    };
+  });
 }
 
 /**
@@ -62,6 +76,17 @@ export async function getActiveFlightIntents(
       status: ClubFlightIntentStatus.ACTIVE,
       visibility: {
         in: allowedVisibilities,
+      },
+    },
+    include: {
+      user: {
+        include: {
+          memberProfiles: {
+            where: {
+              clubId,
+            },
+          },
+        },
       },
     },
     orderBy: {
@@ -108,6 +133,17 @@ export async function getTodayFlightIntents(
         { expiresAt: { gt: now } },
       ],
     },
+    include: {
+      user: {
+        include: {
+          memberProfiles: {
+            where: {
+              clubId,
+            },
+          },
+        },
+      },
+    },
     orderBy: {
       createdAt: 'desc',
     },
@@ -145,6 +181,17 @@ export async function getTodayFlightIntentList(
         { expiresAt: null },
         { expiresAt: { gt: now } },
       ],
+    },
+    include: {
+      user: {
+        include: {
+          memberProfiles: {
+            where: {
+              clubId,
+            },
+          },
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',
