@@ -17,7 +17,6 @@ export default function FlightSchoolCalendarClient({
   session, 
   clubId, 
   clubSlug, 
-  memberProfileId,
   isMember 
 }: FlightSchoolCalendarClientProps) {
   const [loadingSlotId, setLoadingSlotId] = useState<string | null>(null);
@@ -105,6 +104,12 @@ export default function FlightSchoolCalendarClient({
                   {statusLabel}
                 </div>
               </div>
+
+              {isOccupied && slot.bookedMemberName && (
+                <div className="text-xs text-white/50 mb-3 -mt-2">
+                  Booket af {slot.bookedMemberName}
+                </div>
+              )}
 
               <div className="mt-auto">
                 {isBookedByMe && slot.bookingId ? (

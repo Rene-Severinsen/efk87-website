@@ -11,6 +11,7 @@ export interface FlightSchoolCalendarSlotView {
   isActive: boolean;
   status: FlightSchoolCalendarBookingStatus;
   bookingId?: string;
+  bookedMemberName?: string;
 }
 
 export interface FlightSchoolCalendarSessionView {
@@ -140,6 +141,8 @@ export async function listPublishedSessionsFromTodayView(
       const activeBooking = slot.bookings[0];
       
       let status: FlightSchoolCalendarBookingStatus = "FREE";
+      let bookedMemberName: string | undefined = undefined;
+
       if (!slot.isActive) {
         status = "INACTIVE";
       } else if (activeBooking) {
@@ -147,6 +150,10 @@ export async function listPublishedSessionsFromTodayView(
           status = "BOOKED_BY_ME";
         } else {
           status = "OCCUPIED";
+          // Only expose booked member name if the viewer is a club member
+          if (currentMemberProfileId && activeBooking.member) {
+            bookedMemberName = `${activeBooking.member.firstName} ${activeBooking.member.lastName}`.trim();
+          }
         }
       }
 
@@ -157,6 +164,7 @@ export async function listPublishedSessionsFromTodayView(
         isActive: slot.isActive,
         status,
         bookingId: status === "BOOKED_BY_ME" ? activeBooking?.id : undefined,
+        bookedMemberName,
       };
     }),
   }));

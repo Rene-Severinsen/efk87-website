@@ -119,7 +119,6 @@ export default async function SkolekalenderPage({ params }: PageProps) {
                             session={session} 
                             clubId={club.id} 
                             clubSlug={clubSlug}
-                            memberProfileId={memberProfileId}
                             isMember={viewer.isMember}
                           />
                         </div>
