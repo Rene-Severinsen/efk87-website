@@ -81,7 +81,7 @@ const SortableHeader = ({ label, sortKey, currentSort, currentDirection, clubSlu
 export default async function Page({ params, searchParams }: PageProps) {
   const { clubSlug } = await params;
   const { sort = "name", direction = "asc", filter, debugMembers } = await searchParams;
-  const isDebug = process.env.NODE_ENV === "development" || debugMembers === "1";
+  const isDebug = process.env.NODE_ENV === "development" && debugMembers === "1";
 
   let club;
   try {

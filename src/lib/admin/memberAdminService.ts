@@ -1,6 +1,12 @@
 import prisma from "../db/prisma";
 import { getMemberDisplayName } from "../members/memberUtils";
 import { 
+  ClubMemberStatus, 
+  ClubMemberMembershipType, 
+  ClubMemberSchoolStatus, 
+  ClubMemberRoleType 
+} from "@/generated/prisma";
+import { 
   getMemberAdminStats, 
   filterMembersForAdmin, 
   sortMembersForAdmin 
@@ -15,10 +21,10 @@ export interface AdminMemberOverviewDTO {
   mobilePhone: string | null;
   memberNumber: number | null;
   mdkNumber: string | null;
-  membershipType: string;
-  memberRoleType: string;
-  schoolStatus: string;
-  memberStatus: string;
+  membershipType: ClubMemberMembershipType;
+  memberRoleType: ClubMemberRoleType;
+  schoolStatus: ClubMemberSchoolStatus;
+  memberStatus: ClubMemberStatus;
   isInstructor: boolean;
   certificateCount: number;
   updatedAt: Date;

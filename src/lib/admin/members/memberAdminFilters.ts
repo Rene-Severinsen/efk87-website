@@ -40,7 +40,6 @@ export interface PartialMember {
   isInstructor: boolean;
   firstName?: string | null;
   lastName?: string | null;
-  [key: string]: unknown; // Allow other properties
 }
 
 // 1. Shared predicates
@@ -175,7 +174,7 @@ export function getMemberAdminStats(members: PartialMember[]) {
 /**
  * Filter a list of members in-memory based on a filter key.
  */
-export function filterMembersForAdmin(members: PartialMember[], filterKey: MemberAdminFilterKey | string | null | undefined) {
+export function filterMembersForAdmin<T extends PartialMember>(members: T[], filterKey: MemberAdminFilterKey | string | null | undefined): T[] {
   if (!filterKey || !(filterKey in MEMBER_ADMIN_FILTERS)) {
     return members;
   }
