@@ -28,6 +28,26 @@ Instructors are displayed in a read-only panel in the Flyveskole admin.
 - **Control:** They are controlled through **Admin → Medlemmer**.
 - **Requirement:** A member must have the "Instruktør" flag enabled in their profile and have an "ACTIVE" member status to appear in the list.
 
+## Public Pages
+
+The flight school content is available on the public site under the following routes:
+
+- **Main page:** `/[clubSlug]/flyveskole`
+  - Displays the published `FlightSchoolPage` content.
+  - Lists active instructors with contact information.
+  - Links to all published `FlightSchoolDocument` pages.
+- **Document page:** `/[clubSlug]/flyveskole/[documentSlug]`
+  - Displays a specific published document.
+  - Optimized for readability with specific print support.
+
+## Print Support
+
+Document pages include a "Print dokument" button and specialized print CSS:
+- Navigation, headers, and footers are hidden when printing.
+- Content is rendered on a white background with black text.
+- Typography is optimized for physical output.
+- Headings, lists, and links are preserved for clarity.
+
 ## Architecture
 
 - **Models:** `FlightSchoolPage` and `FlightSchoolDocument`.
@@ -39,5 +59,4 @@ Instructors are displayed in a read-only panel in the Flyveskole admin.
 
 ## Future Considerations
 
-- **Print Support:** Support for printing document pages (e.g., for physical handbooks) is planned for the public document pages.
 - **Expansion:** The structure is designed to later include student progression, logbooks, and scheduling without renaming the current CMS feature.

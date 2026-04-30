@@ -21,9 +21,10 @@ export async function getPublishedFlightSchoolDocuments(clubId: string) {
       clubId,
       isPublished: true,
     },
-    orderBy: {
-      sortOrder: "asc",
-    },
+    orderBy: [
+      { sortOrder: "asc" },
+      { title: "asc" },
+    ],
   });
 }
 
