@@ -14,6 +14,7 @@ import { getForumReplyBadge } from '../../../lib/forum/forumHelpers';
 import ForumIcon from '../../forum/ForumIcon';
 import ForumReplyBadge from '../../forum/ForumReplyBadge';
 import { ClubForumThread, ClubForumCategory } from '../../../generated/prisma';
+import { WeatherData } from '../../../lib/weather/openMeteoWeatherService';
 
 type ThreadWithRelations = ClubForumThread & {
   category: ClubForumCategory;
@@ -56,6 +57,7 @@ interface PublicClubHomePageV2Props {
   newMemberHighlights: NewMemberHighlightData;
   calendarMarquee: PublicCalendarEntry[];
   latestForumActivity: ThreadWithRelations[];
+  weather?: WeatherData | null;
   theme?: {
     backgroundColor: string;
     panelColor: string;
@@ -75,7 +77,7 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Isolated V2 homepage component.
  * Ported closely from the provided mockup HTML.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, weather, theme }: PublicClubHomePageV2Props) {
   const clubDisplayName = club.settings?.displayName || club.name;
   const clubShortName = club.settings?.shortName || club.name;
   const firstName = viewer.firstName || viewer.name?.split(' ')[0] || 'Gæst';
@@ -97,7 +99,12 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
         <section className={`home-v2-hero ${newMemberHighlights.visible ? 'home-v2-hero-top--split' : 'home-v2-hero-top--full'}`}>
           <article className="home-v2-card home-v2-hero-main">
             <div className="home-v2-eyebrow">
-              ✈️ Sæsonstart 2026 · {new Date().toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric', month: 'long' })} · Vejr: 8°C og let sidevind
+              {new Date().toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric', month: 'long' })}
+              {weather ? (
+                <> · Vejr: {weather.temp}°C, {weather.wind} m/s fra {weather.direction} · {weather.shortComment}</>
+              ) : (
+                <> · Vejr: Henter...</>
+              )}
             </div>
             <h1>Hej {firstName}.{todayFlyingCount > 0 ? ' Der er liv på pladsen i dag.' : ''}</h1>
             <p className="home-v2-hero-copy">

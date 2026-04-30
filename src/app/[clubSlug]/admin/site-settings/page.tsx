@@ -1,14 +1,22 @@
 import { notFound } from "next/navigation";
-import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
-import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
-import AdminShell from "../../../../components/admin/AdminShell";
-import AdminPlaceholderPage from "../../../../components/admin/AdminPlaceholderPage";
+import { requireClubBySlug, TenancyError } from "@/lib/tenancy/tenantService";
+import { requireClubAdminForClub } from "@/lib/auth/adminAccessGuards";
+import AdminShell from "@/components/admin/AdminShell";
+import WeatherSettingsForm from "./WeatherSettingsForm";
+import { getClubSettings } from "@/lib/admin/siteSettingsService";
 
 interface PageProps {
   params: Promise<{
     clubSlug: string;
   }>;
 }
+
+const GlassCard = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
+  <div className={`backdrop-blur-md bg-[#121b2e]/80 border border-white/10 rounded-3xl shadow-2xl relative overflow-hidden ${className}`}>
+    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500/50 to-emerald-500/50 opacity-30" />
+    {children}
+  </div>
+);
 
 export default async function Page({ params }: PageProps) {
   const { clubSlug } = await params;
@@ -24,6 +32,7 @@ export default async function Page({ params }: PageProps) {
   }
 
   const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin/site-settings`);
+  const settings = await getClubSettings(club.id);
 
   return (
     <AdminShell
@@ -33,16 +42,23 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <AdminPlaceholderPage 
-        title="Site settings"
-        description="Fremtidig konfiguration af klub-indstillinger, domæne og tema."
-        futureItems={[
-          "Generelle kluboplysninger",
-          "Domæne- og DNS-indstillinger",
-          "Visuelt tema og logo",
-          "Integration af sociale medier"
-        ]}
-      />
+      <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
+        <div className="max-w-[800px] mx-auto">
+          <div className="mb-8">
+            <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">Site Settings</h1>
+            <p className="text-slate-400 text-lg">Konfiguration af klub-indstillinger og præferencer.</p>
+          </div>
+
+          <GlassCard className="p-8">
+            <WeatherSettingsForm 
+              clubId={club.id} 
+              clubSlug={clubSlug} 
+              initialLatitude={settings?.weatherLatitude ?? null}
+              initialLongitude={settings?.weatherLongitude ?? null}
+            />
+          </GlassCard>
+        </div>
+      </div>
     </AdminShell>
   );
 }

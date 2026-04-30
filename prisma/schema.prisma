@@ -335,14 +335,16 @@ model ClubTheme {
 }
 
 model ClubSettings {
-  id            String  @id @default(cuid())
-  clubId        String  @unique
-  displayName   String
-  shortName     String
-  primaryDomain String?
-  publicEmail   String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id              String  @id @default(cuid())
+  clubId          String  @unique
+  displayName     String
+  shortName       String
+  primaryDomain   String?
+  publicEmail     String?
+  weatherLatitude Float?
+  weatherLongitude Float?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   club Club @relation(fields: [clubId], references: [id])
 }
