@@ -38,6 +38,10 @@ export async function registerForHomepageContentAction(
     throw new Error("Opslaget er ikke længere aktivt");
   }
 
+  if (content.isSignupClosed) {
+    throw new Error("Tilmeldingen er lukket");
+  }
+
   if (content.signupMode === HomepageContentSignupMode.NONE) {
     throw new Error("Tilmelding er ikke mulig for dette opslag");
   }
@@ -130,6 +134,14 @@ export async function cancelOwnHomepageContentSignupAction(
     throw new Error("Tilmeldingen blev ikke fundet");
   }
 
+  const content = await prisma.homepageContent.findUnique({
+    where: { id: signup.contentId }
+  });
+
+  if (content?.isSignupClosed) {
+    throw new Error("Tilmeldingen er lukket, og du kan ikke længere afmelde dig");
+  }
+
   if (signup.cancelledAt) {
     return; // Allerede aflyst
   }
@@ -193,6 +205,7 @@ export async function saveHomepageContentAction(
     sortOrder: number;
     signupMode: HomepageContentSignupMode;
     signupLabel: string | null;
+    isSignupClosed: boolean;
   }
 ) {
   const club = await requireClubBySlug(clubSlug);

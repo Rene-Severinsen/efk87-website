@@ -113,36 +113,49 @@
 
 /* Homepage Content Boxes */
 .home-v2-content-boxes {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 20px;
-  margin-top: 20px;
+  margin-top: 24px;
+  margin-bottom: 24px;
 }
 
 .home-v2-content-box {
-  padding: 32px;
+  padding: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .home-v2-content-box h2 {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   color: #fff;
 }
 
 .home-v2-content-body {
-  color: var(--home-v2-muted);
-  line-height: 1.6;
+  color: var(--home-v2-text);
+  line-height: 1.65;
   font-size: 16px;
+  display: grid;
+  gap: 12px;
 }
 
 .home-v2-content-body p {
-  margin-bottom: 12px;
+  margin-bottom: 0;
+}
+
+.home-v2-content-body ul, 
+.home-v2-content-body ol {
+  margin-left: 20px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
 .home-v2-signup-area {
-  margin-top: 24px;
-  padding-top: 24px;
+  margin-top: 18px;
+  padding-top: 16px;
   border-top: 1px solid var(--home-v2-line);
 }
 
@@ -150,14 +163,22 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 16px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid var(--home-v2-line);
+  flex-wrap: wrap;
 }
 
 .home-v2-signup-form {
   display: flex;
   align-items: flex-end;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid var(--home-v2-line);
 }
 
 .home-v2-signup-input-group {
@@ -172,25 +193,48 @@
 }
 
 .home-v2-signup-input {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(10, 15, 25, 0.6);
   border: 1px solid var(--home-v2-line);
-  border-radius: 8px;
-  padding: 10px 14px;
-  color: #fff;
+  color: var(--home-v2-text);
+  border-radius: 12px;
+  min-height: 44px;
+  padding: 10px 12px;
   outline: none;
+  transition: all 0.2s ease;
 }
 
 .home-v2-signup-input:focus {
-  border-color: #1890ff; /* Fallback accent */
+  border-color: #7dd3fc;
+  box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.2);
+}
+
+.home-v2-participant-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding: 0 4px;
 }
 
 .home-v2-participant-count {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 14px;
   color: var(--home-v2-muted);
-  margin-top: 12px;
+}
+
+.home-v2-link-cyan {
+  color: #7dd3fc;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.home-v2-link-cyan:hover {
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
 .home-v2-marquee-card {

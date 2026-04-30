@@ -34,11 +34,14 @@ export default function HomepageContentBoxes({ clubSlug, contents, viewer }: Hom
 }
 
 function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: HomepageContentWithSignups, viewer: ServerViewerContext }) {
+  const [isUpdating, setIsUpdating] = React.useState(false);
+
   const sanitizedBody = sanitizeHtml(content.bodyHtml, {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2']),
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'p', 'br']),
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       '*': ['style', 'class'],
+      'a': ['href', 'target', 'rel'],
     }
   });
 
@@ -48,6 +51,7 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
   const handleRegister = async (formData: FormData) => {
     try {
       await registerForHomepageContentAction(clubSlug, content.id, formData);
+      setIsUpdating(false);
     } catch (error) {
       alert("Fejl ved tilmelding: " + (error as Error).message);
     }
@@ -78,28 +82,51 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
           {!viewer.isAuthenticated ? (
             <div className="home-v2-signup-status">
               <Info size={20} className="text-blue-400" />
-              <span>Log ind for at {signupLabel.toLowerCase()}.</span>
-              <Link href={`/${clubSlug}/login`} className="home-v2-btn home-v2-btn-primary" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ flex: 1 }}>Log ind for at {signupLabel.toLowerCase()}.</span>
+              <Link href={`/${clubSlug}/login`} className="home-v2-pill home-v2-primary" style={{ gap: '8px' }}>
                 <LogIn size={18} />
                 Log ind
               </Link>
             </div>
-          ) : isRegistered ? (
+          ) : content.isSignupClosed ? (
+            <div className="home-v2-signup-status">
+              <Info size={20} className="text-amber-400" />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600 }}>Tilmeldingen er lukket</div>
+                {isRegistered && (
+                  <div style={{ fontSize: '13px', color: 'var(--home-v2-muted)' }}>
+                    Du er tilmeldt{content.signupMode === HomepageContentSignupMode.QUANTITY ? ` med ${mySignup.quantity}` : ''}.
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : isRegistered && !isUpdating ? (
             <div className="home-v2-signup-status">
               <CheckCircle size={24} style={{ color: '#52c41a' }} />
-              <div>
+              <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600 }}>Du er tilmeldt!</div>
                 {content.signupMode === HomepageContentSignupMode.QUANTITY && (
                   <div style={{ fontSize: '14px', color: 'var(--home-v2-muted)' }}>Antal: {mySignup.quantity}</div>
                 )}
               </div>
-              <button 
-                onClick={handleCancel}
-                className="home-v2-btn home-v2-btn-ghost" 
-                style={{ marginLeft: 'auto', color: '#ff4d4f' }}
-              >
-                Afmeld
-              </button>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {content.signupMode === HomepageContentSignupMode.QUANTITY && (
+                  <button 
+                    onClick={() => setIsUpdating(true)}
+                    className="home-v2-pill" 
+                    style={{ minHeight: '36px', padding: '0 12px', fontSize: '13px' }}
+                  >
+                    Ændr
+                  </button>
+                )}
+                <button 
+                  onClick={handleCancel}
+                  className="home-v2-pill" 
+                  style={{ minHeight: '36px', padding: '0 12px', fontSize: '13px', color: '#ff4d4f', borderColor: 'rgba(255, 77, 79, 0.2)' }}
+                >
+                  Afmeld
+                </button>
+              </div>
             </div>
           ) : (
             <form action={handleRegister} className="home-v2-signup-form">
@@ -110,7 +137,7 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
                     name="quantity" 
                     type="number" 
                     min="1" 
-                    defaultValue="1" 
+                    defaultValue={mySignup?.quantity || 1} 
                     required 
                     className="home-v2-signup-input"
                     style={{ width: '80px' }}
@@ -123,19 +150,44 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
                   name="note" 
                   type="text" 
                   placeholder="Evt. besked..."
+                  defaultValue={mySignup?.note || ""}
                   className="home-v2-signup-input"
                 />
               </div>
-              <button type="submit" className="home-v2-btn home-v2-btn-primary">
-                {signupLabel}
-              </button>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {isUpdating && (
+                  <button 
+                    type="button" 
+                    onClick={() => setIsUpdating(false)}
+                    className="home-v2-pill"
+                  >
+                    Fortryd
+                  </button>
+                )}
+                <button type="submit" className="home-v2-pill home-v2-primary">
+                  {isUpdating ? 'Opdater' : signupLabel}
+                </button>
+              </div>
             </form>
           )}
 
-          {content._count.signups > 0 && (
-            <div className="home-v2-participant-count">
-              <Users size={16} />
-              <span>{content._count.signups} {content.signupMode === HomepageContentSignupMode.QUANTITY ? 'bestillinger' : 'deltagere'}</span>
+          {(content._count.signups > 0 || viewer.isMember) && (
+            <div className="home-v2-participant-summary">
+              {content._count.signups > 0 ? (
+                <div className="home-v2-participant-count">
+                  <Users size={16} />
+                  <span>
+                    {content._count.signups} {content.signupMode === HomepageContentSignupMode.QUANTITY ? (content._count.signups === 1 ? 'bestilling' : 'bestillinger') : (content._count.signups === 1 ? 'deltager' : 'deltagere')}
+                    {content.signupMode === HomepageContentSignupMode.QUANTITY && content.quantityTotal > content._count.signups && ` (${content.quantityTotal} i alt)`}
+                  </span>
+                </div>
+              ) : <div />}
+              
+              {viewer.isAuthenticated && (viewer.isMember || viewer.isAdmin) && (
+                <Link href={`/${clubSlug}/forside-indhold/${content.id}/tilmeldinger`} className="home-v2-link-cyan">
+                  Se tilmeldinger
+                </Link>
+              )}
             </div>
           )}
         </div>

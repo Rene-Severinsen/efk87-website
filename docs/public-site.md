@@ -137,6 +137,9 @@ Frontpage V2 is now the active live homepage for all clubs.
     - Content is managed via Admin UI.
     - Visibility rules (Public vs Members Only) are respected.
     - Optional signups with quantity and notes.
+    - **Quantity UX**: Members can select quantity for "QUANTITY" mode signups and update their entry.
+    - **Participant List**: Members can view a list of active participants for content with signups enabled at `/[clubSlug]/forside-indhold/[contentId]/tilmeldinger`.
+    - **Signup Closing**: Admins can close signups while keeping the content visible. Members see a "closed" status and cannot modify their registration.
     - Display order follows manual sortOrder.
   - v2 uses the `ClubCalendarEntry` model to populate the homepage marquee (ticker).
     - Marquee shows published upcoming entries (startsAt >= today) up to 3 months ahead.

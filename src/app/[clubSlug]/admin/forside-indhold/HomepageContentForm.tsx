@@ -41,6 +41,7 @@ export default function HomepageContentForm({
       sortOrder: parseInt(formData.get("sortOrder") as string, 10) || 0,
       signupMode: formData.get("signupMode") as HomepageContentSignupMode,
       signupLabel: (formData.get("signupLabel") as string) || null,
+      isSignupClosed: formData.get("isSignupClosed") === "true",
     };
 
     try {
@@ -106,6 +107,22 @@ export default function HomepageContentForm({
                 placeholder="F.eks. 'Tilmeld', 'Bestil'..."
               />
             </div>
+          </div>
+
+          <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontWeight: 500 }}>
+              <input
+                name="isSignupClosed"
+                type="checkbox"
+                value="true"
+                defaultChecked={initialData?.isSignupClosed}
+                style={{ width: '18px', height: '18px' }}
+              />
+              <span>Luk for tilmelding</span>
+            </label>
+            <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginTop: '6px', marginLeft: '28px' }}>
+              Opslaget vises stadig, men medlemmer kan ikke længere tilmelde eller ændre tilmelding.
+            </p>
           </div>
         </div>
       </div>

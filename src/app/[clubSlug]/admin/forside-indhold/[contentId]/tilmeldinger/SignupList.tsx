@@ -16,6 +16,9 @@ interface SignupListProps {
 }
 
 export default function SignupList({ signups, clubSlug }: SignupListProps) {
+  const activeSignups = signups.filter(s => !s.cancelledAt);
+  const totalQuantity = activeSignups.reduce((sum, s) => sum + s.quantity, 0);
+
   const handleCancel = async (signupId: string, name: string) => {
     if (confirm(`Er du sikker på, at du vil afmelde ${name}?`)) {
       try {
@@ -88,6 +91,19 @@ export default function SignupList({ signups, clubSlug }: SignupListProps) {
           </tbody>
         </table>
       </div>
+
+      {(activeSignups.length > 0) && (
+        <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '24px' }}>
+          <div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Aktive tilmeldinger</div>
+            <div style={{ fontSize: '1.25rem', fontWeight: 700 }}>{activeSignups.length}</div>
+          </div>
+          <div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Total Antal</div>
+            <div style={{ fontSize: '1.25rem', fontWeight: 700 }}>{totalQuantity}</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

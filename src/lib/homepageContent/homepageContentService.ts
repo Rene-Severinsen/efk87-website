@@ -6,7 +6,8 @@ export type HomepageContentWithSignups = HomepageContent & {
   signups: HomepageContentSignup[];
   _count: {
     signups: number;
-  }
+  };
+  quantityTotal: number;
 };
 
 export async function getActiveHomepageContentForClub(
@@ -67,7 +68,10 @@ export async function getActiveHomepageContentForClub(
     ]
   });
 
-  return content as HomepageContentWithSignups[];
+  return content.map(c => ({
+    ...c,
+    quantityTotal: c.signups.reduce((sum, s) => sum + s.quantity, 0)
+  })) as HomepageContentWithSignups[];
 }
 
 export async function getHomepageContentById(id: string, clubId: string) {
@@ -126,5 +130,25 @@ export async function getSignupsForContent(contentId: string, clubId: string) {
       }
     },
     orderBy: { createdAt: 'desc' }
+  });
+}
+
+export async function getVisibleSignupsForContent(contentId: string, clubId: string) {
+  return prisma.homepageContentSignup.findMany({
+    where: { 
+      contentId,
+      content: { clubId },
+      cancelledAt: null
+    },
+    include: {
+      user: {
+        include: {
+          memberProfiles: {
+            where: { clubId }
+          }
+        }
+      }
+    },
+    orderBy: { createdAt: 'asc' }
   });
 }

@@ -488,6 +488,7 @@ model HomepageContent {
   sortOrder    Int                       @default(0)
   signupMode   HomepageContentSignupMode @default(NONE)
   signupLabel  String?
+  isSignupClosed Boolean                 @default(false)
   createdAt    DateTime                  @default(now())
   updatedAt    DateTime                  @updatedAt
 
