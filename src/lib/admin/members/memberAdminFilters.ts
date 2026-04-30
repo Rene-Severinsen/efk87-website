@@ -13,14 +13,14 @@ import { Prisma, ClubMemberStatus, ClubMemberMembershipType, ClubMemberSchoolSta
 
 export type MemberAdminFilterKey = 
   | "active" 
-  | "under_creation" 
+  | "creation" 
   | "resigned" 
   | "senior" 
   | "junior" 
   | "passive" 
   | "approved" 
   | "student" 
-  | "not_approved" 
+  | "notApproved" 
   | "instructor";
 
 export interface MemberAdminFilter {
@@ -68,8 +68,8 @@ export const MEMBER_ADMIN_FILTERS: Record<MemberAdminFilterKey, MemberAdminFilte
     isMatch: (m) => isCountableMember(m),
     where: { memberStatus: ClubMemberStatus.ACTIVE },
   },
-  under_creation: {
-    key: "under_creation",
+  creation: {
+    key: "creation",
     label: "Oprettelse",
     colorClass: "text-sky-400",
     isMatch: (m) => isUnderCreationMember(m),
@@ -129,8 +129,8 @@ export const MEMBER_ADMIN_FILTERS: Record<MemberAdminFilterKey, MemberAdminFilte
       schoolStatus: ClubMemberSchoolStatus.STUDENT 
     },
   },
-  not_approved: {
-    key: "not_approved",
+  notApproved: {
+    key: "notApproved",
     label: "Ikke godkendt",
     colorClass: "text-rose-400",
     isMatch: (m) => isCountableMember(m) && m.schoolStatus === ClubMemberSchoolStatus.NOT_APPROVED,
@@ -161,13 +161,13 @@ export function getMemberAdminStats(members: PartialMember[]) {
     total: members.filter(m => !isUnderCreationMember(m)).length,
     active: members.filter(m => MEMBER_ADMIN_FILTERS.active.isMatch(m)).length,
     resigned: members.filter(m => MEMBER_ADMIN_FILTERS.resigned.isMatch(m)).length,
-    new: members.filter(m => MEMBER_ADMIN_FILTERS.under_creation.isMatch(m)).length,
+    creation: members.filter(m => MEMBER_ADMIN_FILTERS.creation.isMatch(m)).length,
     senior: members.filter(m => MEMBER_ADMIN_FILTERS.senior.isMatch(m)).length,
     junior: members.filter(m => MEMBER_ADMIN_FILTERS.junior.isMatch(m)).length,
     passive: members.filter(m => MEMBER_ADMIN_FILTERS.passive.isMatch(m)).length,
     approved: members.filter(m => MEMBER_ADMIN_FILTERS.approved.isMatch(m)).length,
     student: members.filter(m => MEMBER_ADMIN_FILTERS.student.isMatch(m)).length,
-    notApproved: members.filter(m => MEMBER_ADMIN_FILTERS.not_approved.isMatch(m)).length,
+    notApproved: members.filter(m => MEMBER_ADMIN_FILTERS.notApproved.isMatch(m)).length,
     instructors: members.filter(m => MEMBER_ADMIN_FILTERS.instructor.isMatch(m)).length,
   };
 }
@@ -196,10 +196,13 @@ export function sortMembersForAdmin<T extends PartialMember>(members: T[], sortK
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let valB = b[sortKey as keyof T] as any;
     
-    // Handle special cases if any
+    // Handle special cases
     if (sortKey === "name") {
       valA = (a.firstName || "") + (a.lastName || "");
       valB = (b.firstName || "") + (b.lastName || "");
+    } else if (sortKey === "instructorStatus") {
+      valA = a.isInstructor ? 1 : 0;
+      valB = b.isInstructor ? 1 : 0;
     }
     
     if (valA < valB) return direction === "asc" ? -1 : 1;

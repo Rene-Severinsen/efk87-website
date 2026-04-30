@@ -3,8 +3,16 @@ import { requireClubBySlug, TenancyError } from "@/lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "@/lib/auth/adminAccessGuards";
 import AdminShell from "@/components/admin/AdminShell";
 import Link from "next/link";
-import { getAdminMemberOverview, getAdminMemberStats } from "@/lib/admin/memberAdminService";
-import { MEMBER_ADMIN_FILTERS, MemberAdminFilterKey } from "@/lib/admin/members/memberAdminFilters";
+import { 
+  getAdminMemberRows 
+} from "@/lib/admin/memberAdminService";
+import { 
+  MEMBER_ADMIN_FILTERS, 
+  MemberAdminFilterKey, 
+  filterMembersForAdmin, 
+  getMemberAdminStats, 
+  sortMembersForAdmin 
+} from "@/lib/admin/members/memberAdminFilters";
 import { MEMBERSHIP_TYPE_LABELS, SCHOOL_STATUS_LABELS, MEMBER_STATUS_LABELS, ROLE_TYPE_LABELS } from "@/lib/members/memberConstants";
 import { ClubMemberMembershipType, ClubMemberSchoolStatus, ClubMemberStatus, ClubMemberRoleType } from "@/generated/prisma";
 
@@ -16,6 +24,7 @@ interface PageProps {
     sort?: string;
     direction?: string;
     filter?: string;
+    debugMembers?: string;
   }>;
 }
 
@@ -71,7 +80,8 @@ const SortableHeader = ({ label, sortKey, currentSort, currentDirection, clubSlu
 
 export default async function Page({ params, searchParams }: PageProps) {
   const { clubSlug } = await params;
-  const { sort = "name", direction = "asc", filter } = await searchParams;
+  const { sort = "name", direction = "asc", filter, debugMembers } = await searchParams;
+  const isDebug = process.env.NODE_ENV === "development" || debugMembers === "1";
 
   let club;
   try {
@@ -85,12 +95,10 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin/medlemmer`);
 
-  const members = await getAdminMemberOverview(club.id, { 
-    sort, 
-    direction: direction as "asc" | "desc", 
-    filter 
-  });
-  const stats = await getAdminMemberStats(club.id);
+  const allMembers = await getAdminMemberRows(club.id);
+  const stats = getMemberAdminStats(allMembers);
+  const filtered = filterMembersForAdmin(allMembers, filter);
+  const members = sortMembersForAdmin(filtered, sort, direction as "asc" | "desc");
 
   const activeFilterDef = filter && filter in MEMBER_ADMIN_FILTERS 
     ? MEMBER_ADMIN_FILTERS[filter as MemberAdminFilterKey] 
@@ -118,11 +126,11 @@ export default async function Page({ params, searchParams }: PageProps) {
     { ...MEMBER_ADMIN_FILTERS.junior, value: stats.junior },
     { ...MEMBER_ADMIN_FILTERS.passive, value: stats.passive },
     { ...MEMBER_ADMIN_FILTERS.approved, value: stats.approved },
-    { ...MEMBER_ADMIN_FILTERS.not_approved, value: stats.notApproved },
+    { ...MEMBER_ADMIN_FILTERS.notApproved, value: stats.notApproved },
     { ...MEMBER_ADMIN_FILTERS.student, value: stats.student },
     { ...MEMBER_ADMIN_FILTERS.instructor, value: stats.instructors },
     { ...MEMBER_ADMIN_FILTERS.resigned, value: stats.resigned },
-    { ...MEMBER_ADMIN_FILTERS.under_creation, value: stats.new },
+    { ...MEMBER_ADMIN_FILTERS.creation, value: stats.creation },
   ];
 
   return (
@@ -203,6 +211,70 @@ export default async function Page({ params, searchParams }: PageProps) {
 
 
           </div>
+
+          {isDebug && (
+            <div className="mb-8 p-4 bg-black/50 border border-amber-500/50 rounded-xl font-mono text-xs overflow-auto max-h-[400px]">
+              <h3 className="text-amber-500 font-bold mb-2">DEBUG: Member Diagnostics</h3>
+              <div className="mb-4">
+                <p>Filter: {filter || 'none'}</p>
+                <p>Sort: {sort} ({direction})</p>
+                <p>Rows: {members.length}</p>
+                <details>
+                  <summary className="cursor-pointer text-sky-400">KPI Stats JSON</summary>
+                  <pre>{JSON.stringify(stats, null, 2)}</pre>
+                </details>
+              </div>
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-white/20">
+                    <th className="p-1">Name</th>
+                    <th className="p-1">Status (Raw)</th>
+                    <th className="p-1">Type (Raw)</th>
+                    <th className="p-1">School (Raw)</th>
+                    <th className="p-1">Instr</th>
+                    <th className="p-1">Flags</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {members.map(m => {
+                    const partial = {
+                      memberStatus: m.memberStatus as ClubMemberStatus,
+                      membershipType: m.membershipType as ClubMemberMembershipType,
+                      schoolStatus: m.schoolStatus as ClubMemberSchoolStatus,
+                      isInstructor: m.isInstructor
+                    };
+                    const isActive = partial.memberStatus === ClubMemberStatus.ACTIVE;
+                    const isNew = partial.memberStatus === ClubMemberStatus.NEW;
+                    const isResigned = partial.memberStatus === ClubMemberStatus.RESIGNED;
+                    
+                    return (
+                      <tr key={m.userId} className="border-b border-white/10">
+                        <td className="p-1">{m.displayName}</td>
+                        <td className="p-1">{m.memberStatus}</td>
+                        <td className="p-1">{m.membershipType}</td>
+                        <td className="p-1">{m.schoolStatus}</td>
+                        <td className="p-1">{m.isInstructor ? 'Y' : 'N'}</td>
+                        <td className="p-1">
+                          {[
+                            isActive && "ACT",
+                            isNew && "NEW",
+                            isResigned && "RES",
+                            (isActive && partial.membershipType === ClubMemberMembershipType.SENIOR) && "SNR",
+                            (isActive && partial.membershipType === ClubMemberMembershipType.JUNIOR) && "JNR",
+                            (isActive && partial.membershipType === ClubMemberMembershipType.PASSIVE) && "PAS",
+                            (isActive && partial.schoolStatus === ClubMemberSchoolStatus.APPROVED) && "APP",
+                            (isActive && partial.schoolStatus === ClubMemberSchoolStatus.STUDENT) && "STU",
+                            (isActive && partial.schoolStatus === ClubMemberSchoolStatus.NOT_APPROVED) && "NAPP",
+                            (isActive && partial.isInstructor) && "INS"
+                          ].filter(Boolean).join(', ')}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           <GlassCard>
             <div className="overflow-x-auto">
