@@ -42,6 +42,9 @@ model Club {
   forumThreads    ClubForumThread[]
   forumReplies    ClubForumReply[]
   homepageContent HomepageContent[]
+
+  flightSchoolPage      FlightSchoolPage?
+  flightSchoolDocuments FlightSchoolDocument[]
 }
 
 model PublicClubFooter {
@@ -156,6 +159,37 @@ model ArticleTagAssignment {
   tag     ArticleTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([articleId, tagId])
+}
+
+model FlightSchoolPage {
+  id          String   @id @default(cuid())
+  clubId      String   @unique
+  title       String
+  intro       String
+  contentHtml String
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+}
+
+model FlightSchoolDocument {
+  id          String   @id @default(cuid())
+  clubId      String
+  title       String
+  slug        String
+  excerpt     String?
+  contentHtml String
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+
+  @@unique([clubId, slug])
+  @@index([clubId, sortOrder])
 }
 
 model PublicHomeInfoCard {

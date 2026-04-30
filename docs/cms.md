@@ -17,6 +17,17 @@ The `PublicPage` model represents content pages that are visible to the public. 
 - `status`: `DRAFT` or `PUBLISHED`.
 - `createdAt` / `updatedAt`: Standard timestamps.
 
+### Flight School CMS
+
+The Flight School CMS is a tenant-scoped foundation for managing flyveskole-related content.
+
+- **FlightSchoolPage**: A single root page for the flight school per club. Contains a title, intro, and HTML content.
+- **FlightSchoolDocument**: Individual readable CMS content pages (not PDF uploads). These are treated as rich text pages suitable for web rendering and print.
+- **Tenant Scope**: Both models are strictly scoped to a `Club` via `clubId`.
+- **Slugs**: `FlightSchoolDocument` uses slugs for URL resolution (e.g., `/[clubSlug]/flyveskole/[documentSlug]`).
+- **Ordering**: Documents support a `sortOrder` for manual sequencing.
+- **Content**: Content is stored as clean rich text (HTML) suitable for both web and print.
+
 ### Multitenancy
 
 - All public content is scoped by `clubId`.

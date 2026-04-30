@@ -122,6 +122,14 @@ Tenant-scoped forum module for club members.
   - Category `notificationEmail` receives email on new threads and replies.
 - **Security**: Access is generally `MEMBERS_ONLY`.
 
+#### Flight School CMS
+Tenant-scoped foundation for managing flyveskole-related content.
+- **FlightSchoolPage**: A single root page for the flight school per club. Contains title, intro, and HTML content. Unique per `clubId`.
+- **FlightSchoolDocument**: Individual readable CMS content pages (not PDF uploads).
+  - **Slug**: Unique `clubId` + `slug` for URL resolution.
+  - **Ordering**: Supports `sortOrder` for manual sequencing.
+  - **Content**: Clean rich text (HTML) suitable for web rendering and print.
+
 > **Note**: Authentication (login, password management, etc.) is not yet implemented. The `User` model currently only serves as a profile and membership anchor.
 
 ### Environment Separation
