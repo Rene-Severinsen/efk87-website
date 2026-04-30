@@ -241,6 +241,67 @@
   color: var(--home-v2-muted);
 }
 
+.home-v2-participant-list {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--home-v2-line);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-v2-participant-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 14px;
+  gap: 12px;
+}
+
+.home-v2-participant-row:not(:last-child) {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--home-v2-line);
+}
+
+.home-v2-participant-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.home-v2-participant-name {
+  font-weight: 500;
+  color: var(--home-v2-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-v2-participant-note {
+  font-size: 13px;
+  color: var(--home-v2-muted);
+  font-style: italic;
+  word-break: break-word;
+}
+
+.home-v2-participant-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--home-v2-muted);
+  flex-shrink: 0;
+}
+
+.home-v2-participant-empty {
+  font-size: 14px;
+  color: var(--home-v2-muted);
+  text-align: center;
+  padding: 8px 0;
+}
+
 .home-v2-link-cyan {
   color: #7dd3fc;
   text-decoration: none;

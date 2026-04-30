@@ -3,7 +3,16 @@ import { HomepageContentVisibility, HomepageContent, HomepageContentSignup } fro
 import { ViewerVisibilityContext } from "../publicSite/publicVisibility";
 
 export type HomepageContentWithSignups = HomepageContent & {
-  signups: HomepageContentSignup[];
+  signups: (HomepageContentSignup & {
+    user: {
+      name: string | null;
+      email: string;
+      memberProfiles: {
+        firstName: string | null;
+        lastName: string | null;
+      }[];
+    };
+  })[];
   _count: {
     signups: number;
   };
@@ -49,6 +58,21 @@ export async function getActiveHomepageContentForClub(
       signups: {
         where: {
           cancelledAt: null
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+              memberProfiles: {
+                where: { clubId },
+                select: {
+                  firstName: true,
+                  lastName: true
+                }
+              }
+            }
+          }
         }
       },
       _count: {

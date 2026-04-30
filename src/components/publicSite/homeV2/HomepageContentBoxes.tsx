@@ -6,9 +6,10 @@ import { ServerViewerContext } from '../../../lib/auth/viewer';
 import { HomepageContentSignupMode } from '../../../generated/prisma';
 import { registerForHomepageContentAction, cancelOwnHomepageContentSignupAction } from '../../../lib/homepageContent/homepageContentActions';
 import './PublicClubHomePageV2.css';
-import { CheckCircle, LogIn, Users, Info } from 'lucide-react';
+import { CheckCircle, LogIn, Users, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import Link from 'next/link';
 import sanitizeHtml from 'sanitize-html';
+import { formatMemberName } from '../../../lib/members/memberHelpers';
 
 interface HomepageContentBoxesProps {
   clubSlug: string;
@@ -35,6 +36,7 @@ export default function HomepageContentBoxes({ clubSlug, contents, viewer }: Hom
 
 function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: HomepageContentWithSignups, viewer: ServerViewerContext }) {
   const [isUpdating, setIsUpdating] = React.useState(false);
+  const [isExpanded, setIsExpanded] = React.useState(false);
 
   const sanitizedBody = sanitizeHtml(content.bodyHtml, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'p', 'br']),
@@ -184,9 +186,46 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
               ) : <div />}
               
               {viewer.isAuthenticated && (viewer.isMember || viewer.isAdmin) && (
-                <Link href={`/${clubSlug}/forside-indhold/${content.id}/tilmeldinger`} className="home-v2-link-cyan">
-                  Se tilmeldinger
-                </Link>
+                <button 
+                  type="button"
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="home-v2-link-cyan"
+                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                >
+                  {isExpanded ? 'Skjul tilmeldinger' : 'Se tilmeldinger'}
+                  {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+              )}
+            </div>
+          )}
+
+          {isExpanded && viewer.isAuthenticated && (viewer.isMember || viewer.isAdmin) && (
+            <div className="home-v2-participant-list">
+              {content.signups.length > 0 ? (
+                content.signups.map((signup) => (
+                  <div key={signup.id} className="home-v2-participant-row">
+                    <div className="home-v2-participant-info">
+                      <div className="home-v2-participant-name">
+                        {formatMemberName(signup.user)}
+                      </div>
+                      {signup.note && (
+                        <div className="home-v2-participant-note">
+                          &quot;{signup.note}&quot;
+                        </div>
+                      )}
+                    </div>
+                    <div className="home-v2-participant-meta">
+                      {content.signupMode === HomepageContentSignupMode.QUANTITY && (
+                        <span style={{ fontWeight: 600 }}>{signup.quantity}</span>
+                      )}
+                      <span style={{ fontSize: '11px', opacity: 0.6 }}>
+                        {new Date(signup.createdAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="home-v2-participant-empty">Ingen tilmeldinger endnu.</div>
               )}
             </div>
           )}

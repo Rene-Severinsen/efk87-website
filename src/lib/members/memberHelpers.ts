@@ -1,4 +1,3 @@
-import { User, ClubMemberProfile } from "../../generated/prisma";
 
 /**
  * Formaterer et medlems navn baseret på profil og brugerdata.
@@ -9,7 +8,14 @@ import { User, ClubMemberProfile } from "../../generated/prisma";
  * 4. "Medlem"
  */
 export function formatMemberName(
-  user: User & { memberProfiles?: ClubMemberProfile[] }
+  user: {
+    name?: string | null;
+    email?: string | null;
+    memberProfiles?: {
+      firstName?: string | null;
+      lastName?: string | null;
+    }[];
+  }
 ): string {
   const profile = user.memberProfiles?.[0];
   
