@@ -115,6 +115,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             </p>
             <div className="home-v2-inline-actions">
               <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/jeg-flyver`}>Jeg flyver</Link>
+              <Link className="home-v2-pill" href={`/${club.slug}/bliv-medlem`}>Bliv medlem</Link>
               <a className="home-v2-pill" href="#">Åbn kalender</a>
               <a className="home-v2-pill" href="#">Gå til flyveskole</a>
               <a className="home-v2-pill" href="#">Upload billeder</a>

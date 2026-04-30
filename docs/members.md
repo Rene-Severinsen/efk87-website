@@ -8,14 +8,28 @@ We have separated access/authorization from profile data:
 
 1.  **ClubMembership**: Controls system access (ACTIVE, PENDING, etc.) and system roles (MEMBER, ADMIN, OWNER).
 2.  **ClubMemberProfile**: Stores member stamdata (name, address, contact, club-specific roles, etc.).
-3.  **ClubMemberCertificate**: Stores member certificates (A-certifikat, S-kontrollant, etc.).
-4.  **Medlemsnummer**: Every member has a unique `memberNumber` within their club. This is used as a payment reference and is separate from the MDK number.
+3.  **PublicMemberApplication**: Stores public membership applications for members who do not have a user account yet.
+4.  **ClubMemberCertificate**: Stores member certificates (A-certifikat, S-kontrollant, etc.).
+5.  **Medlemsnummer**: Every member has a unique `memberNumber` within their club. This is used as a payment reference and is separate from the MDK number.
+
+## Public Membership Applications
+
+Prospective members can apply via a public form at `/[clubSlug]/bliv-medlem`.
+- **No Login Required**: Users do not need an account to apply.
+- **Data Model**: Applications are stored in `PublicMemberApplication`.
+- **Status**: New applications default to `memberStatus = NEW` ("Under oprettelse") and `schoolStatus = STUDENT` ("Elev i flyveskolen").
+- **Automatic Medlemsnummer**: Assigned automatically at application time to reserve the next sequential number.
+- **Admin Visibility**: Applications appear in the Admin -> Medlemmer list but do not have a linked user account until approved (conversion to `ClubMemberProfile` is a future step).
+- **Validation**:
+  - Birth year vs Membership Type (Senior if >= 18 in current calendar year, else Junior).
+  - MDK nr. is required for Senior and Junior, optional for Passive.
+  - Basic duplicate check based on name, mobile, and birthdate.
 
 ## Medlemsnummer (Member Number)
 
-- **Uniqueness**: `memberNumber` is unique per club.
+- **Uniqueness**: `memberNumber` is unique per club across both members and pending applications.
 - **Payment Reference**: It is primarily used as a reference for kontingent payments.
-- **Automatic Assignment**: For new members, the system follows a max+1 logic (see `getNextMemberNumber` in `memberNumberService.ts`).
+- **Automatic Assignment**: For new members and applicants, the system follows a max+1 logic (see `getNextMemberNumber` in `memberNumberService.ts`).
 - **Read-only**: Once assigned, the `memberNumber` is system-managed and cannot be edited by administrators or members.
 - **Legacy Preservation**: When importing members from legacy systems, their existing `memberNumber` must be preserved.
 - **Separate from MDK**: This field is NOT the same as the MDK number and both can exist simultaneously.

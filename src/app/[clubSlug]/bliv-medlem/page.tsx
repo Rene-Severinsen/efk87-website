@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { resolvePublicPageForClub } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
-import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
+import { ThemedPageHeader } from "../../../components/publicSite/ThemedBuildingBlocks";
+import MemberApplicationForm from "./MemberApplicationForm";
 
 interface PageProps {
   params: Promise<{
@@ -12,11 +13,13 @@ interface PageProps {
 export default async function BlivMedlemPage({ params }: PageProps) {
   const { clubSlug } = await params;
   const pageSlug = "bliv-medlem";
-  const { club, page, theme, footerData, navigationItems, actionItems } = await resolvePublicPageForClub(clubSlug, pageSlug);
+  const { club, theme, footerData, navigationItems, actionItems } = await resolvePublicPageForClub(clubSlug, pageSlug);
 
-  if (!page) {
+  if (!club) {
     notFound();
   }
+
+  const proseText = "Udfyld formularen herunder, hvis du ønsker at blive medlem af EFK87. Når vi har modtaget din ansøgning, gennemgår vi oplysningerne og kontakter dig med næste skridt. Har du spørgsmål, er du altid velkommen til at kontakte klubben.";
 
   return (
     <ThemedClubPageShell
@@ -27,16 +30,17 @@ export default async function BlivMedlemPage({ params }: PageProps) {
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}
-      title={page.title}
+      title="Bliv medlem"
       currentPath={`/${clubSlug}/bliv-medlem`}
     >
-      <ThemedSectionCard>
-        <div className="prose prose-invert max-w-none">
-          <p className="text-lg opacity-90 leading-relaxed">
-            {page.body}
-          </p>
-        </div>
-      </ThemedSectionCard>
+      <div className="max-w-3xl mx-auto">
+        <ThemedPageHeader 
+          title={`Bliv medlem af ${club.settings?.shortName || club.name}`}
+          subtitle={proseText}
+        />
+        
+        <MemberApplicationForm clubSlug={clubSlug} />
+      </div>
     </ThemedClubPageShell>
   );
 }

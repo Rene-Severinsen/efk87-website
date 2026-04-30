@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import './PublicClubHomePage.css';
 import { ThemedTopBar } from './ThemedTopBar';
 import { ClubTheme, PublicHomeFeatureTile, PublicHomeInfoCard, PublicClubFooter, PublicSponsor } from "../../generated/prisma";
@@ -116,8 +117,8 @@ export default function PublicClubHomePage({
             <h1>{heroTitle}</h1>
             <p className="hero-copy">{heroSubtitle}</p>
             <div className="hero-actions">
-              <a className="pill primary" href="#">Jeg flyver i dag</a>
-              <a className="pill" href="#">Bliv medlem</a>
+              <Link className="pill primary" href={`/${clubSlug}/jeg-flyver`}>Jeg flyver i dag</Link>
+              <Link className="pill" href={`/${clubSlug}/bliv-medlem`}>Bliv medlem</Link>
               <a className="pill" href="#">Se flyveskolen</a>
               <a className="pill" href="#">Åbn galleri</a>
             </div>

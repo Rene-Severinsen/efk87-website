@@ -104,19 +104,23 @@ export default async function Page({ params, searchParams }: PageProps) {
     ? MEMBER_ADMIN_FILTERS[filter as MemberAdminFilterKey] 
     : null;
 
-  const getRoleLabel = (r: string) => {
+  const getRoleLabel = (r: string | null) => {
+    if (!r) return "—";
     return ROLE_TYPE_LABELS[r as ClubMemberRoleType] || r;
   };
 
-  const getStatusLabel = (s: string) => {
+  const getStatusLabel = (s: string | null) => {
+    if (!s) return "—";
     return MEMBER_STATUS_LABELS[s as ClubMemberStatus] || s;
   };
 
-  const getMembershipLabel = (m: string) => {
+  const getMembershipLabel = (m: string | null) => {
+    if (!m) return "—";
     return MEMBERSHIP_TYPE_LABELS[m as ClubMemberMembershipType] || m;
   };
 
-  const getSchoolStatusLabel = (s: string) => {
+  const getSchoolStatusLabel = (s: string | null) => {
+    if (!s) return "—";
     return SCHOOL_STATUS_LABELS[s as ClubMemberSchoolStatus] || s;
   };
 
@@ -248,7 +252,7 @@ export default async function Page({ params, searchParams }: PageProps) {
                     const isResigned = partial.memberStatus === ClubMemberStatus.RESIGNED;
                     
                     return (
-                      <tr key={m.userId} className="border-b border-white/10">
+                      <tr key={m.id} className="border-b border-white/10">
                         <td className="p-1">{m.displayName}</td>
                         <td className="p-1">{m.memberStatus}</td>
                         <td className="p-1">{m.membershipType}</td>
@@ -259,14 +263,9 @@ export default async function Page({ params, searchParams }: PageProps) {
                             isActive && "ACT",
                             isNew && "NEW",
                             isResigned && "RES",
-                            (isActive && partial.membershipType === ClubMemberMembershipType.SENIOR) && "SNR",
-                            (isActive && partial.membershipType === ClubMemberMembershipType.JUNIOR) && "JNR",
-                            (isActive && partial.membershipType === ClubMemberMembershipType.PASSIVE) && "PAS",
-                            (isActive && partial.schoolStatus === ClubMemberSchoolStatus.APPROVED) && "APP",
-                            (isActive && partial.schoolStatus === ClubMemberSchoolStatus.STUDENT) && "STU",
-                            (isActive && partial.schoolStatus === ClubMemberSchoolStatus.NOT_APPROVED) && "NAPP",
-                            (isActive && partial.isInstructor) && "INS"
-                          ].filter(Boolean).join(', ')}
+                            m.userId ? "HAS_USER" : "NO_USER",
+                            m.applicationId ? "IS_APP" : "NOT_APP"
+                          ].filter(Boolean).join(", ")}
                         </td>
                       </tr>
                     );
@@ -295,10 +294,10 @@ export default async function Page({ params, searchParams }: PageProps) {
                 </thead>
                 <tbody className="divide-y divide-white/5">
                   {members.map((member) => (
-                    <tr key={member.userId} className="hover:bg-white/[0.02] transition-colors group">
+                    <tr key={member.id} className="hover:bg-white/[0.02] transition-colors group">
                       <td className="px-6 py-4">
                         <div className="font-bold text-white group-hover:text-sky-400 transition-colors">{member.displayName}</div>
-                        <div className="text-sm text-slate-500">{member.email}</div>
+                        <div className="text-sm text-slate-500">{member.email || member.mobilePhone || "Intet medlemsinfo"}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-slate-300 font-mono text-sm">{member.memberNumber || '—'}</div>
@@ -342,12 +341,16 @@ export default async function Page({ params, searchParams }: PageProps) {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <Link 
-                          href={`/${clubSlug}/admin/medlemmer/${member.userId}/rediger`}
-                          className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-sm font-semibold transition-all border border-white/5 hover:border-white/10"
-                        >
-                          Rediger
-                        </Link>
+                        {member.userId ? (
+                          <Link 
+                            href={`/${clubSlug}/admin/medlemmer/${member.userId}/rediger`}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 transition-all text-sm font-semibold"
+                          >
+                            Rediger
+                          </Link>
+                        ) : (
+                          <span className="text-xs text-slate-500 italic px-4 py-2">Ansøgning</span>
+                        )}
                       </td>
                     </tr>
                   ))}

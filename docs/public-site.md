@@ -189,13 +189,14 @@ Reusable small themed components for consistent internal page styling:
   - `/[clubSlug]/galleri`: Galleri (PublicPage content stub)
   - `/[clubSlug]/artikler`: Artikler (PublicPage content stub)
   - `/[clubSlug]/flyveskole`: Flyveskole (PublicPage content stub)
-  - `/[clubSlug]/bliv-medlem`: Bliv medlem (PublicPage content stub)
+  - `/[clubSlug]/bliv-medlem`: Bliv medlem (Public membership application form)
   - `/[clubSlug]/jeg-flyver/liste`: Jeg flyver (Full today list)
   - `/[clubSlug]/login`: Log ind (Placeholder only, no auth implementation)
   - `/[clubSlug]/kalender/[entryId]`: Kalenderindslag (Public detail page)
 
 ### Public Route Details
-- **Content Stubs**: Galleri, Artikler, Flyveskole, and Bliv medlem use the `PublicPage` model via `publicPageService`. They currently contain seed content for EFK87 and serve as visual/structural stubs.
+- **Content Stubs**: Galleri, Artikler, and Flyveskole use the `PublicPage` model via `publicPageService`. They currently contain seed content for EFK87 and serve as visual/structural stubs.
+- **Bliv medlem**: Implements a functional membership application form that saves to `PublicMemberApplication`.
 - **Login Placeholder**: The login page is a visual placeholder only. It does not implement real authentication, session handling, or form fields. A code comment indicates that auth/session handling is intentionally skipped in this scope.
 - **Member-only Areas**: Forum (`/[clubSlug]/forum`) and My Profile (`/[clubSlug]/profil`) are intended for members only and are hidden from anonymous visitors in the navigation.
 - **Scope Limitations**:

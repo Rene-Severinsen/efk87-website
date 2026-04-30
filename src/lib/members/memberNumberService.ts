@@ -13,7 +13,7 @@ import prisma from "@/lib/db/prisma";
  * @returns The next available member number
  */
 export async function getNextMemberNumber(clubId: string): Promise<number> {
-  const result = await prisma.clubMemberProfile.aggregate({
+  const profileResult = await prisma.clubMemberProfile.aggregate({
     where: {
       clubId,
     },
@@ -22,9 +22,33 @@ export async function getNextMemberNumber(clubId: string): Promise<number> {
     },
   });
 
-  const maxNumber = result._max.memberNumber;
+  const applicationResult = await prisma.publicMemberApplication.aggregate({
+    where: {
+      clubId,
+    },
+    _max: {
+      memberNumber: true,
+    },
+  });
 
-  if (maxNumber === null) {
+  const maxProfile = profileResult._max.memberNumber ?? 0;
+  const maxApplication = applicationResult._max.memberNumber ?? 0;
+
+  const maxNumber = Math.max(maxProfile, maxApplication);
+
+  if (maxNumber === 0) {
+    // Check if any record actually has 0 or if both were null
+    const hasProfile = await prisma.clubMemberProfile.count({ where: { clubId, memberNumber: 0 } });
+    const hasApp = await prisma.publicMemberApplication.count({ where: { clubId, memberNumber: 0 } });
+    if (hasProfile === 0 && hasApp === 0 && maxProfile === 0 && maxApplication === 0) {
+       // if we got 0 it might be because they are all null, or because some are 0.
+       // aggregate _max returns null if no rows or all null. 
+       // If we get null for both, maxNumber is 0.
+       // We should return 1.
+    }
+  }
+
+  if (profileResult._max.memberNumber === null && applicationResult._max.memberNumber === null) {
     return 1;
   }
 

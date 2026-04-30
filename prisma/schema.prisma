@@ -36,6 +36,7 @@ model Club {
   articleTags   ArticleTag[]
   memberProfiles ClubMemberProfile[]
   memberCertificates ClubMemberCertificate[]
+  memberApplications PublicMemberApplication[]
   calendarEntries ClubCalendarEntry[]
   forumCategories ClubForumCategory[]
   forumThreads    ClubForumThread[]
@@ -744,4 +745,28 @@ model ClubMemberCertificate {
 
   @@unique([clubId, userId, certificateType])
   @@index([clubId, certificateType])
+}
+
+model PublicMemberApplication {
+  id              String                  @id @default(cuid())
+  clubId          String
+  firstName       String
+  lastName        String
+  address         String
+  postalCode      String
+  city            String
+  mobilePhone     String
+  birthDate       DateTime
+  membershipType  ClubMemberMembershipType
+  mdkNumber       String?
+  memberNumber    Int?
+  status          ClubMemberStatus         @default(NEW)
+  schoolStatus    ClubMemberSchoolStatus   @default(STUDENT)
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+
+  @@index([clubId, status])
+  @@index([clubId, createdAt])
 }

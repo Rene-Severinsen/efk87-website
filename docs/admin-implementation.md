@@ -94,9 +94,10 @@ Located in `src/components/admin/`:
   - `src/lib/admin/memberCreateActions.ts` (Create)
 - **Capabilities**: 
   - Statistics dashboard for member statuses and roles.
-  - Comprehensive member list.
+  - Comprehensive member list including both active members and public applications.
   - Member creation with automatic `memberNumber` assignment.
   - MDK nummer validation: Required for `SENIOR` and `JUNIOR` membership types during creation. Optional for `PASSIVE`.
+  - Public Applications: New applications from the public "Bliv medlem" form appear in the list with status `Under oprettelse`. They do not have a linked user account yet.
   - Full profile editing (stamdata, contact info, membership type).
   - Medlemsnummer: Management of club-specific member numbers used as payment references. Unique per club. System-managed (read-only) once assigned.
   - Instructor status: Marking a member as "Instruktør" enables their public visibility on the club's instructor contact page.

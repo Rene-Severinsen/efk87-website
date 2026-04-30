@@ -13,16 +13,18 @@ import {
 } from "./members/memberAdminFilters";
 
 export interface AdminMemberOverviewDTO {
-  userId: string;
+  id: string; // Internal unique ID (userId or applicationId)
+  userId: string | null;
+  applicationId: string | null;
   displayName: string | null;
-  email: string;
+  email: string | null;
   firstName: string | null;
   lastName: string | null;
   mobilePhone: string | null;
   memberNumber: number | null;
   mdkNumber: string | null;
   membershipType: ClubMemberMembershipType;
-  memberRoleType: ClubMemberRoleType;
+  memberRoleType: ClubMemberRoleType | null;
   schoolStatus: ClubMemberSchoolStatus;
   memberStatus: ClubMemberStatus;
   isInstructor: boolean;
@@ -63,7 +65,7 @@ export async function getAdminMemberOverview(
 }
 
 export async function getAdminMemberRows(clubId: string): Promise<AdminMemberOverviewDTO[]> {
-  const members = await prisma.clubMemberProfile.findMany({
+  const profiles = await prisma.clubMemberProfile.findMany({
     where: { clubId },
     include: {
       user: {
@@ -73,6 +75,10 @@ export async function getAdminMemberRows(clubId: string): Promise<AdminMemberOve
         },
       },
     },
+  });
+
+  const applications = await prisma.publicMemberApplication.findMany({
+    where: { clubId },
   });
 
   const certificateCounts = await prisma.clubMemberCertificate.groupBy({
@@ -85,8 +91,10 @@ export async function getAdminMemberRows(clubId: string): Promise<AdminMemberOve
 
   const countMap = new Map(certificateCounts.map((c) => [c.userId, c._count.id]));
 
-  return members.map((m) => ({
+  const profileDTOs: AdminMemberOverviewDTO[] = profiles.map((m) => ({
+    id: m.userId,
     userId: m.userId,
+    applicationId: null,
     displayName: getMemberDisplayName(m, m.user),
     email: m.user.email,
     firstName: m.firstName,
@@ -102,6 +110,28 @@ export async function getAdminMemberRows(clubId: string): Promise<AdminMemberOve
     certificateCount: countMap.get(m.userId) || 0,
     updatedAt: m.updatedAt,
   }));
+
+  const applicationDTOs: AdminMemberOverviewDTO[] = applications.map((a) => ({
+    id: a.id,
+    userId: null,
+    applicationId: a.id,
+    displayName: `${a.firstName} ${a.lastName}`,
+    email: null,
+    firstName: a.firstName,
+    lastName: a.lastName,
+    mobilePhone: a.mobilePhone,
+    memberNumber: a.memberNumber,
+    mdkNumber: a.mdkNumber,
+    membershipType: a.membershipType,
+    memberRoleType: null,
+    schoolStatus: a.schoolStatus,
+    memberStatus: a.status,
+    isInstructor: false,
+    certificateCount: 0,
+    updatedAt: a.updatedAt,
+  }));
+
+  return [...profileDTOs, ...applicationDTOs];
 }
 
 export async function getAdminMemberByUserId(clubId: string, userId: string) {
