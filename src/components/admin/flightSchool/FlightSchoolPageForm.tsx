@@ -3,18 +3,13 @@
 import React, { useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { upsertFlightSchoolPageAction } from "../../../lib/admin/flightSchoolActions";
+import { formatAdminDateTime } from "../../../lib/format/adminDateFormat";
+import { FlightSchoolPage } from "../../../generated/prisma";
 
 const ArticleRichTextEditor = dynamic(() => import("../articles/ArticleRichTextEditor"), {
   ssr: false,
   loading: () => <div className="h-64 bg-white/5 animate-pulse rounded-lg" />,
 });
-
-interface FlightSchoolPage {
-  title: string;
-  intro: string;
-  contentHtml: string;
-  isPublished: boolean;
-}
 
 interface FlightSchoolPageFormProps {
   clubSlug: string;
@@ -114,7 +109,12 @@ const FlightSchoolPageForm: React.FC<FlightSchoolPageFormProps> = ({
         </div>
       )}
 
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-slate-400">
+          {initialData?.updatedAt && (
+            <span>Sidst ændret: {formatAdminDateTime(initialData.updatedAt)}</span>
+          )}
+        </div>
         <button
           type="submit"
           disabled={isPending}

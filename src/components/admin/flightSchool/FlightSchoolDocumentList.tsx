@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { FlightSchoolDocument } from "../../../generated/prisma";
 import FlightSchoolDocumentForm from "./FlightSchoolDocumentForm";
 import { deleteFlightSchoolDocumentAction } from "../../../lib/admin/flightSchoolActions";
+import { formatAdminDateTime } from "../../../lib/format/adminDateFormat";
 
 interface FlightSchoolDocumentListProps {
   clubSlug: string;
@@ -87,24 +88,25 @@ const FlightSchoolDocumentList: React.FC<FlightSchoolDocumentListProps> = ({
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Sortering</th>
-                <th>Titel</th>
-                <th>Slug</th>
-                <th>Status</th>
-                <th className="text-right">Handlinger</th>
+                <th className="w-[100px]">Sortering</th>
+                <th className="min-w-[200px]">Titel</th>
+                <th className="min-w-[200px]">Slug</th>
+                <th className="w-[120px]">Status</th>
+                <th className="w-[180px]">Sidst ændret</th>
+                <th className="text-right w-[180px] whitespace-nowrap">Handlinger</th>
               </tr>
             </thead>
             <tbody>
               {documents.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-8 text-slate-400">
+                  <td colSpan={6} className="text-center py-8 text-slate-400">
                     Ingen elevdokumenter fundet.
                   </td>
                 </tr>
               ) : (
                 documents.map((doc) => (
                   <tr key={doc.id}>
-                    <td className="w-20">{doc.sortOrder}</td>
+                    <td>{doc.sortOrder}</td>
                     <td className="font-medium">{doc.title}</td>
                     <td className="text-slate-400">{doc.slug}</td>
                     <td>
@@ -114,17 +116,20 @@ const FlightSchoolDocumentList: React.FC<FlightSchoolDocumentListProps> = ({
                         <span className="admin-badge admin-badge-warning">Kladde</span>
                       )}
                     </td>
+                    <td className="text-slate-400 text-sm">
+                      {formatAdminDateTime(doc.updatedAt)}
+                    </td>
                     <td className="text-right">
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => setEditingDocument(doc)}
-                          className="admin-btn admin-btn-ghost text-sky-400"
+                          className="admin-btn admin-btn-ghost text-sky-400 px-2 py-1 text-sm whitespace-nowrap"
                         >
                           Rediger
                         </button>
                         <button
                           onClick={() => handleDelete(doc.id)}
-                          className="admin-btn admin-btn-ghost text-red-400"
+                          className="admin-btn admin-btn-ghost text-red-400 px-2 py-1 text-sm whitespace-nowrap"
                         >
                           Slet
                         </button>

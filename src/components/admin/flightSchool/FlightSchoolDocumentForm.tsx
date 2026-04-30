@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { createFlightSchoolDocumentAction, updateFlightSchoolDocumentAction } from "../../../lib/admin/flightSchoolActions";
 import { normalizeSlug } from "../../../lib/slug/normalizeSlug";
 import { FlightSchoolDocument } from "../../../generated/prisma";
+import { formatAdminDateTime } from "../../../lib/format/adminDateFormat";
 
 const ArticleRichTextEditor = dynamic(() => import("../articles/ArticleRichTextEditor"), {
   ssr: false,
@@ -175,8 +176,13 @@ const FlightSchoolDocumentForm: React.FC<FlightSchoolDocumentFormProps> = ({
           {error}
         </div>
       )}
-
-      <div className="flex justify-end">
+      
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-slate-400">
+          {initialData?.updatedAt && (
+            <span>Sidst ændret: {formatAdminDateTime(initialData.updatedAt)}</span>
+          )}
+        </div>
         <button
           type="submit"
           disabled={isPending}
