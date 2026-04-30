@@ -181,7 +181,7 @@ const FlightSchoolCalendarTab: React.FC<FlightSchoolCalendarTabProps> = ({
                                       )}
                                     </div>
                                     <div className="space-y-2">
-                                      <div className="text-[11px] text-slate-400 uppercase font-bold tracking-tight">Bookinger ({slot.bookings.filter((b) => b.status === "BOOKED").length}/{slot.capacity})</div>
+                                      <div className="text-[11px] text-slate-400 uppercase font-bold tracking-tight">Bookinger</div>
                                       {slot.bookings.filter((b) => b.status === "BOOKED").length === 0 ? (
                                         <div className="text-xs text-slate-500">Ingen bookinger endnu</div>
                                       ) : (

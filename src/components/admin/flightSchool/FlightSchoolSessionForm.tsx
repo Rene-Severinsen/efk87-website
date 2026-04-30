@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Save, Plus, Clock, Calendar as CalendarIcon, Info, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { X, Save, Plus, Clock, Calendar as CalendarIcon, Info, Trash2, Power, PowerOff } from "lucide-react";
 import { createSessionAction, updateSessionAction, createTimeSlotAction, updateTimeSlotAction, deactivateTimeSlotAction } from "../../../lib/admin/flightSchoolSessionActions";
 import { FlightSchoolSessionStatus, FlightSchoolSession, FlightSchoolTimeSlot, FlightSchoolBooking, ClubMemberProfile } from "../../../generated/prisma";
 
@@ -31,7 +32,6 @@ interface LocalTimeSlot {
   id: string; // Temporary ID for new slots (e.g., 'new-1'), real ID for existing
   startsAt: string; // HH:mm
   endsAt: string; // HH:mm
-  capacity: number;
   isActive: boolean;
   isNew: boolean;
   bookingCount: number;
@@ -43,6 +43,7 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
   instructors,
   onClose,
 }) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,7 +63,6 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
         id: slot.id,
         startsAt: new Date(slot.startsAt).toTimeString().substring(0, 5),
         endsAt: slot.endsAt ? new Date(slot.endsAt).toTimeString().substring(0, 5) : "",
-        capacity: slot.capacity,
         isActive: slot.isActive,
         isNew: false,
         bookingCount: slot.bookings.filter(b => b.status === 'BOOKED').length
@@ -75,9 +75,18 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
     setError(null);
 
     try {
+      if (!date) throw new Error("Dato er påkrævet");
+      if (!startsAt) throw new Error("Session starttid er påkrævet");
+      if (!endsAt) throw new Error("Session sluttid er påkrævet");
+      if (!instructorId) throw new Error("Instruktør er påkrævet");
+
       const sessionDate = new Date(date);
       const startDateTime = new Date(`${date}T${startsAt}`);
       const endDateTime = new Date(`${date}T${endsAt}`);
+
+      if (isNaN(sessionDate.getTime())) throw new Error("Ugyldig dato");
+      if (isNaN(startDateTime.getTime())) throw new Error("Ugyldig starttid");
+      if (isNaN(endDateTime.getTime())) throw new Error("Ugyldig sluttid");
 
       const sessionData = {
         date: sessionDate,
@@ -102,10 +111,18 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
       // Save all slots
       for (let i = 0; i < slots.length; i++) {
         const slot = slots[i];
+        if (!slot.startsAt) throw new Error(`Starttid mangler for tidsrum ${i + 1}`);
+        
+        const slotStart = new Date(`${date}T${slot.startsAt}`);
+        const slotEnd = slot.endsAt ? new Date(`${date}T${slot.endsAt}`) : null;
+
+        if (isNaN(slotStart.getTime())) throw new Error(`Ugyldig starttid for tidsrum ${i + 1}`);
+        if (slotEnd && isNaN(slotEnd.getTime())) throw new Error(`Ugyldig sluttid for tidsrum ${i + 1}`);
+
         const slotData = {
-          startsAt: new Date(`${date}T${slot.startsAt}`),
-          endsAt: slot.endsAt ? new Date(`${date}T${slot.endsAt}`) : null,
-          capacity: slot.capacity,
+          startsAt: slotStart,
+          endsAt: slotEnd,
+          capacity: 1,
           isActive: slot.isActive,
           sortOrder: i,
         };
@@ -134,7 +151,7 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
       }
 
       onClose();
-      window.location.reload(); // To refresh the calendar view
+      router.refresh();
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message || "Der skete en fejl");
@@ -169,7 +186,6 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
       id: `new-${Date.now()}`,
       startsAt: lastEnd,
       endsAt: nextEnd,
-      capacity: 1,
       isActive: true,
       isNew: true,
       bookingCount: 0
@@ -313,13 +329,13 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
                     <div className="hidden md:grid md:grid-cols-12 gap-4 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
                       <div className="col-span-3">Start</div>
                       <div className="col-span-3">Slut</div>
-                      <div className="col-span-2 text-center">Kapacitet</div>
+                      <div className="col-span-2 text-center">Aktiv</div>
                       <div className="col-span-2 text-center">Status</div>
                       <div className="col-span-2 text-right">Handlinger</div>
                     </div>
 
                     {slots.map((slot) => (
-                      <div key={slot.id} className={`p-4 rounded-xl border transition-all ${slot.isActive ? 'bg-white/5 border-white/10' : 'bg-rose-500/5 border-rose-500/20 opacity-80'}`}>
+                      <div key={slot.id} className={`p-3 rounded-xl border transition-all ${slot.isActive ? 'bg-white/5 border-white/10' : 'bg-rose-500/5 border-rose-500/20 opacity-80'}`}>
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                           <div className="col-span-3">
                             <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Start</label>
@@ -339,40 +355,41 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
                               className="w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-sky-500 transition-colors"
                             />
                           </div>
-                          <div className="col-span-2">
-                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Kapacitet</label>
-                            <input
-                              type="number"
-                              min="1"
-                              value={slot.capacity}
-                              onChange={(e) => updateLocalSlot(slot.id, { capacity: parseInt(e.target.value) || 1 })}
-                              className="w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white text-center focus:outline-none focus:border-sky-500 transition-colors"
-                            />
-                          </div>
                           <div className="col-span-2 flex justify-center">
-                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Status</label>
+                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Aktiv</label>
                             <button
                               type="button"
                               onClick={() => updateLocalSlot(slot.id, { isActive: !slot.isActive })}
-                              className={`text-[10px] px-3 py-1 rounded-full border font-bold transition-all uppercase tracking-wider ${
+                              className={`p-1.5 rounded-lg border transition-all ${
                                   slot.isActive 
                                   ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20' 
                                   : 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20'
                               }`}
+                              title={slot.isActive ? 'Deaktiver' : 'Aktiver'}
                             >
-                              {slot.isActive ? 'Aktiv' : 'Inaktiv'}
+                              {slot.isActive ? <Power className="w-4 h-4" /> : <PowerOff className="w-4 h-4" />}
                             </button>
                           </div>
-                          <div className="col-span-2 flex justify-end items-center gap-3">
-                            <div className="text-right">
-                              <div className="text-[10px] text-slate-500 uppercase font-bold leading-none">Bookinger</div>
-                              <div className="text-sm font-bold text-white">{slot.bookingCount}</div>
+                          <div className="col-span-2 text-center">
+                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Status</label>
+                            <div className="flex flex-col items-center">
+                              <span className={`text-[10px] font-bold uppercase ${slot.bookingCount > 0 ? 'text-emerald-400' : 'text-slate-500'}`}>
+                                {slot.bookingCount > 0 ? 'Booket' : 'Ledig'}
+                              </span>
                             </div>
+                          </div>
+                          <div className="col-span-2 flex justify-end items-center gap-2">
                             <button
                               type="button"
-                              onClick={() => removeLocalSlot(slot.id)}
+                              onClick={() => {
+                                if (slot.isNew || slot.bookingCount === 0) {
+                                  removeLocalSlot(slot.id);
+                                } else {
+                                  updateLocalSlot(slot.id, { isActive: false });
+                                }
+                              }}
                               className="p-2 text-slate-500 hover:text-rose-400 transition-colors"
-                              title="Fjern tidsrum"
+                              title={slot.isNew || slot.bookingCount === 0 ? "Fjern" : "Deaktiver (pga. booking)"}
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>

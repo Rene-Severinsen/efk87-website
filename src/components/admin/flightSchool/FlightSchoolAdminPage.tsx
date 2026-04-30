@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import FlightSchoolPageForm from "./FlightSchoolPageForm";
 import FlightSchoolDocumentList from "./FlightSchoolDocumentList";
 import InstructorsPanel from "./InstructorsPanel";
@@ -41,7 +42,24 @@ const FlightSchoolAdminPage: React.FC<FlightSchoolAdminPageProps> = ({
   instructors,
   sessions,
 }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  
   const [activeTab, setActiveTab] = useState<"content" | "documents" | "calendar">("content");
+
+  useEffect(() => {
+    if (tabParam === "content" || tabParam === "documents" || tabParam === "calendar") {
+      setActiveTab(tabParam);
+    }
+  }, [tabParam]);
+
+  const handleTabChange = (tab: "content" | "documents" | "calendar") => {
+    setActiveTab(tab);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", tab);
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
 
   return (
     <div className="py-8">
@@ -54,7 +72,7 @@ const FlightSchoolAdminPage: React.FC<FlightSchoolAdminPageProps> = ({
 
       <div className="flex gap-1 p-1 bg-white/5 rounded-xl mb-8 w-full">
         <button
-          onClick={() => setActiveTab("content")}
+          onClick={() => handleTabChange("content")}
           className={`flex-1 px-6 py-2 rounded-lg font-medium transition-all ${
             activeTab === "content"
               ? "bg-sky-500 text-white shadow-lg shadow-sky-500/20"
@@ -64,7 +82,7 @@ const FlightSchoolAdminPage: React.FC<FlightSchoolAdminPageProps> = ({
           Sideindhold
         </button>
         <button
-          onClick={() => setActiveTab("documents")}
+          onClick={() => handleTabChange("documents")}
           className={`flex-1 px-6 py-2 rounded-lg font-medium transition-all ${
             activeTab === "documents"
               ? "bg-sky-500 text-white shadow-lg shadow-sky-500/20"
@@ -74,7 +92,7 @@ const FlightSchoolAdminPage: React.FC<FlightSchoolAdminPageProps> = ({
           Elevdokumenter
         </button>
         <button
-          onClick={() => setActiveTab("calendar")}
+          onClick={() => handleTabChange("calendar")}
           className={`flex-1 px-6 py-2 rounded-lg font-medium transition-all ${
             activeTab === "calendar"
               ? "bg-sky-500 text-white shadow-lg shadow-sky-500/20"

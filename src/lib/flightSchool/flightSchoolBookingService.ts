@@ -240,7 +240,7 @@ export async function bookSlot(clubId: string, memberProfileId: string, slotId: 
       flightSchoolTimeSlotId: slotId,
       memberProfileId,
       status: FlightSchoolBookingStatus.BOOKED
-    }
+    } as Prisma.FlightSchoolBookingUncheckedCreateInput
   });
 
   // 31. TODO: Add notification service seam here for later instructor notification
