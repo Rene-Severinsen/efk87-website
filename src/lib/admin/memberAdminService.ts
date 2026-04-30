@@ -1,7 +1,7 @@
 import { Prisma } from "@/generated/prisma";
 import prisma from "../db/prisma";
 import { getMemberDisplayName } from "../members/memberUtils";
-import { MemberFilterKey, MEMBER_FILTER_DEFINITIONS } from "./memberAdminFilters";
+import { MemberAdminFilterKey, MEMBER_ADMIN_FILTERS } from "./members/memberAdminFilters";
 
 export interface AdminMemberOverviewDTO {
   userId: string;
@@ -47,8 +47,8 @@ export async function getAdminMemberOverview(
 
   const where: Prisma.ClubMemberProfileWhereInput = { clubId };
 
-  if (filter && filter in MEMBER_FILTER_DEFINITIONS) {
-    const filterDef = MEMBER_FILTER_DEFINITIONS[filter as MemberFilterKey];
+  if (filter && filter in MEMBER_ADMIN_FILTERS) {
+    const filterDef = MEMBER_ADMIN_FILTERS[filter as MemberAdminFilterKey];
     Object.assign(where, filterDef.where);
   }
 
@@ -194,16 +194,16 @@ export async function getAdminMemberStats(clubId: string): Promise<AdminMemberSt
     notApproved,
     instructors
   ] = await Promise.all([
-    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.active.where } }),
-    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.under_creation.where } }),
-    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.resigned.where } }),
-    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.senior.where } }),
-    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.junior.where } }),
-    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.passive.where } }),
-    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.approved.where } }),
-    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.student.where } }),
-    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.not_approved.where } }),
-    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_FILTER_DEFINITIONS.instructor.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_ADMIN_FILTERS.active.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_ADMIN_FILTERS.under_creation.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_ADMIN_FILTERS.resigned.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_ADMIN_FILTERS.senior.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_ADMIN_FILTERS.junior.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_ADMIN_FILTERS.passive.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_ADMIN_FILTERS.approved.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_ADMIN_FILTERS.student.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_ADMIN_FILTERS.not_approved.where } }),
+    prisma.clubMemberProfile.count({ where: { clubId, ...MEMBER_ADMIN_FILTERS.instructor.where } }),
   ]);
 
   return {

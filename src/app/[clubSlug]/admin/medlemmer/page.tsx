@@ -4,7 +4,9 @@ import { requireClubAdminForClub } from "@/lib/auth/adminAccessGuards";
 import AdminShell from "@/components/admin/AdminShell";
 import Link from "next/link";
 import { getAdminMemberOverview, getAdminMemberStats } from "@/lib/admin/memberAdminService";
-import { MEMBER_FILTER_DEFINITIONS, MemberFilterKey } from "@/lib/admin/memberAdminFilters";
+import { MEMBER_ADMIN_FILTERS, MemberAdminFilterKey } from "@/lib/admin/members/memberAdminFilters";
+import { MEMBERSHIP_TYPE_LABELS, SCHOOL_STATUS_LABELS, MEMBER_STATUS_LABELS, ROLE_TYPE_LABELS } from "@/lib/members/memberConstants";
+import { ClubMemberMembershipType, ClubMemberSchoolStatus, ClubMemberStatus, ClubMemberRoleType } from "@/generated/prisma";
 
 interface PageProps {
   params: Promise<{
@@ -90,60 +92,37 @@ export default async function Page({ params, searchParams }: PageProps) {
   });
   const stats = await getAdminMemberStats(club.id);
 
-  const activeFilterDef = filter && filter in MEMBER_FILTER_DEFINITIONS 
-    ? MEMBER_FILTER_DEFINITIONS[filter as MemberFilterKey] 
+  const activeFilterDef = filter && filter in MEMBER_ADMIN_FILTERS 
+    ? MEMBER_ADMIN_FILTERS[filter as MemberAdminFilterKey] 
     : null;
 
   const getRoleLabel = (r: string) => {
-    switch (r) {
-      case 'REGULAR': return 'Almindelig';
-      case 'BOARD_MEMBER': return 'Bestyrelsesmedlem';
-      case 'BOARD_SUPPLEANT': return 'Bestyrelsessuppleant';
-      case 'TREASURER': return 'Kasserer';
-      case 'CHAIRMAN': return 'Formand';
-      case 'VICE_CHAIRMAN': return 'Næstformand';
-      default: return r;
-    }
+    return ROLE_TYPE_LABELS[r as ClubMemberRoleType] || r;
   };
 
   const getStatusLabel = (s: string) => {
-    switch (s) {
-      case 'ACTIVE': return 'Aktiv';
-      case 'RESIGNED': return 'Udmeldt';
-      case 'NEW': return 'Oprettelse';
-      default: return s;
-    }
+    return MEMBER_STATUS_LABELS[s as ClubMemberStatus] || s;
   };
 
   const getMembershipLabel = (m: string) => {
-    switch (m) {
-      case 'SENIOR': return 'Senior';
-      case 'JUNIOR': return 'Junior';
-      case 'PASSIVE': return 'Passiv';
-      default: return m;
-    }
+    return MEMBERSHIP_TYPE_LABELS[m as ClubMemberMembershipType] || m;
   };
 
   const getSchoolStatusLabel = (s: string) => {
-    switch (s) {
-      case 'APPROVED': return 'Godkendt';
-      case 'STUDENT': return 'Elev i flyveskolen';
-      case 'NOT_APPROVED': return 'Ikke godkendt';
-      default: return s;
-    }
+    return SCHOOL_STATUS_LABELS[s as ClubMemberSchoolStatus] || s;
   };
 
   const tiles = [
-    { ...MEMBER_FILTER_DEFINITIONS.active, value: stats.active },
-    { ...MEMBER_FILTER_DEFINITIONS.senior, value: stats.senior },
-    { ...MEMBER_FILTER_DEFINITIONS.junior, value: stats.junior },
-    { ...MEMBER_FILTER_DEFINITIONS.passive, value: stats.passive },
-    { ...MEMBER_FILTER_DEFINITIONS.approved, value: stats.approved },
-    { ...MEMBER_FILTER_DEFINITIONS.not_approved, value: stats.notApproved },
-    { ...MEMBER_FILTER_DEFINITIONS.student, value: stats.student },
-    { ...MEMBER_FILTER_DEFINITIONS.instructor, value: stats.instructors },
-    { ...MEMBER_FILTER_DEFINITIONS.resigned, value: stats.resigned },
-    { ...MEMBER_FILTER_DEFINITIONS.under_creation, value: stats.new },
+    { ...MEMBER_ADMIN_FILTERS.active, value: stats.active },
+    { ...MEMBER_ADMIN_FILTERS.senior, value: stats.senior },
+    { ...MEMBER_ADMIN_FILTERS.junior, value: stats.junior },
+    { ...MEMBER_ADMIN_FILTERS.passive, value: stats.passive },
+    { ...MEMBER_ADMIN_FILTERS.approved, value: stats.approved },
+    { ...MEMBER_ADMIN_FILTERS.not_approved, value: stats.notApproved },
+    { ...MEMBER_ADMIN_FILTERS.student, value: stats.student },
+    { ...MEMBER_ADMIN_FILTERS.instructor, value: stats.instructors },
+    { ...MEMBER_ADMIN_FILTERS.resigned, value: stats.resigned },
+    { ...MEMBER_ADMIN_FILTERS.under_creation, value: stats.new },
   ];
 
   return (
