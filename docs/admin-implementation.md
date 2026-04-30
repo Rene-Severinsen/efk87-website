@@ -141,7 +141,7 @@ Located in `src/components/admin/`:
   - Scheduling (visibleFrom/visibleUntil).
   - Visibility control (Public vs Members Only).
   - Signup management: NONE, ONE_PER_MEMBER, QUANTITY.
-  - Signup closing: Admin can close signups without hiding the content box.
+  - Signup closing: Admin can close signups manually or via an optional `signupDeadlineAt`. The content box remains visible after the deadline.
   - Participant management: View list of signups, see total quantities, and cancel signups as admin.
   - Sorting: Manual sort order control.
 

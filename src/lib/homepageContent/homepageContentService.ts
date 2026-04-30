@@ -1,23 +1,9 @@
 import prisma from "../db/prisma";
-import { HomepageContentVisibility, HomepageContent, HomepageContentSignup } from "../../generated/prisma";
+import { HomepageContentVisibility } from "../../generated/prisma";
 import { ViewerVisibilityContext } from "../publicSite/publicVisibility";
+import { HomepageContentWithSignups } from "./homepageContentUtils";
 
-export type HomepageContentWithSignups = HomepageContent & {
-  signups: (HomepageContentSignup & {
-    user: {
-      name: string | null;
-      email: string;
-      memberProfiles: {
-        firstName: string | null;
-        lastName: string | null;
-      }[];
-    };
-  })[];
-  _count: {
-    signups: number;
-  };
-  quantityTotal: number;
-};
+export { type HomepageContentWithSignups } from "./homepageContentUtils";
 
 export async function getActiveHomepageContentForClub(
   clubId: string,
@@ -176,3 +162,5 @@ export async function getVisibleSignupsForContent(contentId: string, clubId: str
     orderBy: { createdAt: 'asc' }
   });
 }
+
+export { isHomepageContentSignupClosed } from "./homepageContentUtils";

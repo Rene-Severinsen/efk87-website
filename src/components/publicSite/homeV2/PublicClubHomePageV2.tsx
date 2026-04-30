@@ -170,13 +170,11 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
 
         <section className="home-v2-layout">
           <div className="home-v2-stack">
-
             <HomepageContentBoxes
                 clubSlug={club.slug}
                 contents={homepageContents}
                 viewer={viewer}
             />
-
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Forum – seneste aktivitet</h2>

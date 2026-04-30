@@ -42,6 +42,7 @@ export default function HomepageContentForm({
       signupMode: formData.get("signupMode") as HomepageContentSignupMode,
       signupLabel: (formData.get("signupLabel") as string) || null,
       isSignupClosed: formData.get("isSignupClosed") === "true",
+      signupDeadlineAt: formData.get("signupDeadlineAt") ? new Date(formData.get("signupDeadlineAt") as string) : null,
     };
 
     try {
@@ -110,6 +111,19 @@ export default function HomepageContentForm({
           </div>
 
           <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px' }}>
+            <label className="admin-form-label">Tilmeldingsfrist</label>
+            <input
+              name="signupDeadlineAt"
+              type="datetime-local"
+              defaultValue={initialData?.signupDeadlineAt ? new Date(initialData.signupDeadlineAt.getTime() - initialData.signupDeadlineAt.getTimezoneOffset() * 60000).toISOString().slice(0, 16) : ""}
+              className="admin-input"
+            />
+            <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginTop: '6px' }}>
+              Når fristen er passeret, vises opslaget stadig, men medlemmer kan ikke længere tilmelde eller ændre tilmelding.
+            </p>
+          </div>
+
+          <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontWeight: 500 }}>
               <input
                 name="isSignupClosed"
@@ -118,10 +132,10 @@ export default function HomepageContentForm({
                 defaultChecked={initialData?.isSignupClosed}
                 style={{ width: '18px', height: '18px' }}
               />
-              <span>Luk for tilmelding</span>
+              <span>Luk for tilmelding manuelt</span>
             </label>
             <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginTop: '6px', marginLeft: '28px' }}>
-              Opslaget vises stadig, men medlemmer kan ikke længere tilmelde eller ændre tilmelding.
+              Overstyrer tidsfristen og lukker med det samme.
             </p>
           </div>
         </div>

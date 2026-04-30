@@ -90,6 +90,7 @@ Tenant-scoped module for announcements and messages on the club's homepage.
   - `visibleFrom` / `visibleUntil`: Optional date range for scheduled visibility.
   - `signupMode`: `NONE`, `ONE_PER_MEMBER` (once per user), or `QUANTITY` (user enters quantity).
   - `isSignupClosed`: Boolean flag to close registrations while keeping the content visible.
+  - `signupDeadlineAt`: Optional date/time for automatic signup closing. Content remains visible after this time.
 - **HomepageContentSignup**: User registrations for specific homepage content.
   - Scoped by `clubId`, `contentId`, and `userId`.
   - Supports `quantity` (default 1) and optional `note`.

@@ -5,6 +5,7 @@ import { HomepageContent, HomepageContentSignupMode, HomepageContentVisibility }
 import { Edit2, Users, Trash2, ArrowUp, ArrowDown, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { deleteHomepageContentAction, updateHomepageContentSortOrderAction } from "../../../../lib/homepageContent/homepageContentActions";
+import { isHomepageContentSignupClosed } from "../../../../lib/homepageContent/homepageContentUtils";
 
 interface HomepageContentListProps {
   contents: (HomepageContent & { _count: { signups: number } })[];
@@ -110,6 +111,21 @@ const HomepageContentList: React.FC<HomepageContentListProps> = ({ contents, clu
                       <>
                         <div>{content.signupMode === HomepageContentSignupMode.ONE_PER_MEMBER ? 'En pr. medlem' : 'Antal'}</div>
                         <div style={{ fontWeight: 600, color: '#1890ff' }}>{content._count.signups} tilmeldte</div>
+                        
+                        {content.isSignupClosed && (
+                          <div style={{ marginTop: '4px' }}>
+                            <span style={{ background: 'rgba(255, 77, 79, 0.1)', color: '#ff4d4f', fontSize: '0.65rem', padding: '1px 4px', borderRadius: '3px', fontWeight: 600 }}>Lukket manuelt</span>
+                          </div>
+                        )}
+                        
+                        {content.signupDeadlineAt && (
+                          <div style={{ marginTop: '4px', fontSize: '0.7rem', color: isHomepageContentSignupClosed(content) ? '#ff4d4f' : 'var(--admin-text-muted)' }}>
+                            Frist: {new Date(content.signupDeadlineAt).toLocaleDateString('da-DK', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                            {isHomepageContentSignupClosed(content) && !content.isSignupClosed && (
+                              <div style={{ background: 'rgba(255, 77, 79, 0.1)', color: '#ff4d4f', fontSize: '0.65rem', padding: '1px 4px', borderRadius: '3px', fontWeight: 600, marginTop: '2px', display: 'inline-block' }}>Tilmelding lukket</div>
+                            )}
+                          </div>
+                        )}
                       </>
                     )}
                   </div>

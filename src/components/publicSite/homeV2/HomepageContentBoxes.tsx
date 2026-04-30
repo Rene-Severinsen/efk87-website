@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { HomepageContentWithSignups } from '../../../lib/homepageContent/homepageContentService';
+import { HomepageContentWithSignups, isHomepageContentSignupClosed } from '../../../lib/homepageContent/homepageContentUtils';
 import { ServerViewerContext } from '../../../lib/auth/viewer';
 import { HomepageContentSignupMode } from '../../../generated/prisma';
 import { registerForHomepageContentAction, cancelOwnHomepageContentSignupAction } from '../../../lib/homepageContent/homepageContentActions';
@@ -49,6 +49,7 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
 
   const mySignup = viewer.userId ? content.signups.find(s => s.userId === viewer.userId && !s.cancelledAt) : null;
   const isRegistered = !!mySignup;
+  const isClosed = isHomepageContentSignupClosed(content);
 
   const handleRegister = async (formData: FormData) => {
     try {
@@ -81,6 +82,13 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
 
       {content.signupMode !== HomepageContentSignupMode.NONE && (
         <div className="home-v2-signup-area">
+          {content.signupDeadlineAt && !isClosed && (
+            <div className="home-v2-signup-deadline" style={{ fontSize: '13px', color: 'var(--home-v2-muted)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px', opacity: 0.8 }}>
+              <Info size={14} className="text-blue-400" />
+              <span>Tilmelding lukker: {new Date(content.signupDeadlineAt).toLocaleString('da-DK', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+          )}
+
           {!viewer.isAuthenticated ? (
             <div className="home-v2-signup-status">
               <Info size={20} className="text-blue-400" />
@@ -90,7 +98,7 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
                 Log ind
               </Link>
             </div>
-          ) : content.isSignupClosed ? (
+          ) : isClosed ? (
             <div className="home-v2-signup-status">
               <Info size={20} className="text-amber-400" />
               <div style={{ flex: 1 }}>

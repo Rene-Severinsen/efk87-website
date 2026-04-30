@@ -7,6 +7,7 @@ import { requireClubBySlug } from "../tenancy/tenantService";
 import { requireActiveMemberForClub } from "../auth/accessGuards";
 import { requireClubAdminForClub } from "../auth/adminAccessGuards";
 import { HomepageContentSignupMode, HomepageContentVisibility } from "../../generated/prisma";
+import { isHomepageContentSignupClosed } from "./homepageContentService";
 
 /**
  * Registrerer en bruger til et opslag på forsiden.
@@ -38,7 +39,7 @@ export async function registerForHomepageContentAction(
     throw new Error("Opslaget er ikke længere aktivt");
   }
 
-  if (content.isSignupClosed) {
+  if (isHomepageContentSignupClosed(content)) {
     throw new Error("Tilmeldingen er lukket");
   }
 
@@ -138,7 +139,7 @@ export async function cancelOwnHomepageContentSignupAction(
     where: { id: signup.contentId }
   });
 
-  if (content?.isSignupClosed) {
+  if (!content || isHomepageContentSignupClosed(content)) {
     throw new Error("Tilmeldingen er lukket, og du kan ikke længere afmelde dig");
   }
 
@@ -206,6 +207,7 @@ export async function saveHomepageContentAction(
     signupMode: HomepageContentSignupMode;
     signupLabel: string | null;
     isSignupClosed: boolean;
+    signupDeadlineAt: Date | null;
   }
 ) {
   const club = await requireClubBySlug(clubSlug);

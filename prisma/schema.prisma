@@ -489,6 +489,7 @@ model HomepageContent {
   signupMode   HomepageContentSignupMode @default(NONE)
   signupLabel  String?
   isSignupClosed Boolean                 @default(false)
+  signupDeadlineAt DateTime?
   createdAt    DateTime                  @default(now())
   updatedAt    DateTime                  @updatedAt
 
