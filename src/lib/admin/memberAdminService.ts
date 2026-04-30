@@ -12,6 +12,11 @@ import {
   sortMembersForAdmin 
 } from "./members/memberAdminFilters";
 
+/**
+ * Normalized read model for the member administration list.
+ * This DTO allows the UI to display both active members (ClubMemberProfile)
+ * and pending applications (PublicMemberApplication) safely in the same table.
+ */
 export interface AdminMemberOverviewDTO {
   id: string; // Internal unique ID (userId or applicationId)
   userId: string | null;

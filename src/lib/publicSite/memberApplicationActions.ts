@@ -116,6 +116,7 @@ export async function submitPublicMemberApplicationAction(
 
   // 5. Create record
   try {
+    // Reserve member number immediately to ensure sequential integrity
     const memberNumber = await getNextMemberNumber(club.id);
 
     await prisma.publicMemberApplication.create({

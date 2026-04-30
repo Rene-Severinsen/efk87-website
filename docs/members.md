@@ -15,15 +15,27 @@ We have separated access/authorization from profile data:
 ## Public Membership Applications
 
 Prospective members can apply via a public form at `/[clubSlug]/bliv-medlem`.
-- **No Login Required**: Users do not need an account to apply.
-- **Data Model**: Applications are stored in `PublicMemberApplication`.
-- **Status**: New applications default to `memberStatus = NEW` ("Under oprettelse") and `schoolStatus = STUDENT` ("Elev i flyveskolen").
-- **Automatic Medlemsnummer**: Assigned automatically at application time to reserve the next sequential number.
-- **Admin Visibility**: Applications appear in the Admin -> Medlemmer list but do not have a linked user account until approved (conversion to `ClubMemberProfile` is a future step).
-- **Validation**:
-  - Birth year vs Membership Type (Senior if >= 18 in current calendar year, else Junior).
-  - MDK nr. is required for Senior and Junior, optional for Passive.
-  - Basic duplicate check based on name, mobile, and birthdate.
+
+### Architecture & Purpose
+The `PublicMemberApplication` model exists because public membership applications can be submitted without a login or user account. It serves as a **pending application model**, not a second permanent member table.
+
+- **Status "Under oprettelse"**: Applications are created with `memberStatus = NEW`, appearing as "Under oprettelse" in the admin UI.
+- **No User/Account**: Unlike active members, applications do not have a linked `User` record or login credentials. We do not create "fake" users during the application phase.
+- **Member Number Reservation**: To ensure consistency, applications reserve a `memberNumber` immediately upon submission using the same sequential logic as active members.
+- **Future Approval Flow**: A future approval flow will handle the conversion of an application into a real member:
+    - Creation of a `ClubMemberProfile`.
+    - Creation of a `User` account (if the person is new to the platform).
+    - Triggering Dinero/payment integration for kontingent billing.
+
+### Rules & Constraints
+1. **No Logic Duplication**: Business logic for active members should not be duplicated across both models.
+2. **Admin Visibility**: Applications must be visible in **Admin → Medlemmer** for operational handling.
+3. **Data Model**: Applications use `PublicMemberApplication`, while active members use `ClubMemberProfile`.
+
+### Validation
+- **Birth year vs Membership Type**: Senior if >= 18 in current calendar year, else Junior.
+- **MDK nr.**: Required for Senior and Junior, optional for Passive.
+- **Duplicate Check**: Basic check based on name, mobile, and birthdate across both applications and existing profiles.
 
 ## Medlemsnummer (Member Number)
 

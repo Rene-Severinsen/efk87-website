@@ -75,12 +75,20 @@ Tenant-scoped calendar entries used for club events and homepage visibility.
 - **Constraints**: Scoped by `clubId`. Published entries are visible publicly.
 
 #### ClubMemberProfile
-Stores club-specific member stamdata (profile information).
+Stores club-specific member stamdata (profile information) for active members who have a platform account.
 - **Constraints**: Unique combination of `clubId` + `userId`.
 - **Fields**: Name, address, phone, Medlemsnummer (`memberNumber`), MDK number, profile image URL, membership type, club role, school status, member status.
 - **Uniqueness**: `memberNumber` is unique per `clubId`.
 - **Automatic Assignment**: `memberNumber` is assigned automatically when a new profile is created for a club, using a max+1 logic scoped to that club.
 - **Privacy**: Contains private member data, strictly tenant-scoped.
+
+#### PublicMemberApplication
+Stores public membership applications for individuals who do not yet have a platform account.
+- **Purpose**: Acts as a temporary storage for pending applications. It is NOT a permanent member table.
+- **Status**: Applications use `memberStatus = NEW` (displayed as "Under oprettelse").
+- **Independence**: Not linked to a `User` or `ClubMembership`.
+- **Member Number Reservation**: Reserves a `memberNumber` upon creation to ensure sequential integrity even before approval.
+- **Future Flow**: Will be converted to `ClubMemberProfile` and `User` records upon approval.
 
 #### Homepage Content
 Tenant-scoped module for announcements and messages on the club's homepage.
