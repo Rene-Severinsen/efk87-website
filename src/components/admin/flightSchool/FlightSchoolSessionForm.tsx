@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Save, Plus, Clock, Calendar as CalendarIcon, Info } from "lucide-react";
-import { createSessionAction, updateSessionAction, createTimeSlotAction, updateTimeSlotAction } from "../../../lib/admin/flightSchoolSessionActions";
+import { X, Save, Plus, Clock, Calendar as CalendarIcon, Info, Trash2 } from "lucide-react";
+import { createSessionAction, updateSessionAction, createTimeSlotAction, updateTimeSlotAction, deactivateTimeSlotAction } from "../../../lib/admin/flightSchoolSessionActions";
 import { FlightSchoolSessionStatus, FlightSchoolSession, FlightSchoolTimeSlot, FlightSchoolBooking, ClubMemberProfile } from "../../../generated/prisma";
 
 type SessionWithIncludes = FlightSchoolSession & {
@@ -27,6 +27,16 @@ interface FlightSchoolSessionFormProps {
   onClose: () => void;
 }
 
+interface LocalTimeSlot {
+  id: string; // Temporary ID for new slots (e.g., 'new-1'), real ID for existing
+  startsAt: string; // HH:mm
+  endsAt: string; // HH:mm
+  capacity: number;
+  isActive: boolean;
+  isNew: boolean;
+  bookingCount: number;
+}
+
 const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
   clubSlug,
   initialData,
@@ -44,8 +54,20 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
   const [status, setStatus] = useState<FlightSchoolSessionStatus>(initialData?.status || "DRAFT");
   const [note, setNote] = useState(initialData?.note || "");
 
-  // Time slots (only for editing existing session)
-  const timeSlots = initialData?.timeSlots || [];
+  // Local slots state
+  const [slots, setSlots] = useState<LocalTimeSlot[]>(
+    (initialData?.timeSlots || [])
+      .sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime())
+      .map(slot => ({
+        id: slot.id,
+        startsAt: new Date(slot.startsAt).toTimeString().substring(0, 5),
+        endsAt: slot.endsAt ? new Date(slot.endsAt).toTimeString().substring(0, 5) : "",
+        capacity: slot.capacity,
+        isActive: slot.isActive,
+        isNew: false,
+        bookingCount: slot.bookings.filter(b => b.status === 'BOOKED').length
+      }))
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +79,7 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
       const startDateTime = new Date(`${date}T${startsAt}`);
       const endDateTime = new Date(`${date}T${endsAt}`);
 
-      const data = {
+      const sessionData = {
         date: sessionDate,
         startsAt: startDateTime,
         endsAt: endDateTime,
@@ -66,14 +88,53 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
         note,
       };
 
+      let sessionId = initialData?.id;
+
       if (initialData) {
-        await updateSessionAction(clubSlug, initialData.id, data);
+        await updateSessionAction(clubSlug, initialData.id, sessionData);
       } else {
-        await createSessionAction(clubSlug, data);
-        // If we want to allow slot management immediately, we'd need to redirect or update state
-        // For now, closing is fine as per typical flow
+        const res = await createSessionAction(clubSlug, sessionData);
+        sessionId = res.id;
       }
+
+      if (!sessionId) throw new Error("Kunne ikke finde eller oprette session ID");
+
+      // Save all slots
+      for (let i = 0; i < slots.length; i++) {
+        const slot = slots[i];
+        const slotData = {
+          startsAt: new Date(`${date}T${slot.startsAt}`),
+          endsAt: slot.endsAt ? new Date(`${date}T${slot.endsAt}`) : null,
+          capacity: slot.capacity,
+          isActive: slot.isActive,
+          sortOrder: i,
+        };
+
+        if (slot.isNew) {
+          await createTimeSlotAction(clubSlug, sessionId, slotData);
+        } else {
+          // If deactivated and has bookings, the action handles it as a cancellation logic usually 
+          // but here we use updateTimeSlotAction which just sets isActive.
+          // requirement 22: "Existing slots with bookings must not be hard deleted; they must be deactivated."
+          await updateTimeSlotAction(clubSlug, slot.id, slotData);
+        }
+      }
+
+      // Handle removed slots (those that were in initialData but not in current slots state)
+      if (initialData) {
+        const initialSlotIds = initialData.timeSlots.map(s => s.id);
+        const currentSlotIds = slots.filter(s => !s.isNew).map(s => s.id);
+        const removedSlotIds = initialSlotIds.filter(id => !currentSlotIds.includes(id));
+
+        for (const removedId of removedSlotIds) {
+          // Requirement 22: Existing slots with bookings must not be hard deleted; they must be deactivated.
+          // deactivateTimeSlotAction usually handles this safety.
+          await deactivateTimeSlotAction(clubSlug, removedId);
+        }
+      }
+
       onClose();
+      window.location.reload(); // To refresh the calendar view
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message || "Der skete en fejl");
@@ -85,64 +146,49 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
     }
   };
 
-  const handleAddTimeSlot = async () => {
-    if (!initialData) return;
-    
-    setLoading(true);
-    try {
-      // Default new slot: 1 hour long, at the end of existing slots or session start
-      let lastEnd = startsAt;
-      if (timeSlots.length > 0) {
-        const sorted = [...timeSlots].sort((a, b) => new Date(b.startsAt).getTime() - new Date(a.startsAt).getTime());
-        if (sorted[0].endsAt) {
-            lastEnd = new Date(sorted[0].endsAt).toTimeString().substring(0, 5);
-        }
-      }
-
-      const nextHour = (parseInt(lastEnd.split(':')[0]) + 1).toString().padStart(2, '0');
-      const nextEnd = `${nextHour}:${lastEnd.split(':')[1]}`;
-
-      await createTimeSlotAction(clubSlug, initialData.id, {
-        startsAt: new Date(`${date}T${lastEnd}`),
-        endsAt: new Date(`${date}T${nextEnd}`),
-        capacity: 1,
-        sortOrder: timeSlots.length,
-      });
-      
-      // We rely on server action revalidating path, but since we are in a client component modal,
-      // we might want to refresh the slots. For simplicity in this iteration, we tell user to save/refresh or we can just update local state if we had the ID back.
-      // But requirement says "revalidatePath" is used.
-      window.location.reload(); // Hard refresh to get new slots for now, simple and reliable
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
+  const handleAddTimeSlot = () => {
+    // Default new slot
+    let lastEnd = "09:00";
+    if (slots.length > 0) {
+      const lastSlot = slots[slots.length - 1];
+      if (lastSlot.endsAt) {
+        lastEnd = lastSlot.endsAt;
       } else {
-        setError("Der skete en ukendt fejl");
+        lastEnd = lastSlot.startsAt;
       }
-    } finally {
-      setLoading(false);
+    } else if (startsAt) {
+      lastEnd = startsAt;
     }
+
+    const startParts = lastEnd.split(':');
+    let nextHour = parseInt(startParts[0]) + 1;
+    if (nextHour > 23) nextHour = 23;
+    const nextEnd = `${nextHour.toString().padStart(2, '0')}:${startParts[1]}`;
+
+    const newSlot: LocalTimeSlot = {
+      id: `new-${Date.now()}`,
+      startsAt: lastEnd,
+      endsAt: nextEnd,
+      capacity: 1,
+      isActive: true,
+      isNew: true,
+      bookingCount: 0
+    };
+
+    setSlots([...slots, newSlot]);
   };
 
-  const handleToggleSlotActive = async (slotId: string, currentActive: boolean) => {
-    setLoading(true);
-    try {
-        await updateTimeSlotAction(clubSlug, slotId, { isActive: !currentActive });
-        window.location.reload();
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Der skete en ukendt fejl");
-      }
-    } finally {
-        setLoading(false);
-    }
-  }
+  const updateLocalSlot = (id: string, updates: Partial<LocalTimeSlot>) => {
+    setSlots(slots.map(s => s.id === id ? { ...s, ...updates } : s));
+  };
+
+  const removeLocalSlot = (id: string) => {
+    setSlots(slots.filter(s => s.id !== id));
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
+      <div className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
         <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
             <CalendarIcon className="w-5 h-5 text-sky-400" />
@@ -160,142 +206,183 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-4 space-y-6">
               <h4 className="text-sm font-bold text-sky-400 uppercase tracking-wider">Grundlæggende information</h4>
               
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Dato</label>
-                <input
-                  type="date"
-                  required
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4 bg-white/5 p-5 rounded-xl border border-white/5">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Start tid</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-1">Dato</label>
                   <input
-                    type="time"
+                    type="date"
                     required
-                    value={startsAt}
-                    onChange={(e) => setStartsAt(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
                   />
                 </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-1">Session Start</label>
+                    <input
+                      type="time"
+                      required
+                      value={startsAt}
+                      onChange={(e) => setStartsAt(e.target.value)}
+                      className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-1">Session Slut</label>
+                    <input
+                      type="time"
+                      required
+                      value={endsAt}
+                      onChange={(e) => setEndsAt(e.target.value)}
+                      className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Slut tid</label>
-                  <input
-                    type="time"
+                  <label className="block text-sm font-medium text-slate-300 mb-1">Instruktør</label>
+                  <select
                     required
-                    value={endsAt}
-                    onChange={(e) => setEndsAt(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                    value={instructorId}
+                    onChange={(e) => setInstructorId(e.target.value)}
+                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                  >
+                    <option value="" disabled className="bg-slate-900 text-slate-500">Vælg instruktør...</option>
+                    {instructors.map((instructor) => (
+                      <option key={instructor.id} value={instructor.id} className="bg-slate-900 text-white">
+                        {instructor.firstName} {instructor.lastName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-1">Status</label>
+                  <select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value as FlightSchoolSessionStatus)}
+                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                  >
+                    <option value="DRAFT" className="bg-slate-900">Udkast (Draft)</option>
+                    <option value="PUBLISHED" className="bg-slate-900">Udgivet (Published)</option>
+                    <option value="CANCELLED" className="bg-slate-900">Aflyst (Cancelled)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-1">Note (valgfri)</label>
+                  <textarea
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    rows={3}
+                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors resize-none"
+                    placeholder="Evt. besked til elever..."
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Instruktør</label>
-                <select
-                  required
-                  value={instructorId}
-                  onChange={(e) => setInstructorId(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
-                >
-                  <option value="" disabled className="bg-slate-900 text-slate-500">Vælg instruktør...</option>
-                  {instructors.map((instructor) => (
-                    <option key={instructor.id} value={instructor.id} className="bg-slate-900 text-white">
-                      {instructor.firstName} {instructor.lastName}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Status</label>
-                <select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value as FlightSchoolSessionStatus)}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
-                >
-                  <option value="DRAFT" className="bg-slate-900">Udkast (Draft)</option>
-                  <option value="PUBLISHED" className="bg-slate-900">Udgivet (Published)</option>
-                  <option value="CANCELLED" className="bg-slate-900">Aflyst (Cancelled)</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Note (valgfri)</label>
-                <textarea
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  rows={3}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors resize-none"
-                  placeholder="Evt. besked til elever..."
-                />
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="lg:col-span-8 space-y-6">
               <div className="flex justify-between items-center">
                 <h4 className="text-sm font-bold text-sky-400 uppercase tracking-wider">Tidsrum (Slots)</h4>
-                {initialData && (
-                  <button
-                    type="button"
-                    onClick={handleAddTimeSlot}
-                    className="flex items-center gap-1 text-xs font-bold text-sky-400 hover:text-sky-300 transition-colors"
-                  >
-                    <Plus className="w-3 h-3" />
-                    Tilføj tid
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={handleAddTimeSlot}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 rounded-lg text-sm font-bold transition-colors border border-sky-500/20"
+                >
+                  <Plus className="w-4 h-4" />
+                  Tilføj tid
+                </button>
               </div>
 
-              {!initialData ? (
-                <div className="p-6 bg-white/5 border border-dashed border-white/10 rounded-xl flex flex-col items-center text-center">
-                    <Info className="w-8 h-8 text-slate-500 mb-2" />
-                    <p className="text-sm text-slate-400">
-                        Du skal gemme sessionen før du kan administrere specifikke tidsrum.
-                    </p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {timeSlots.map((slot) => (
-                    <div key={slot.id} className={`p-4 rounded-xl border ${slot.isActive ? 'bg-white/5 border-white/10' : 'bg-rose-500/5 border-rose-500/20'}`}>
-                      <div className="flex justify-between items-center mb-3">
-                        <div className="flex items-center gap-2 text-white font-medium">
-                          <Clock className="w-4 h-4 text-sky-400" />
-                          {new Date(slot.startsAt).toTimeString().substring(0, 5)} - {slot.endsAt ? new Date(slot.endsAt).toTimeString().substring(0, 5) : "??:??"}
-                        </div>
-                        <div className="flex items-center gap-2">
-                           <button
-                            type="button"
-                            onClick={() => handleToggleSlotActive(slot.id, slot.isActive)}
-                            className={`text-xs px-2 py-1 rounded border transition-colors ${
-                                slot.isActive 
-                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20' 
-                                : 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20'
-                            }`}
-                           >
-                            {slot.isActive ? 'Aktiv' : 'Inaktiv'}
-                           </button>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between text-xs text-slate-400">
-                        <span>Kapacitet: {slot.capacity}</span>
-                        <span>Bookinger: {slot.bookings.filter((b) => b.status === 'BOOKED').length}</span>
-                      </div>
+              <div className="space-y-4">
+                {slots.length === 0 ? (
+                  <div className="p-12 bg-white/5 border border-dashed border-white/10 rounded-2xl flex flex-col items-center text-center">
+                    <Clock className="w-12 h-12 text-slate-600 mb-4" />
+                    <p className="text-slate-400 max-w-xs">Ingen tidsrum tilføjet endnu. Klik på "Tilføj tid" for at oprette det første tidsrum.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-3">
+                    {/* Header for slots on larger screens */}
+                    <div className="hidden md:grid md:grid-cols-12 gap-4 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                      <div className="col-span-3">Start</div>
+                      <div className="col-span-3">Slut</div>
+                      <div className="col-span-2 text-center">Kapacitet</div>
+                      <div className="col-span-2 text-center">Status</div>
+                      <div className="col-span-2 text-right">Handlinger</div>
                     </div>
-                  ))}
-                  {timeSlots.length === 0 && (
-                    <p className="text-sm text-slate-500 italic text-center py-4">Ingen tider oprettet.</p>
-                  )}
-                </div>
-              )}
+
+                    {slots.map((slot) => (
+                      <div key={slot.id} className={`p-4 rounded-xl border transition-all ${slot.isActive ? 'bg-white/5 border-white/10' : 'bg-rose-500/5 border-rose-500/20 opacity-80'}`}>
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                          <div className="col-span-3">
+                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Start</label>
+                            <input
+                              type="time"
+                              value={slot.startsAt}
+                              onChange={(e) => updateLocalSlot(slot.id, { startsAt: e.target.value })}
+                              className="w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-sky-500 transition-colors"
+                            />
+                          </div>
+                          <div className="col-span-3">
+                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Slut</label>
+                            <input
+                              type="time"
+                              value={slot.endsAt}
+                              onChange={(e) => updateLocalSlot(slot.id, { endsAt: e.target.value })}
+                              className="w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-sky-500 transition-colors"
+                            />
+                          </div>
+                          <div className="col-span-2">
+                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Kapacitet</label>
+                            <input
+                              type="number"
+                              min="1"
+                              value={slot.capacity}
+                              onChange={(e) => updateLocalSlot(slot.id, { capacity: parseInt(e.target.value) || 1 })}
+                              className="w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white text-center focus:outline-none focus:border-sky-500 transition-colors"
+                            />
+                          </div>
+                          <div className="col-span-2 flex justify-center">
+                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Status</label>
+                            <button
+                              type="button"
+                              onClick={() => updateLocalSlot(slot.id, { isActive: !slot.isActive })}
+                              className={`text-[10px] px-3 py-1 rounded-full border font-bold transition-all uppercase tracking-wider ${
+                                  slot.isActive 
+                                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20' 
+                                  : 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20'
+                              }`}
+                            >
+                              {slot.isActive ? 'Aktiv' : 'Inaktiv'}
+                            </button>
+                          </div>
+                          <div className="col-span-2 flex justify-end items-center gap-3">
+                            <div className="text-right">
+                              <div className="text-[10px] text-slate-500 uppercase font-bold leading-none">Bookinger</div>
+                              <div className="text-sm font-bold text-white">{slot.bookingCount}</div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => removeLocalSlot(slot.id)}
+                              className="p-2 text-slate-500 hover:text-rose-400 transition-colors"
+                              title="Fjern tidsrum"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </form>
