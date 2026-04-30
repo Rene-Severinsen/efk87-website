@@ -8,7 +8,6 @@ The public booking system allows club members to view the school calendar and bo
 
 ### Public Route
 - `/[clubSlug]/flyveskole/skolekalender`: The main page for the school calendar.
-- Linked from the flyveskole landing page with the text: "Se skolekalender og book tid".
 
 ### Access Rules
 - **Guests**: Can view the calendar but cannot book or cancel. They see a prompt to log in.
@@ -66,7 +65,12 @@ A seam for instructor notifications has been prepared in the service layer (`TOD
 
 ## Homepage Integration
 
-The `getTodayPublishedSessions` helper in `flightSchoolBookingService.ts` is provided for future integration with the homepage "Skoleflyvning i dag" box.
+The homepage includes a "Skoleflyvning i dag" box that shows real-time data from today's published sessions:
+- **Data shown**: Status (today), number of active instructors, number of booked students, and available slots (if any).
+- **Session summary**: Compact list of instructors today with their time range and booking ratio (booked/total slots).
+- **No-session behavior**: Shows "Ingen skoleflyvning i dag" if no published sessions exist.
+- **CTA**: A "Se skolekalender" button linking to the public booking page.
+- **Privacy**: No student contact data is exposed on the homepage.
 
 ## Admin Maintenance Flow
 

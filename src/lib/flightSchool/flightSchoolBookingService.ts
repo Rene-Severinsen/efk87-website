@@ -27,6 +27,22 @@ export interface FlightSchoolCalendarSessionView {
   timeSlots: FlightSchoolCalendarSlotView[];
 }
 
+export interface FlightSchoolHomepageViewModel {
+  hasSessionsToday: boolean;
+  totalSessions: number;
+  totalInstructors: number;
+  totalBookedStudents: number;
+  totalAvailableSlots: number;
+  sessions: {
+    id: string;
+    instructorName: string;
+    startTime: Date | null;
+    endTime: Date | null;
+    bookedSlots: number;
+    totalActiveSlots: number;
+  }[];
+}
+
 /**
  * List all sessions for a club.
  */
@@ -80,6 +96,54 @@ export async function listPublishedSessionsForDate(clubId: string, date: Date) {
  */
 export async function getTodayPublishedSessions(clubId: string) {
   return listPublishedSessionsForDate(clubId, new Date());
+}
+
+/**
+ * Get the view model for the homepage flight school box.
+ */
+export async function getFlightSchoolHomepageView(clubId: string): Promise<FlightSchoolHomepageViewModel> {
+  const sessions = await getTodayPublishedSessions(clubId);
+
+  let totalBookedStudents = 0;
+  let totalAvailableSlots = 0;
+
+  const sessionSummaries = sessions.map(session => {
+    let sessionBooked = 0;
+    let sessionActive = 0;
+
+    session.timeSlots.forEach(slot => {
+      sessionActive++;
+      if (slot.bookings.length > 0) {
+        sessionBooked++;
+      }
+    });
+
+    totalBookedStudents += sessionBooked;
+    totalAvailableSlots += (sessionActive - sessionBooked);
+
+    return {
+      id: session.id,
+      instructorId: session.instructorMemberProfileId,
+      instructorName: `${session.instructor.firstName} ${session.instructor.lastName}`.trim(),
+      startTime: session.startsAt,
+      endTime: session.endsAt,
+      bookedSlots: sessionBooked,
+      totalActiveSlots: sessionActive,
+    };
+  });
+
+  const totalSessions = sessions.length;
+  const instructors = new Set(sessions.map(s => s.instructorMemberProfileId));
+  const totalInstructors = instructors.size;
+
+  return {
+    hasSessionsToday: totalSessions > 0,
+    totalSessions,
+    totalInstructors,
+    totalBookedStudents,
+    totalAvailableSlots,
+    sessions: sessionSummaries,
+  };
 }
 
 /**

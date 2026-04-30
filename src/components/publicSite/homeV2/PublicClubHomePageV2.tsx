@@ -16,6 +16,7 @@ import ForumReplyBadge from '../../forum/ForumReplyBadge';
 import { ClubForumThread, ClubForumCategory } from '../../../generated/prisma';
 import { WeatherData } from '../../../lib/weather/openMeteoWeatherService';
 import { HomepageContentWithSignups } from '../../../lib/homepageContent/homepageContentService';
+import { FlightSchoolHomepageViewModel } from '../../../lib/flightSchool/flightSchoolBookingService';
 import HomepageContentBoxes from './HomepageContentBoxes';
 
 type ThreadWithRelations = ClubForumThread & {
@@ -60,6 +61,7 @@ interface PublicClubHomePageV2Props {
   calendarMarquee: PublicCalendarEntry[];
   latestForumActivity: ThreadWithRelations[];
   homepageContents: HomepageContentWithSignups[];
+  flightSchoolHomepage: FlightSchoolHomepageViewModel;
   weather?: WeatherData | null;
   theme?: {
     backgroundColor: string;
@@ -80,7 +82,7 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Isolated V2 homepage component.
  * Ported closely from the provided mockup HTML.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, weather, theme }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, flightSchoolHomepage, weather }: PublicClubHomePageV2Props) {
   const clubDisplayName = club.settings?.displayName || club.name;
   const clubShortName = club.settings?.shortName || club.name;
   const firstName = viewer.firstName || viewer.name?.split(' ')[0] || 'Gæst';
@@ -305,22 +307,51 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Skoleflyvning i dag</h2>
-                <a className="home-v2-link-soft" href="#">Skolekalender</a>
+                <Link className="home-v2-link-soft" href={`/${club.slug}/flyveskole/skolekalender`}>Skolekalender</Link>
               </div>
-              <div className="home-v2-mini-grid">
-                <div className="home-v2-mini-card">
-                  <div className="home-v2-muted">Status</div>
-                  <h3 style={{marginTop: '8px'}}>Aktiv fra kl. 11:00</h3>
-                  <p className="home-v2-row-sub" style={{marginTop: '8px'}}>Instruktør: Poul Andersen</p>
+              
+              {!flightSchoolHomepage.hasSessionsToday ? (
+                <div className="home-v2-compact-empty" style={{ padding: '20px 0' }}>
+                  Ingen skoleflyvning i dag
                 </div>
-                <div className="home-v2-mini-card">
-                  <div className="home-v2-muted">Dagens note</div>
-                  <p className="home-v2-row-sub" style={{marginTop: '8px'}}>Banen er lidt blød mod øst. Brug bane 2 til elevstarter frem til middag.</p>
-                </div>
-              </div>
+              ) : (
+                <>
+                  <div className="home-v2-mini-grid">
+                    <div className="home-v2-mini-card">
+                      <div className="home-v2-muted">Status</div>
+                      <h3 style={{marginTop: '8px'}}>I dag</h3>
+                      <div className="home-v2-row-sub" style={{marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '8px 12px'}}>
+                        <span>{flightSchoolHomepage.totalInstructors} {flightSchoolHomepage.totalInstructors === 1 ? 'instruktør' : 'instruktører'}</span>
+                        <span>{flightSchoolHomepage.totalBookedStudents} {flightSchoolHomepage.totalBookedStudents === 1 ? 'elev' : 'elever'}</span>
+                        {flightSchoolHomepage.totalAvailableSlots > 0 && (
+                          <span className="text-emerald-400">{flightSchoolHomepage.totalAvailableSlots} ledige tider</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="home-v2-online-list" style={{ marginTop: '16px', borderTop: '1px solid var(--home-v2-line)', paddingTop: '16px' }}>
+                    {flightSchoolHomepage.sessions.map((session) => (
+                      <div key={session.id} className="home-v2-online-row">
+                        <span className="home-v2-online-time" style={{ minWidth: '85px' }}>
+                          {session.startTime?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })} - {session.endTime?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        <span className="home-v2-online-name">
+                          {session.instructorName}
+                        </span>
+                        <span className="home-v2-muted" style={{ fontSize: '12px', marginLeft: 'auto' }}>
+                          {session.bookedSlots}/{session.totalActiveSlots} booket
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
               <div className="home-v2-cta-row">
-                <a className="home-v2-pill home-v2-primary" href="#">Skriv besked til elever</a>
-                <a className="home-v2-pill" href="#">Se elever</a>
+                <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/flyveskole/skolekalender`}>
+                  Se skolekalender
+                </Link>
               </div>
             </article>
 

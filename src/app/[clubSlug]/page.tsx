@@ -25,6 +25,7 @@ import { getLatestForumActivity } from "../../lib/forum/forumService";
 import { getPublicClubSettings } from "../../lib/publicSite/publicClubSettingsService";
 import { getOpenMeteoWeather } from "../../lib/weather/openMeteoWeatherService";
 import { getActiveHomepageContentForClub } from "../../lib/homepageContent/homepageContentService";
+import { getFlightSchoolHomepageView } from "../../lib/flightSchool/flightSchoolBookingService";
 
 interface ClubPageProps {
   params: Promise<{
@@ -90,6 +91,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const calendarMarquee = await getHomepageMarqueeCalendarEntries(club.id);
   const latestForumActivity = await getLatestForumActivity(club.id);
   const homepageContents = await getActiveHomepageContentForClub(club.id, viewer);
+  const flightSchoolHomepage = await getFlightSchoolHomepageView(club.id);
   const publicSettings = await getPublicClubSettings(club.id);
   
   const weather = await getOpenMeteoWeather(
@@ -145,6 +147,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
           calendarMarquee={calendarMarquee}
           latestForumActivity={latestForumActivity}
           homepageContents={homepageContents}
+          flightSchoolHomepage={flightSchoolHomepage}
           weather={weather}
       />
   );
