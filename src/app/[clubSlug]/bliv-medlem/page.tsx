@@ -22,13 +22,17 @@ export default async function BlivMedlemPage({ params }: PageProps) {
    // const proseText = "Udfyld formularen herunder, hvis du ønsker at blive medlem af EFK87. Når vi har modtaget din ansøgning, gennemgår vi oplysningerne og kontakter dig med næste skridt. Har du spørgsmål, er du altid velkommen til at kontakte klubben.";
   const proseText = (
       <>
-        Velkommen til EFK87. Udfyld formularen herunder, hvis du ønsker at blive medlem af klubben.
+        <b>Velkommen til EFK87</b>
+          <br />
+          <br />
+          Udfyld formularen herunder, hvis du ønsker at blive medlem af klubben.
         <br />
         Før du kan blive medlem af EFK87, skal du først have oprettet medlemskab hos{" "}
         <a
             href="https://modelflyvningdanmark.dk"
             target="_blank"
             rel="noopener noreferrer"
+            className="font-semibold text-sky-300 underline underline-offset-4 decoration-2 hover:text-sky-100 transition-colors"
         >
           Modelflyvning Danmark
         </a>

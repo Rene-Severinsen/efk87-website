@@ -20,7 +20,7 @@ interface ThemedClubPageShellProps {
   navigationItems?: PublicNavigationItem[];
   actionItems?: PublicNavigationItem[];
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   eyebrow?: string;
   currentPath?: string;
   children: React.ReactNode;
