@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../components/admin/AdminShell";
-import AdminPlaceholderPage from "../../../../components/admin/AdminPlaceholderPage";
+import FlightSchoolAdminPage from "../../../../components/admin/flightSchool/FlightSchoolAdminPage";
+import * as flightSchoolAdminService from "../../../../lib/admin/flightSchoolAdminService";
 
 interface PageProps {
   params: Promise<{
@@ -25,6 +26,12 @@ export default async function Page({ params }: PageProps) {
 
   const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin/flyveskole`);
 
+  const [page, documents, instructors] = await Promise.all([
+    flightSchoolAdminService.getAdminFlightSchoolPage(club.id),
+    flightSchoolAdminService.getAdminFlightSchoolDocuments(club.id),
+    flightSchoolAdminService.getFlightSchoolInstructors(club.id),
+  ]);
+
   return (
     <AdminShell
       clubSlug={clubSlug}
@@ -33,15 +40,11 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <AdminPlaceholderPage 
-        title="Flyveskole"
-        description="Fremtidig oversigt over skoleflyvning, instruktører og elever."
-        futureItems={[
-          "Elev-progression og logbøger",
-          "Instruktør-oversigt og planlægning",
-          "Teoriundervisning og prøver",
-          "Skolefly-log"
-        ]}
+      <FlightSchoolAdminPage
+        clubSlug={clubSlug}
+        page={page}
+        documents={documents}
+        instructors={instructors}
       />
     </AdminShell>
   );
