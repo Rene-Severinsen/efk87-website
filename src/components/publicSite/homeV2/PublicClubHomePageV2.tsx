@@ -496,56 +496,55 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                     {footerData.footer.description}
                   </p>
                 )}
-                <div className="home-v2-sponsors">
-                  {footerData.sponsors.map(sponsor => (
-                    <span key={sponsor.id} className="home-v2-sponsor">
-                      {sponsor.href ? (
-                        <a href={sponsor.href} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
-                          {sponsor.name}
-                        </a>
-                      ) : (
-                        sponsor.name
-                      )}
-                    </span>
-                  ))}
-                </div>
+                {footerData.sponsors.length > 0 && (
+                  <div className="home-v2-sponsors">
+                    {footerData.sponsors.map(sponsor => (
+                      <span key={sponsor.id} className="home-v2-sponsor">
+                        {sponsor.href ? (
+                          <a href={sponsor.href} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                            {sponsor.name}
+                          </a>
+                        ) : (
+                          sponsor.name
+                        )}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </>
-            ) : (
-              <>
-                <p className="home-v2-small" style={{marginTop: '10px'}}>Mockup af medlemsforside med realistisk klubstruktur. Designet er tænkt mobile first på medlemsdelen og mere informationsrigt på desktop.</p>
-                <div className="home-v2-sponsors">
-                  <span className="home-v2-sponsor">Ellehammerfonden</span>
-                  <span className="home-v2-sponsor">Friluftsrådet</span>
-                  <span className="home-v2-sponsor">Dane-RC</span>
-                  <span className="home-v2-sponsor">Køb din sponsor plads her</span>
-                </div>
-              </>
-            )}
+            ) : null}
           </div>
           <div>
             <h3>Kontakt</h3>
             {footerData?.footer ? (
               <>
+                {(footerData.footer.addressLine1 || footerData.footer.addressLine2) && (
+                  <p className="home-v2-small" style={{marginTop: '10px'}}>
+                    {footerData.footer.addressLine1}{footerData.footer.addressLine1 && footerData.footer.addressLine2 && ', '}
+                    {footerData.footer.addressLine2}
+                  </p>
+                )}
                 <p className="home-v2-small" style={{marginTop: '10px'}}>
-                  {footerData.footer.addressLine1}{footerData.footer.addressLine1 && footerData.footer.addressLine2 && ', '}
-                  {footerData.footer.addressLine2}
-                </p>
-                <p className="home-v2-small" style={{marginTop: '10px'}}>
-                  {footerData.footer.email}<br/>
+                  {footerData.footer.email && <>{footerData.footer.email}<br/></>}
                   {footerData.footer.phone && <>{footerData.footer.phone}<br/></>}
                   {footerData.footer.cvr && <>CVR {footerData.footer.cvr}</>}
                 </p>
               </>
             ) : (
-              <>
-                <p className="home-v2-small" style={{marginTop: '10px'}}>{clubDisplayName}</p>
-                <p className="home-v2-small" style={{marginTop: '10px'}}>{club.settings?.publicEmail || 'kontakt@efk87.dk'}<br/>CVR 12345678</p>
-              </>
+              <p className="home-v2-small" style={{marginTop: '10px'}}>
+                {clubDisplayName}
+                {club.settings?.publicEmail && <><br/>{club.settings.publicEmail}</>}
+              </p>
             )}
           </div>
           <div>
             <h3>Links</h3>
-            <p className="home-v2-small" style={{marginTop: '10px'}}>Regler og bestemmelser<br/>Bestyrelsen<br/>Her bor vi<br/>Privatliv og cookies</p>
+            <p className="home-v2-small" style={{marginTop: '10px'}}>
+              <Link href={`/${club.slug}/forum`} style={{ color: 'inherit', textDecoration: 'none' }}>Forum</Link><br/>
+              <Link href={`/${club.slug}/galleri`} style={{ color: 'inherit', textDecoration: 'none' }}>Galleri</Link><br/>
+              <Link href={`/${club.slug}/flyveskole`} style={{ color: 'inherit', textDecoration: 'none' }}>Flyveskole</Link><br/>
+              <Link href={`/${club.slug}/om`} style={{ color: 'inherit', textDecoration: 'none' }}>Om {clubShortName}</Link>
+            </p>
           </div>
         </footer>
       </div>
