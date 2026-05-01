@@ -1,5 +1,6 @@
 import prisma from "../db/prisma";
 import { ServerViewerContext } from "../auth/viewer";
+import { getMemberDisplayName } from "../../components/member/MemberDisplayName";
 
 export interface LatestMemberActivityDTO {
   displayName: string;
@@ -97,6 +98,14 @@ export async function getTodayLatestActiveMembers(
           name: true,
           email: true,
           image: true,
+          memberProfiles: {
+            where: { clubId },
+            select: {
+              firstName: true,
+              lastName: true,
+              profileImageUrl: true,
+            },
+          },
         },
       },
     },
@@ -112,10 +121,8 @@ export async function getTodayLatestActiveMembers(
     let displayName = "Medlem";
     let profileImageUrl: string | null = null;
     if (canSeeNames) {
-      // Use the name from User model, but we should eventually use getMemberDisplayName 
-      // if we have memberProfiles here. For now keeping it simple as per existing code.
-      displayName = activity.user.name || activity.user.email || "Medlem";
-      profileImageUrl = activity.user.image;
+      displayName = getMemberDisplayName(activity.user);
+      profileImageUrl = activity.user.memberProfiles?.[0]?.profileImageUrl || activity.user.image;
     }
 
     return {

@@ -8,6 +8,8 @@ This document describes the member activity tracking and display features.
 
 ### Core Concepts
 - **Definition**: Shows the latest members seen today for the current club.
+- **Real Data Only**: "Senest online" uses real activity data only. Seed or mock members are never shown.
+- **Empty State**: If no members have been active today, a clean empty state is shown: “Ingen medlemmer online lige nu”.
 - **Tenant Scoping**: Activity is tracked per club using `MemberDailyActivity`. A user can have separate activity records for different clubs they are members of.
 - **Not Real-time**: It is not a live websocket-based presence system. It relies on the last recorded activity for the current club today.
 - **Privacy**:

@@ -314,7 +314,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                         </div>
                     ))
                 ) : (
-                    <div className="home-v2-compact-empty">Ingen aktivitet endnu</div>
+                    <div className="home-v2-compact-empty">Ingen medlemmer online lige nu</div>
                 )}
               </div>
 
