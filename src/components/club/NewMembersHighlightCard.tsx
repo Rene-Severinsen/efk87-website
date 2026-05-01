@@ -1,5 +1,6 @@
 import React from 'react';
 import { NewMemberHighlight } from '../../lib/members/newMemberHighlightService';
+import Avatar from '../shared/Avatar';
 
 interface NewMembersHighlightCardProps {
   clubName: string;
@@ -34,8 +35,15 @@ export default function NewMembersHighlightCard({ clubName, members }: NewMember
         <ul className="new-members-list">
           {members.map((member) => (
             <li key={member.id} className="new-member-item">
-              <span className="member-name">{member.displayName}</span>
-              <span className="member-date home-v2-muted">(pr. {formatDate(member.joinedAt)})</span>
+              <Avatar 
+                imageUrl={member.profileImageUrl} 
+                name={member.displayName} 
+                size="sm" 
+              />
+              <div className="new-member-info">
+                <span className="member-name">{member.displayName}</span>
+                <span className="member-date home-v2-muted"> (pr. {formatDate(member.joinedAt)})</span>
+              </div>
             </li>
           ))}
         </ul>

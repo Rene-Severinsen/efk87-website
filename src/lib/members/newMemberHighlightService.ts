@@ -8,6 +8,7 @@ export interface NewMemberHighlight {
   id: string;
   displayName: string;
   joinedAt: Date;
+  profileImageUrl: string | null;
 }
 
 export interface NewMemberHighlightData {
@@ -45,6 +46,7 @@ export async function getNewMemberHighlights(clubId: string): Promise<NewMemberH
       id: m.id,
       displayName: getMemberDisplayName(m, m.user),
       joinedAt: m.joinedAt!,
+      profileImageUrl: m.profileImageUrl,
     }));
 
   return {
