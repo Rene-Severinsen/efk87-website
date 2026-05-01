@@ -330,15 +330,15 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                   
                   <div className="home-v2-online-list" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {flightSchoolHomepage.sessions.map((session) => (
-                      <div key={session.id} className="home-v2-online-row" style={{ padding: '6px 0', borderBottom: '1px solid var(--home-v2-line-soft)', fontSize: '13px' }}>
-                        <span style={{ fontWeight: 500, flex: 1 }}>
+                      <div key={session.id} className="home-v2-online-row" style={{ padding: '6px 0', borderBottom: '1px solid var(--home-v2-line-soft)', fontSize: '13px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontWeight: 500 }}>
                           {session.instructorName}
+                          {' '}·{' '}
                         </span>
-                        <span className="home-v2-muted" style={{ width: '90px', textAlign: 'right' }}>
-                          {session.startTime?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}–{session.endTime?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                        <span className="home-v2-muted" style={{ width: '70px', textAlign: 'right', fontSize: '12px' }}>
-                          {session.bookedSlots}/{session.totalActiveSlots} booket
+                        <span className="home-v2-muted">
+                          {session.startTime?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}–{session.endTime?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit'})}
+                          {' '}·{' '}
+                          {session.bookedSlots}/{session.totalActiveSlots} tider booket
                         </span>
                       </div>
                     ))}
@@ -348,7 +348,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
 
               {flightSchoolHomepage.upcomingDays.length > 0 && (
                 <div style={{ marginTop: '20px', borderTop: '1px solid var(--home-v2-line)', paddingTop: '16px' }}>
-                  <div className="home-v2-muted" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>📅 Næste skoledage</div>
+                  <div className="home-v2-muted" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>📅 <b>næste skoledage</b></div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {flightSchoolHomepage.upcomingDays.map((day, idx) => (
                       <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px', padding: '4px 0' }}>
