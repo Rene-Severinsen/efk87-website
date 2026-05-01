@@ -306,49 +306,70 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
 
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
-                <h2>Skoleflyvning i dag</h2>
-                <Link className="home-v2-link-soft" href={`/${club.slug}/flyveskole/skolekalender`}>Skolekalender</Link>
+                <h2>✈️ Skoleflyvning i dag</h2>
               </div>
               
               {!flightSchoolHomepage.hasSessionsToday ? (
-                <div className="home-v2-compact-empty" style={{ padding: '20px 0' }}>
+                <div className="home-v2-compact-empty" style={{ padding: '12px 0' }}>
                   Ingen skoleflyvning i dag
                 </div>
               ) : (
-                <>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <div className="home-v2-mini-grid">
-                    <div className="home-v2-mini-card">
-                      <div className="home-v2-muted">Status</div>
-                      <h3 style={{marginTop: '8px'}}>I dag</h3>
-                      <div className="home-v2-row-sub" style={{marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '8px 12px'}}>
-                        <span>{flightSchoolHomepage.totalInstructors} {flightSchoolHomepage.totalInstructors === 1 ? 'instruktør' : 'instruktører'}</span>
-                        <span>{flightSchoolHomepage.totalBookedStudents} {flightSchoolHomepage.totalBookedStudents === 1 ? 'elev' : 'elever'}</span>
+                    <div className="home-v2-mini-card" style={{ padding: '12px' }}>
+                      <div className="home-v2-muted" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>I dag</div>
+                      <div className="home-v2-row-sub" style={{ marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '8px 16px', fontSize: '13px' }}>
+                        <span>👨‍✈️ {flightSchoolHomepage.totalInstructors} {flightSchoolHomepage.totalInstructors === 1 ? 'instruktør' : 'instruktører'}</span>
+                        <span>👥 {flightSchoolHomepage.totalBookedStudents} {flightSchoolHomepage.totalBookedStudents === 1 ? 'elev' : 'elever'}</span>
                         {flightSchoolHomepage.totalAvailableSlots > 0 && (
-                          <span className="text-emerald-400">{flightSchoolHomepage.totalAvailableSlots} ledige tider</span>
+                          <span className="text-emerald-400">🟢 {flightSchoolHomepage.totalAvailableSlots} ledige</span>
                         )}
                       </div>
                     </div>
                   </div>
                   
-                  <div className="home-v2-online-list" style={{ marginTop: '16px', borderTop: '1px solid var(--home-v2-line)', paddingTop: '16px' }}>
+                  <div className="home-v2-online-list" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {flightSchoolHomepage.sessions.map((session) => (
-                      <div key={session.id} className="home-v2-online-row">
-                        <span className="home-v2-online-time" style={{ minWidth: '85px' }}>
-                          {session.startTime?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })} - {session.endTime?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                        <span className="home-v2-online-name">
+                      <div key={session.id} className="home-v2-online-row" style={{ padding: '6px 0', borderBottom: '1px solid var(--home-v2-line-soft)', fontSize: '13px' }}>
+                        <span style={{ fontWeight: 500, flex: 1 }}>
                           {session.instructorName}
                         </span>
-                        <span className="home-v2-muted" style={{ fontSize: '12px', marginLeft: 'auto' }}>
+                        <span className="home-v2-muted" style={{ width: '90px', textAlign: 'right' }}>
+                          {session.startTime?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}–{session.endTime?.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        <span className="home-v2-muted" style={{ width: '70px', textAlign: 'right', fontSize: '12px' }}>
                           {session.bookedSlots}/{session.totalActiveSlots} booket
                         </span>
                       </div>
                     ))}
                   </div>
-                </>
+                </div>
               )}
 
-              <div className="home-v2-cta-row">
+              {flightSchoolHomepage.upcomingDays.length > 0 && (
+                <div style={{ marginTop: '20px', borderTop: '1px solid var(--home-v2-line)', paddingTop: '16px' }}>
+                  <div className="home-v2-muted" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>📅 Næste skoledage</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {flightSchoolHomepage.upcomingDays.map((day, idx) => (
+                      <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px', padding: '4px 0' }}>
+                        <span style={{ textTransform: 'capitalize' }}>
+                          {day.date.toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short' }).replace('.', '')}
+                        </span>
+                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                          <span className="home-v2-muted">{day.instructorCount} {day.instructorCount === 1 ? 'instruktør' : 'instruktører'}</span>
+                          {day.availableSlots > 0 ? (
+                            <span className="text-emerald-400" style={{ fontSize: '12px' }}>{day.availableSlots} ledige</span>
+                          ) : (
+                            <span className="home-v2-muted" style={{ fontSize: '12px' }}>Fuldt booket</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="home-v2-cta-row" style={{ marginTop: '20px' }}>
                 <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/flyveskole/skolekalender`}>
                   Se skolekalender
                 </Link>

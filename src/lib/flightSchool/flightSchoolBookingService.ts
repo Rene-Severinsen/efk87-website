@@ -41,6 +41,11 @@ export interface FlightSchoolHomepageViewModel {
     bookedSlots: number;
     totalActiveSlots: number;
   }[];
+  upcomingDays: {
+    date: Date;
+    instructorCount: number;
+    availableSlots: number;
+  }[];
 }
 
 /**
@@ -136,6 +141,54 @@ export async function getFlightSchoolHomepageView(clubId: string): Promise<Fligh
   const instructors = new Set(sessions.map(s => s.instructorMemberProfileId));
   const totalInstructors = instructors.size;
 
+  // Fetch upcoming days (published sessions after today)
+  const today = startOfDay(new Date());
+  const upcomingSessions = await prisma.flightSchoolSession.findMany({
+    where: {
+      clubId,
+      date: {
+        gt: endOfDay(today),
+      },
+      status: FlightSchoolSessionStatus.PUBLISHED,
+    },
+    include: {
+      timeSlots: {
+        where: { isActive: true },
+        include: {
+          bookings: {
+            where: { status: FlightSchoolBookingStatus.BOOKED },
+          }
+        }
+      }
+    },
+    orderBy: { date: 'asc' },
+    take: 20, // Take a reasonable amount to find 2 unique dates
+  });
+
+  const upcomingDaysMap = new Map<string, { date: Date; instructorCount: number; availableSlots: number }>();
+  
+  for (const session of upcomingSessions) {
+    const dateKey = startOfDay(session.date).toISOString();
+    let dayData = upcomingDaysMap.get(dateKey);
+    
+    if (!dayData) {
+      if (upcomingDaysMap.size >= 2) continue;
+      dayData = {
+        date: session.date,
+        instructorCount: 0,
+        availableSlots: 0,
+      };
+      upcomingDaysMap.set(dateKey, dayData);
+    }
+
+    dayData.instructorCount++;
+    const activeSlots = session.timeSlots.length;
+    const bookedSlots = session.timeSlots.reduce((acc, slot) => acc + slot.bookings.length, 0);
+    dayData.availableSlots += (activeSlots - bookedSlots);
+  }
+
+  const upcomingDays = Array.from(upcomingDaysMap.values());
+
   return {
     hasSessionsToday: totalSessions > 0,
     totalSessions,
@@ -143,6 +196,7 @@ export async function getFlightSchoolHomepageView(clubId: string): Promise<Fligh
     totalBookedStudents,
     totalAvailableSlots,
     sessions: sessionSummaries,
+    upcomingDays,
   };
 }
 

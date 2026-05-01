@@ -65,12 +65,18 @@ A seam for instructor notifications has been prepared in the service layer (`TOD
 
 ## Homepage Integration
 
-The homepage includes a "Skoleflyvning i dag" box that shows real-time data from today's published sessions:
-- **Data shown**: Status (today), number of active instructors, number of booked students, and available slots (if any).
-- **Session summary**: Compact list of instructors today with their time range and booking ratio (booked/total slots).
-- **No-session behavior**: Shows "Ingen skoleflyvning i dag" if no published sessions exist.
+The homepage includes a "Skoleflyvning i dag" box that provides a compact, visually clear summary of current and upcoming flight school activities:
+- **Today summary**: If there are sessions today, it shows a compact "I dag" section with:
+  - Total instructors.
+  - Total booked students.
+  - Total available slots today (with a green 🟢 indicator).
+- **Session details**: Compact per-session rows for today showing instructor name, time range (e.g., 09:00–16:00), and booked/total active slots.
+- **Next school days**: A "Næste skoledage" section showing the next 2 upcoming dates with published sessions after today, including the number of instructors and available slots for each date.
+- **Empty state**: If no sessions are scheduled today, it shows "Ingen skoleflyvning i dag" but still displays upcoming school days if available.
+- **Visual tone**: Uses a premium, clean style with restrained emoji usage (max 3–5) to support scannability (e.g., ✈️, 👨‍✈️, 👥, 🟢, 📅).
 - **CTA**: A "Se skolekalender" button linking to the public booking page.
 - **Privacy**: No student contact data is exposed on the homepage.
+- **Responsive**: Optimized for both mobile and desktop viewports.
 
 ## Admin Maintenance Flow
 
