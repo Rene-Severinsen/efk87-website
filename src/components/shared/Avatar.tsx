@@ -55,7 +55,7 @@ const Avatar = ({ imageUrl, name, size = "md", className = "", objectPosition = 
           src={imageUrl}
           alt={name}
           className="w-full h-full object-cover"
-          style={{ objectPosition }}
+          style={{ objectPosition: objectPosition || "center" }}
         />
       ) : (
         <div className={`w-full h-full flex items-center justify-center font-bold text-white/70 ${bgColor}`}>

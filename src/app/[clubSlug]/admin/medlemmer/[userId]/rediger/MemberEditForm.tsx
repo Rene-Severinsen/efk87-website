@@ -154,7 +154,7 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
                   name={member.displayName || "Medlem"} 
                   size="lg" 
                   className="w-32 h-32 text-4xl border-2 border-white/20 shadow-xl group-hover:border-sky-500/50 transition-all duration-300" 
-                  objectPosition="center 25%"
+                  objectPosition="center 18%"
                 />
                 {previewUrl && (
                   <button
