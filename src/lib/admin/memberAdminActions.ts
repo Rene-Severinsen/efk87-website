@@ -51,11 +51,20 @@ export async function updateAdminMemberProfileAction(
 
   const firstName = getString("firstName");
   const lastName = getString("lastName");
+  const email = getString("email")?.toLowerCase().trim();
   const addressLine = getString("addressLine");
   const postalCode = getString("postalCode");
   const city = getString("city");
   const mobilePhone = getString("mobilePhone");
   const mdkNumber = getString("mdkNumber");
+
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return {
+      fieldErrors: {
+        email: "Indtast en gyldig e-mailadresse.",
+      },
+    };
+  }
   // memberNumber is now auto-assigned and not editable from edit form
 
   let profileImageUrl = getString("profileImageUrl");
@@ -89,6 +98,29 @@ export async function updateAdminMemberProfileAction(
 
   try {
     await prisma.$transaction(async (tx) => {
+      // Update User email if changed
+      if (email) {
+        // Check if email is already in use by another user
+        const existingUser = await tx.user.findFirst({
+          where: {
+            email,
+            id: { not: userId }
+          }
+        });
+
+        if (existingUser) {
+          throw new Error("EMAIL_ALREADY_IN_USE");
+        }
+
+        await tx.user.update({
+          where: { id: userId },
+          data: { 
+            email,
+            name: (firstName || lastName) ? `${firstName ?? ""} ${lastName ?? ""}`.trim() : undefined
+          },
+        });
+      }
+
       // Update Profile
       await tx.clubMemberProfile.update({
         where: {
@@ -148,6 +180,13 @@ export async function updateAdminMemberProfileAction(
       }
     });
   } catch (err) {
+    if (err instanceof Error && err.message === "EMAIL_ALREADY_IN_USE") {
+      return {
+        fieldErrors: {
+          email: "Denne e-mailadresse er allerede i brug af et andet medlem.",
+        },
+      };
+    }
     throw err;
   }
 

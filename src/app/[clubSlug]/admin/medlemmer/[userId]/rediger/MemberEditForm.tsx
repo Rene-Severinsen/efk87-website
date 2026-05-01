@@ -16,7 +16,7 @@ import Avatar from "@/components/shared/Avatar";
 
 interface MemberEditFormProps {
   clubSlug: string;
-  member: ClubMemberProfile & { certificates: ClubMemberCertificateType[], displayName?: string | null };
+  member: ClubMemberProfile & { certificates: ClubMemberCertificateType[], displayName?: string | null, email?: string | null };
   updateAction: (prevState: AdminMemberActionResponse | null, formData: FormData) => Promise<AdminMemberActionResponse>;
 }
 
@@ -216,6 +216,7 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
             <Field label="Adresse" name="addressLine" defaultValue={member.addressLine} fullWidth />
             <Field label="Postnummer" name="postalCode" defaultValue={member.postalCode} />
             <Field label="By" name="city" defaultValue={member.city} />
+            <Field label="E-mail" name="email" defaultValue={member.email} error={state?.fieldErrors?.email} fullWidth />
             <Field label="Mobil" name="mobilePhone" defaultValue={member.mobilePhone} />
             <Field label="MDK nummer" name="mdkNumber" defaultValue={member.mdkNumber} />
           </Section>
