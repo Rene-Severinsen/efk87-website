@@ -7,7 +7,8 @@ import { getMemberDisplayName } from "../../../../../components/member/MemberDis
 import { formatAdminDateTime } from "../../../../../lib/format/adminDateFormat";
 import ReplyForm from "../../../../../components/forum/ReplyForm";
 import { createForumReply } from "../../../../../lib/forum/actions/memberForumActions";
-import { User, Clock, Lock } from "lucide-react";
+import { Clock, Lock } from "lucide-react";
+import Avatar from "../../../../../components/shared/Avatar";
 
 interface ThreadDetailPageProps {
   params: Promise<{
@@ -53,10 +54,12 @@ export default async function ThreadDetailPage({ params }: ThreadDetailPageProps
         <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl">
           <div className="p-8 border-b border-white/10 bg-white/5">
             <div className="flex flex-wrap items-center gap-6 text-sm text-slate-400">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-sky-500/20 flex items-center justify-center text-sky-400 border border-sky-500/20">
-                  <User className="w-4 h-4" />
-                </div>
+              <div className="flex items-center gap-3">
+                <Avatar 
+                  name={getMemberDisplayName(thread.author)} 
+                  imageUrl={thread.author.image} 
+                  size="sm" 
+                />
                 <span className="font-bold text-white">{getMemberDisplayName(thread.author)}</span>
               </div>
               <div className="flex items-center gap-2">
@@ -77,10 +80,12 @@ export default async function ThreadDetailPage({ params }: ThreadDetailPageProps
         {replies.map((reply) => (
           <div key={reply.id} className="backdrop-blur-md bg-white/5 border border-white/10 rounded-[2rem] overflow-hidden shadow-xl ml-4 sm:ml-8 lg:ml-12">
             <div className="p-6 border-b border-white/10 bg-white/5 flex flex-wrap items-center gap-6 text-sm text-slate-400">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
-                  <User className="w-3 h-3" />
-                </div>
+              <div className="flex items-center gap-3">
+                <Avatar 
+                  name={getMemberDisplayName(reply.author)} 
+                  imageUrl={reply.author.image} 
+                  size="sm" 
+                />
                 <span className="font-bold text-white">{getMemberDisplayName(reply.author)}</span>
               </div>
               <div className="flex items-center gap-2 text-xs">

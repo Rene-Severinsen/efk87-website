@@ -5,6 +5,7 @@ import { ThemedTopBar } from './ThemedTopBar';
 import { ClubTheme, PublicHomeFeatureTile, PublicHomeInfoCard, PublicClubFooter, PublicSponsor } from "../../generated/prisma";
 import { PublicNavigationItem } from "../../lib/publicSite/publicNavigation";
 import { PublicFlightIntentListItem } from "../../lib/publicSite/publicFlightIntentService";
+import Avatar from '../shared/Avatar';
 
 interface PublicFooterData {
   footer: PublicClubFooter | null;
@@ -255,10 +256,20 @@ export default function PublicClubHomePage({
               {flightIntents && flightIntents.length > 0 ? (
                 flightIntents.map((intent) => (
                   <div className="row-item" key={intent.id}>
-                    <div className="row-icon">{activityIcons[intent.activityType] || '•'}</div>
-                    <div>
-                      <div className="row-title">{intent.displayName}</div>
-                      {intent.message && <div className="row-sub">“{intent.message}”</div>}
+                    <div className="relative shrink-0 mr-3">
+                      <Avatar 
+                        name={intent.displayName} 
+                        imageUrl={intent.profileImageUrl} 
+                        size="sm" 
+                        className="w-8 h-8"
+                      />
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 flex items-center justify-center rounded-full bg-[var(--club-panel)] border border-[var(--club-line)] text-[8px]">
+                        {activityIcons[intent.activityType] || '•'}
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="row-title truncate">{intent.displayName}</div>
+                      {intent.message && <div className="row-sub truncate">“{intent.message}”</div>}
                     </div>
                     <span className="status-badge info">{formatTime(intent.createdAt)}</span>
                   </div>

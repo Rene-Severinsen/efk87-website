@@ -4,12 +4,13 @@ import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPag
 import { requireActiveMemberForClub } from "../../../../lib/auth/accessGuards";
 import { getForumCategoryBySlug, getForumThreads } from "../../../../lib/forum/forumService";
 import Link from "next/link";
-import { Plus, Clock, MessageSquare, User } from "lucide-react";
+import { Plus, Clock, MessageSquare } from "lucide-react";
 import ForumIcon from "../../../../components/forum/ForumIcon";
 import ForumReplyBadge from "../../../../components/forum/ForumReplyBadge";
 import { getForumReplyBadge } from "../../../../lib/forum/forumHelpers";
 import { getMemberDisplayName } from "../../../../components/member/MemberDisplayName";
 import { formatAdminDate } from "../../../../lib/format/adminDateFormat";
+import Avatar from "../../../../components/shared/Avatar";
 
 interface CategoryPageProps {
   params: Promise<{
@@ -90,8 +91,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   </div>
                   
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
-                    <div className="flex items-center gap-1.5">
-                      <User className="w-3 h-3" />
+                    <div className="flex items-center gap-2">
+                      <Avatar 
+                        name={getMemberDisplayName(thread.author)} 
+                        imageUrl={thread.author.image} 
+                        size="sm" 
+                        className="w-5 h-5"
+                      />
                       <span>{getMemberDisplayName(thread.author)}</span>
                     </div>
                     <div className="flex items-center gap-1.5">

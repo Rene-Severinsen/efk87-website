@@ -10,6 +10,7 @@ import { ViewerVisibilityContext } from "./publicVisibility";
 export interface PublicFlightIntentListItem {
   id: string;
   displayName: string;
+  profileImageUrl?: string | null;
   message: string | null;
   activityType: ClubFlightIntentType;
   createdAt: Date;
@@ -28,6 +29,7 @@ function maskFlightIntents(
     user: {
       name: string | null;
       email: string;
+      image: string | null;
       memberProfiles: {
         firstName: string | null;
         lastName: string | null;
@@ -40,16 +42,19 @@ function maskFlightIntents(
 
   return intents.map((intent) => {
     let displayName = "Medlem";
+    let profileImageUrl: string | null = null;
 
     if (canSeeRealNames) {
       // Use the helper to get the real display name from profile/user
       const profile = intent.user.memberProfiles[0] || { firstName: null, lastName: null };
       displayName = getMemberDisplayName(profile, intent.user);
+      profileImageUrl = intent.user.image;
     }
 
     return {
       id: intent.id,
       displayName,
+      profileImageUrl,
       message: intent.message,
       activityType: intent.activityType,
       createdAt: intent.createdAt,

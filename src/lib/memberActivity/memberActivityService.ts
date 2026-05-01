@@ -3,6 +3,7 @@ import { ServerViewerContext } from "../auth/viewer";
 
 export interface LatestMemberActivityDTO {
   displayName: string;
+  profileImageUrl?: string | null;
   lastSeenAt: Date;
 }
 
@@ -95,6 +96,7 @@ export async function getTodayLatestActiveMembers(
         select: {
           name: true,
           email: true,
+          image: true,
         },
       },
     },
@@ -108,12 +110,17 @@ export async function getTodayLatestActiveMembers(
 
   return activities.map((activity) => {
     let displayName = "Medlem";
+    let profileImageUrl: string | null = null;
     if (canSeeNames) {
+      // Use the name from User model, but we should eventually use getMemberDisplayName 
+      // if we have memberProfiles here. For now keeping it simple as per existing code.
       displayName = activity.user.name || activity.user.email || "Medlem";
+      profileImageUrl = activity.user.image;
     }
 
     return {
       displayName,
+      profileImageUrl,
       lastSeenAt: activity.lastSeenAt,
     };
   });

@@ -18,12 +18,14 @@ import { WeatherData } from '../../../lib/weather/openMeteoWeatherService';
 import { HomepageContentWithSignups } from '../../../lib/homepageContent/homepageContentService';
 import { FlightSchoolHomepageViewModel } from '../../../lib/flightSchool/flightSchoolBookingService';
 import HomepageContentBoxes from './HomepageContentBoxes';
+import Avatar from '../../shared/Avatar';
 
 type ThreadWithRelations = ClubForumThread & {
   category: ClubForumCategory;
   author: {
     id: string;
     name: string | null;
+    image: string | null;
     memberProfiles: {
       firstName: string | null;
       lastName: string | null;
@@ -33,6 +35,7 @@ type ThreadWithRelations = ClubForumThread & {
     author: {
       id: string;
       name: string | null;
+      image: string | null;
       memberProfiles: {
         firstName: string | null;
         lastName: string | null;
@@ -285,13 +288,19 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               <div className="home-v2-online-list">
                 {memberActivity.latestMembers.length > 0 ? (
                     memberActivity.latestMembers.map((member, idx) => (
-                        <div key={idx} className="home-v2-online-row">
-                    <span className="home-v2-online-time">
-                      {member.lastSeenAt.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
-                    </span>
+                        <div key={idx} className="home-v2-online-row flex items-center gap-3">
+                          <Avatar 
+                            name={member.displayName} 
+                            imageUrl={member.profileImageUrl} 
+                            size="sm" 
+                            className="w-6 h-6"
+                          />
+                          <span className="home-v2-online-time">
+                            {member.lastSeenAt.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
                           <span className="home-v2-online-name">
-                      {member.displayName}
-                    </span>
+                            {member.displayName}
+                          </span>
                         </div>
                     ))
                 ) : (

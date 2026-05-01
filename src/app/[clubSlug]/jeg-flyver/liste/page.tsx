@@ -2,6 +2,7 @@ import { resolveClubContext } from "../../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPageShell";
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { getTodayFlightIntentList } from "../../../../lib/publicSite/publicFlightIntentService";
+import Avatar from "../../../../components/shared/Avatar";
 
 interface JegFlyverListePageProps {
   params: Promise<{
@@ -55,8 +56,15 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
           <div className="list flex flex-col gap-3">
             {flightIntents.map((intent) => (
               <div className="row-item flex items-center gap-3 p-3 rounded-xl bg-[var(--club-panel-soft)] border border-[var(--club-line)]" key={intent.id}>
-                <div className="row-icon w-10 h-10 shrink-0 flex items-center justify-center rounded-full bg-white/5 text-xl">
-                  {activityIcons[intent.activityType] || '•'}
+                <div className="relative shrink-0">
+                  <Avatar 
+                    name={intent.displayName} 
+                    imageUrl={intent.profileImageUrl} 
+                    size="sm" 
+                  />
+                  <div className="absolute -bottom-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-[var(--club-panel)] border border-[var(--club-line)] text-[10px]">
+                    {activityIcons[intent.activityType] || '•'}
+                  </div>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="row-item-header flex justify-between items-center gap-2">

@@ -125,6 +125,7 @@ export async function getLatestForumActivity(clubId: string, limit = 5) {
         select: {
           id: true,
           name: true,
+          image: true,
           memberProfiles: {
             where: { clubId },
             select: { firstName: true, lastName: true },
@@ -140,6 +141,7 @@ export async function getLatestForumActivity(clubId: string, limit = 5) {
             select: {
               id: true,
               name: true,
+              image: true,
               memberProfiles: {
                 where: { clubId },
                 select: { firstName: true, lastName: true },
