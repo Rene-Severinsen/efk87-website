@@ -7,6 +7,7 @@ import { PublicNavigationItem } from '../../../lib/publicSite/publicNavigation';
 import { NewMemberHighlightData } from '../../../lib/members/newMemberHighlightService';
 import NewMembersHighlightCard from '../../club/NewMembersHighlightCard';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ThemedTopBar } from '../ThemedTopBar';
 import { PublicCalendarEntry } from '../../../lib/publicSite/publicCalendarService';
 import { getMemberDisplayName } from '../../member/MemberDisplayName';
@@ -114,10 +115,23 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 <> · Vejr: Henter...</>
               )}
             </div>
-            <h1>Hej {firstName}.{todayFlyingCount > 0 ? ' Der er liv på pladsen i dag.' : ''}</h1>
-            <p className="home-v2-hero-copy">
-              {todayFlightIntents.length} medlemmer har allerede meldt “jeg flyver”.
-            </p>
+            <div className="home-v2-hero-header">
+              <div className="home-v2-hero-text">
+                <h1>Hej {firstName}.{todayFlyingCount > 0 ? ' Der er liv på pladsen i dag.' : ''}</h1>
+                <p className="home-v2-hero-copy">
+                  {todayFlightIntents.length} medlemmer har allerede meldt “jeg flyver”.
+                </p>
+              </div>
+              <div className="home-v2-bird-indicator">
+                <Image
+                  src={todayFlyingCount > 0 ? '/images/club/vi_flyver.gif' : '/images/club/vi_flyver_ikke.gif'}
+                  alt={todayFlyingCount > 0 ? 'Gribben flyver' : 'Gribben sidder stille'}
+                  width={80}
+                  height={80}
+                  unoptimized
+                />
+              </div>
+            </div>
             <div className="home-v2-inline-actions">
               <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/jeg-flyver`}>Jeg flyver</Link>
               <Link className="home-v2-pill" href={`/${club.slug}/bliv-medlem`}>Bliv medlem</Link>

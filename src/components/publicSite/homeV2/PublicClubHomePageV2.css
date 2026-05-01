@@ -87,11 +87,36 @@
   max-width: 800px;
 }
 
+.home-v2-hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.home-v2-hero-text {
+  flex: 1;
+}
+
+.home-v2-bird-indicator {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.home-v2-bird-indicator img {
+  width: auto;
+  height: 80px;
+  object-fit: contain;
+}
+
 .home-v2-hero-copy {
   font-size: 18px;
   line-height: 1.6;
   color: var(--home-v2-muted);
-  margin-bottom: 24px;
+  margin-bottom: 0;
   max-width: 720px;
 }
 
@@ -765,9 +790,20 @@
     letter-spacing: -0.03em;
   }
 
+  .home-v2-hero-header {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .home-v2-bird-indicator img {
+    height: 56px;
+  }
+
   .home-v2-hero-copy {
     max-width: 100%;
-    margin-bottom: 12px;
+    margin-bottom: 0;
     font-size: 14px;
     line-height: 1.42;
   }
