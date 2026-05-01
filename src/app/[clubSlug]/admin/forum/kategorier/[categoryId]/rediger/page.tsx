@@ -5,7 +5,7 @@ import AdminShell from "../../../../../../../components/admin/AdminShell";
 import { MessageCircle } from "lucide-react";
 import ForumCategoryForm from "../../../../../../../components/admin/forum/ForumCategoryForm";
 import { updateForumCategory } from "../../../../../../../lib/forum/actions/adminForumActions";
-import prisma from "../../../../../../../lib/db/prisma";
+import { getForumCategoryById } from "../../../../../../../lib/forum/forumService";
 
 interface PageProps {
   params: Promise<{
@@ -29,9 +29,7 @@ export default async function Page({ params }: PageProps) {
 
   const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin/forum/kategorier/${categoryId}/rediger`);
 
-  const category = await prisma.clubForumCategory.findUnique({
-    where: { id: categoryId, clubId: club.id }
-  });
+  const category = await getForumCategoryById(club.id, categoryId);
 
   if (!category) {
     notFound();

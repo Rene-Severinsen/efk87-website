@@ -28,6 +28,15 @@ export async function getForumCategoryBySlug(clubId: string, slug: string) {
   });
 }
 
+export async function getForumCategoryById(clubId: string, categoryId: string) {
+  return prisma.clubForumCategory.findUnique({
+    where: {
+      id: categoryId,
+      clubId,
+    },
+  });
+}
+
 export async function getForumThreads(
   clubId: string,
   categoryId: string,
