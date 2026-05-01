@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
-import { Plus, Edit2, Clock, User, CheckCircle, ChevronRight, ChevronDown, Trash2, XCircle } from "lucide-react";
+import Avatar from "../../shared/Avatar";
+import { Plus, Edit2, Clock, CheckCircle, ChevronRight, ChevronDown, Trash2, XCircle } from "lucide-react";
 import { formatAdminDate, formatAdminTime, formatAdminDateTime } from "../../../lib/format/adminDateFormat";
 import FlightSchoolSessionForm from "./FlightSchoolSessionForm";
 import { FlightSchoolSessionStatus, FlightSchoolSession, FlightSchoolTimeSlot, FlightSchoolBooking, ClubMemberProfile } from "../../../generated/prisma";
@@ -134,18 +134,11 @@ const FlightSchoolCalendarTab: React.FC<FlightSchoolCalendarTabProps> = ({
                       </td>
                       <td className="px-4 py-4 text-sm text-slate-300">
                         <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-full bg-sky-500/20 flex items-center justify-center overflow-hidden relative">
-                            {session.instructor.profileImageUrl ? (
-                              <Image 
-                                src={session.instructor.profileImageUrl} 
-                                alt="" 
-                                fill 
-                                className="object-cover" 
-                              />
-                            ) : (
-                              <User className="w-3 h-3 text-sky-400" />
-                            )}
-                          </div>
+                          <Avatar 
+                            imageUrl={session.instructor.profileImageUrl} 
+                            name={`${session.instructor.firstName} ${session.instructor.lastName}`}
+                            size="sm"
+                          />
                           {session.instructor.firstName} {session.instructor.lastName}
                         </div>
                       </td>

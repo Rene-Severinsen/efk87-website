@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { ThemedSectionCard } from '../publicSite/ThemedBuildingBlocks';
 import { ClubMemberCertificateType } from '@/generated/prisma';
+import Avatar from '../shared/Avatar';
 
 interface ProfileSummaryCardProps {
   clubSlug: string;
@@ -20,19 +21,8 @@ export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({
   role, 
   status,
   profileImageUrl,
-  membershipType,
-  certificates = [],
   memberNumber
 }) => {
-  // Generate initials for the avatar placeholder
-  const initials = name
-    .split(' ')
-    .map((n) => n[0])
-    .filter(Boolean)
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
-
   const getRoleLabel = (r: string) => {
     switch (r) {
       case 'REGULAR': return 'Almindelig medlem';
@@ -54,31 +44,16 @@ export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({
     }
   };
 
-  const getMembershipLabel = (m: string) => {
-    switch (m) {
-      case 'SENIOR': return 'Senior';
-      case 'JUNIOR': return 'Junior';
-      case 'PASSIVE': return 'Passiv';
-      default: return m;
-    }
-  };
-
-  const getCertLabel = (c: string) => {
-    return c.replace(/_/g, '-').replace('CERTIFICATE', 'certifikat');
-  };
-
   return (
     <>
       <ThemedSectionCard className="profile-box">
         <div className="avatar-wrap">
-          <div className="avatar">
-            {profileImageUrl ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img src={profileImageUrl} alt={name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-            ) : (
-              <span style={{ color: 'var(--club-text)' }}>{initials}</span>
-            )}
-          </div>
+          <Avatar 
+            imageUrl={profileImageUrl} 
+            name={name} 
+            size="lg" 
+            className="avatar"
+          />
         </div>
 
         <h3>{name}</h3>
