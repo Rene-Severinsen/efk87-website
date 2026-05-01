@@ -4,15 +4,28 @@ interface AvatarProps {
   imageUrl?: string | null;
   name: string;
   size?: "sm" | "md" | "lg";
+  shape?: "circle" | "rounded";
   className?: string;
   objectPosition?: string;
 }
 
-const Avatar = ({ imageUrl, name, size = "md", className = "", objectPosition = "center" }: AvatarProps) => {
+const Avatar = ({
+  imageUrl,
+  name,
+  size = "md",
+  shape = "circle",
+  className = "",
+  objectPosition = "center",
+}: AvatarProps) => {
   const sizeClasses = {
     sm: "w-8 h-8 text-xs",
     md: "w-12 h-12 text-lg",
     lg: "w-16 h-16 text-2xl",
+  };
+
+  const shapeClasses = {
+    circle: "rounded-full",
+    rounded: "rounded-2xl",
   };
 
   const getInitials = (name: string) => {
@@ -45,7 +58,7 @@ const Avatar = ({ imageUrl, name, size = "md", className = "", objectPosition = 
 
   return (
     <div
-      className={`rounded-full flex-shrink-0 overflow-hidden flex items-center justify-center border border-white/10 ${sizeClasses[size]} ${className}`}
+      className={`${shapeClasses[shape]} flex-shrink-0 overflow-hidden flex items-center justify-center border border-white/10 ${sizeClasses[size]} ${className}`}
       role={!imageUrl ? "img" : undefined}
       aria-label={!imageUrl ? name : undefined}
     >

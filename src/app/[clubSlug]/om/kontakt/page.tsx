@@ -43,7 +43,8 @@ export default async function ContactPage({ params }: ContactPageProps) {
                   imageUrl={instructor.profileImageUrl} 
                   name={instructor.displayName} 
                   size="lg"
-                  className="!rounded-2xl w-16 h-16 sm:w-20 sm:h-20"
+                  shape="rounded"
+                  className="w-16 h-16 sm:w-20 sm:h-20"
                 />
                 <div className="min-w-0">
                   <h3 className="text-lg sm:text-xl font-bold text-white leading-tight truncate">{instructor.displayName}</h3>
