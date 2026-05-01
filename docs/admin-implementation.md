@@ -109,8 +109,12 @@ Located in `src/components/admin/`:
   - **Profilbillede (Profile Photo)**:
     - Reusable `Avatar` component for consistent display of member/instructor photos.
     - Deterministic fallback initials when no photo is available.
-    - Support for manual URL/reference storage in member profiles.
-    - Current limitation: Image upload is not yet implemented; only manual URL editing in admin.
+    - Support for simple image upload in member edit form.
+    - Supported file types: `image/jpeg`, `image/png`, `image/webp`.
+    - Max file size: 2 MB.
+    - Storage: Local filesystem under `public/uploads/clubs/[clubId]/members/[memberProfileId]/`.
+    - Physical deletion of old files is not implemented in this iteration.
+    - Manual URL/reference storage still supported as fallback/debug.
   - Future billing: Reserved UI for pushing members to billing/Dinero.
 - **Privacy**: All data is strictly tenant-scoped.
 

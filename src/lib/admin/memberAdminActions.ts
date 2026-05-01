@@ -5,6 +5,7 @@ import { getServerViewerForClub } from "@/lib/auth/viewer";
 import { getClubBySlug } from "@/lib/tenancy/tenantService";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { saveMemberProfilePhoto } from "@/lib/storage/storageService";
 import { 
   ClubMemberMembershipType, 
   ClubMemberRoleType, 
@@ -57,7 +58,22 @@ export async function updateAdminMemberProfileAction(
   const mdkNumber = getString("mdkNumber");
   // memberNumber is now auto-assigned and not editable from edit form
 
-  const profileImageUrl = getString("profileImageUrl");
+  let profileImageUrl = getString("profileImageUrl");
+  const profilePhotoFile = formData.get("profilePhoto") as File | null;
+  const shouldRemovePhoto = formData.get("removeProfilePhoto") === "true";
+
+  if (shouldRemovePhoto) {
+    profileImageUrl = null;
+  } else if (profilePhotoFile && profilePhotoFile.size > 0) {
+    const uploadResult = await saveMemberProfilePhoto(club.id, userId, profilePhotoFile);
+    if (uploadResult.error) {
+      return { error: uploadResult.error };
+    }
+    if (uploadResult.url) {
+      profileImageUrl = uploadResult.url;
+    }
+  }
+
   const birthDate = getDate("birthDate");
   const joinedAt = getDate("joinedAt");
   

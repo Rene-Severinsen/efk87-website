@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState, useRef } from "react";
 import { AdminMemberActionResponse } from "@/lib/admin/memberAdminActions";
 import { SubmitButton } from "@/components/admin/SubmitButton";
 import Link from "next/link";
@@ -98,6 +98,29 @@ const CertificateTile = ({ label, name, defaultChecked }: { label: string, name:
 
 export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFormProps) {
   const [state, formAction] = useActionState(updateAction, null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(member.profileImageUrl);
+  const [isRemovingPhoto, setIsRemovingPhoto] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+        setIsRemovingPhoto(false);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    setPreviewUrl(null);
+    setIsRemovingPhoto(true);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   const membershipOptions = Object.entries(MEMBERSHIP_TYPE_LABELS).map(([value, label]) => ({ value, label }));
   const roleOptions = Object.entries(ROLE_TYPE_LABELS).map(([value, label]) => ({ value, label }));
@@ -123,12 +146,68 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
+          <Section title="Profilbillede" className="md:col-span-2">
+            <div className="md:col-span-2 flex flex-col md:flex-row items-center gap-8">
+              <div className="relative group">
+                <Avatar 
+                  imageUrl={previewUrl} 
+                  name={member.displayName || "Medlem"} 
+                  size="lg" 
+                  className="w-32 h-32 text-4xl border-2 border-white/20 shadow-xl group-hover:border-sky-500/50 transition-all duration-300" 
+                />
+                {previewUrl && (
+                  <button
+                    type="button"
+                    onClick={handleRemovePhoto}
+                    className="absolute -top-2 -right-2 p-1.5 bg-red-500/90 hover:bg-red-600 text-white rounded-full shadow-lg transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-500/40"
+                    title="Fjern billede"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              
+              <div className="flex-grow space-y-4 w-full md:w-auto">
+                <div className="flex flex-col gap-2">
+                  <label className="block text-sm font-medium text-slate-400">Upload nyt billede</label>
+                  <input 
+                    type="file"
+                    name="profilePhoto"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                    className="block w-full text-sm text-slate-400
+                      file:mr-4 file:py-2.5 file:px-4
+                      file:rounded-xl file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-sky-500/10 file:text-sky-400
+                      hover:file:bg-sky-500/20
+                      cursor-pointer file:cursor-pointer transition-all"
+                  />
+                  <p className="text-xs text-slate-500 ml-1">JPG, PNG eller WebP. Maks 2 MB.</p>
+                </div>
+                
+                <div className="hidden">
+                  <input type="hidden" name="removeProfilePhoto" value={isRemovingPhoto ? "true" : "false"} />
+                  <Field 
+                    label="Profilbillede URL (fallback)" 
+                    name="profileImageUrl" 
+                    defaultValue={member.profileImageUrl} 
+                    placeholder="https://..."
+                    fullWidth
+                  />
+                </div>
+              </div>
+            </div>
+          </Section>
+
           <Section title="Profil">
             <Field label="Fornavn" name="firstName" defaultValue={member.firstName} error={state?.fieldErrors?.firstName} />
             <Field label="Efternavn" name="lastName" defaultValue={member.lastName} error={state?.fieldErrors?.lastName} />
             <Field label="Fødselsdato" name="birthDate" type="date" defaultValue={formatDate(member.birthDate)} />
             <Field label="Indmeldt dato" name="joinedAt" type="date" defaultValue={formatDate(member.joinedAt)} />
-            <Field label="Profilbillede URL" name="profileImageUrl" defaultValue={member.profileImageUrl} fullWidth />
           </Section>
 
           <Section title="Kontaktoplysninger">
