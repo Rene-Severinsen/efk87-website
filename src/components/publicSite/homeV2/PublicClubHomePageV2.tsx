@@ -7,7 +7,6 @@ import { PublicNavigationItem } from '../../../lib/publicSite/publicNavigation';
 import { NewMemberHighlightData } from '../../../lib/members/newMemberHighlightService';
 import NewMembersHighlightCard from '../../club/NewMembersHighlightCard';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ThemedTopBar } from '../ThemedTopBar';
 import { PublicCalendarEntry } from '../../../lib/publicSite/publicCalendarService';
 import { getMemberDisplayName } from '../../member/MemberDisplayName';
@@ -121,15 +120,6 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 <p className="home-v2-hero-copy">
                   {todayFlightIntents.length} medlemmer har allerede meldt “jeg flyver”.
                 </p>
-              </div>
-              <div className="home-v2-bird-indicator">
-                <Image
-                  src={todayFlyingCount > 0 ? '/images/club/vi_flyver.gif' : '/images/club/vi_flyver_ikke.gif'}
-                  alt={todayFlyingCount > 0 ? 'Gribben flyver' : 'Gribben sidder stille'}
-                  width={80}
-                  height={80}
-                  unoptimized
-                />
               </div>
             </div>
             <div className="home-v2-inline-actions">
@@ -267,7 +257,13 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               </div>
 
               <div className="home-v2-griffin">
-                <div className="home-v2-griffin-emoji">{todayFlightIntents.length > 0 ? '🦅' : '💤'}</div>
+                <div className="home-v2-griffin-emoji">
+                  <img
+                    src={todayFlightIntents.length > 0 ? '/images/clubs/efk87/vi_flyver.gif' : '/images/clubs/efk87/vi_flyver_ikke.gif'}
+                    alt={todayFlightIntents.length > 0 ? 'Gribben flyver' : 'Gribben sover'}
+                    style={{ height: '100%', width: 'auto', objectFit: 'contain' }}
+                  />
+                </div>
                 <div>
                   <h3>{todayFlightIntents.length > 0 ? 'Gribben basker – der er aktivitet i dag' : 'Gribben sover – ingen har meldt deres ankomst endnu'}</h3>
                   <p className="home-v2-row-sub">
