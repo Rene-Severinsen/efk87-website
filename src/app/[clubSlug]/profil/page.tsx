@@ -13,7 +13,7 @@ interface ProfilePageProps {
 
 /**
  * Member profile page.
- * Renders the "Min profil" mockup with real viewer data.
+ * Renders member profile with viewer data.
  */
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const { clubSlug } = await params;

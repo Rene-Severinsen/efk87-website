@@ -1,10 +1,7 @@
 import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../lib/tenancy/tenantService";
 import PublicClubHomePageV2 from "../../components/publicSite/homeV2/PublicClubHomePageV2";
-import { getPublicHomePage } from "../../lib/publicSite/publicHomePageService";
 import { getClubTheme } from "../../lib/publicSite/publicThemeService";
-import { getActiveHomeFeatureTiles } from "../../lib/publicSite/publicHomeFeatureTileService";
-import { getActiveHomeInfoCards } from "../../lib/publicSite/publicHomeInfoCardService";
 import { getTodayFlightIntents } from "../../lib/publicSite/publicFlightIntentService";
 import { 
   getMemberActivityStats, 
@@ -72,12 +69,9 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const serverViewer = await getServerViewerForClub(club.id);
   const viewer = toViewerVisibilityContext(serverViewer);
 
-  console.log("[ClubPage] VIEWER:", viewer);
+  // console.log("[ClubPage] VIEWER:", viewer);
 
-  const homePage = await getPublicHomePage(club.id);
   const theme = await getClubTheme(club.id);
-  const featureTiles = await getActiveHomeFeatureTiles(club.id, viewer);
-  const infoCards = await getActiveHomeInfoCards(club.id, viewer);
   const flightIntents = await getTodayFlightIntents(club.id, viewer);
   
   // Record activity for the current member

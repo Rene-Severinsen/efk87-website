@@ -36,10 +36,7 @@ interface PublicClubHomePageProps {
 }
 
 /**
- * PublicClubHomePage - Ported from EFK87 approved mockup.
- * 
- * This component preserves the visual hierarchy, section order, and layout
- * of the approved HTML/CSS mockup.
+ * PublicClubHomePage - Renders public homepage with tenant data.
  */
 export default function PublicClubHomePage({ 
   clubSlug,
@@ -56,9 +53,9 @@ export default function PublicClubHomePage({
   submitFlightIntentHref = "#",
   viewAllFlightIntentsHref = "#"
 }: PublicClubHomePageProps) {
-  // Use existing dynamic data where it fits, otherwise use mockup defaults
-  const heroTitle = content.heroTitle || "En klubside med mere liv og bedre overblik.";
-  const heroSubtitle = content.heroSubtitle || "Den nye forside er tænkt som en mere visuel indgang til klubben: aktivitet, indhold, hurtige valg og tydelige områder for både gæster, medlemmer og kommende medlemmer.";
+  // Use existing dynamic data
+  const heroTitle = content.heroTitle;
+  const heroSubtitle = content.heroSubtitle;
   
   // Theme CSS variables
   const themeStyles = theme ? {
@@ -126,7 +123,7 @@ export default function PublicClubHomePage({
           </article>
 
           <div className="side-stack">
-            {(infoCards && infoCards.length > 0) ? (
+            {infoCards && infoCards.length > 0 && (
               infoCards.map((card) => (
                 <article className="card mini-card" key={card.id}>
                   <h3>{card.title}</h3>
@@ -138,33 +135,12 @@ export default function PublicClubHomePage({
                   </div>
                 </article>
               ))
-            ) : (
-              <>
-                {/* Placeholder data - Static mockup data */}
-                <article className="card mini-card">
-                  <h3>Skoleflyvning i dag</h3>
-                  <p className="small">Skoleflyvningen er aktiv fra kl. 11:00. Brug bane 2 til elevstarter frem til middag. Poul Andersen og Lars Mortensen er på pladsen.</p>
-                  <div className="meta-row">
-                    <span className="meta-chip">4 elever tilmeldt</span>
-                    <span className="meta-chip">2 instruktører</span>
-                  </div>
-                </article>
-
-                <article className="card mini-card">
-                  <h3>Næste aktiviteter</h3>
-                  <p className="small">Klubåbning og kaffe kl. 10:30 · Skoleflyvning kl. 11:00 · Bestyrelsesmøde onsdag kl. 19:00 · Forårsoprydning lørdag kl. 09:30.</p>
-                  <div className="meta-row">
-                    <span className="meta-chip">Kalender</span>
-                    <span className="meta-chip">Live fra admin</span>
-                  </div>
-                </article>
-              </>
             )}
           </div>
         </section>
 
         <section className="tile-grid">
-          {(featureTiles && featureTiles.length > 0) ? (
+          {featureTiles && featureTiles.length > 0 && (
             featureTiles.map((tile) => (
               <article className="tile" key={tile.id}>
                 <div className="tile-hero" style={{ backgroundImage: `url('${tile.imageUrl || IMAGES.heroMain}')` }}>
@@ -182,52 +158,6 @@ export default function PublicClubHomePage({
                 </div>
               </article>
             ))
-          ) : (
-            <>
-              {/* Tile: Forum */}
-              <article className="tile">
-                <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.forum}')` }}>
-                  <h3>Forum</h3>
-                </div>
-                <div className="tile-body">
-                  <p>Følg dialogen i klubben, se nye tråde og del erfaringer om udstyr, ture og flyvning.</p>
-                  <a className="tile-link" href="#">Åbn forum</a>
-                </div>
-              </article>
-
-              {/* Tile: Galleri */}
-              <article className="tile">
-                <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.gallery}')` }}>
-                  <h3>Galleri</h3>
-                </div>
-                <div className="tile-body">
-                  <p>Se klubbens albums, seneste uploads og udvalgt aktivitet fra Facebook og Instagram.</p>
-                  <a className="tile-link" href="#">Åbn galleri</a>
-                </div>
-              </article>
-
-              {/* Tile: Flyveskole */}
-              <article className="tile">
-                <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.flyveskole}')` }}>
-                  <h3>Flyveskole</h3>
-                </div>
-                <div className="tile-body">
-                  <p>Find vej ind i sporten med instruktører, skolekalender og en enkel introduktion til forløbet.</p>
-                  <a className="tile-link" href="#">Se flyveskolen</a>
-                </div>
-              </article>
-
-              {/* Tile: Om EFK87 */}
-              <article className="tile">
-                <div className="tile-hero" style={{ backgroundImage: `url('${IMAGES.about}')` }}>
-                  <h3>Om {clubName}</h3>
-                </div>
-                <div className="tile-body">
-                  <p>Bestyrelse, regler, kontakt, vejvisning og de områder der kræver login som medlem.</p>
-                  <a className="tile-link" href="#">Læs om klubben</a>
-                </div>
-              </article>
-            </>
           )}
         </section>
 
@@ -293,26 +223,9 @@ export default function PublicClubHomePage({
                 <a className="link-soft" href="#">Åbn forum</a>
               </div>
 
-              <div className="list">
-                {/* Placeholder: Forum rows */}
-                <div className="row-item">
-                  <div className="row-icon">💬</div>
-                  <div>
-                    <div className="row-title">Forårsoprydning på pladsen – hvem kommer?</div>
-                    <div className="row-sub">9 nye svar · Sidste svar af Jesper Holm for 14 min siden</div>
-                  </div>
-                  <span className="status-badge warn">32 svar</span>
-                </div>
-
-                <div className="row-item">
-                  <div className="row-icon">🧭</div>
-                  <div>
-                    <div className="row-title">Nyt GPS-triangle setup til sæson 2026</div>
-                    <div className="row-sub">4 nye svar · Sidste svar for 43 min siden</div>
-                  </div>
-                  <span className="status-badge info">18 svar</span>
-                </div>
-              </div>
+            <div className="list">
+              {/* Forum activity renders here if available */}
+            </div>
             </article>
 
             <article className="card section-card">
@@ -321,22 +234,7 @@ export default function PublicClubHomePage({
               </div>
 
               <div className="social-grid">
-                {/* Placeholder: Social items */}
-                <div className="social-item">
-                  <div className="social-icon">f</div>
-                  <div>
-                    <h3>Facebook-gruppen</h3>
-                    <p>Seneste aktivitet fra gruppen kan vises her som et supplement til klubbens eget galleri og forum.</p>
-                  </div>
-                </div>
-
-                <div className="social-item">
-                  <div className="social-icon">◎</div>
-                  <div>
-                    <h3>Instagram</h3>
-                    <p>Udvalgte billeder og highlights kan styrke den udadvendte profil uden at erstatte klubbens eget arkiv.</p>
-                  </div>
-                </div>
+                {/* Social items render here if available */}
               </div>
             </article>
           </div>
