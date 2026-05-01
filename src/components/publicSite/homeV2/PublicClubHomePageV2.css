@@ -418,7 +418,7 @@
 
 .home-v2-griffin {
   display: grid;
-  grid-template-columns: 60px 1fr;
+  grid-template-columns: 110px 1fr;
   gap: 20px;
   padding: 20px;
   background: rgba(255,255,255,0.03);
@@ -428,8 +428,8 @@
 }
 
 .home-v2-griffin-emoji {
-  width: 60px;
-  height: 60px;
+  width: 110px;
+  height: 110px;
   background: rgba(255,255,255,0.05);
   border-radius: 14px;
   display: grid;
@@ -1082,7 +1082,7 @@
   }
 
   .home-v2-griffin {
-    grid-template-columns: 54px minmax(0, 1fr);
+    grid-template-columns: 110px minmax(0, 1fr);
     gap: 10px;
     padding: 11px;
     border-radius: 14px;
@@ -1090,8 +1090,8 @@
   }
 
   .home-v2-griffin-emoji {
-    width: 54px;
-    height: 54px;
+    width: 110px;
+    height: 110px;
     border-radius: 14px;
     font-size: 28px;
     margin: 0;
