@@ -154,6 +154,7 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
                   name={member.displayName || "Medlem"} 
                   size="lg" 
                   className="w-32 h-32 text-4xl border-2 border-white/20 shadow-xl group-hover:border-sky-500/50 transition-all duration-300" 
+                  objectPosition="center 25%"
                 />
                 {previewUrl && (
                   <button
@@ -241,6 +242,7 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
               imageUrl={member.profileImageUrl} 
               name={member.displayName || ""} 
               className="w-48 h-48 rounded-3xl !text-5xl"
+              objectPosition="center 25%"
             />
             <p className="mt-4 text-xs text-slate-500 text-center italic">Kun URL understøttes</p>
           </div>

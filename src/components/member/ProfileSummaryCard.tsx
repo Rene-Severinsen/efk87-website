@@ -53,6 +53,7 @@ export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({
             name={name} 
             size="lg" 
             className="avatar"
+            objectPosition="center 25%"
           />
         </div>
 

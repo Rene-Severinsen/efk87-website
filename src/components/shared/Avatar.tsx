@@ -5,9 +5,10 @@ interface AvatarProps {
   name: string;
   size?: "sm" | "md" | "lg";
   className?: string;
+  objectPosition?: string;
 }
 
-const Avatar = ({ imageUrl, name, size = "md", className = "" }: AvatarProps) => {
+const Avatar = ({ imageUrl, name, size = "md", className = "", objectPosition = "center" }: AvatarProps) => {
   const sizeClasses = {
     sm: "w-8 h-8 text-xs",
     md: "w-12 h-12 text-lg",
@@ -54,6 +55,7 @@ const Avatar = ({ imageUrl, name, size = "md", className = "" }: AvatarProps) =>
           src={imageUrl}
           alt={name}
           className="w-full h-full object-cover"
+          style={{ objectPosition }}
         />
       ) : (
         <div className={`w-full h-full flex items-center justify-center font-bold text-white/70 ${bgColor}`}>

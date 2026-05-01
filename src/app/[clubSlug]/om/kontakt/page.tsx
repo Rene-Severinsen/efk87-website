@@ -2,6 +2,7 @@ import { resolvePublicPageForClub } from "../../../../lib/publicSite/publicPageR
 import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPageShell";
 import { ThemedSectionCard, ThemedPageHeader } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { getPublicInstructorContacts } from "../../../../lib/members/instructorContactService";
+import Avatar from "../../../../components/shared/Avatar";
 
 interface ContactPageProps {
   params: Promise<{
@@ -38,22 +39,12 @@ export default async function ContactPage({ params }: ContactPageProps) {
           {instructors.map((instructor, index) => (
             <ThemedSectionCard key={index} className="flex flex-col h-full p-4 sm:p-6">
               <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-slate-800 border border-white/10 shrink-0">
-                  {instructor.profileImageUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img 
-                      src={instructor.profileImageUrl} 
-                      alt={instructor.displayName} 
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-600">
-                      <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
+                <Avatar 
+                  imageUrl={instructor.profileImageUrl} 
+                  name={instructor.displayName} 
+                  size="lg"
+                  className="!rounded-2xl w-16 h-16 sm:w-20 sm:h-20"
+                />
                 <div className="min-w-0">
                   <h3 className="text-lg sm:text-xl font-bold text-white leading-tight truncate">{instructor.displayName}</h3>
                   {instructor.memberRoleType && instructor.memberRoleType !== 'REGULAR' && (
