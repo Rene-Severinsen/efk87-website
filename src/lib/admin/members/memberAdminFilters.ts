@@ -1,5 +1,7 @@
 import { Prisma, ClubMemberStatus, ClubMemberMembershipType, ClubMemberSchoolStatus } from "@/generated/prisma";
 
+type Comparable = string | number | boolean | Date | null | undefined;
+
 /**
  * Shared member admin filter/stat helper logic.
  * Consolidates business logic for what defines a Senior, Junior, Passive, etc.
@@ -190,10 +192,8 @@ export function sortMembersForAdmin<T extends PartialMember>(members: T[], sortK
   const sorted = [...members];
   
   sorted.sort((a, b) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let valA = a[sortKey as keyof T] as any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let valB = b[sortKey as keyof T] as any;
+    let valA: Comparable;
+    let valB: Comparable;
     
     // Handle special cases
     if (sortKey === "name") {
@@ -202,8 +202,15 @@ export function sortMembersForAdmin<T extends PartialMember>(members: T[], sortK
     } else if (sortKey === "instructorStatus") {
       valA = a.isInstructor ? 1 : 0;
       valB = b.isInstructor ? 1 : 0;
+    } else {
+      valA = (a as unknown as Record<string, Comparable>)[sortKey];
+      valB = (b as unknown as Record<string, Comparable>)[sortKey];
     }
     
+    if (valA === valB) return 0;
+    if (valA === null || valA === undefined) return direction === "asc" ? 1 : -1;
+    if (valB === null || valB === undefined) return direction === "asc" ? -1 : 1;
+
     if (valA < valB) return direction === "asc" ? -1 : 1;
     if (valA > valB) return direction === "asc" ? 1 : -1;
     return 0;
