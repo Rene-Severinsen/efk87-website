@@ -99,41 +99,6 @@ export default async function ClubPage({ params }: ClubPageProps) {
     publicSettings?.weatherLongitude
   );
 
-  console.log("[ClubPage] DATA SUMMARY:", {
-    clubId: club.id,
-    hasHomePage: Boolean(homePage),
-    memberActivity,
-    hasTheme: Boolean(theme),
-    featureTilesCount: featureTiles.length,
-    infoCardsCount: infoCards.length,
-    flightIntentsCount: flightIntents.length,
-    hasFooterData: Boolean(footerData),
-    navigationItems: navigationItems.map((item) => ({
-      key: item.key,
-      label: item.label,
-      href: item.href,
-      visibility: item.visibility,
-    })),
-    actionItems: actionItems.map((item) => ({
-      key: item.key,
-      label: item.label,
-      href: item.href,
-      visibility: item.visibility,
-    })),
-  });
-
-  // Temporary mapping because getPublicHomePage currently returns PublicPage,
-  // not the dedicated PublicHomePage model.
-  const content = homePage
-      ? {
-        heroTitle: homePage.title,
-        heroSubtitle: homePage.excerpt || undefined,
-        introBody: homePage.body,
-      }
-      : {};
-
-  console.log("[ClubPage] CONTENT:", content);
-
   return (
       <PublicClubHomePageV2
           club={club}
@@ -149,6 +114,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
           homepageContents={homepageContents}
           flightSchoolHomepage={flightSchoolHomepage}
           weather={weather}
+          footerData={footerData}
       />
   );
 }

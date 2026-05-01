@@ -13,7 +13,7 @@ import { getMemberDisplayName } from '../../member/MemberDisplayName';
 import { getForumReplyBadge } from '../../../lib/forum/forumHelpers';
 import ForumIcon from '../../forum/ForumIcon';
 import ForumReplyBadge from '../../forum/ForumReplyBadge';
-import { ClubForumThread, ClubForumCategory } from '../../../generated/prisma';
+import { ClubForumThread, ClubForumCategory, PublicClubFooter, PublicSponsor } from '../../../generated/prisma';
 import { WeatherData } from '../../../lib/weather/openMeteoWeatherService';
 import { HomepageContentWithSignups } from '../../../lib/homepageContent/homepageContentService';
 import { FlightSchoolHomepageViewModel } from '../../../lib/flightSchool/flightSchoolBookingService';
@@ -66,6 +66,10 @@ interface PublicClubHomePageV2Props {
   homepageContents: HomepageContentWithSignups[];
   flightSchoolHomepage: FlightSchoolHomepageViewModel;
   weather?: WeatherData | null;
+  footerData?: {
+    footer: PublicClubFooter | null;
+    sponsors: PublicSponsor[];
+  };
   theme?: {
     backgroundColor: string;
     panelColor: string;
@@ -85,7 +89,7 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Isolated V2 homepage component.
  * Ported closely from the provided mockup HTML.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, flightSchoolHomepage, weather }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, flightSchoolHomepage, weather, footerData }: PublicClubHomePageV2Props) {
   const clubDisplayName = club.settings?.displayName || club.name;
   const clubShortName = club.settings?.shortName || club.name;
   const firstName = viewer.firstName || viewer.name?.split(' ')[0] || 'Gæst';
@@ -485,18 +489,59 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
         <footer className="home-v2-card home-v2-footer">
           <div>
             <h3>{clubShortName}</h3>
-            <p className="home-v2-small" style={{marginTop: '10px'}}>Mockup af medlemsforside med realistisk klubstruktur. Designet er tænkt mobile first på medlemsdelen og mere informationsrigt på desktop.</p>
-            <div className="home-v2-sponsors">
-              <span className="home-v2-sponsor">Ellehammerfonden</span>
-              <span className="home-v2-sponsor">Friluftsrådet</span>
-              <span className="home-v2-sponsor">Dane-RC</span>
-              <span className="home-v2-sponsor">Køb din sponsor plads her</span>
-            </div>
+            {footerData?.footer ? (
+              <>
+                {footerData.footer.description && (
+                  <p className="home-v2-small" style={{marginTop: '10px'}}>
+                    {footerData.footer.description}
+                  </p>
+                )}
+                <div className="home-v2-sponsors">
+                  {footerData.sponsors.map(sponsor => (
+                    <span key={sponsor.id} className="home-v2-sponsor">
+                      {sponsor.href ? (
+                        <a href={sponsor.href} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
+                          {sponsor.name}
+                        </a>
+                      ) : (
+                        sponsor.name
+                      )}
+                    </span>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="home-v2-small" style={{marginTop: '10px'}}>Mockup af medlemsforside med realistisk klubstruktur. Designet er tænkt mobile first på medlemsdelen og mere informationsrigt på desktop.</p>
+                <div className="home-v2-sponsors">
+                  <span className="home-v2-sponsor">Ellehammerfonden</span>
+                  <span className="home-v2-sponsor">Friluftsrådet</span>
+                  <span className="home-v2-sponsor">Dane-RC</span>
+                  <span className="home-v2-sponsor">Køb din sponsor plads her</span>
+                </div>
+              </>
+            )}
           </div>
           <div>
             <h3>Kontakt</h3>
-            <p className="home-v2-small" style={{marginTop: '10px'}}>{clubDisplayName}</p>
-            <p className="home-v2-small" style={{marginTop: '10px'}}>{club.settings?.publicEmail || 'kontakt@efk87.dk'}<br/>CVR 12345678</p>
+            {footerData?.footer ? (
+              <>
+                <p className="home-v2-small" style={{marginTop: '10px'}}>
+                  {footerData.footer.addressLine1}{footerData.footer.addressLine1 && footerData.footer.addressLine2 && ', '}
+                  {footerData.footer.addressLine2}
+                </p>
+                <p className="home-v2-small" style={{marginTop: '10px'}}>
+                  {footerData.footer.email}<br/>
+                  {footerData.footer.phone && <>{footerData.footer.phone}<br/></>}
+                  {footerData.footer.cvr && <>CVR {footerData.footer.cvr}</>}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="home-v2-small" style={{marginTop: '10px'}}>{clubDisplayName}</p>
+                <p className="home-v2-small" style={{marginTop: '10px'}}>{club.settings?.publicEmail || 'kontakt@efk87.dk'}<br/>CVR 12345678</p>
+              </>
+            )}
           </div>
           <div>
             <h3>Links</h3>
