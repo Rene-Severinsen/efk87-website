@@ -12,10 +12,11 @@ import {
   MEMBER_STATUS_LABELS,
   CERTIFICATE_LABELS
 } from "@/lib/members/memberConstants";
+import Avatar from "@/components/shared/Avatar";
 
 interface MemberEditFormProps {
   clubSlug: string;
-  member: ClubMemberProfile & { certificates: ClubMemberCertificateType[] };
+  member: ClubMemberProfile & { certificates: ClubMemberCertificateType[], displayName?: string | null };
   updateAction: (prevState: AdminMemberActionResponse | null, formData: FormData) => Promise<AdminMemberActionResponse>;
 }
 
@@ -103,6 +104,30 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
   const schoolStatusOptions = Object.entries(SCHOOL_STATUS_LABELS).map(([value, label]) => ({ value, label }));
   const statusOptions = Object.entries(MEMBER_STATUS_LABELS).map(([value, label]) => ({ value, label }));
 
+  const SectionWithMember = ({ title, children, className = "" }: { title: string, children: React.ReactNode, className?: string }) => (
+    <div className={`backdrop-blur-md bg-[#121b2e]/80 border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden ${className}`}>
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500/50 to-emerald-500/50 opacity-30" />
+      <h3 className="text-xl font-bold mb-6 pb-3 border-b border-white/10 text-white flex items-center gap-2">
+        <span className="w-1.5 h-6 bg-sky-500 rounded-full" />
+        {title}
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="md:col-span-2 flex items-center gap-4 mb-2">
+          <Avatar 
+            imageUrl={member.profileImageUrl} 
+            name={member.displayName || ""} 
+            size="lg"
+          />
+          <div>
+            <p className="text-sm font-medium text-slate-400">Aktuelt profilbillede</p>
+            <p className="text-xs text-slate-500 italic">Baseret på URL-feltet nedenfor</p>
+          </div>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+
   const formatDate = (date: Date | string | null) => {
     if (!date) return "";
     const d = typeof date === 'string' ? new Date(date) : date;
@@ -122,13 +147,13 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
-          <Section title="Profil">
+          <SectionWithMember title="Profil">
             <Field label="Fornavn" name="firstName" defaultValue={member.firstName} error={state?.fieldErrors?.firstName} />
             <Field label="Efternavn" name="lastName" defaultValue={member.lastName} error={state?.fieldErrors?.lastName} />
             <Field label="Fødselsdato" name="birthDate" type="date" defaultValue={formatDate(member.birthDate)} />
             <Field label="Indmeldt dato" name="joinedAt" type="date" defaultValue={formatDate(member.joinedAt)} />
             <Field label="Profilbillede URL" name="profileImageUrl" defaultValue={member.profileImageUrl} fullWidth />
-          </Section>
+          </SectionWithMember>
 
           <Section title="Kontaktoplysninger">
             <Field label="Adresse" name="addressLine" defaultValue={member.addressLine} fullWidth />

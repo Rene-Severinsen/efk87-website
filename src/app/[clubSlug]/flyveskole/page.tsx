@@ -4,6 +4,7 @@ import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuilding
 import { getPublishedFlightSchoolPage, getPublishedFlightSchoolDocuments } from "../../../lib/flightSchool/flightSchoolService";
 import { getPublicInstructorContacts } from "../../../lib/members/instructorContactService";
 import Link from "next/link";
+import Avatar from "../../../components/shared/Avatar";
 
 interface PageProps {
   params: Promise<{
@@ -71,20 +72,12 @@ export default async function FlyveskolePage({ params }: PageProps) {
                     key={idx}
                     className="flex items-start gap-5 p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-colors"
                   >
-                    <div className="w-16 h-16 rounded-full bg-white/10 flex-shrink-0 overflow-hidden flex items-center justify-center border border-white/10 mt-1">
-                      {instructor.profileImageUrl ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img 
-                          src={instructor.profileImageUrl} 
-                          alt={instructor.displayName}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-2xl font-bold opacity-30">
-                          {instructor.displayName.charAt(0)}
-                        </span>
-                      )}
-                    </div>
+                    <Avatar 
+                      imageUrl={instructor.profileImageUrl} 
+                      name={instructor.displayName} 
+                      size="lg"
+                      className="mt-1"
+                    />
                     <div className="flex-1 min-w-0">
                       <div className="font-bold text-lg truncate text-white">{instructor.displayName}</div>
                       

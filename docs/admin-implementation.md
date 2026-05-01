@@ -106,6 +106,11 @@ Located in `src/components/admin/`:
   - Medlemsnummer: Management of club-specific member numbers used as payment references. Unique per club. System-managed (read-only) once assigned.
   - Instructor status: Marking a member as "Instruktør" enables their public visibility on the club's instructor contact page.
   - Certificate management (normalized model).
+  - **Profilbillede (Profile Photo)**:
+    - Reusable `Avatar` component for consistent display of member/instructor photos.
+    - Deterministic fallback initials when no photo is available.
+    - Support for manual URL/reference storage in member profiles.
+    - Current limitation: Image upload is not yet implemented; only manual URL editing in admin.
   - Future billing: Reserved UI for pushing members to billing/Dinero.
 - **Privacy**: All data is strictly tenant-scoped.
 
