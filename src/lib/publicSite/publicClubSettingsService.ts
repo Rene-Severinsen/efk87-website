@@ -9,7 +9,8 @@ export async function getPublicClubSettings(clubId: string) {
       weatherLongitude: true,
       displayName: true,
       shortName: true,
-      publicEmail: true
+      publicEmail: true,
+      publicThemeMode: true
     }
   });
 }

@@ -95,7 +95,10 @@ export default async function ClubPage({ params }: ClubPageProps) {
 
   return (
       <PublicClubHomePageV2
-          club={club}
+          club={{
+            ...club,
+            settings: publicSettings
+          }}
           viewer={serverViewer}
           theme={theme}
           todayFlightIntents={flightIntents}

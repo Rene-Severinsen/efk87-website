@@ -94,12 +94,21 @@ For more details, see [Visibility documentation](visibility.md).
 
 ## Visual Themes
 
-Visual settings are managed per club through the `ClubTheme` model.
+Visual settings are managed per club.
 
+### Visual Identity
 - **Tenant Scoped**: All theme values are scoped by `clubId`.
 - **CSS Variables**: Theme values are applied to the public homepage as CSS variables on the root element.
 - **Locked Visuals**: The approved EFK87 mockup remains the locked visual reference. Theme controls must not be used to redesign the layout.
 - **Service**: `src/lib/publicSite/publicThemeService.ts` provides `getClubTheme(clubId)`.
+
+### Public Theme Mode (V2 Only)
+- **Setting**: `publicThemeMode` in `ClubSettings`.
+- **Allowed Values**: `light` (default), `dark`.
+- **Admin Control**: Admin → Site Settings → Offentligt tema.
+- **Application**: Currently applied only to the Homepage V2 (`PublicClubHomePageV2.tsx`).
+- **Implementation**: Sets `data-theme` on the root element. CSS uses semantic tokens starting with `--home-`.
+- **Fallback**: Defaults to `light` if the setting is missing or invalid.
 
 ## Data Management
 - **Dynamic Content**: Hero title and subtitle are sourced from the `PublicPage` model via `publicHomePageService`.

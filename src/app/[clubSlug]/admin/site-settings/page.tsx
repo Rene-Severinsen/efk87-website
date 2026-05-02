@@ -3,6 +3,7 @@ import { requireClubBySlug, TenancyError } from "@/lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "@/lib/auth/adminAccessGuards";
 import AdminShell from "@/components/admin/AdminShell";
 import WeatherSettingsForm from "./WeatherSettingsForm";
+import PublicThemeSettingsForm from "./PublicThemeSettingsForm";
 import { getClubSettings } from "@/lib/admin/siteSettingsService";
 
 interface PageProps {
@@ -48,6 +49,14 @@ export default async function Page({ params }: PageProps) {
             <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">Site Settings</h1>
             <p className="text-slate-400 text-lg">Konfiguration af klub-indstillinger og præferencer.</p>
           </div>
+
+          <GlassCard className="p-8 mb-8">
+            <PublicThemeSettingsForm
+              clubId={club.id}
+              clubSlug={clubSlug}
+              initialThemeMode={settings?.publicThemeMode ?? "light"}
+            />
+          </GlassCard>
 
           <GlassCard className="p-8">
             <WeatherSettingsForm 

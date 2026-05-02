@@ -452,6 +452,7 @@ model ClubSettings {
   shortName       String
   primaryDomain   String?
   publicEmail     String?
+  publicThemeMode String  @default("light")
   weatherLatitude Float?
   weatherLongitude Float?
   createdAt       DateTime @default(now())

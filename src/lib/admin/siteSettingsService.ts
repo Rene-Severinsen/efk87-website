@@ -15,11 +15,31 @@ export async function updateClubWeatherSettings(clubId: string, lat: number | nu
       displayName: "", // These should ideally be pre-populated
       shortName: "",
       weatherLatitude: lat,
-      weatherLongitude: lon
+      weatherLongitude: lon,
+      publicThemeMode: "light"
     },
     update: {
       weatherLatitude: lat,
       weatherLongitude: lon
+    }
+  });
+}
+
+export async function updateClubPublicTheme(clubId: string, themeMode: string) {
+  if (themeMode !== "light" && themeMode !== "dark") {
+    throw new Error("Invalid theme mode");
+  }
+
+  return await prisma.clubSettings.upsert({
+    where: { clubId },
+    create: {
+      clubId,
+      displayName: "",
+      shortName: "",
+      publicThemeMode: themeMode
+    },
+    update: {
+      publicThemeMode: themeMode
     }
   });
 }

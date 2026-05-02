@@ -4,7 +4,7 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { requireClubAdminForClub } from "@/lib/auth/adminAccessGuards";
-import { updateClubWeatherSettings } from "./siteSettingsService";
+import { updateClubWeatherSettings, updateClubPublicTheme } from "./siteSettingsService";
 
 const weatherSettingsSchema = z.object({
   latitude: z.union([
@@ -51,5 +51,40 @@ export async function updateWeatherSettingsAction(
   } catch (error) {
     console.error("Failed to update weather settings", error);
     return { success: false, error: "Der skete en fejl ved gemning af indstillinger." };
+  }
+}
+
+const publicThemeSchema = z.object({
+  publicThemeMode: z.enum(["light", "dark"]),
+});
+
+export async function updatePublicThemeAction(
+  clubId: string,
+  clubSlug: string,
+  formData: FormData
+) {
+  await requireClubAdminForClub(clubId, clubSlug, `/${clubSlug}/admin/site-settings`);
+
+  const rawTheme = formData.get("publicThemeMode");
+
+  const parsed = publicThemeSchema.safeParse({
+    publicThemeMode: rawTheme,
+  });
+
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: "Ugyldigt tema valgt."
+    };
+  }
+
+  try {
+    await updateClubPublicTheme(clubId, parsed.data.publicThemeMode);
+    revalidatePath(`/${clubSlug}/admin/site-settings`);
+    revalidatePath(`/${clubSlug}`);
+    return { success: true };
+  } catch (error: unknown) {
+    console.error("Failed to update public theme settings", error);
+    return { success: false, error: "Der skete en fejl ved gemning af tema-indstillinger." };
   }
 }

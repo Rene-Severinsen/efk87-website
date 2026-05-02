@@ -53,6 +53,7 @@ interface PublicClubHomePageV2Props {
       displayName: string;
       shortName: string;
       publicEmail: string | null;
+      publicThemeMode: string;
     } | null;
   };
   viewer: ServerViewerContext;
@@ -95,9 +96,10 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
   const firstName = viewer.firstName || viewer.name?.split(' ')[0] || 'Gæst';
   const todayFlyingCount = todayFlightIntents.length;
 
+  const publicThemeMode = club.settings?.publicThemeMode === 'dark' ? 'dark' : 'light';
 
   return (
-    <div className="home-v2-root">
+    <div className="home-v2-root" data-theme={publicThemeMode}>
       <div className="home-v2-shell">
         <ThemedTopBar
           clubSlug={club.slug}
