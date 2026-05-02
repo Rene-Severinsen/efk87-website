@@ -15,7 +15,7 @@ interface PageProps {
 
 export default async function FlightSchoolDocumentPage({ params }: PageProps) {
   const { clubSlug, documentSlug } = await params;
-  const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
+  const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolveClubContext(clubSlug);
 
   const document = await getPublishedFlightSchoolDocumentBySlug(club.id, documentSlug);
 
@@ -29,6 +29,7 @@ export default async function FlightSchoolDocumentPage({ params }: PageProps) {
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}
+      publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}

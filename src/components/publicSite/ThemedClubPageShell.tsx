@@ -2,6 +2,7 @@ import React from 'react';
 import './PublicClubHomePage.css';
 import { ClubTheme, PublicClubFooter, PublicSponsor } from "../../generated/prisma";
 import { PublicNavigationItem } from "../../lib/publicSite/publicNavigation";
+import { normalizePublicThemeMode } from "../../lib/publicSite/publicThemeService";
 import { ThemedTopBar } from "./ThemedTopBar";
 import { ThemedFooter } from "./ThemedFooter";
 import { ThemedPageHeader } from "./ThemedBuildingBlocks";
@@ -25,18 +26,18 @@ interface ThemedClubPageShellProps {
   currentPath?: string;
   children: React.ReactNode;
   maxWidth?: string;
+  publicThemeMode?: string;
 }
 
 /**
  * ThemedClubPageShell - Shared layout for all non-home club pages.
- * 
- * Uses the same visual language as the approved homepage.
  */
 export default function ThemedClubPageShell({ 
   clubSlug,
   clubName, 
   clubDisplayName, 
   theme, 
+  publicThemeMode,
   footerData,
   navigationItems = [],
   actionItems = [],
@@ -47,6 +48,8 @@ export default function ThemedClubPageShell({
   children,
   maxWidth = '1000px'
 }: ThemedClubPageShellProps) {
+  const normalizedTheme = normalizePublicThemeMode(publicThemeMode);
+
   // Theme CSS variables
   const themeStyles = theme ? {
     '--club-bg': theme.backgroundColor,
@@ -62,7 +65,7 @@ export default function ThemedClubPageShell({
   } as React.CSSProperties : {};
 
   return (
-    <div className="public-home" style={themeStyles}>
+    <div className="public-home" style={themeStyles} data-theme={normalizedTheme}>
       <div className="shell">
         <ThemedTopBar 
           clubSlug={clubSlug}

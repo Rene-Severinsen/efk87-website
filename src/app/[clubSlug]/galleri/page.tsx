@@ -15,7 +15,7 @@ interface PageProps {
 export default async function GalleriPage({ params }: PageProps) {
   const { clubSlug } = await params;
   const pageSlug = "galleri";
-  const { club, page, theme, footerData, navigationItems, actionItems } = await resolvePublicPageForClub(clubSlug, pageSlug);
+  const { club, page, theme, footerData, navigationItems, actionItems, publicSettings } = await resolvePublicPageForClub(clubSlug, pageSlug);
 
   if (!page) {
     notFound();
@@ -30,6 +30,7 @@ export default async function GalleriPage({ params }: PageProps) {
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}
+      publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}

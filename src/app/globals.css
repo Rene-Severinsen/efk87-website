@@ -7,6 +7,43 @@
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
+
+  /* Public Theme Tokens - Default (Light) */
+  --public-bg: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+  --public-bg-soft: radial-gradient(circle at top left, rgba(56, 189, 248, 0.1), transparent 30%),
+                    radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 25%);
+  --public-surface: #f0f9ff;
+  --public-surface-strong: #e0f2fe;
+  --public-card: rgba(255, 255, 255, 0.9);
+  --public-card-border: rgba(14, 165, 233, 0.15);
+  --public-text: #0f172a;
+  --public-text-muted: #475569;
+  --public-text-soft: #64748b;
+  --public-primary: #0284c7;
+  --public-primary-soft: rgba(2, 132, 199, 0.1);
+  --public-success: #059669;
+  --public-warning: #d97706;
+  --public-danger: #e11d48;
+  --public-shadow: 0 20px 50px rgba(2, 132, 199, 0.1);
+}
+
+[data-theme="dark"] {
+  --public-bg: linear-gradient(180deg, #08101c 0%, #0b1220 100%);
+  --public-bg-soft: radial-gradient(circle at top left, rgba(125,211,252,0.16), transparent 28%),
+                    radial-gradient(circle at top right, rgba(110,231,183,0.12), transparent 24%);
+  --public-surface: #0b1220;
+  --public-surface-strong: #08101c;
+  --public-card: rgba(18, 27, 46, 0.88);
+  --public-card-border: rgba(255, 255, 255, 0.08);
+  --public-text: #edf2ff;
+  --public-text-muted: #aab7d4;
+  --public-text-soft: #7f8ea3;
+  --public-primary: #7dd3fc;
+  --public-primary-soft: rgba(125, 211, 252, 0.1);
+  --public-success: #6ee7b7;
+  --public-warning: #fcd34d;
+  --public-danger: #f43f5e;
+  --public-shadow: 0 20px 50px rgba(0,0,0,0.35);
 }
 
 body {

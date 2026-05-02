@@ -16,7 +16,7 @@ interface CreateThreadPageProps {
 export default async function CreateThreadPage({ params }: CreateThreadPageProps) {
   const { clubSlug, categorySlug } = await params;
 
-  const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
+  const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member
   await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/forum/${categorySlug}/ny`);
@@ -35,6 +35,7 @@ export default async function CreateThreadPage({ params }: CreateThreadPageProps
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}
+      publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}

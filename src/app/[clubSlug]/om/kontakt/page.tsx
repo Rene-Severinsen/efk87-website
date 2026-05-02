@@ -13,7 +13,7 @@ interface ContactPageProps {
 export default async function ContactPage({ params }: ContactPageProps) {
   const { clubSlug } = await params;
   const pageSlug = "kontakt";
-  const { club, theme, footerData, navigationItems, actionItems } = await resolvePublicPageForClub(clubSlug, pageSlug);
+  const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolvePublicPageForClub(clubSlug, pageSlug);
 
   const instructors = await getPublicInstructorContacts(club.id);
 
@@ -23,6 +23,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}
+      publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}

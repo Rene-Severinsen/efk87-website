@@ -6,6 +6,8 @@ import { getPublicFooterData } from "./publicFooterService";
 import { getServerViewerForClub, toViewerVisibilityContext } from "../auth/viewer";
 import { getVisiblePublicNavigation, getVisiblePublicActions } from "./publicNavigation";
 
+import { getPublicClubSettings } from "./publicClubSettingsService";
+
 /**
  * Shared helper to resolve both the club and a specific public page.
  * Uses tenantService and publicPageService to ensure consistent resolution.
@@ -45,6 +47,7 @@ export async function resolveClubContext(clubSlug: string) {
     const footerData = await getPublicFooterData(club.id);
     const navigationItems = getVisiblePublicNavigation(clubSlug, viewer);
     const actionItems = getVisiblePublicActions(clubSlug, viewer);
+    const publicSettings = await getPublicClubSettings(club.id);
 
     return {
       club,
@@ -53,6 +56,7 @@ export async function resolveClubContext(clubSlug: string) {
       navigationItems,
       actionItems,
       viewer,
+      publicSettings,
     };
   } catch (error) {
     if (error instanceof TenancyError) {

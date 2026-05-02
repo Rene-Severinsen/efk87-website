@@ -28,7 +28,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
   const { clubSlug } = await params;
   const { created, cancelled, duplicate } = await searchParams;
 
-  const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
+  const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member
   const viewer = await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/jeg-flyver`);
@@ -47,6 +47,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}
+      publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}

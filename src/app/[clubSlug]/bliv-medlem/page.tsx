@@ -13,7 +13,7 @@ interface PageProps {
 export default async function BlivMedlemPage({ params }: PageProps) {
   const { clubSlug } = await params;
   const pageSlug = "bliv-medlem";
-  const { club, theme, footerData, navigationItems, actionItems } = await resolvePublicPageForClub(clubSlug, pageSlug);
+  const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolvePublicPageForClub(clubSlug, pageSlug);
 
   if (!club) {
     notFound();
@@ -50,6 +50,7 @@ export default async function BlivMedlemPage({ params }: PageProps) {
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}
+      publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}

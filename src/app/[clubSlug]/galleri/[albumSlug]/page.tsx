@@ -18,7 +18,7 @@ export default async function AlbumDetailPage({ params }: PageProps) {
   
   // Reuse the general page resolution to get theme/navigation etc.
   // "galleri" is the parent page, we use it to maintain context.
-  const { club, theme, footerData, navigationItems, actionItems } = await resolvePublicPageForClub(clubSlug, "galleri");
+  const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolvePublicPageForClub(clubSlug, "galleri");
 
   const viewer = await getServerViewerForClub(club.id);
   const album = await getPublishedGalleryAlbumBySlug(club.id, albumSlug, { isMember: viewer.isMember });
@@ -33,6 +33,7 @@ export default async function AlbumDetailPage({ params }: PageProps) {
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}
+      publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}

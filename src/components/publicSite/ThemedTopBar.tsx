@@ -52,9 +52,9 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
                         : 'inline-flex min-h-[44px] items-center whitespace-nowrap rounded-full px-3 py-2 text-sm',
                     isActive
                         ? mobile
-                            ? 'border border-sky-300/25 bg-sky-300/10 font-semibold text-white'
-                            : 'border border-sky-300/25 bg-sky-300/10 text-white'
-                        : 'text-slate-400 hover:bg-white/5 hover:text-white',
+                            ? 'border border-sky-300/25 bg-sky-300/10 font-semibold active'
+                            : 'border border-sky-300/25 bg-sky-300/10 active'
+                        : 'text-slate-400 hover:bg-white/5',
                   ].join(' ')}
               >
                 {item.label}
@@ -105,14 +105,14 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
   return (
       <header className="efk-topbar-root sticky top-4 z-[900] relative isolation-isolate mx-auto w-full max-w-[1400px] pointer-events-auto">
         {/* Desktop Header */}
-        <div className="efk-topbar-desktop hidden items-center justify-between gap-6 min-[1100px]:flex rounded-full border border-white/10 bg-slate-950/90 px-6 py-3 shadow-2xl backdrop-blur-xl">
+        <div className="efk-topbar-desktop hidden items-center justify-between gap-6 min-[1100px]:flex rounded-full border border-white/10 px-6 py-3 shadow-2xl backdrop-blur-xl">
           <div className="flex min-w-0 items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold text-white">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold">
               {clubName}
             </div>
 
             <div className="flex min-w-0 flex-col">
-            <span className="truncate text-sm font-bold leading-tight text-white">
+            <span className="truncate text-sm font-bold leading-tight">
               {clubDisplayName}
             </span>
               <span className="truncate text-[10px] font-semibold uppercase tracking-wider text-slate-500">
@@ -131,15 +131,15 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
         </div>
 
         {/* Mobile/Tablet Header */}
-        <details className="efk-topbar-mobile-details group min-[1100px]:hidden rounded-[24px] border border-white/10 bg-slate-950/90 shadow-2xl backdrop-blur-xl">
+        <details className="efk-topbar-mobile-details group min-[1100px]:hidden rounded-[24px] border border-white/10 shadow-2xl backdrop-blur-xl">
           <summary className="efk-topbar-mobile-summary flex items-center justify-between cursor-pointer list-none select-none touch-manipulation min-h-[56px] px-4 py-3 [&::-webkit-details-marker]:hidden">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold text-white">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold">
                 {clubName}
               </div>
 
               <div className="flex min-w-0 flex-col">
-              <span className="truncate text-sm font-bold leading-tight text-white">
+              <span className="truncate text-sm font-bold leading-tight">
                 {clubDisplayName}
               </span>
                 <span className="truncate text-[10px] font-semibold uppercase tracking-wider text-slate-500">

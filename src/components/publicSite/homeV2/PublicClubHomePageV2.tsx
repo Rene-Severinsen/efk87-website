@@ -44,6 +44,8 @@ type ThreadWithRelations = ClubForumThread & {
   }[];
 };
 
+import { normalizePublicThemeMode } from '../../../lib/publicSite/publicThemeService';
+
 interface PublicClubHomePageV2Props {
   club: {
     id: string;
@@ -96,7 +98,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
   const firstName = viewer.firstName || viewer.name?.split(' ')[0] || 'Gæst';
   const todayFlyingCount = todayFlightIntents.length;
 
-  const publicThemeMode = club.settings?.publicThemeMode === 'dark' ? 'dark' : 'light';
+  const publicThemeMode = normalizePublicThemeMode(club.settings?.publicThemeMode);
 
   return (
     <div className="home-v2-root" data-theme={publicThemeMode}>

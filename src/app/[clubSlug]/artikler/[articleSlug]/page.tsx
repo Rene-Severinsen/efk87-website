@@ -14,7 +14,7 @@ interface PageProps {
 export default async function ArticleDetailPage({ params }: PageProps) {
   const { clubSlug, articleSlug } = await params;
   const context = await resolveClubContext(clubSlug);
-  const { club, theme, footerData, navigationItems, actionItems, viewer } = context;
+  const { club, theme, footerData, navigationItems, actionItems, viewer, publicSettings } = context;
 
   const article = await getPublishedArticleBySlug(club.id, articleSlug, viewer);
 
@@ -28,6 +28,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}
+      publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}

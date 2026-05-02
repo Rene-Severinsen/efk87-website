@@ -16,7 +16,7 @@ interface PageProps {
 
 export default async function SkolekalenderPage({ params }: PageProps) {
   const { clubSlug } = await params;
-  const { club, theme, footerData, navigationItems, actionItems } = await resolveClubContext(clubSlug);
+  const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolveClubContext(clubSlug);
   const viewer = await getServerViewerForClub(club.id);
 
   // Get member profile for the viewer to identify their own bookings
@@ -45,6 +45,7 @@ export default async function SkolekalenderPage({ params }: PageProps) {
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}
+      publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}

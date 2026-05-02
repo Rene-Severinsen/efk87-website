@@ -23,7 +23,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
   const { clubSlug } = await params;
   const { tag: selectedTagSlug, q: searchQuery, sort: sortOption } = await searchParams;
   const context = await resolveClubContext(clubSlug);
-  const { club, theme, footerData, navigationItems, actionItems, viewer } = context;
+  const { club, theme, footerData, navigationItems, actionItems, viewer, publicSettings } = context;
 
   const isFilterActive = !!(selectedTagSlug || (searchQuery && searchQuery.trim()) || (sortOption && sortOption !== "newest"));
 
@@ -65,6 +65,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}
+      publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}

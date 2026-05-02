@@ -16,7 +16,7 @@ interface JegFlyverListePageProps {
 export default async function JegFlyverListePage({ params }: JegFlyverListePageProps) {
   const { clubSlug } = await params;
 
-  const { club, theme, footerData, navigationItems, actionItems, viewer } = await resolveClubContext(clubSlug);
+  const { club, theme, footerData, navigationItems, actionItems, viewer, publicSettings } = await resolveClubContext(clubSlug);
 
   const flightIntents = await getTodayFlightIntentList(club.id, viewer);
 
@@ -43,6 +43,7 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
       theme={theme}
+      publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}
       navigationItems={navigationItems}
       actionItems={actionItems}
