@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import './PublicShell.css';
 import './PublicClubHomePage.css';
 import { ThemedTopBar } from './ThemedTopBar';
 import { ClubTheme, PublicHomeFeatureTile, PublicHomeInfoCard, PublicClubFooter, PublicSponsor } from "../../generated/prisma";

@@ -1,0 +1,133 @@
+/* Shared Public Shell / Layout CSS */
+
+.public-home {
+  --club-bg: var(--public-surface-strong);
+  --club-panel: var(--public-card);
+  --club-panel-soft: var(--public-surface);
+  --club-line: var(--public-card-border);
+  --club-text: var(--public-text);
+  --club-muted: var(--public-text-muted);
+  --club-accent: var(--public-success);
+  --club-accent-2: var(--public-primary);
+  --club-shadow: var(--public-shadow);
+  --club-radius: 22px;
+
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--club-text);
+  background: var(--public-bg-soft), var(--public-bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.public-home * { box-sizing: border-box; }
+
+.public-home a, .public-home button { 
+  color: inherit; 
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.public-home h1, .public-home h2, .public-home h3, .public-home h4, .public-home p { margin: 0; }
+
+.public-home .shell {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Card & Building Blocks */
+.public-home .card {
+  background: var(--public-card);
+  border: 1px solid var(--public-card-border);
+  color: var(--public-text);
+  border-radius: var(--club-radius);
+  box-shadow: var(--public-shadow);
+  overflow: hidden;
+}
+
+.public-home .section-card { padding: 22px; }
+
+.public-home .themed-h1 {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  color: var(--club-text);
+  letter-spacing: -0.02em;
+}
+
+.public-home .eyebrow {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--public-primary-soft);
+  border: 1px solid var(--public-card-border);
+  width: fit-content;
+  color: var(--public-primary);
+  font-size: 13px;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.public-home .hero-copy {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--club-muted);
+  max-width: 68ch;
+  margin-bottom: 18px;
+}
+
+.public-home .small { font-size: 13px; line-height: 1.55; color: var(--club-muted); }
+
+/* Footer components */
+.public-home .footer {
+  margin-top: 20px;
+  padding: 30px;
+  display: grid;
+  grid-template-columns: 1.2fr .8fr .8fr;
+  gap: 30px;
+}
+
+.public-home .footer h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.public-home .sponsors {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.public-home .sponsor {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--public-card);
+  border: 1px solid var(--club-line);
+  color: var(--club-text);
+  font-weight: 600;
+  font-size: 14px;
+  min-height: auto;
+}
+
+/* Breakpoints for Shell */
+@media (max-width: 1100px) {
+  .public-home .footer { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 767px) {
+  .public-home .shell { padding: 12px; }
+  .public-home .footer {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+  }
+}

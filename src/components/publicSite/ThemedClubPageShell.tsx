@@ -1,5 +1,5 @@
 import React from 'react';
-import './PublicClubHomePage.css';
+import './PublicShell.css';
 import { ClubTheme, PublicClubFooter, PublicSponsor } from "../../generated/prisma";
 import { PublicNavigationItem } from "../../lib/publicSite/publicNavigation";
 import { normalizePublicThemeMode } from "../../lib/publicSite/publicThemeService";
