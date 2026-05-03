@@ -58,25 +58,25 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
     >
       <ThemedSectionCard className="p-4 sm:p-8">
         {created === "1" && (
-          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-lg text-sm sm:text-base">
+          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-[var(--public-success)]/10 border border-[var(--public-success)]/30 text-[var(--public-success)] rounded-lg text-sm sm:text-base">
             Din flyvemelding er oprettet!
           </div>
         )}
 
         {cancelled === "1" && (
-          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-lg text-sm sm:text-base">
+          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-[var(--public-success)]/10 border border-[var(--public-success)]/30 text-[var(--public-success)] rounded-lg text-sm sm:text-base">
             Din melding er aflyst.
           </div>
         )}
 
         {duplicate === "1" && (
-          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-red-600 border border-red-500 text-white rounded-lg text-sm sm:text-base">
+          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-[var(--public-danger)]/10 border border-[var(--public-danger)]/30 text-[var(--public-danger)] rounded-lg text-sm sm:text-base">
             Du har allerede en aktiv &apos;Jeg flyver&apos;-melding for den valgte dag. Aflys den først, hvis du vil oprette en ny.
           </div>
         )}
 
         {hasActiveToday && (
-          <div className="mb-5 sm:mb-6 p-3 bg-blue-900/20 border border-blue-500/30 text-blue-200 text-sm rounded-lg">
+          <div className="mb-5 sm:mb-6 p-3 bg-[var(--public-primary)]/10 border border-[var(--public-primary)]/30 text-[var(--public-primary)] text-sm rounded-lg">
             Du har allerede en aktiv melding for i dag.
           </div>
         )}
@@ -96,7 +96,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                 required
                 defaultValue={todayStr}
                 min={todayStr}
-                className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-white"
+                className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)]"
               />
             </div>
 
@@ -108,7 +108,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                 type="time"
                 id="plannedTime"
                 name="plannedTime"
-                className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-white"
+                className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)]"
               />
             </div>
           </div>
@@ -122,8 +122,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
               name="activityType"
               required
               defaultValue={ClubFlightIntentType.FLYING}
-              className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-white"
-              style={{ colorScheme: 'dark' }}
+              className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)]"
             >
               <option value={ClubFlightIntentType.FLYING}>Flyvning</option>
               <option value={ClubFlightIntentType.TRAINING}>Skoleflyvning / Træning</option>
@@ -144,29 +143,29 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
               rows={3}
               maxLength={240}
               placeholder="F.eks. hvilke fly du tager med, eller om der er noget specielt..."
-              className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-white placeholder-white/20"
+              className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)] placeholder-[var(--club-text)]/30"
             ></textarea>
           </div>
 
           <button
             type="submit"
-            className="w-full flex justify-center py-2.5 sm:py-3 px-4 border border-transparent rounded-lg shadow-lg text-sm sm:text-base font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+            className="w-full flex justify-center py-2.5 sm:py-3 px-4 border border-transparent rounded-lg shadow-lg text-sm sm:text-base font-semibold text-white bg-[var(--public-primary)] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--public-primary)] transition-colors"
           >
             Meld ankomst
           </button>
         </form>
 
-        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/5">
+        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-[var(--club-line)]">
           <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Dine seneste meldinger</h2>
           
           {recentIntents.length === 0 ? (
-            <p className="opacity-50 italic text-sm">
+            <p className="opacity-50 italic text-sm text-[var(--club-muted)]">
               Du har endnu ikke oprettet nogen &apos;Jeg flyver&apos;-meldinger.
             </p>
           ) : (
             <div className="space-y-3 sm:space-y-4">
               {recentIntents.map((intent) => (
-                <div key={intent.id} className="p-3 sm:p-4 rounded-lg border border-white/5 bg-white/5">
+                <div key={intent.id} className="p-3 sm:p-4 rounded-lg border border-[var(--club-line)] bg-[var(--public-surface)]">
                   <div className="flex justify-between items-start mb-2">
                     <div className="font-medium text-sm sm:text-base">
                       {new Date(intent.flightDate).toLocaleDateString("da-DK", { 
@@ -175,7 +174,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                         month: 'short' 
                       })}
                       {intent.plannedAt && (
-                        <span className="ml-2 opacity-60">
+                        <span className="ml-2 opacity-60 text-[var(--club-muted)]">
                           kl. {new Date(intent.plannedAt).toLocaleTimeString("da-DK", { 
                             hour: '2-digit', 
                             minute: '2-digit' 
@@ -184,9 +183,9 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                       )}
                     </div>
                     <span className={`text-xs px-2 py-1 rounded-full ${
-                      intent.status === ClubFlightIntentStatus.ACTIVE ? 'bg-green-500/20 text-green-400' : 
-                      intent.status === ClubFlightIntentStatus.CANCELLED ? 'bg-red-500/20 text-red-400' :
-                      'bg-white/10 text-white/50'
+                      intent.status === ClubFlightIntentStatus.ACTIVE ? 'bg-[var(--public-success)]/20 text-[var(--public-success)]' : 
+                      intent.status === ClubFlightIntentStatus.CANCELLED ? 'bg-[var(--public-danger)]/20 text-[var(--public-danger)]' :
+                      'bg-[var(--club-line)] text-[var(--club-muted)]'
                     }`}>
                       {intent.status === ClubFlightIntentStatus.CANCELLED ? 'AFLYST' : intent.status}
                     </span>
@@ -194,10 +193,10 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                   <div className="flex justify-between items-end">
                     <div className="flex-1">
                       <div className="text-sm opacity-90 mb-1">
-                        <span className="font-semibold">{getActivityLabel(intent.activityType)}</span>
+                        <span className="font-semibold text-[var(--club-text)]">{getActivityLabel(intent.activityType)}</span>
                       </div>
                       {intent.message && (
-                        <div className="text-sm opacity-70 italic">
+                        <div className="text-sm opacity-70 italic text-[var(--club-muted)]">
                           &ldquo;{intent.message}&rdquo;
                         </div>
                       )}
@@ -209,7 +208,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                         <input type="hidden" name="flightIntentId" value={intent.id} />
                         <button 
                           type="submit"
-                          className="text-xs px-3 py-1 bg-red-600/20 hover:bg-red-600/40 text-red-300 border border-red-500/30 rounded transition-colors"
+                          className="text-xs px-3 py-1 bg-[var(--public-danger)]/10 hover:bg-[var(--public-danger)]/20 text-[var(--public-danger)] border border-[var(--public-danger)]/30 rounded transition-colors"
                         >
                           Aflys
                         </button>
@@ -218,15 +217,15 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                   </div>
                 </div>
               ))}
-              <p className="text-xs opacity-40 mt-6">
+              <p className="text-xs opacity-40 mt-6 text-[var(--club-muted)]">
                 Redigering er planlagt til en fremtidig opdatering.
               </p>
             </div>
           )}
         </div>
 
-        <div className="mt-10 pt-8 border-t border-white/5 text-center">
-          <p className="text-sm opacity-50 italic">
+        <div className="mt-10 pt-8 border-t border-[var(--club-line)] text-center">
+          <p className="text-sm opacity-50 italic text-[var(--club-muted)]">
             Dagens offentlige aktivitetsliste vises på forsiden.
           </p>
         </div>

@@ -51,13 +51,13 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
             </svg>
           </div>
         </div>
-        <h2 className="text-2xl font-bold text-white mb-4">Tak for din ansøgning</h2>
-        <p className="text-slate-300">
+        <h2 className="text-2xl font-bold text-[var(--club-text)] mb-4">Tak for din ansøgning</h2>
+        <p className="text-[var(--club-muted)]">
           Vi har modtaget din indmeldelse. Vi kontakter dig, når den er gennemgået.
         </p>
         <button 
           onClick={() => window.location.reload()} 
-          className="mt-8 text-sky-400 hover:text-sky-300 transition-colors"
+          className="mt-8 text-[var(--public-primary)] hover:opacity-80 transition-colors"
         >
           Send en anden ansøgning
         </button>
@@ -69,7 +69,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
     <ThemedSectionCard>
       <form action={action} className="space-y-6">
         {state.error && (
-          <div className="p-4 bg-red-900/30 border border-red-500/50 rounded-md text-red-200 text-sm">
+          <div className="p-4 bg-[var(--public-danger)]/10 border border-[var(--public-danger)]/30 rounded-md text-[var(--public-danger)] text-sm">
             {state.error}
           </div>
         )}
@@ -85,10 +85,10 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               name="firstName"
               id="firstName"
               required
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
+              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)] placeholder-[var(--club-text)]/30"
             />
             {state.fieldErrors?.firstName && (
-              <p className="mt-1 text-xs text-red-400">{state.fieldErrors.firstName}</p>
+              <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.firstName}</p>
             )}
           </div>
 
@@ -102,15 +102,13 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               name="lastName"
               id="lastName"
               required
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
+              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)] placeholder-[var(--club-text)]/30"
             />
             {state.fieldErrors?.lastName && (
-              <p className="mt-1 text-xs text-red-400">{state.fieldErrors.lastName}</p>
+              <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.lastName}</p>
             )}
           </div>
         </div>
-
-
 
         {/* Adresse */}
         <div>
@@ -122,10 +120,10 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
             name="address"
             id="address"
             required
-            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
+            className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)] placeholder-[var(--club-text)]/30"
           />
           {state.fieldErrors?.address && (
-            <p className="mt-1 text-xs text-red-400">{state.fieldErrors.address}</p>
+            <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.address}</p>
           )}
         </div>
 
@@ -140,10 +138,10 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               name="postalCode"
               id="postalCode"
               required
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
+              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)] placeholder-[var(--club-text)]/30"
             />
             {state.fieldErrors?.postalCode && (
-              <p className="mt-1 text-xs text-red-400">{state.fieldErrors.postalCode}</p>
+              <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.postalCode}</p>
             )}
           </div>
 
@@ -157,10 +155,10 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               name="city"
               id="city"
               required
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
+              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)] placeholder-[var(--club-text)]/30"
             />
             {state.fieldErrors?.city && (
-              <p className="mt-1 text-xs text-red-400">{state.fieldErrors.city}</p>
+              <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.city}</p>
             )}
           </div>
         </div>
@@ -177,10 +175,10 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
                 id="email"
                 required
                 autoComplete="email"
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
+                className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)] placeholder-[var(--club-text)]/30"
             />
             {state.fieldErrors?.email && (
-                <p className="mt-1 text-xs text-red-400">{state.fieldErrors.email}</p>
+                <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.email}</p>
             )}
           </div>
 
@@ -194,10 +192,10 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
                 name="mobilePhone"
                 id="mobilePhone"
                 required
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
+                className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)] placeholder-[var(--club-text)]/30"
             />
             {state.fieldErrors?.mobilePhone && (
-                <p className="mt-1 text-xs text-red-400">{state.fieldErrors.mobilePhone}</p>
+                <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.mobilePhone}</p>
             )}
           </div>
         </div>
@@ -215,10 +213,10 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               required
               value={birthDate}
               onChange={(e) => setBirthDate(e.target.value)}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
+              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)]"
             />
             {state.fieldErrors?.birthDate && (
-              <p className="mt-1 text-xs text-red-400">{state.fieldErrors.birthDate}</p>
+              <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.birthDate}</p>
             )}
           </div>
 
@@ -232,13 +230,13 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               name="mdkNumber"
               id="mdkNumber"
               required={membershipType === ClubMemberMembershipType.SENIOR || membershipType === ClubMemberMembershipType.JUNIOR}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white placeholder-white/30"
+              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)] placeholder-[var(--club-text)]/30"
             />
-            <p className="mt-1 text-[10px] text-slate-400">
+            <p className="mt-1 text-[10px] text-[var(--club-muted)]">
               MDK nr. er påkrævet for Senior og Junior. Passivt medlemskab kan oprettes uden MDK nr.
             </p>
             {state.fieldErrors?.mdkNumber && (
-              <p className="mt-1 text-xs text-red-400">{state.fieldErrors.mdkNumber}</p>
+              <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.mdkNumber}</p>
             )}
           </div>
         </div>
@@ -254,7 +252,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
             required
             value={membershipType}
             onChange={(e) => setMembershipType(e.target.value)}
-            className="w-full px-4 py-3 bg-[#1e293b] border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 text-white appearance-none"
+            className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)] appearance-none"
           >
             <option value="" disabled>Vælg medlemskab</option>
             <option value={ClubMemberMembershipType.SENIOR}>Senior</option>
@@ -262,10 +260,10 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
             <option value={ClubMemberMembershipType.PASSIVE}>Passiv</option>
           </select>
           {ageError && (
-            <p className="mt-1 text-xs text-red-400">{ageError}</p>
+            <p className="mt-1 text-xs text-[var(--public-danger)]">{ageError}</p>
           )}
           {state.fieldErrors?.membershipType && (
-            <p className="mt-1 text-xs text-red-400">{state.fieldErrors.membershipType}</p>
+            <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.membershipType}</p>
           )}
         </div>
 
@@ -273,7 +271,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
           <button
             type="submit"
             disabled={isPending || !!ageError}
-            className="w-full py-4 px-6 bg-sky-600 hover:bg-sky-500 disabled:bg-sky-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg shadow-lg shadow-sky-900/20 transition-all transform active:scale-[0.98]"
+            className="w-full py-4 px-6 bg-[var(--public-primary)] hover:opacity-90 disabled:bg-[var(--public-primary)]/50 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg shadow-lg transition-all transform active:scale-[0.98]"
           >
             {isPending ? "Sender ansøgning..." : "Indsend indmeldelse"}
           </button>
