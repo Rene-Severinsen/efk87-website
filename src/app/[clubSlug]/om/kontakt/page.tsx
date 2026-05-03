@@ -48,7 +48,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
                   className="w-16 h-16 sm:w-20 sm:h-20"
                 />
                 <div className="min-w-0">
-                  <h3 className="text-lg sm:text-xl font-bold text-white leading-tight truncate">{instructor.displayName}</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-[var(--public-text)] leading-tight truncate">{instructor.displayName}</h3>
                   {instructor.memberRoleType && instructor.memberRoleType !== 'REGULAR' && (
                     <p className="text-sky-400 text-[11px] sm:text-sm font-medium mt-0.5 sm:mt-1 truncate">
                       {instructor.memberRoleType === 'CHAIRMAN' ? 'Formand' :
@@ -67,7 +67,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
                 {instructor.email && (
                   <a 
                     href={`mailto:${instructor.email}`}
-                    className="flex items-center gap-2.5 sm:gap-3 text-slate-300 hover:text-white transition-colors group"
+                    className="flex items-center gap-2.5 sm:gap-3 text-[var(--public-text-muted)] hover:text-[var(--public-text)] transition-colors group"
                   >
                     <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-sky-500/20 transition-colors">
                       <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -80,7 +80,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
                 {instructor.mobilePhone && (
                   <a 
                     href={`tel:${instructor.mobilePhone}`}
-                    className="flex items-center gap-2.5 sm:gap-3 text-slate-300 hover:text-white transition-colors group"
+                    className="flex items-center gap-2.5 sm:gap-3 text-[var(--public-text-muted)] hover:text-[var(--public-text)] transition-colors group"
                   >
                     <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
                       <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -96,7 +96,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
         </div>
       ) : (
         <ThemedSectionCard className="mt-8 text-center py-12">
-          <p className="text-slate-400 text-lg italic">
+          <p className="text-[var(--public-text-soft)] text-lg italic">
             Der er endnu ikke registreret instruktører til offentlig visning.
           </p>
         </ThemedSectionCard>

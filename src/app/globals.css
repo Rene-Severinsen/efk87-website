@@ -56,7 +56,7 @@ body {
 
 /* Article Detail Prose Styles */
 .article-detail-prose {
-  color: #e8eefc;
+  color: var(--public-text);
   font-size: 1rem;
   line-height: 1.75;
 }
@@ -67,7 +67,7 @@ body {
 
 .article-detail-prose strong {
   font-weight: 700;
-  color: #f3f7ff;
+  color: var(--public-text);
 }
 
 .article-detail-prose h2 {
@@ -75,7 +75,7 @@ body {
   font-weight: 700;
   margin-top: 2rem;
   margin-bottom: 1rem;
-  color: #f3f7ff;
+  color: var(--public-text);
 }
 
 .article-detail-prose h3 {
@@ -83,7 +83,7 @@ body {
   font-weight: 700;
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
-  color: #f3f7ff;
+  color: var(--public-text);
 }
 
 .article-detail-prose h4 {
@@ -91,7 +91,7 @@ body {
   font-weight: 700;
   margin-top: 1.25rem;
   margin-bottom: 0.5rem;
-  color: #f3f7ff;
+  color: var(--public-text);
 }
 
 .article-detail-prose ul,

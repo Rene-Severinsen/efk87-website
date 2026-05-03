@@ -81,7 +81,7 @@ export default function FlightSchoolCalendarClient({
             statusColor = "text-amber-400/60";
           } else if (isInactive) {
             statusLabel = "Inaktiv";
-            statusColor = "text-white/30";
+            statusColor = "opacity-30";
           }
 
           return (
@@ -96,7 +96,7 @@ export default function FlightSchoolCalendarClient({
               }`}
             >
               <div className="flex justify-between items-start mb-3">
-                <div className="font-bold text-white">
+                <div className="font-bold text-[var(--public-text)]">
                   {format(new Date(slot.startsAt), "HH:mm")}
                   {slot.endsAt && ` - ${format(new Date(slot.endsAt), "HH:mm")}`}
                 </div>
@@ -106,7 +106,7 @@ export default function FlightSchoolCalendarClient({
               </div>
 
               {isOccupied && slot.bookedMemberName && (
-                <div className="text-xs text-white/50 mb-3 -mt-2">
+                <div className="text-xs text-[var(--public-text-soft)] mb-3 -mt-2">
                   Booket af {slot.bookedMemberName}
                 </div>
               )}

@@ -83,7 +83,7 @@ export default async function SkolekalenderPage({ params }: PageProps) {
 
               return (
                 <section key={dateIso}>
-                  <h2 className="text-xl font-bold mb-6 px-1 text-white border-b border-white/10 pb-2 flex items-baseline gap-3">
+                  <h2 className="text-xl font-bold mb-6 px-1 text-[var(--public-text)] border-b border-[var(--public-card-border)] pb-2 flex items-baseline gap-3">
                     <span className="capitalize">{format(date, "EEEE 'd.' d. MMMM", { locale: da })}</span>
                     {isSameDay(date, new Date()) && (
                       <span className="text-xs uppercase tracking-wider bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded-full font-bold">I dag</span>
@@ -99,7 +99,7 @@ export default async function SkolekalenderPage({ params }: PageProps) {
                         <div className="p-5 border-b border-white/5 bg-white/[0.02] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                           <div>
                             <div className="text-sm opacity-50 uppercase tracking-wider font-semibold mb-1">Instruktør</div>
-                            <div className="font-bold text-lg text-white">{session.instructor.firstName} {session.instructor.lastName}</div>
+                            <div className="font-bold text-lg text-[var(--public-text)]">{session.instructor.firstName} {session.instructor.lastName}</div>
                           </div>
                           <div className="text-right sm:text-right">
                             <div className="text-sm opacity-50 uppercase tracking-wider font-semibold mb-1">Tidsrum</div>
