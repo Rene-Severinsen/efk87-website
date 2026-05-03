@@ -60,7 +60,10 @@ export const ThemedFooter: React.FC<ThemedFooterProps> = ({
       </div>
       <div>
         <h3>Links</h3>
-        <p className="small" style={{ marginTop: '10px' }}>Forum<br />Galleri<br />Flyveskole<br />Om {clubName}</p>
+        <p className="small" style={{ marginTop: '10px' }}>
+          Flyveskole<br />
+          Om {clubName}
+        </p>
       </div>
     </footer>
   );

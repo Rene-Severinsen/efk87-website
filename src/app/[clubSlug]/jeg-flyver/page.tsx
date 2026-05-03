@@ -165,7 +165,12 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
           ) : (
             <div className="space-y-3 sm:space-y-4">
               {recentIntents.map((intent) => (
-                <div key={intent.id} className="p-3 sm:p-4 rounded-lg border border-[var(--public-card-border)] bg-[var(--public-surface)]">
+                <div 
+                  key={intent.id} 
+                  className={`p-3 sm:p-4 rounded-lg border border-[var(--public-card-border)] bg-[var(--public-surface)] ${
+                    intent.status === ClubFlightIntentStatus.CANCELLED ? 'opacity-60 grayscale-[0.5]' : ''
+                  }`}
+                >
                   <div className="flex justify-between items-start mb-2">
                     <div className="font-medium text-sm sm:text-base text-[var(--public-text)]">
                       {new Date(intent.flightDate).toLocaleDateString("da-DK", { 
@@ -187,7 +192,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                       intent.status === ClubFlightIntentStatus.CANCELLED ? 'bg-[var(--public-danger)]/20 text-[var(--public-danger)]' :
                       'bg-[var(--public-card-border)] text-[var(--public-text-soft)]'
                     }`}>
-                      {intent.status === ClubFlightIntentStatus.CANCELLED ? 'AFLYST' : intent.status}
+                      {getFlightIntentStatusLabel(intent.status)}
                     </span>
                   </div>
                   <div className="flex justify-between items-end">
@@ -243,5 +248,14 @@ function getActivityLabel(type: ClubFlightIntentType): string {
     case ClubFlightIntentType.SOCIAL: return "Socialt samvær";
     case ClubFlightIntentType.OTHER: return "Andet";
     default: return type;
+  }
+}
+
+function getFlightIntentStatusLabel(status: ClubFlightIntentStatus): string {
+  switch (status) {
+    case ClubFlightIntentStatus.ACTIVE: return "Aktiv";
+    case ClubFlightIntentStatus.CANCELLED: return "Aflyst";
+    case ClubFlightIntentStatus.EXPIRED: return "Udløbet";
+    default: return status;
   }
 }
