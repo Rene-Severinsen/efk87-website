@@ -52,16 +52,16 @@ export default async function ThreadDetailPage({ params }: ThreadDetailPageProps
     >
       <div className="space-y-8 mt-8">
         {/* OP Thread Body */}
-        <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl">
-          <div className="p-8 border-b border-white/10 bg-white/5">
-            <div className="flex flex-wrap items-center gap-6 text-sm text-slate-400">
+        <div className="backdrop-blur-md bg-[var(--public-card)] border border-[var(--public-card-border)] rounded-[2rem] overflow-hidden shadow-2xl">
+          <div className="p-8 border-b border-[var(--public-card-border)] bg-[var(--public-primary-soft)]">
+            <div className="flex flex-wrap items-center gap-6 text-sm text-[var(--club-text)]">
               <div className="flex items-center gap-3">
                 <Avatar 
                   name={getMemberDisplayName(thread.author)} 
                   imageUrl={thread.author.image} 
                   size="sm" 
                 />
-                <span className="font-bold text-white">{getMemberDisplayName(thread.author)}</span>
+                <span className="font-bold text-[var(--club-text)]">{getMemberDisplayName(thread.author)}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
@@ -79,15 +79,15 @@ export default async function ThreadDetailPage({ params }: ThreadDetailPageProps
 
         {/* Replies */}
         {replies.map((reply) => (
-          <div key={reply.id} className="backdrop-blur-md bg-white/5 border border-white/10 rounded-[2rem] overflow-hidden shadow-xl ml-4 sm:ml-8 lg:ml-12">
-            <div className="p-6 border-b border-white/10 bg-white/5 flex flex-wrap items-center gap-6 text-sm text-slate-400">
+          <div key={reply.id} className="backdrop-blur-md bg-[var(--public-card)] border border-[var(--public-card-border)] rounded-[2rem] overflow-hidden shadow-xl ml-4 sm:ml-8 lg:ml-12">
+            <div className="p-6 border-b border-[var(--public-card-border)] bg-[var(--public-primary-soft)] flex flex-wrap items-center gap-6 text-sm text-[var(--club-text)]">
               <div className="flex items-center gap-3">
                 <Avatar 
                   name={getMemberDisplayName(reply.author)} 
                   imageUrl={reply.author.image} 
                   size="sm" 
                 />
-                <span className="font-bold text-white">{getMemberDisplayName(reply.author)}</span>
+                <span className="font-bold text-[var(--club-text)]">{getMemberDisplayName(reply.author)}</span>
               </div>
               <div className="flex items-center gap-2 text-xs">
                 <Clock className="w-3.5 h-3.5" />

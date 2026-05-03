@@ -62,8 +62,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
       <div className="space-y-4">
         {threads.length === 0 ? (
-          <div className="p-12 text-center backdrop-blur-md bg-white/5 border border-white/10 rounded-3xl">
-            <p className="text-slate-400">Der er endnu ikke nogen tråde i denne kategori.</p>
+          <div className="p-12 text-center backdrop-blur-md bg-[var(--public-card)] border border-[var(--public-card-border)] rounded-3xl">
+            <p className="text-[var(--club-text)] opacity-60">Der er endnu ikke nogen tråde i denne kategori.</p>
           </div>
         ) : (
           threads.map((thread) => {
@@ -73,9 +73,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <Link
                 key={thread.id}
                 href={`/${clubSlug}/forum/${categorySlug}/${thread.slug}`}
-                className="flex items-center gap-4 p-4 backdrop-blur-md bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all group"
+                className="flex items-center gap-4 p-4 backdrop-blur-md bg-[var(--public-card)] hover:bg-[var(--public-nav-hover)] border border-[var(--public-card-border)] rounded-2xl transition-all group"
               >
-                <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-sky-500/10 text-sky-400 group-hover:bg-sky-500/20 transition-all">
+                <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-[var(--public-primary-soft)] text-[var(--public-primary)] group-hover:bg-[var(--public-primary-soft)] transition-all">
                   <ForumIcon iconKey={thread.iconKey} className="w-6 h-6" />
                 </div>
                 
@@ -86,12 +86,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                         Fastgjort
                       </span>
                     )}
-                    <h3 className="font-bold text-white group-hover:text-sky-400 transition-colors truncate">
+                    <h3 className="font-bold text-[var(--club-text)] group-hover:text-sky-400 transition-colors truncate">
                       {thread.title}
                     </h3>
                   </div>
                   
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[var(--public-text-soft)]">
                     <div className="flex items-center gap-2">
                       <Avatar 
                         name={getMemberDisplayName(thread.author)} 

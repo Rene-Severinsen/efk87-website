@@ -52,9 +52,9 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
                         : 'inline-flex min-h-[44px] items-center whitespace-nowrap rounded-full px-3 py-2 text-sm',
                     isActive
                         ? mobile
-                            ? 'border border-sky-300/25 bg-sky-300/10 font-semibold active'
-                            : 'border border-sky-300/25 bg-sky-300/10 active'
-                        : 'text-slate-400 hover:bg-white/5',
+                            ? 'border border-sky-300/25 bg-[var(--public-primary-soft)] font-semibold active text-[var(--public-primary)]'
+                            : 'border border-sky-300/25 bg-[var(--public-primary-soft)] active text-[var(--public-primary)]'
+                        : 'text-[var(--public-nav-text)] hover:bg-[var(--public-nav-hover)]',
                   ].join(' ')}
               >
                 {item.label}
@@ -71,8 +71,8 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
             'flex min-h-[44px] items-center justify-center rounded-full text-sm font-semibold transition-all duration-200',
             mobile ? 'w-full rounded-xl px-4 py-2.5' : 'px-4 py-2',
             item.isPrimary
-                ? 'border border-emerald-400/30 bg-gradient-to-br from-emerald-400/20 to-sky-400/20 text-emerald-300 hover:from-emerald-400/30 hover:to-sky-400/30'
-                : 'border border-white/10 bg-white/5 text-white hover:bg-white/10',
+                ? 'border border-emerald-400/30 bg-[var(--public-primary)] text-white hover:opacity-90'
+                : 'border border-[var(--public-card-border)] bg-[var(--public-card)] text-[var(--public-text)] hover:bg-[var(--public-nav-hover)]',
           ].join(' ');
 
           if (item.key === 'logout') {
@@ -105,17 +105,17 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
   return (
       <header className="efk-topbar-root sticky top-4 z-[900] relative isolation-isolate mx-auto w-full max-w-[1400px] pointer-events-auto">
         {/* Desktop Header */}
-        <div className="efk-topbar-desktop hidden items-center justify-between gap-6 min-[1100px]:flex rounded-full border border-white/10 px-6 py-3 shadow-2xl backdrop-blur-xl">
+        <div className="efk-topbar-desktop hidden items-center justify-between gap-6 min-[1100px]:flex rounded-full border border-[var(--public-card-border)] bg-[var(--public-card)] px-6 py-3 shadow-2xl backdrop-blur-xl">
           <div className="flex min-w-0 items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--public-card-border)] bg-[var(--public-primary-soft)] text-[var(--public-primary)] text-xs font-bold">
               {clubName}
             </div>
 
             <div className="flex min-w-0 flex-col">
-            <span className="truncate text-sm font-bold leading-tight">
+            <span className="truncate text-sm font-bold leading-tight text-[var(--public-text)]">
               {clubDisplayName}
             </span>
-              <span className="truncate text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+              <span className="truncate text-[10px] font-semibold uppercase tracking-wider text-[var(--public-text-soft)]">
               Klubsite
             </span>
             </div>
@@ -131,34 +131,34 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
         </div>
 
         {/* Mobile/Tablet Header */}
-        <details className="efk-topbar-mobile-details group min-[1100px]:hidden rounded-[24px] border border-white/10 shadow-2xl backdrop-blur-xl">
+        <details className="efk-topbar-mobile-details group min-[1100px]:hidden rounded-[24px] border border-[var(--public-card-border)] bg-[var(--public-card)] shadow-2xl backdrop-blur-xl">
           <summary className="efk-topbar-mobile-summary flex items-center justify-between cursor-pointer list-none select-none touch-manipulation min-h-[56px] px-4 py-3 [&::-webkit-details-marker]:hidden">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-emerald-400/20 to-sky-400/30 text-xs font-bold">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--public-card-border)] bg-[var(--public-primary-soft)] text-[var(--public-primary)] text-xs font-bold">
                 {clubName}
               </div>
 
               <div className="flex min-w-0 flex-col">
-              <span className="truncate text-sm font-bold leading-tight">
+              <span className="truncate text-sm font-bold leading-tight text-[var(--public-text)]">
                 {clubDisplayName}
               </span>
-                <span className="truncate text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                <span className="truncate text-[10px] font-semibold uppercase tracking-wider text-[var(--public-text-soft)]">
                 Klubsite
               </span>
               </div>
             </div>
 
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-slate-900/90 text-white transition-colors hover:bg-white/5 active:bg-white/10">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--public-card-border)] bg-[var(--public-card)] text-[var(--public-text)] transition-colors hover:bg-[var(--public-nav-hover)] active:bg-[var(--public-nav-hover)]">
               <span className="text-xl group-open:hidden">☰</span>
               <span className="text-xl hidden group-open:block">✕</span>
             </div>
           </summary>
 
-          <nav className="efk-topbar-mobile-menu mt-3 flex flex-col gap-2 rounded-2xl border border-white/10 bg-slate-950/95 p-3 md:p-4 shadow-2xl md:max-w-2xl md:mx-auto">
+          <nav className="efk-topbar-mobile-menu mt-3 flex flex-col gap-2 rounded-2xl border border-[var(--public-card-border)] bg-[var(--public-card)] p-3 md:p-4 shadow-2xl md:max-w-2xl md:mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {renderNavLinks(true)}
             </div>
-            <div className="my-2 h-px bg-white/10" />
+            <div className="my-2 h-px bg-[var(--public-card-border)]" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {renderAuthActions(true)}
             </div>

@@ -73,8 +73,8 @@
   border-radius: 14px;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, rgba(110,231,183,0.22), rgba(125,211,252,0.28));
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--public-primary-soft);
+  border: 1px solid var(--club-line);
   font-size: 14px;
   flex-shrink: 0;
 }
@@ -131,15 +131,16 @@
 }
 
 .public-home .chip-btn {
-  background: rgba(255,255,255,0.04);
+  background: var(--public-primary-soft);
   border: 1px solid var(--club-line);
   color: var(--club-text);
   font-weight: 600;
 }
 
 .public-home .chip-btn.primary {
-  background: linear-gradient(135deg, rgba(110,231,183,0.18), rgba(125,211,252,0.18));
-  border-color: rgba(110,231,183,0.22);
+  background: var(--public-primary);
+  color: #fff;
+  border-color: var(--public-primary);
 }
 
 /* Mobile Nav Toggle neutralized */
@@ -185,12 +186,13 @@
   align-items: center;
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(11,18,32,0.58);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--public-primary-soft);
+  border: 1px solid var(--public-card-border);
   width: fit-content;
-  color: #d8e3ff;
+  color: var(--public-primary);
   font-size: 13px;
   margin-bottom: 14px;
+  font-weight: 600;
 }
 
 .public-home .hero-main h1 {
@@ -212,7 +214,7 @@
 .public-home .hero-copy {
   font-size: 16px;
   line-height: 1.6;
-  color: #d7e2fb;
+  color: var(--club-muted);
   max-width: 68ch;
   margin-bottom: 18px;
 }
@@ -226,16 +228,17 @@
 .public-home .pill {
   padding: 12px 20px;
   border-radius: 14px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--public-card);
+  border: 1px solid var(--club-line);
   color: var(--club-text);
   font-weight: 600;
   font-size: 14px;
 }
 
 .public-home .pill.primary {
-  background: linear-gradient(135deg, rgba(110,231,183,0.20), rgba(125,211,252,0.24));
-  border-color: rgba(110,231,183,0.28);
+  background: var(--public-primary);
+  color: #fff;
+  border-color: var(--public-primary);
 }
 
 .public-home .side-stack { display: grid; gap: 20px; }
@@ -243,7 +246,7 @@
 .public-home .mini-card {
   padding: 22px;
   min-height: 180px;
-  background: linear-gradient(180deg, rgba(20,29,47,0.95), rgba(17,25,41,0.95));
+  background: var(--public-card);
 }
 
 .public-home .mini-card h3 {
@@ -263,9 +266,9 @@
 .public-home .meta-chip {
   padding: 7px 10px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.05);
+  background: var(--public-primary-soft);
   border: 1px solid var(--club-line);
-  color: #dbe7ff;
+  color: var(--public-primary);
   font-size: 12px;
   font-weight: 700;
   min-height: auto;
@@ -299,7 +302,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(6,10,18,0.12), rgba(6,10,18,0.72));
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.6));
 }
 
 .public-home .tile-hero h3 {
@@ -368,8 +371,8 @@
   align-items: center;
   padding: 18px;
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(110,231,183,0.07), rgba(125,211,252,0.08));
-  border: 1px solid rgba(110,231,183,0.16);
+  background: var(--public-primary-soft);
+  border: 1px solid var(--public-card-border);
   margin-bottom: 16px;
 }
 
@@ -380,7 +383,7 @@
   display: grid;
   place-items: center;
   font-size: 48px;
-  background: rgba(255,255,255,0.05);
+  background: var(--public-card);
   border: 1px solid var(--club-line);
 }
 
@@ -396,7 +399,7 @@
   align-items: center;
   padding: 14px;
   border-radius: 18px;
-  background: rgba(255,255,255,0.035);
+  background: var(--public-card);
   border: 1px solid var(--club-line);
 }
 
@@ -431,14 +434,14 @@
   white-space: nowrap;
 }
 
-.public-home .status-badge.ok { background: rgba(52,211,153,0.12); color: #86efac; border-color: rgba(52,211,153,0.2); }
-.public-home .status-badge.warn { background: rgba(251,191,36,0.12); color: #fde68a; border-color: rgba(251,191,36,0.2); }
-.public-home .status-badge.info { background: rgba(125,211,252,0.12); color: #bae6fd; border-color: rgba(125,211,252,0.2); }
+.public-home .status-badge.ok { background: var(--public-primary-soft); color: var(--public-primary); border-color: var(--public-card-border); }
+.public-home .status-badge.warn { background: rgba(251,191,36,0.12); color: #d97706; border-color: rgba(251,191,36,0.2); }
+.public-home .status-badge.info { background: var(--public-primary-soft); color: var(--public-primary); border-color: var(--public-card-border); }
 
 .public-home .side-panel {
   padding: 18px;
   border-radius: 20px;
-  background: rgba(255,255,255,0.035);
+  background: var(--public-card);
   border: 1px solid var(--club-line);
   margin-bottom: 16px;
 }
@@ -462,7 +465,7 @@
 .public-home .social-item {
   padding: 16px;
   border-radius: 20px;
-  background: rgba(255,255,255,0.035);
+  background: var(--public-card);
   border: 1px solid var(--club-line);
   display: grid;
   grid-template-columns: auto 1fr;
@@ -499,9 +502,9 @@
 .public-home .sponsor {
   padding: 12px 14px;
   border-radius: 14px;
-  background: rgba(255,255,255,0.04);
+  background: var(--public-card);
   border: 1px solid var(--club-line);
-  color: #d8e5ff;
+  color: var(--club-text);
   font-weight: 600;
   font-size: 14px;
   min-height: auto;

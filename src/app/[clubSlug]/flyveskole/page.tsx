@@ -50,7 +50,7 @@ export default async function FlyveskolePage({ params }: PageProps) {
           {page.intro && (
             <ThemedSectionCard className="border-l-4 border-l-sky-400/50">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <p className="text-xl sm:text-2xl font-medium text-sky-100/90 leading-relaxed">
+                <p className="text-xl sm:text-2xl font-medium text-[var(--club-text)] leading-relaxed">
                   {page.intro}
                 </p>
               </div>
@@ -66,12 +66,12 @@ export default async function FlyveskolePage({ params }: PageProps) {
 
           {instructors.length > 0 && (
             <section>
-              <h2 className="text-2xl font-bold mb-6 px-1 text-white">Instruktører</h2>
+              <h2 className="text-2xl font-bold mb-6 px-1 text-[var(--club-text)]">Instruktører</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {instructors.map((instructor, idx) => (
                   <div 
                     key={idx}
-                    className="flex items-start gap-5 p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-colors"
+                    className="flex items-start gap-5 p-5 rounded-2xl bg-[var(--public-card)] border border-[var(--public-card-border)] hover:bg-[var(--public-nav-hover)] transition-colors"
                   >
                     <Avatar 
                       imageUrl={instructor.profileImageUrl} 
@@ -80,21 +80,21 @@ export default async function FlyveskolePage({ params }: PageProps) {
                       className="mt-1"
                     />
                     <div className="flex-1 min-w-0">
-                      <div className="font-bold text-lg truncate text-white">{instructor.displayName}</div>
+                      <div className="font-bold text-lg truncate text-[var(--club-text)]">{instructor.displayName}</div>
                       
                       <div className="flex flex-col gap-0.5 mt-1.5 text-sm">
                         {instructor.email && (
                           <div className="flex gap-2 items-baseline whitespace-nowrap">
-                            <span className="opacity-50 flex-shrink-0">E-mail:</span>
-                            <a href={`mailto:${instructor.email}`} className="opacity-90 hover:opacity-100 hover:text-sky-400 transition-colors truncate block">
+                            <span className="opacity-50 flex-shrink-0 text-[var(--club-text)]">E-mail:</span>
+                            <a href={`mailto:${instructor.email}`} className="text-[var(--club-text)] opacity-90 hover:opacity-100 hover:text-sky-400 transition-colors truncate block">
                               {instructor.email}
                             </a>
                           </div>
                         )}
                         {instructor.mobilePhone && (
                           <div className="flex gap-2 items-baseline whitespace-nowrap">
-                            <span className="opacity-50 flex-shrink-0">Telefon:</span>
-                            <a href={`tel:${instructor.mobilePhone}`} className="opacity-90 hover:opacity-100 hover:text-sky-400 transition-colors truncate block">
+                            <span className="opacity-50 flex-shrink-0 text-[var(--club-text)]">Telefon:</span>
+                            <a href={`tel:${instructor.mobilePhone}`} className="text-[var(--club-text)] opacity-90 hover:opacity-100 hover:text-sky-400 transition-colors truncate block">
                               {instructor.mobilePhone}
                             </a>
                           </div>
@@ -109,19 +109,19 @@ export default async function FlyveskolePage({ params }: PageProps) {
 
           {documents.length > 0 && (
             <section>
-              <h2 className="text-2xl font-bold mb-6 px-1 text-white">Dokumenter og Information</h2>
+              <h2 className="text-2xl font-bold mb-6 px-1 text-[var(--club-text)]">Dokumenter og Information</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {documents.map((doc) => (
                   <Link 
                     key={doc.id}
                     href={`/${clubSlug}/flyveskole/${doc.slug}`}
-                    className="group flex flex-col p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-sky-500/50 hover:bg-sky-500/10 transition-all h-auto min-h-0"
+                    className="group flex flex-col p-6 rounded-2xl bg-[var(--public-card)] border border-[var(--public-card-border)] hover:border-sky-500/50 hover:bg-sky-500/10 transition-all h-auto min-h-0"
                   >
-                    <h3 className="text-xl font-bold mb-3 group-hover:text-sky-400 transition-colors leading-tight text-white">
+                    <h3 className="text-xl font-bold mb-3 group-hover:text-sky-400 transition-colors leading-tight text-[var(--club-text)]">
                       {doc.title}
                     </h3>
                     {doc.excerpt && (
-                      <p className="text-base opacity-60 line-clamp-3 leading-relaxed mb-6">
+                      <p className="text-base opacity-60 line-clamp-3 leading-relaxed mb-6 text-[var(--club-text)]">
                         {doc.excerpt}
                       </p>
                     )}
