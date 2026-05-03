@@ -117,8 +117,8 @@ export default function PublicClubHomePage({
             <div className="hero-actions">
               <Link className="pill primary" href={`/${clubSlug}/jeg-flyver`}>Jeg flyver i dag</Link>
               <Link className="pill" href={`/${clubSlug}/bliv-medlem`}>Bliv medlem</Link>
-              <a className="pill" href="#">Se flyveskolen</a>
-              <a className="pill" href="#">Åbn galleri</a>
+              <Link className="pill" href={`/${clubSlug}/flyveskole`}>Se flyveskolen</Link>
+              <Link className="pill" href={`/${clubSlug}/galleri`}>Åbn galleri</Link>
             </div>
           </article>
 
@@ -148,13 +148,13 @@ export default function PublicClubHomePage({
                 </div>
                 <div className="tile-body">
                   <p>{tile.description}</p>
-                  <a className="tile-link" href={tile.href}>
+                  <Link className="tile-link" href={tile.href}>
                     {tile.title === "Forum" && "Åbn forum"}
                     {tile.title === "Galleri" && "Åbn galleri"}
                     {tile.title === "Flyveskole" && "Se flyveskolen"}
                     {tile.title.startsWith("Om ") && "Læs om klubben"}
                     {!(tile.title === "Forum" || tile.title === "Galleri" || tile.title === "Flyveskole" || tile.title.startsWith("Om ")) && "Læs mere"}
-                  </a>
+                  </Link>
                 </div>
               </article>
             ))
@@ -165,7 +165,7 @@ export default function PublicClubHomePage({
           <article className="card section-card">
             <div className="section-head">
               <h2>Aktivitet på pladsen</h2>
-              <a className="link-soft" href={viewAllFlightIntentsHref}>Se alle flyvemeddelser</a>
+              <Link className="link-soft" href={viewAllFlightIntentsHref}>Se alle flyvemeddelser</Link>
             </div>
 
             <div className="griffin-box">
@@ -176,8 +176,8 @@ export default function PublicClubHomePage({
                 <div className="hero-actions" style={{ marginTop: '14px' }}>
                   {/* Submit flow requires future auth/member implementation */}
                   {/* Future submit flow must allow selecting today or a future date */}
-                  <a className="pill primary" href={submitFlightIntentHref}>Skriv “jeg flyver”</a>
-                  <a className="pill" href={viewAllFlightIntentsHref}>Se dagens liste</a>
+                  <Link className="pill primary" href={submitFlightIntentHref}>Skriv “jeg flyver”</Link>
+                  <Link className="pill" href={viewAllFlightIntentsHref}>Se dagens liste</Link>
                 </div>
               </div>
             </div>
@@ -220,7 +220,7 @@ export default function PublicClubHomePage({
             <article className="card section-card" style={{ marginBottom: '20px' }}>
               <div className="section-head">
                 <h2>Seneste forumaktivitet</h2>
-                <a className="link-soft" href="#">Åbn forum</a>
+                <Link className="link-soft" href={`/${clubSlug}/forum`}>Åbn forum</Link>
               </div>
 
             <div className="list">

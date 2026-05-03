@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { PublicNavigationItem } from '../../lib/publicSite/publicNavigation';
 import { logoutAction } from '../../lib/auth/logout';
 
@@ -42,7 +43,7 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
           const isActive = isActiveItem(item);
 
           return (
-              <a
+              <Link
                   key={item.key}
                   href={item.href}
                   className={[
@@ -58,7 +59,7 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
                   ].join(' ')}
               >
                 {item.label}
-              </a>
+              </Link>
           );
         })}
       </>
@@ -90,13 +91,13 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
           }
 
           return (
-              <a
+              <Link
                   key={item.key}
                   href={item.href}
                   className={baseClassName}
               >
                 {item.label}
-              </a>
+              </Link>
           );
         })}
       </>

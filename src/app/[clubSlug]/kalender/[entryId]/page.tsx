@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { resolveClubContext } from "../../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPageShell";
@@ -84,7 +85,7 @@ export default async function CalendarDetailPage({ params }: PageProps) {
           )}
 
           <div className="mt-12 pt-8 border-t border-[var(--club-line)]">
-            <a 
+            <Link 
               href={`/${clubSlug}`}
               className="inline-flex items-center text-[var(--club-accent)] hover:underline font-medium"
             >
@@ -92,7 +93,7 @@ export default async function CalendarDetailPage({ params }: PageProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
               Tilbage til forsiden
-            </a>
+            </Link>
           </div>
         </ThemedSectionCard>
       </div>

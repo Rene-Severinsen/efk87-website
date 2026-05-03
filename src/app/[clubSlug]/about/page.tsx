@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { resolvePublicPageForClub } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
 import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
@@ -40,7 +41,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
           <p className="text-sm sm:text-base text-[var(--public-text-soft)] mb-6">
             Har du spørgsmål eller brug for hjælp? Find vores instruktører og kontaktpersoner her.
           </p>
-          <a 
+          <Link 
             href={`/${clubSlug}/om/kontakt`}
             className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-[var(--public-primary-soft)] hover:bg-[var(--public-primary-soft)] hover:opacity-90 text-[var(--public-primary)] border border-[var(--public-card-border)] transition-all text-sm sm:text-base font-semibold group"
           >
@@ -48,7 +49,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
             <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
-          </a>
+          </Link>
         </div>
       </ThemedSectionCard>
     </ThemedClubPageShell>

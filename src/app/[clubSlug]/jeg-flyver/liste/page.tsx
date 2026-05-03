@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { resolveClubContext } from "../../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPageShell";
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
@@ -96,12 +97,12 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
       </ThemedSectionCard>
       
       <div className="mt-8 flex justify-center">
-        <a 
+        <Link 
           href={`/${clubSlug}/jeg-flyver`}
           className="pill primary px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all hover:scale-[1.02]"
         >
           Skriv jeg flyver
-        </a>
+        </Link>
       </div>
     </ThemedClubPageShell>
   );

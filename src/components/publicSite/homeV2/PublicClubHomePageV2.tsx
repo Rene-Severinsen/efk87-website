@@ -424,7 +424,6 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Klubchat</h2>
-                <a className="home-v2-link-soft" href="#">Åbn Nextcloud Talk</a>
               </div>
               <div className="home-v2-mailing-list">
                 <div className="home-v2-row-item">
