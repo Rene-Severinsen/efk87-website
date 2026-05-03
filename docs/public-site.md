@@ -8,25 +8,25 @@ Currently, the public club navigation is defined statically in `src/lib/publicSi
 
 ### Current Navigation Structure (Visibility Aware)
 - **Forside**: `/{clubSlug}` (PUBLIC)
-- **Forum**: `/{clubSlug}/forum` (MEMBERS_ONLY)
+- **Forum**: `/{clubSlug}/forum` (PUBLIC - Visibility governed by forum access)
 - **Galleri**: `/{clubSlug}/galleri` (PUBLIC)
 - **Artikler**: `/{clubSlug}/artikler` (PUBLIC)
 - **Flyveskole**: `/{clubSlug}/flyveskole` (PUBLIC)
 - **Om [Club]**: `/{clubSlug}/about` (PUBLIC)
-- **Kontakt**: `/{clubSlug}/om/kontakt` (PUBLIC)
+- **Kontakt**: `/{clubSlug}/om/kontakt` (PUBLIC - linked from About page)
 
 ### Current Topbar Actions (Visibility Aware)
 - **Min profil**: `/{clubSlug}/profil` (MEMBERS_ONLY)
 - **Bliv medlem**: `/{clubSlug}/bliv-medlem` (PUBLIC)
 - **Log ind**: `/{clubSlug}/login` (PUBLIC)
+- **Admin**: `/{clubSlug}/admin` (ADMIN_ONLY)
 
 ### Member-only Areas
-- **Min profil**: `/{clubSlug}/profil` (MEMBERS_ONLY) - Protected member profile page based on the approved mockup.
-- **Forum**: `/{clubSlug}/forum` (MEMBERS_ONLY) - Full member forum with categories, threads, and replies.
-- **Jeg flyver**: `/{clubSlug}/jeg-flyver` (MEMBERS_ONLY)
-- **Jeg flyver liste**: `/{clubSlug}/jeg-flyver/liste` (PUBLIC)
-
-These routes are reserved for future member-only functionality. Currently, they render a placeholder title and text stating that login and access control are not yet implemented. They are hidden from navigation for anonymous viewers.
+- **Min profil**: `/{clubSlug}/profil` (MEMBERS_ONLY) - Protected member profile page.
+- **Forum**: `/{clubSlug}/forum` (PUBLIC entry, MEMBER protected threads) - Full member forum with categories, threads, and replies.
+- **Jeg flyver**: `/{clubSlug}/jeg-flyver` (MEMBERS_ONLY) - Submit flight intent.
+- **Jeg flyver liste**: `/{clubSlug}/jeg-flyver/liste` (PUBLIC) - View who is flying today.
+- **Medlemskort**: `/{clubSlug}/profil/medlemskort` (MEMBERS_ONLY) - Digital member card.
 
 ### Future Evolution
 - Navigation must later become managed via CMS or Admin UI.
@@ -106,8 +106,8 @@ Visual settings are managed per club.
 - **Setting**: `publicThemeMode` in `ClubSettings`.
 - **Allowed Values**: `light` (default), `dark`.
 - **Admin Control**: Admin → Site Settings → Offentligt tema.
-- **Application**: Currently applied only to the Homepage V2 (`PublicClubHomePageV2.tsx`).
-- **Implementation**: Sets `data-theme` on the root element. CSS uses semantic tokens starting with `--home-`.
+- **Application**: Applied to the Homepage V2 (`PublicClubHomePageV2.tsx`) and the shared shell (`ThemedClubPageShell.tsx`).
+- **Implementation**: Sets `data-theme` on the root element. CSS uses semantic tokens starting with `--home-` or `--club-`.
 - **Fallback**: Defaults to `light` if the setting is missing or invalid.
 
 ## Data Management
@@ -119,7 +119,7 @@ Visual settings are managed per club.
 - **"Jeg flyver" Domain**: This is a social presence feature, not a standard event model. See [Flight Intents documentation](flight-intents.md) for details.
 
 ### Approved Design Master
-The homepage (`PublicClubHomePage.tsx`) is the approved visual master. All non-home pages must follow the same dark premium club-platform theme using the shared themed shell.
+The homepage (`PublicClubHomePageV2.tsx`) is the active live homepage. All non-home pages follow the same premium club-platform theme using the shared `ThemedClubPageShell`.
 
 ## Responsive Design
 All public and member-facing pages are built to be responsive-first.
@@ -137,8 +137,7 @@ Frontpage V2 is now the active live homepage for all clubs.
 - **CSS**: `src/components/publicSite/homeV2/PublicClubHomePageV2.css` (Scoped with `.home-v2-` prefix)
 - **Status**: Live. 
 - **Active Route**: `/[clubSlug]`
-- **Preview Route**: `/[clubSlug]/preview/home-v2` (Remains available during transition)
-- **Fallback**: The old homepage component (`PublicClubHomePage.tsx`) remains in the codebase temporarily as a fallback/reference.
+- **Preview Route**: `/[clubSlug]/preview/home-v2` (Remains available)
 - **Guidelines**:
   - v2 uses real data for club, user profile, and "Jeg flyver" activity.
   - v2 includes a "Nye medlemmer" highlight card that appears when members have joined within the last 14 days.
@@ -159,11 +158,11 @@ Frontpage V2 is now the active live homepage for all clubs.
 
 ## Components
 
-### PublicClubHomePage
-`src/components/publicSite/PublicClubHomePage.tsx` implements the approved mockup structure and style for the homepage. It uses `PublicClubHomePage.css` for scoped styling.
+### PublicClubHomePageV2
+`src/components/publicSite/homeV2/PublicClubHomePageV2.tsx` implements the active homepage structure and style. It uses `PublicClubHomePageV2.css` for scoped styling.
 
 ### ThemedClubPageShell
-`src/components/publicSite/ThemedClubPageShell.tsx` is the shared layout for all non-home club pages.
+`src/components/publicSite/ThemedClubPageShell.tsx` is the shared layout for all non-home club pages. It uses `src/components/publicSite/PublicShell.css` for base styles.
 
 - **Visual Consistency**: Uses the same dark premium visual language as the homepage.
 - **Theme Support**: Applies `ClubTheme` CSS variables consistently across the site.
@@ -177,11 +176,14 @@ Reusable small themed components for consistent internal page styling:
 - **ThemedSectionCard**: A card container matching the homepage "section-card" style.
 - **ThemedCard**: Standard card container matching the homepage "card" style.
 
-### PublicClubShell (Deprecated)
-`src/components/publicSite/PublicClubShell.tsx` is the old white/default layout and is deprecated. All pages should use `ThemedClubPageShell`.
+### PublicClubShell (Deleted)
+`src/components/publicSite/PublicClubShell.tsx` was the old white/default layout and has been deleted. Use `ThemedClubPageShell`.
 
-### PublicContentPage (Deprecated)
-`src/components/publicSite/PublicContentPage.tsx` is deprecated in favor of `ThemedClubPageShell` and `ThemedSectionCard`.
+### PublicContentPage (Deleted)
+`src/components/publicSite/PublicContentPage.tsx` has been deleted in favor of `ThemedClubPageShell` and `ThemedSectionCard`.
+
+### PublicClubHomePage (Deleted)
+`src/components/publicSite/PublicClubHomePage.tsx` has been deleted. Use `PublicClubHomePageV2`.
 
 ## Implementation Guidelines
 
@@ -198,16 +200,22 @@ Reusable small themed components for consistent internal page styling:
   - `/[clubSlug]/galleri`: Galleri (PublicPage content stub)
   - `/[clubSlug]/artikler`: Artikler (PublicPage content stub)
   - `/[clubSlug]/flyveskole`: Flyveskole (PublicPage content stub)
+  - `/[clubSlug]/flyveskole/skolekalender`: Skolekalender (Flight school schedule)
   - `/[clubSlug]/bliv-medlem`: Bliv medlem (Public membership application form)
   - `/[clubSlug]/jeg-flyver/liste`: Jeg flyver (Full today list)
-  - `/[clubSlug]/login`: Log ind (Placeholder only, no auth implementation)
+  - `/[clubSlug]/login`: Log ind (Email/Password login)
   - `/[clubSlug]/kalender/[entryId]`: Kalenderindslag (Public detail page)
+  - `/[clubSlug]/members`: Medlemmer (PublicPage content stub)
+  - `/[clubSlug]/events`: Begivenheder (Static placeholder)
+  - `/[clubSlug]/profil`: Min profil (Member profile)
+  - `/[clubSlug]/profil/medlemskort`: Medlemskort (Digital member card)
+  - `/[clubSlug]/forum`: Forum (Club forum)
 
 ### Public Route Details
 - **Content Stubs**: Galleri, Artikler, and Flyveskole use the `PublicPage` model via `publicPageService`. They currently contain seed content for EFK87 and serve as visual/structural stubs.
 - **Bliv medlem**: Implements a functional membership application form that saves to `PublicMemberApplication`. Requires e-mail, mobile, and other basic contact info.
-- **Login Placeholder**: The login page is a visual placeholder only. It does not implement real authentication, session handling, or form fields. A code comment indicates that auth/session handling is intentionally skipped in this scope.
-- **Member-only Areas**: Forum (`/[clubSlug]/forum`) and My Profile (`/[clubSlug]/profil`) are intended for members only and are hidden from anonymous visitors in the navigation.
+- **Login**: The login page (`/[clubSlug]/login`) supports email/password login and password reset flows.
+- **Member-only Areas**: Forum (`/[clubSlug]/forum`) and My Profile (`/[clubSlug]/profil`) are intended for members only and are visibility-aware in the navigation.
 - **Scope Limitations**:
   - Gallery is now implemented as a read-only foundation with tenant-scoping.
   - Calendar and marquee logic are implemented.
