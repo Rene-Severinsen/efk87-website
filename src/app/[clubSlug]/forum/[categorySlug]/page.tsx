@@ -53,7 +53,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <div className="flex justify-end mb-8 mt-4">
         <Link
           href={`/${clubSlug}/forum/${categorySlug}/ny`}
-          className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-400 hover:to-emerald-400 text-white font-bold shadow-lg shadow-sky-500/20 transition-all"
+          className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--public-primary)] hover:bg-[var(--public-primary)] hover:opacity-90 text-[var(--public-text)] font-bold shadow-lg shadow-[var(--public-primary-soft)] transition-all"
         >
           <Plus className="w-5 h-5" />
           Opret tråd
@@ -82,11 +82,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 <div className="flex-grow min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     {thread.isPinned && (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 uppercase tracking-tighter border border-amber-500/20">
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[var(--public-primary-soft)] text-[var(--public-primary)] uppercase tracking-tighter border border-[var(--public-primary-soft)]">
                         Fastgjort
                       </span>
                     )}
-                    <h3 className="font-bold text-[var(--club-text)] group-hover:text-sky-400 transition-colors truncate">
+                    <h3 className="font-bold text-[var(--club-text)] group-hover:text-[var(--public-primary)] transition-colors truncate">
                       {thread.title}
                     </h3>
                   </div>

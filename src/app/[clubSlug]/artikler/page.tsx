@@ -86,7 +86,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
               type="text"
               defaultValue={searchQuery || ''}
               placeholder="Søg efter emne, forfatter eller titel..."
-              className="w-full appearance-none flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-[14px] bg-[var(--club-panel-soft)] border border-[var(--club-line)] text-[#dbe7ff] text-sm sm:text-[15px] outline-none focus:border-sky-300/40 focus:ring-2 focus:ring-sky-300/10 transition-all placeholder:text-slate-400/60"
+              className="w-full appearance-none flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-[14px] bg-[var(--club-panel-soft)] border border-[var(--club-line)] text-[var(--club-text)] text-sm sm:text-[15px] outline-none focus:border-[var(--public-primary)]/40 focus:ring-2 focus:ring-[var(--public-primary)]/10 transition-all placeholder:text-[var(--public-text-soft)]"
             />
             <button type="submit" className="absolute right-3.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer opacity-70 hover:opacity-100">
               🔎
@@ -124,12 +124,12 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
 
                   <h3 className="text-2xl sm:text-3xl leading-[1.1] tracking-tight">{featuredArticle.title}</h3>
 
-                  <p className="text-[#d7e2fb] leading-relaxed text-sm sm:text-[15px]">
+                  <p className="text-[var(--club-text)] opacity-90 leading-relaxed text-sm sm:text-[15px]">
                     {featuredArticle.excerpt}
                   </p>
 
                   <div className="hero-actions flex gap-3 mt-auto pt-2">
-                    <Link className="pill primary inline-flex items-center px-4 py-3 rounded-xl bg-gradient-to-br from-emerald-400/20 to-sky-400/25 border border-emerald-400/30 text-[var(--club-text)] font-semibold text-sm transition-all hover:scale-[1.02]" href={`/${clubSlug}/artikler/${featuredArticle.slug}`}>Læs hele artiklen</Link>
+                    <Link className="pill primary inline-flex items-center px-4 py-3 rounded-xl bg-[var(--public-primary-soft)] border border-[var(--public-primary)]/20 text-[var(--club-text)] font-semibold text-sm transition-all hover:scale-[1.02]" href={`/${clubSlug}/artikler/${featuredArticle.slug}`}>Læs hele artiklen</Link>
                   </div>
                 </div>
               </div>

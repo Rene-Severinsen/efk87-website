@@ -59,16 +59,16 @@ export default async function ArticleDetailPage({ params }: PageProps) {
             )}
           </div>
 
-          <div 
-            className="article-detail-prose text-[var(--club-text)] text-base sm:text-lg leading-relaxed" 
-            dangerouslySetInnerHTML={{ __html: article.body }}
-          />
+            <div 
+              className="article-detail-prose text-[var(--club-text)] text-base sm:text-lg leading-relaxed prose prose-invert max-w-none prose-headings:text-[var(--club-text)] prose-p:text-[var(--club-text)] prose-p:opacity-90" 
+              dangerouslySetInnerHTML={{ __html: article.body }}
+            />
 
           {article.tags.length > 0 && (
             <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-[var(--club-line)]">
               <div className="flex flex-wrap gap-2">
                 {article.tags.map(tag => (
-                  <span key={tag.slug} className="tag px-3 py-1.5 rounded-full bg-white/5 border border-[var(--club-line)] text-[#dbe7ff] text-[11px] sm:text-xs font-bold uppercase tracking-wider">
+                  <span key={tag.slug} className="tag px-3 py-1.5 rounded-full bg-[var(--public-card)] border border-[var(--club-line)] text-[var(--club-text)] text-[11px] sm:text-xs font-bold uppercase tracking-wider">
                     {tag.name}
                   </span>
                 ))}

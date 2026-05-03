@@ -50,7 +50,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
                 <div className="min-w-0">
                   <h3 className="text-lg sm:text-xl font-bold text-[var(--public-text)] leading-tight truncate">{instructor.displayName}</h3>
                   {instructor.memberRoleType && instructor.memberRoleType !== 'REGULAR' && (
-                    <p className="text-sky-400 text-[11px] sm:text-sm font-medium mt-0.5 sm:mt-1 truncate">
+                    <p className="text-[var(--public-primary)] text-[11px] sm:text-sm font-medium mt-0.5 sm:mt-1 truncate">
                       {instructor.memberRoleType === 'CHAIRMAN' ? 'Formand' :
                        instructor.memberRoleType === 'VICE_CHAIRMAN' ? 'Næstformand' :
                        instructor.memberRoleType === 'BOARD_MEMBER' ? 'Bestyrelsesmedlem' :
@@ -59,7 +59,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
                        instructor.memberRoleType}
                     </p>
                   )}
-                  <p className="text-emerald-400 text-[10px] sm:text-xs font-semibold uppercase tracking-wider mt-0.5 sm:mt-1">Instruktør</p>
+                  <p className="text-[var(--public-primary)] text-[10px] sm:text-xs font-semibold uppercase tracking-wider mt-0.5 sm:mt-1">Instruktør</p>
                 </div>
               </div>
 
@@ -69,7 +69,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
                     href={`mailto:${instructor.email}`}
                     className="flex items-center gap-2.5 sm:gap-3 text-[var(--public-text-muted)] hover:text-[var(--public-text)] transition-colors group"
                   >
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-sky-500/20 transition-colors">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[var(--public-surface)] flex items-center justify-center group-hover:bg-[var(--public-primary-soft)] transition-colors">
                       <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
@@ -82,7 +82,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
                     href={`tel:${instructor.mobilePhone}`}
                     className="flex items-center gap-2.5 sm:gap-3 text-[var(--public-text-muted)] hover:text-[var(--public-text)] transition-colors group"
                   >
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[var(--public-surface)] flex items-center justify-center group-hover:bg-[var(--public-primary-soft)] transition-colors">
                       <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                       </svg>

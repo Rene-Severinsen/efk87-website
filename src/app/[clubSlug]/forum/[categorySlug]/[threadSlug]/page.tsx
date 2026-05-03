@@ -71,7 +71,7 @@ export default async function ThreadDetailPage({ params }: ThreadDetailPageProps
           </div>
           <div className="p-8">
             <div 
-              className="prose prose-invert prose-sky max-w-none"
+              className="prose prose-invert max-w-none prose-headings:text-[var(--club-text)] prose-p:text-[var(--club-text)] prose-p:opacity-90"
               dangerouslySetInnerHTML={{ __html: thread.bodyHtml }}
             />
           </div>
@@ -96,7 +96,7 @@ export default async function ThreadDetailPage({ params }: ThreadDetailPageProps
             </div>
             <div className="p-6">
               <div 
-                className="prose prose-invert prose-sky prose-sm max-w-none"
+                className="prose prose-invert prose-sm max-w-none prose-headings:text-[var(--club-text)] prose-p:text-[var(--club-text)] prose-p:opacity-90"
                 dangerouslySetInnerHTML={{ __html: reply.bodyHtml }}
               />
             </div>
@@ -105,11 +105,11 @@ export default async function ThreadDetailPage({ params }: ThreadDetailPageProps
 
         {/* Reply Form or Locked Message */}
         {thread.isLocked ? (
-          <div className="p-8 text-center backdrop-blur-md bg-amber-500/5 border border-amber-500/20 rounded-[2rem] flex flex-col items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 border border-amber-500/20">
+          <div className="p-8 text-center backdrop-blur-md bg-[var(--public-primary-soft)] border border-[var(--public-card-border)] rounded-[2rem] flex flex-col items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-[var(--public-primary-soft)] flex items-center justify-center text-[var(--public-primary)] border border-[var(--public-card-border)]">
               <Lock className="w-6 h-6" />
             </div>
-            <p className="text-amber-400 font-bold uppercase tracking-widest text-sm">Denne tråd er låst og kan ikke besvares.</p>
+            <p className="text-[var(--public-primary)] font-bold uppercase tracking-widest text-sm">Denne tråd er låst og kan ikke besvares.</p>
           </div>
         ) : (
           <ReplyForm action={replyAction} />

@@ -129,18 +129,18 @@ body {
 }
 
 .article-detail-prose li::marker {
-  color: #7dd3fc;
+  color: var(--public-primary);
   font-weight: 700;
 }
 
 .article-detail-prose blockquote {
   margin: 1.25rem 0;
   padding: 0.75rem 1rem;
-  border-left: 3px solid #7dd3fc;
-  background: rgba(125, 211, 252, 0.08);
+  border-left: 3px solid var(--public-primary);
+  background: var(--public-primary-soft);
   border-radius: 12px;
   font-style: italic;
-  color: var(--club-muted);
+  color: var(--public-text-muted);
 }
 
 /* BlockNote HTML output sometimes uses specific classes or structures */
@@ -154,7 +154,7 @@ body {
 }
 
 .article-detail-prose a {
-  color: #7dd3fc;
+  color: var(--public-primary);
   text-decoration: underline;
   text-underline-offset: 3px;
 }

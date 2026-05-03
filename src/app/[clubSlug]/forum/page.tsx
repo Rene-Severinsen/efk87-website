@@ -45,7 +45,7 @@ export default async function ForumPage({ params }: ForumPageProps) {
             <Link
               key={category.id}
               href={`/${clubSlug}/forum/${category.slug}`}
-              className="group flex items-start gap-6 p-6 backdrop-blur-md bg-[var(--public-card)] hover:bg-[var(--public-nav-hover)] border border-[var(--public-card-border)] rounded-3xl transition-all shadow-xl hover:shadow-sky-500/10"
+              className="group flex items-start gap-6 p-6 backdrop-blur-md bg-[var(--public-card)] hover:bg-[var(--public-nav-hover)] border border-[var(--public-card-border)] rounded-3xl transition-all shadow-xl hover:shadow-[var(--public-primary-soft)]"
             >
               <div className="flex-shrink-0 p-4 rounded-2xl bg-[var(--public-primary-soft)] text-[var(--public-primary)] group-hover:bg-[var(--public-primary-soft)] group-hover:scale-110 transition-all">
                 <MessageCircle className="w-8 h-8" />
@@ -53,10 +53,10 @@ export default async function ForumPage({ params }: ForumPageProps) {
               
               <div className="flex-grow min-w-0">
                 <div className="flex items-center justify-between gap-2 mb-1">
-                  <h3 className="text-xl font-bold text-[var(--club-text)] group-hover:text-sky-400 transition-colors truncate">
+                  <h3 className="text-xl font-bold text-[var(--club-text)] group-hover:text-[var(--public-primary)] transition-colors truncate">
                     {category.title}
                   </h3>
-                  <ChevronRight className="w-5 h-5 text-[var(--public-text-soft)] group-hover:text-sky-400 group-hover:translate-x-1 transition-all" />
+                  <ChevronRight className="w-5 h-5 text-[var(--public-text-soft)] group-hover:text-[var(--public-primary)] group-hover:translate-x-1 transition-all" />
                 </div>
                 
                 <p className="text-[var(--club-text)] opacity-60 text-sm line-clamp-2 mb-4 h-10">
@@ -64,7 +64,7 @@ export default async function ForumPage({ params }: ForumPageProps) {
                 </p>
                 
                 <div className="flex items-center gap-4 pt-4 border-t border-[var(--public-card-border)]">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--public-text-soft)] uppercase tracking-wider">
                     <MessageSquare className="w-3.5 h-3.5" />
                     <span>{category._count.threads} tråde</span>
                   </div>
