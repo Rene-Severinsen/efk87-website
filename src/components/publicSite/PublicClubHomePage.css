@@ -162,10 +162,11 @@
 }
 
 .public-home .card {
-  background: var(--club-panel);
-  border: 1px solid var(--club-line);
+  background: var(--public-card);
+  border: 1px solid var(--public-card-border);
+  color: var(--public-text);
   border-radius: var(--club-radius);
-  box-shadow: var(--club-shadow);
+  box-shadow: var(--public-shadow);
   overflow: hidden;
 }
 

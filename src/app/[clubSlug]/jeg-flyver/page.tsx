@@ -86,7 +86,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
-              <label htmlFor="flightDate" className="block text-sm font-medium opacity-80 mb-2">
+              <label htmlFor="flightDate" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
                 Dato *
               </label>
               <input
@@ -96,25 +96,25 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                 required
                 defaultValue={todayStr}
                 min={todayStr}
-                className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)]"
+                className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)]"
               />
             </div>
 
             <div>
-              <label htmlFor="plannedTime" className="block text-sm font-medium opacity-80 mb-2">
+              <label htmlFor="plannedTime" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
                 Forventet tidspunkt (valgfrit)
               </label>
               <input
                 type="time"
                 id="plannedTime"
                 name="plannedTime"
-                className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)]"
+                className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)]"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="activityType" className="block text-sm font-medium opacity-80 mb-2">
+            <label htmlFor="activityType" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
               Aktivitetstype *
             </label>
             <select
@@ -122,7 +122,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
               name="activityType"
               required
               defaultValue={ClubFlightIntentType.FLYING}
-              className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)]"
+              className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)]"
             >
               <option value={ClubFlightIntentType.FLYING}>Flyvning</option>
               <option value={ClubFlightIntentType.TRAINING}>Skoleflyvning / Træning</option>
@@ -134,7 +134,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
           </div>
 
           <div>
-            <label htmlFor="message" className="block text-sm font-medium opacity-80 mb-2">
+            <label htmlFor="message" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
               Besked (valgfrit, max 240 tegn)
             </label>
             <textarea
@@ -143,7 +143,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
               rows={3}
               maxLength={240}
               placeholder="F.eks. hvilke fly du tager med, eller om der er noget specielt..."
-              className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--club-line)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--club-text)] placeholder-[var(--club-text)]/30"
+              className="w-full px-4 py-2 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)] placeholder-[var(--public-text-soft)]"
             ></textarea>
           </div>
 
@@ -155,26 +155,26 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
           </button>
         </form>
 
-        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-[var(--club-line)]">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Dine seneste meldinger</h2>
+        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-[var(--public-card-border)]">
+          <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-[var(--public-text)]">Dine seneste meldinger</h2>
           
           {recentIntents.length === 0 ? (
-            <p className="opacity-50 italic text-sm text-[var(--club-muted)]">
+            <p className="italic text-sm text-[var(--public-text-soft)]">
               Du har endnu ikke oprettet nogen &apos;Jeg flyver&apos;-meldinger.
             </p>
           ) : (
             <div className="space-y-3 sm:space-y-4">
               {recentIntents.map((intent) => (
-                <div key={intent.id} className="p-3 sm:p-4 rounded-lg border border-[var(--club-line)] bg-[var(--public-surface)]">
+                <div key={intent.id} className="p-3 sm:p-4 rounded-lg border border-[var(--public-card-border)] bg-[var(--public-surface)]">
                   <div className="flex justify-between items-start mb-2">
-                    <div className="font-medium text-sm sm:text-base">
+                    <div className="font-medium text-sm sm:text-base text-[var(--public-text)]">
                       {new Date(intent.flightDate).toLocaleDateString("da-DK", { 
                         weekday: 'short', 
                         day: 'numeric', 
                         month: 'short' 
                       })}
                       {intent.plannedAt && (
-                        <span className="ml-2 opacity-60 text-[var(--club-muted)]">
+                        <span className="ml-2 text-[var(--public-text-muted)]">
                           kl. {new Date(intent.plannedAt).toLocaleTimeString("da-DK", { 
                             hour: '2-digit', 
                             minute: '2-digit' 
@@ -185,18 +185,18 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                     <span className={`text-xs px-2 py-1 rounded-full ${
                       intent.status === ClubFlightIntentStatus.ACTIVE ? 'bg-[var(--public-success)]/20 text-[var(--public-success)]' : 
                       intent.status === ClubFlightIntentStatus.CANCELLED ? 'bg-[var(--public-danger)]/20 text-[var(--public-danger)]' :
-                      'bg-[var(--club-line)] text-[var(--club-muted)]'
+                      'bg-[var(--public-card-border)] text-[var(--public-text-soft)]'
                     }`}>
                       {intent.status === ClubFlightIntentStatus.CANCELLED ? 'AFLYST' : intent.status}
                     </span>
                   </div>
                   <div className="flex justify-between items-end">
                     <div className="flex-1">
-                      <div className="text-sm opacity-90 mb-1">
-                        <span className="font-semibold text-[var(--club-text)]">{getActivityLabel(intent.activityType)}</span>
+                      <div className="text-sm mb-1">
+                        <span className="font-semibold text-[var(--public-text)]">{getActivityLabel(intent.activityType)}</span>
                       </div>
                       {intent.message && (
-                        <div className="text-sm opacity-70 italic text-[var(--club-muted)]">
+                        <div className="text-sm italic text-[var(--public-text-muted)]">
                           &ldquo;{intent.message}&rdquo;
                         </div>
                       )}
@@ -217,15 +217,15 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                   </div>
                 </div>
               ))}
-              <p className="text-xs opacity-40 mt-6 text-[var(--club-muted)]">
+              <p className="text-xs mt-6 text-[var(--public-text-soft)]">
                 Redigering er planlagt til en fremtidig opdatering.
               </p>
             </div>
           )}
         </div>
 
-        <div className="mt-10 pt-8 border-t border-[var(--club-line)] text-center">
-          <p className="text-sm opacity-50 italic text-[var(--club-muted)]">
+        <div className="mt-10 pt-8 border-t border-[var(--public-card-border)] text-center">
+          <p className="text-sm italic text-[var(--public-text-soft)]">
             Dagens offentlige aktivitetsliste vises på forsiden.
           </p>
         </div>

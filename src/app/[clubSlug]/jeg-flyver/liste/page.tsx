@@ -56,28 +56,28 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
         {flightIntents.length > 0 ? (
           <div className="list flex flex-col gap-3">
             {flightIntents.map((intent) => (
-              <div className="row-item flex items-center gap-3 p-3 rounded-xl bg-[var(--club-panel-soft)] border border-[var(--club-line)]" key={intent.id}>
+              <div className="row-item flex items-center gap-3 p-3 rounded-xl bg-[var(--public-surface)] border border-[var(--public-card-border)]" key={intent.id}>
                 <div className="relative shrink-0">
                   <Avatar 
                     name={intent.displayName} 
                     imageUrl={intent.profileImageUrl} 
                     size="sm" 
                   />
-                  <div className="absolute -bottom-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-[var(--club-panel)] border border-[var(--club-line)] text-[10px]">
+                  <div className="absolute -bottom-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-[var(--public-card)] border border-[var(--public-card-border)] text-[10px] text-[var(--public-text)]">
                     {activityIcons[intent.activityType] || '•'}
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="row-item-header flex justify-between items-center gap-2">
-                    <div className="row-title font-semibold text-sm sm:text-base truncate">
+                    <div className="row-title font-semibold text-sm sm:text-base truncate text-[var(--public-text)]">
                       {intent.displayName}
                     </div>
-                    <span className="status-badge info text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-400 font-medium">
+                    <span className="status-badge info text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-[var(--public-primary)]/20 text-[var(--public-primary)] font-medium">
                       {formatTime(intent.createdAt)}
                     </span>
                   </div>
                   {intent.message && (
-                    <div className="row-sub mt-1 text-xs sm:text-sm italic opacity-70 truncate">
+                    <div className="row-sub mt-1 text-xs sm:text-sm italic text-[var(--public-text-muted)] truncate">
                       “{intent.message}”
                     </div>
                   )}
@@ -86,7 +86,7 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
             ))}
           </div>
         ) : (
-          <div className="py-12 text-center opacity-60">
+          <div className="py-12 text-center text-[var(--public-text-soft)]">
             <div className="text-4xl sm:text-5xl mb-4">✈️</div>
             <p className="text-base sm:text-lg">
               Der er endnu ingen flyvemeldinger for i dag.
