@@ -56,7 +56,7 @@ export function getVisiblePublicNavigation(
       visibility: 'PUBLIC',
     },
     {
-      label: `Om ${clubSlug.toUpperCase()}`,
+      label: 'Om klubben',
       href: publicRoutes.about(clubSlug),
       key: 'about',
       visibility: 'PUBLIC',

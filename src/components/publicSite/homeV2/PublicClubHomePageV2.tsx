@@ -416,7 +416,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               )}
 
               <div className="home-v2-cta-row" style={{ marginTop: '20px' }}>
-                <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/flyveskole/skolekalender`}>
+                <Link className="home-v2-pill home-v2-primary" href={publicRoutes.flightSchoolCalendar(club.slug)}>
                   Se skolekalender
                 </Link>
               </div>
