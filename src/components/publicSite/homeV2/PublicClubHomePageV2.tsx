@@ -478,7 +478,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 <h2>Hurtige genveje</h2>
               </div>
               <div className="home-v2-quick-list">
-                <Link className="home-v2-row-item" href={`/${club.slug}/om/vedtaegter`}>
+                <Link className="home-v2-row-item" href={`/${club.slug}/about`}>
                   <div className="home-v2-row-icon">📜</div>
                   <div>
                     <div className="home-v2-row-title">Vedtægter</div>
@@ -486,7 +486,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                   </div>
                   <span className="home-v2-status-badge home-v2-info">Åbn</span>
                 </Link>
-                <Link className="home-v2-row-item" href={`/${club.slug}/om/pladsregler`}>
+                <Link className="home-v2-row-item" href={`/${club.slug}/about`}>
                   <div className="home-v2-row-icon">⚠️</div>
                   <div>
                     <div className="home-v2-row-title">Pladsregler</div>
@@ -564,7 +564,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               <Link href={`/${club.slug}/forum`} style={{ color: 'inherit', textDecoration: 'none' }}>Forum</Link><br/>
               <Link href={`/${club.slug}/galleri`} style={{ color: 'inherit', textDecoration: 'none' }}>Galleri</Link><br/>
               <Link href={`/${club.slug}/flyveskole`} style={{ color: 'inherit', textDecoration: 'none' }}>Flyveskole</Link><br/>
-              <Link href={`/${club.slug}/om`} style={{ color: 'inherit', textDecoration: 'none' }}>Om {clubShortName}</Link>
+              <Link href={`/${club.slug}/about`} style={{ color: 'inherit', textDecoration: 'none' }}>Om {clubShortName}</Link>
             </p>
           </div>
         </footer>
