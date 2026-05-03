@@ -5,34 +5,34 @@
 }
 
 :root {
-  --background: #ffffff;
+  --background: #f8fafc;
   --foreground: #0f172a;
 
-  /* Public Theme Tokens - Default (Light) */
-  --public-bg: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
-  --public-bg-soft: radial-gradient(circle at top left, rgba(56, 189, 248, 0.1), transparent 30%),
-                    radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 25%);
-  --public-surface: #f0f9ff;
-  --public-surface-strong: #e0f2fe;
-  --public-card: rgba(255, 255, 255, 0.9);
-  --public-card-border: rgba(14, 165, 233, 0.15);
+  /* Public Theme Tokens - Default (Light Premium Solid Contrast) */
+  --public-bg: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+  --public-bg-soft: radial-gradient(circle at top left, rgba(2, 132, 199, 0.08), transparent 30%),
+  radial-gradient(circle at top right, rgba(15, 23, 42, 0.05), transparent 25%);
+  --public-surface: #f8fafc;
+  --public-surface-strong: #eef2f7;
+  --public-card: rgba(255, 255, 255, 0.96);
+  --public-card-border: rgba(15, 23, 42, 0.14);
   --public-text: #0f172a;
-  --public-text-muted: #475569;
+  --public-text-muted: #334155;
   --public-text-soft: #64748b;
-  --public-primary: #0284c7;
-  --public-primary-soft: rgba(2, 132, 199, 0.1);
-  --public-success: #059669;
-  --public-warning: #d97706;
-  --public-danger: #e11d48;
-  --public-shadow: 0 10px 30px rgba(2, 132, 199, 0.08);
-  --public-nav-text: #475569;
-  --public-nav-hover: rgba(2, 132, 199, 0.05);
+  --public-primary: #0369a1;
+  --public-primary-soft: rgba(3, 105, 161, 0.1);
+  --public-success: #047857;
+  --public-warning: #b45309;
+  --public-danger: #be123c;
+  --public-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
+  --public-nav-text: #334155;
+  --public-nav-hover: rgba(15, 23, 42, 0.06);
 }
 
 [data-theme="dark"] {
   --public-bg: linear-gradient(180deg, #08101c 0%, #0b1220 100%);
-  --public-bg-soft: radial-gradient(circle at top left, rgba(125,211,252,0.16), transparent 28%),
-                    radial-gradient(circle at top right, rgba(110,231,183,0.12), transparent 24%);
+  --public-bg-soft: radial-gradient(circle at top left, rgba(125, 211, 252, 0.16), transparent 28%),
+  radial-gradient(circle at top right, rgba(110, 231, 183, 0.12), transparent 24%);
   --public-surface: #0b1220;
   --public-surface-strong: #08101c;
   --public-card: rgba(18, 27, 46, 0.88);
@@ -45,7 +45,7 @@
   --public-success: #6ee7b7;
   --public-warning: #fcd34d;
   --public-danger: #f43f5e;
-  --public-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  --public-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
   --public-nav-text: #aab7d4;
   --public-nav-hover: rgba(255, 255, 255, 0.05);
 }
@@ -54,7 +54,144 @@ body {
   @apply bg-white text-slate-900;
 }
 
+/* Public / Member Theme Utility Classes */
+
+.public-page-shell {
+  background: var(--public-bg);
+  color: var(--public-text);
+}
+
+.public-section-card,
+.public-form-card {
+  background: var(--public-card);
+  border: 1px solid var(--public-card-border);
+  color: var(--public-text);
+  box-shadow: var(--public-shadow);
+  border-radius: 1.5rem;
+}
+
+.public-form-card {
+  padding: 1.5rem;
+}
+
+.public-input {
+  width: 100%;
+  min-height: 44px;
+  border-radius: 0.875rem;
+  border: 1px solid var(--public-card-border);
+  background: var(--public-card);
+  color: var(--public-text);
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition:
+          border-color 160ms ease,
+          box-shadow 160ms ease,
+          background-color 160ms ease;
+}
+
+.public-input::placeholder {
+  color: var(--public-text-soft);
+}
+
+.public-input:focus {
+  border-color: var(--public-primary);
+  box-shadow: 0 0 0 3px var(--public-primary-soft);
+}
+
+.public-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.public-label {
+  display: block;
+  color: var(--public-text);
+  font-size: 0.875rem;
+  font-weight: 650;
+  margin-bottom: 0.4rem;
+}
+
+.public-help-text,
+.public-muted-text {
+  color: var(--public-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.public-soft-text {
+  color: var(--public-text-soft);
+}
+
+.public-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--public-card-border);
+  background: var(--public-primary-soft);
+  color: var(--public-primary);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  line-height: 1;
+}
+
+.public-primary-button,
+.public-secondary-button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.75rem 1.1rem;
+  font-size: 0.925rem;
+  font-weight: 700;
+  line-height: 1;
+  transition:
+          transform 160ms ease,
+          box-shadow 160ms ease,
+          border-color 160ms ease,
+          background-color 160ms ease,
+          color 160ms ease;
+}
+
+.public-primary-button {
+  border: 1px solid var(--public-primary);
+  background: var(--public-primary);
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(3, 105, 161, 0.2);
+}
+
+.public-primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 36px rgba(3, 105, 161, 0.26);
+}
+
+.public-secondary-button {
+  border: 1px solid var(--public-card-border);
+  background: var(--public-card);
+  color: var(--public-text);
+  box-shadow: var(--public-shadow);
+}
+
+.public-secondary-button:hover {
+  transform: translateY(-1px);
+  border-color: var(--public-primary);
+  color: var(--public-primary);
+}
+
+.public-primary-button:disabled,
+.public-secondary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
 /* Article Detail Prose Styles */
+
 .article-detail-prose {
   color: var(--public-text);
   font-size: 1rem;
@@ -144,6 +281,7 @@ body {
 }
 
 /* BlockNote HTML output sometimes uses specific classes or structures */
+
 .article-detail-prose .bn-inline-content {
   display: inline;
 }
