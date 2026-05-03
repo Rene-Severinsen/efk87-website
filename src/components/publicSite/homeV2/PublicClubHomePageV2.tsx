@@ -285,7 +285,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               <div className="home-v2-griffin">
                 <div className="home-v2-griffin-emoji">
                   <img
-                    src={todayFlightIntents.length > 0 ? '/images/clubs/efk87/vi_flyver.gif' : '/images/clubs/efk87/vi_flyver_ikke.gif'}
+                    src={todayFlightIntents.length > 0 ? `/images/clubs/${club.slug}/vi_flyver.gif` : `/images/clubs/${club.slug}/vi_flyver_ikke.gif`}
                     alt={todayFlightIntents.length > 0 ? 'Gribben flyver' : 'Gribben sover'}
                     style={{ height: '100%', width: 'auto', objectFit: 'contain' }}
                   />
