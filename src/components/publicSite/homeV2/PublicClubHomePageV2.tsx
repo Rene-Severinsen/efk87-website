@@ -133,9 +133,9 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             <div className="home-v2-inline-actions">
               <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/jeg-flyver`}>Jeg flyver</Link>
               <Link className="home-v2-pill" href={`/${club.slug}/bliv-medlem`}>Bliv medlem</Link>
-              <a className="home-v2-pill" href="#">Åbn kalender</a>
-              <a className="home-v2-pill" href="#">Gå til flyveskole</a>
-              <a className="home-v2-pill" href="#">Upload billeder</a>
+              <Link className="home-v2-pill" href={`/${club.slug}/kalender`}>Åbn kalender</Link>
+              <Link className="home-v2-pill" href={`/${club.slug}/flyveskole`}>Gå til flyveskole</Link>
+              <Link className="home-v2-pill" href={`/${club.slug}/galleri`}>Upload billeder</Link>
             </div>
           </article>
 
@@ -241,33 +241,33 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Seneste billeder</h2>
-                <a className="home-v2-link-soft" href="#">Åbn galleri</a>
+                <Link className="home-v2-link-soft" href={`/${club.slug}/galleri`}>Åbn galleri</Link>
               </div>
               <div className="home-v2-gallery-grid">
-                <div className="home-v2-gallery-item">
+                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1508615070457-7baeba4003ab?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">ASW-28 · I dag</div>
-                </div>
-                <div className="home-v2-gallery-item">
+                </Link>
+                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">Klubpladsen</div>
-                </div>
-                <div className="home-v2-gallery-item">
+                </Link>
+                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">Skoleflyvning</div>
-                </div>
-                <div className="home-v2-gallery-item">
+                </Link>
+                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1496449903678-68ddcb189a24?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">Skræntdag</div>
-                </div>
-                <div className="home-v2-gallery-item">
+                </Link>
+                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">Klubhuset</div>
-                </div>
-                <div className="home-v2-gallery-item">
+                </Link>
+                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">Solnedgang</div>
-                </div>
+                </Link>
               </div>
             </article>
           </div>
@@ -469,8 +469,8 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 </div>
               </div>
               <div className="home-v2-cta-row">
-                <a className="home-v2-pill home-v2-primary" href="#">Skriv i chatten</a>
-                <a className="home-v2-pill" href="#">Se alle beskeder</a>
+                <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/forum`}>Skriv i chatten</Link>
+                <Link className="home-v2-pill" href={`/${club.slug}/forum`}>Se alle beskeder</Link>
               </div>
             </article>
 
@@ -479,30 +479,30 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 <h2>Hurtige genveje</h2>
               </div>
               <div className="home-v2-quick-list">
-                <a className="home-v2-row-item" href="#">
+                <Link className="home-v2-row-item" href={`/${club.slug}/om/vedtaegter`}>
                   <div className="home-v2-row-icon">📜</div>
                   <div>
                     <div className="home-v2-row-title">Vedtægter</div>
                     <div className="home-v2-row-sub">Klubbens formelle vedtægter og rammer for medlemskab</div>
                   </div>
                   <span className="home-v2-status-badge home-v2-info">Åbn</span>
-                </a>
-                <a className="home-v2-row-item" href="#">
+                </Link>
+                <Link className="home-v2-row-item" href={`/${club.slug}/om/pladsregler`}>
                   <div className="home-v2-row-icon">⚠️</div>
                   <div>
                     <div className="home-v2-row-title">Pladsregler</div>
                     <div className="home-v2-row-sub">Sikkerhed, flyvning, brug af bane og fælles regler på pladsen</div>
                   </div>
                   <span className="home-v2-status-badge home-v2-info">Åbn</span>
-                </a>
-                <a className="home-v2-row-item" href="#">
+                </Link>
+                <Link className="home-v2-row-item" href={`/${club.slug}/flyveskole/skolekalender`}>
                   <div className="home-v2-row-icon">🗓️</div>
                   <div>
                     <div className="home-v2-row-title">Skolekalender</div>
                     <div className="home-v2-row-sub">Se planlagte skoleflyvninger, tider og dagens instruktion</div>
                   </div>
                   <span className="home-v2-status-badge home-v2-info">Åbn</span>
-                </a>
+                </Link>
               </div>
             </article>
           </div>
