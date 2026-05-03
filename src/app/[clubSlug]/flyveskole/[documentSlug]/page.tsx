@@ -5,6 +5,7 @@ import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuild
 import { getPublishedFlightSchoolDocumentBySlug } from "../../../../lib/flightSchool/flightSchoolService";
 import PrintButton from "./PrintButton";
 import Link from "next/link";
+import { publicRoutes } from "../../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -35,11 +36,11 @@ export default async function FlightSchoolDocumentPage({ params }: PageProps) {
       actionItems={actionItems}
       title={document.title}
       eyebrow="Flyveskole Dokument"
-      currentPath={`/${clubSlug}/flyveskole/${documentSlug}`}
+      currentPath={publicRoutes.flightSchoolDocument(clubSlug, documentSlug)}
     >
       <div className="mb-6 flex justify-between items-center print:hidden">
         <Link 
-          href={`/${clubSlug}/flyveskole`} 
+          href={publicRoutes.flightSchool(clubSlug)} 
           className="text-sm opacity-60 hover:opacity-100 hover:text-sky-400 flex items-center gap-1 h-auto min-h-0 transition-colors"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

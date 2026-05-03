@@ -7,6 +7,7 @@ import React from "react";
 import ArticleSortSelect from "../../../components/articles/ArticleSortSelect";
 import ArticleTagCloud from "../../../components/articles/ArticleTagCloud";
 import ArticleCardTags from "../../../components/articles/ArticleCardTags";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -54,10 +55,10 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
     Object.entries(merged).forEach(([key, value]) => {
       if (value) search.set(key, value);
     });
-    return `/${clubSlug}/artikler?${search.toString()}`;
+    return `${publicRoutes.articles(clubSlug)}?${search.toString()}`;
   };
 
-  const clearFilterUrl = `/${clubSlug}/artikler`;
+  const clearFilterUrl = publicRoutes.articles(clubSlug);
 
   return (
     <ThemedClubPageShell
@@ -71,13 +72,13 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
       actionItems={actionItems}
       title="Artikler fra livet i klubben."
       subtitle="Her samler vi klubbens historier, tekniske erfaringer, flyveture, skoleflyvning og det, der gør EFK87 til mere end bare en plads at starte fra."
-      currentPath={`/${clubSlug}/artikler`}
+      currentPath={publicRoutes.articles(clubSlug)}
       maxWidth="1440px"
     >
       <section className="toolbar-grid grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
         <article className="card toolbar-card p-4 sm:p-5 min-h-[84px] flex flex-col justify-center bg-[var(--club-panel)] rounded-2xl border border-[var(--club-line)]">
           <label htmlFor="search-input" className="text-[10px] sm:text-xs uppercase tracking-widest color-[var(--club-accent-2)] mb-2 opacity-80">Søg i artikler</label>
-          <form action={`/${clubSlug}/artikler`} method="GET" className="relative">
+          <form action={publicRoutes.articles(clubSlug)} method="GET" className="relative">
             {selectedTagSlug && <input type="hidden" name="tag" value={selectedTagSlug} />}
             {sortOption && <input type="hidden" name="sort" value={sortOption} />}
             <input 
@@ -108,7 +109,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
             <ThemedSectionCard className="p-4 sm:p-6">
               <div className="section-head flex justify-between items-center mb-4 sm:mb-5">
                 <h2 className="text-xl sm:text-[22px] tracking-tight">Fremhævet artikel</h2>
-                <Link className="link-soft text-sm font-semibold text-[var(--club-accent-2)]" href={`/${clubSlug}/artikler/${featuredArticle.slug}`}>Åbn artikel</Link>
+                <Link className="link-soft text-sm font-semibold text-[var(--club-accent-2)]" href={publicRoutes.article(clubSlug, featuredArticle.slug)}>Åbn artikel</Link>
               </div>
 
               <div className={`featured grid gap-5 ${featuredArticle.heroImageUrl ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
@@ -129,7 +130,7 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                   </p>
 
                   <div className="hero-actions flex gap-3 mt-auto pt-2">
-                    <Link className="pill primary inline-flex items-center px-4 py-3 rounded-xl bg-[var(--public-primary-soft)] border border-[var(--public-primary)]/20 text-[var(--club-text)] font-semibold text-sm transition-all hover:scale-[1.02]" href={`/${clubSlug}/artikler/${featuredArticle.slug}`}>Læs hele artiklen</Link>
+                    <Link className="pill primary inline-flex items-center px-4 py-3 rounded-xl bg-[var(--public-primary-soft)] border border-[var(--public-primary)]/20 text-[var(--club-text)] font-semibold text-sm transition-all hover:scale-[1.02]" href={publicRoutes.article(clubSlug, featuredArticle.slug)}>Læs hele artiklen</Link>
                   </div>
                 </div>
               </div>
@@ -153,12 +154,12 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                 {latestToDisplay.map(article => (
                   <article key={article.id} className="article-card flex flex-col gap-3.5 p-4 rounded-[18px] sm:rounded-[20px] bg-[var(--club-panel-soft)] border border-[var(--club-line)] hover:border-[var(--club-line-bright)] transition-colors">
                     {article.heroImageUrl && (
-                      <Link href={`/${clubSlug}/artikler/${article.slug}`}>
+                      <Link href={publicRoutes.article(clubSlug, article.slug)}>
                         <div className="article-thumb min-h-[160px] rounded-2xl border border-[var(--club-line)] bg-center bg-cover bg-no-repeat" style={{ backgroundImage: `url(${article.heroImageUrl})` }}></div>
                       </Link>
                     )}
                     <ArticleCardTags tags={article.tags} getFilterUrl={getFilterUrl} />
-                    <Link href={`/${clubSlug}/artikler/${article.slug}`} className="text-inherit no-underline group">
+                    <Link href={publicRoutes.article(clubSlug, article.slug)} className="text-inherit no-underline group">
                       <h4 className="text-lg sm:text-xl leading-[1.2] group-hover:text-[var(--club-accent)] transition-colors">{article.title}</h4>
                     </Link>
                     <p className="text-[var(--club-muted)] leading-relaxed text-sm line-clamp-3">{article.excerpt}</p>

@@ -5,6 +5,7 @@ import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageSh
 import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
 import { getPublishedGalleryAlbums } from "../../../lib/gallery/galleryService";
 import { getServerViewerForClub } from "../../../lib/auth/viewer";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -36,12 +37,12 @@ export default async function GalleriPage({ params }: PageProps) {
       actionItems={actionItems}
       title="Galleri"
       subtitle="Billeder og albums fra klubbens liv."
-      currentPath={`/${clubSlug}/galleri`}
+      currentPath={publicRoutes.gallery(clubSlug)}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {albums.length > 0 ? (
           albums.map((album) => (
-            <Link key={album.id} href={`/${clubSlug}/galleri/${album.slug}`} className="no-underline group">
+            <Link key={album.id} href={publicRoutes.galleryAlbum(clubSlug, album.slug)} className="no-underline group">
               <ThemedSectionCard className="h-full p-4 sm:p-6 hover:scale-[1.01] transition-transform duration-200">
                 {album.coverImageUrl && (
                   <div 

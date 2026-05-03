@@ -5,6 +5,7 @@ import { requireActiveMemberForClub } from "../../../../../lib/auth/accessGuards
 import { getForumCategoryBySlug } from "../../../../../lib/forum/forumService";
 import ThreadForm from "../../../../../components/forum/ThreadForm";
 import { createForumThread } from "../../../../../lib/forum/actions/memberForumActions";
+import { publicRoutes } from "../../../../../lib/publicRoutes";
 
 interface CreateThreadPageProps {
   params: Promise<{
@@ -19,7 +20,8 @@ export default async function CreateThreadPage({ params }: CreateThreadPageProps
   const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member
-  await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/forum/${categorySlug}/ny`);
+  const currentPath = publicRoutes.home(clubSlug) + `/forum/${categorySlug}/ny`;
+  await requireActiveMemberForClub(club.id, club.slug, currentPath);
 
   const category = await getForumCategoryBySlug(club.id, categorySlug);
 
@@ -42,7 +44,7 @@ export default async function CreateThreadPage({ params }: CreateThreadPageProps
       title="Opret ny tråd"
       subtitle={`I kategorien ${category.title}`}
       eyebrow="Forum"
-      currentPath={`/${clubSlug}/forum/${categorySlug}/ny`}
+      currentPath={currentPath}
     >
       <ThreadForm 
         clubSlug={clubSlug} 

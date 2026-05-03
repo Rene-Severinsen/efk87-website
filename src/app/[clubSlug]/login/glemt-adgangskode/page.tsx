@@ -4,6 +4,7 @@ import { use, useState, useTransition } from "react";
 import Link from "next/link";
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { forgotPasswordAction } from "../../../../lib/auth/passwordActions";
+import { publicRoutes } from "../../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -41,7 +42,7 @@ export default function ForgotPasswordPage({ params }: PageProps) {
               </div>
               <div className="text-center">
                 <Link
-                  href={`/${clubSlug}/login`}
+                  href={publicRoutes.login(clubSlug)}
                   className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
                 >
                   Tilbage til login
@@ -78,7 +79,7 @@ export default function ForgotPasswordPage({ params }: PageProps) {
 
               <div className="text-center pt-2">
                 <Link
-                  href={`/${clubSlug}/login`}
+                  href={publicRoutes.login(clubSlug)}
                   className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
                 >
                   Tilbage til login

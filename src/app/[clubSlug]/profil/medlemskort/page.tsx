@@ -3,6 +3,7 @@ import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPag
 import { requireActiveMemberForClub } from "../../../../lib/auth/accessGuards";
 import { getOrCreateOwnMemberProfile } from "../../../../lib/members/memberProfileService";
 import { PrintableMemberCard } from "../../../../components/member/MemberCard/PrintableMemberCard";
+import { publicRoutes } from "../../../../lib/publicRoutes";
 import { MemberCardInstructions } from "../../../../components/member/MemberCard/MemberCardInstructions";
 import { MemberCardTypeLegend } from "../../../../components/member/MemberCard/MemberCardTypeLegend";
 import { MemberCardReference } from "../../../../components/member/MemberCard/MemberCardReference";
@@ -19,7 +20,7 @@ export default async function MemberCardPage({ params }: MemberCardPageProps) {
   const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member and get viewer data
-  const viewer = await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/profil/medlemskort`);
+  const viewer = await requireActiveMemberForClub(club.id, club.slug, publicRoutes.profileMemberCard(clubSlug));
 
   const profile = await getOrCreateOwnMemberProfile(club.id, viewer.userId!);
 
@@ -51,7 +52,7 @@ export default async function MemberCardPage({ params }: MemberCardPageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title="Medlemskort"
-      currentPath={`/${clubSlug}/profil/medlemskort`}
+      currentPath={publicRoutes.profileMemberCard(clubSlug)}
       maxWidth="1200px"
     >
       <div className="printable-content" style={{ background: 'white', padding: '2rem', color: 'black', borderRadius: '8px' }}>

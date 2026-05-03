@@ -1,5 +1,6 @@
 import { PublicSurfaceVisibility } from "../../generated/prisma";
 import { canViewSurface, ViewerVisibilityContext } from "./publicVisibility";
+import { publicRoutes } from "../publicRoutes";
 
 /**
  * Typed navigation item structure for the public site.
@@ -26,37 +27,37 @@ export function getVisiblePublicNavigation(
   const allItems: PublicNavigationItem[] = [
     {
       label: 'Forside',
-      href: `/${clubSlug}`,
+      href: publicRoutes.home(clubSlug),
       key: 'home',
       visibility: 'PUBLIC',
     },
     {
       label: 'Forum',
-      href: `/${clubSlug}/forum`,
+      href: publicRoutes.forum(clubSlug),
       key: 'forum',
       visibility: 'PUBLIC',
     },
     {
       label: 'Galleri',
-      href: `/${clubSlug}/galleri`,
+      href: publicRoutes.gallery(clubSlug),
       key: 'gallery',
       visibility: 'PUBLIC',
     },
     {
       label: 'Artikler',
-      href: `/${clubSlug}/artikler`,
+      href: publicRoutes.articles(clubSlug),
       key: 'articles',
       visibility: 'PUBLIC',
     },
     {
       label: 'Flyveskole',
-      href: `/${clubSlug}/flyveskole`,
+      href: publicRoutes.flightSchool(clubSlug),
       key: 'flyveskole',
       visibility: 'PUBLIC',
     },
     {
       label: `Om ${clubSlug.toUpperCase()}`,
-      href: `/${clubSlug}/about`,
+      href: publicRoutes.about(clubSlug),
       key: 'about',
       visibility: 'PUBLIC',
     },
@@ -91,14 +92,14 @@ export function getVisiblePublicActions(
     if (viewer.isMember || viewer.isAdmin) {
       allActions.push({
         label: 'Min profil',
-        href: `/${clubSlug}/profil`,
+        href: publicRoutes.profile(clubSlug),
         key: 'profile',
         visibility: 'MEMBERS_ONLY',
       });
     } else {
       allActions.push({
         label: 'Bliv medlem',
-        href: `/${clubSlug}/bliv-medlem`,
+        href: publicRoutes.becomeMember(clubSlug),
         key: 'join',
         visibility: 'PUBLIC',
         isPrimary: true,
@@ -107,14 +108,14 @@ export function getVisiblePublicActions(
 
     allActions.push({
       label: 'Log ud',
-      href: `/${clubSlug}/logout`, // Handled via form action in UI
+      href: publicRoutes.logout(clubSlug), // Handled via form action in UI
       key: 'logout',
       visibility: 'PUBLIC',
     });
   } else {
     allActions.push({
       label: 'Bliv medlem',
-      href: `/${clubSlug}/bliv-medlem`,
+      href: publicRoutes.becomeMember(clubSlug),
       key: 'join',
       visibility: 'PUBLIC',
       isPrimary: true,
@@ -122,7 +123,7 @@ export function getVisiblePublicActions(
 
     allActions.push({
       label: 'Log ind',
-      href: `/${clubSlug}/login`,
+      href: publicRoutes.login(clubSlug),
       key: 'login',
       visibility: 'PUBLIC',
     });
@@ -142,25 +143,25 @@ export function getPublicNavigation(clubSlug: string): PublicNavigationItem[] {
   return [
     {
       label: 'Home',
-      href: `/${clubSlug}`,
+      href: publicRoutes.home(clubSlug),
       key: 'home',
       visibility: 'PUBLIC',
     },
     {
       label: 'About',
-      href: `/${clubSlug}/about`,
+      href: publicRoutes.about(clubSlug),
       key: 'about',
       visibility: 'PUBLIC',
     },
     {
       label: 'Events',
-      href: `/${clubSlug}/events`,
+      href: publicRoutes.events(clubSlug),
       key: 'events',
       visibility: 'PUBLIC',
     },
     {
       label: 'Members',
-      href: `/${clubSlug}/members`,
+      href: publicRoutes.members(clubSlug),
       key: 'members',
       visibility: 'MEMBERS_ONLY',
     },

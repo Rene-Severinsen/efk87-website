@@ -4,6 +4,7 @@ import { resolveClubContext } from "../../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPageShell";
 import { getPublicCalendarEntryDetail } from "../../../../lib/publicSite/publicCalendarService";
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
+import { publicRoutes } from "../../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -53,7 +54,7 @@ export default async function CalendarDetailPage({ params }: PageProps) {
       actionItems={actionItems}
       title={entry.title}
       eyebrow={`Kalender · ${formatDate(entry.startsAt)}${timeDisplay}`}
-      currentPath={`/${clubSlug}/kalender/${entryId}`}
+      currentPath={publicRoutes.calendarEntry(clubSlug, entryId)}
       maxWidth="1120px"
     >
       <div className="max-w-[800px] mx-auto">
@@ -86,7 +87,7 @@ export default async function CalendarDetailPage({ params }: PageProps) {
 
           <div className="mt-12 pt-8 border-t border-[var(--club-line)]">
             <Link 
-              href={`/${clubSlug}`}
+              href={publicRoutes.home(clubSlug)}
               className="inline-flex items-center text-[var(--club-accent)] hover:underline font-medium"
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

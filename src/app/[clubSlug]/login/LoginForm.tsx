@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 export default function LoginForm({ 
   clubSlug, 
@@ -150,7 +151,7 @@ export default function LoginForm({
               Send loginlink i stedet
             </button>
             <Link
-              href={`/${clubSlug}/login/glemt-adgangskode`}
+              href={publicRoutes.forgotPassword(clubSlug)}
               className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
             >
               Glemt adgangskode?

@@ -8,6 +8,7 @@ import { registerForHomepageContentAction, cancelOwnHomepageContentSignupAction 
 import './PublicClubHomePageV2.css';
 import { CheckCircle, LogIn, Users, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import Link from 'next/link';
+import { publicRoutes } from '../../../lib/publicRoutes';
 import sanitizeHtml from 'sanitize-html';
 import { formatMemberName } from '../../../lib/members/memberHelpers';
 
@@ -93,7 +94,7 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
             <div className="home-v2-signup-status">
               <Info size={20} className="text-blue-400" />
               <span style={{ flex: 1 }}>Log ind for at {signupLabel.toLowerCase()}.</span>
-              <Link href={`/${clubSlug}/login`} className="home-v2-pill home-v2-primary">
+              <Link href={publicRoutes.login(clubSlug)} className="home-v2-pill home-v2-primary">
                 <LogIn size={18} />
                 Log ind
               </Link>

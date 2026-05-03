@@ -8,6 +8,7 @@ import { requireClubBySlug } from "../../tenancy/tenantService";
 import { guessForumThreadIcon } from "../forumHelpers";
 import { requireActiveMemberForClub } from "../../auth/accessGuards";
 import { notifyCategoryEmailOfNewReply, notifyCategoryEmailOfNewThread, notifyThreadAuthorOfReply } from "../forumNotificationService";
+import { publicRoutes } from "../../publicRoutes";
 
 export async function createForumThread(clubSlug: string, categorySlug: string, formData: FormData) {
   const club = await requireClubBySlug(clubSlug);
@@ -77,8 +78,8 @@ export async function createForumThread(clubSlug: string, categorySlug: string, 
     bodyHtml: thread.bodyHtml
   }).catch(err => console.error("Error in notifyCategoryEmailOfNewThread:", err));
 
-  revalidatePath(`/${clubSlug}/forum/${categorySlug}`);
-  redirect(`/${clubSlug}/forum/${categorySlug}/${thread.slug}`);
+  revalidatePath(publicRoutes.forumCategory(clubSlug, categorySlug));
+  redirect(publicRoutes.forumThread(clubSlug, categorySlug, thread.slug));
 }
 
 export async function createForumReply(clubSlug: string, categorySlug: string, threadSlug: string, threadId: string, formData: FormData) {
@@ -134,5 +135,5 @@ export async function createForumReply(clubSlug: string, categorySlug: string, t
     replyBodyHtml: bodyHtml
   }).catch(err => console.error("Error in notifyCategoryEmailOfNewReply:", err));
 
-  revalidatePath(`/${clubSlug}/forum/${categorySlug}/${threadSlug}`);
+  revalidatePath(publicRoutes.forumThread(clubSlug, categorySlug, threadSlug));
 }

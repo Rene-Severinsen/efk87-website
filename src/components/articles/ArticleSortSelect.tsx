@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { publicRoutes } from "../../lib/publicRoutes";
 
 interface ArticleSortSelectProps {
   currentSort: string;
@@ -22,7 +23,7 @@ export default function ArticleSortSelect({ currentSort, clubSlug }: ArticleSort
       params.set('sort', val);
     }
     
-    router.push(`/${clubSlug}/artikler?${params.toString()}`);
+    router.push(`${publicRoutes.articles(clubSlug)}?${params.toString()}`);
   };
 
   return (

@@ -11,6 +11,7 @@ import { getForumReplyBadge } from "../../../../lib/forum/forumHelpers";
 import { getMemberDisplayName } from "../../../../components/member/MemberDisplayName";
 import { formatAdminDate } from "../../../../lib/format/adminDateFormat";
 import Avatar from "../../../../components/shared/Avatar";
+import { publicRoutes } from "../../../../lib/publicRoutes";
 
 interface CategoryPageProps {
   params: Promise<{
@@ -25,7 +26,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member
-  await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/forum/${categorySlug}`);
+  await requireActiveMemberForClub(club.id, club.slug, publicRoutes.forumCategory(clubSlug, categorySlug));
 
   const category = await getForumCategoryBySlug(club.id, categorySlug);
 
@@ -48,11 +49,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       title={category.title}
       subtitle={category.description || undefined}
       eyebrow="Forum"
-      currentPath={`/${clubSlug}/forum/${categorySlug}`}
+      currentPath={publicRoutes.forumCategory(clubSlug, categorySlug)}
     >
       <div className="flex justify-end mb-8 mt-4">
         <Link
-          href={`/${clubSlug}/forum/${categorySlug}/ny`}
+          href={publicRoutes.home(clubSlug) + `/forum/${categorySlug}/ny`}
           className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--public-primary)] hover:bg-[var(--public-primary)] hover:opacity-90 text-[var(--public-text)] font-bold shadow-lg shadow-[var(--public-primary-soft)] transition-all"
         >
           <Plus className="w-5 h-5" />
@@ -72,7 +73,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             return (
               <Link
                 key={thread.id}
-                href={`/${clubSlug}/forum/${categorySlug}/${thread.slug}`}
+                href={publicRoutes.forumThread(clubSlug, categorySlug, thread.slug)}
                 className="flex items-center gap-4 p-4 backdrop-blur-md bg-[var(--public-card)] hover:bg-[var(--public-nav-hover)] border border-[var(--public-card-border)] rounded-2xl transition-all group"
               >
                 <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-[var(--public-primary-soft)] text-[var(--public-primary)] group-hover:bg-[var(--public-primary-soft)] transition-all">

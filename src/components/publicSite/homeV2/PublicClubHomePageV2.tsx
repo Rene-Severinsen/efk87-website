@@ -17,6 +17,7 @@ import { ClubForumThread, ClubForumCategory, PublicClubFooter, PublicSponsor } f
 import { WeatherData } from '../../../lib/weather/openMeteoWeatherService';
 import { HomepageContentWithSignups } from '../../../lib/homepageContent/homepageContentService';
 import { FlightSchoolHomepageViewModel } from '../../../lib/flightSchool/flightSchoolBookingService';
+import { publicRoutes } from '../../../lib/publicRoutes';
 import HomepageContentBoxes from './HomepageContentBoxes';
 import Avatar from '../../shared/Avatar';
 
@@ -131,11 +132,11 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               </div>
             </div>
             <div className="home-v2-inline-actions">
-              <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/jeg-flyver`}>Jeg flyver</Link>
-              <Link className="home-v2-pill" href={`/${club.slug}/bliv-medlem`}>Bliv medlem</Link>
-              <Link className="home-v2-pill" href={`/${club.slug}/kalender`}>Åbn kalender</Link>
-              <Link className="home-v2-pill" href={`/${club.slug}/flyveskole`}>Gå til flyveskole</Link>
-              <Link className="home-v2-pill" href={`/${club.slug}/galleri`}>Upload billeder</Link>
+              <Link className="home-v2-pill home-v2-primary" href={publicRoutes.jegFlyver(club.slug)}>Jeg flyver</Link>
+              <Link className="home-v2-pill" href={publicRoutes.becomeMember(club.slug)}>Bliv medlem</Link>
+              <Link className="home-v2-pill" href={publicRoutes.home(club.slug) + '/kalender'}>Åbn kalender</Link>
+              <Link className="home-v2-pill" href={publicRoutes.flightSchool(club.slug)}>Gå til flyveskole</Link>
+              <Link className="home-v2-pill" href={publicRoutes.gallery(club.slug)}>Upload billeder</Link>
             </div>
           </article>
 
@@ -164,18 +165,18 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                         minute: '2-digit'
                       }) : '';
                       
-                      return (
-                        <React.Fragment key={`${entry.id}-${idx}`}>
-                          <Link href={`/${club.slug}/kalender/${entry.id}`} className="home-v2-marquee-item">
-                            <span className="home-v2-marquee-date">{dateDisplay}</span>
-                            <span className="home-v2-marquee-title">{entry.title}</span>
-                            {hasTime && <span className="home-v2-marquee-time">{timeDisplay}</span>}
-                          </Link>
-                          <span className="home-v2-marquee-separator">
-                             <div className="home-v2-marquee-logo-mark">EFK87</div>
-                          </span>
-                        </React.Fragment>
-                      );
+              return (
+                <React.Fragment key={`${entry.id}-${idx}`}>
+                  <Link href={publicRoutes.calendarEntry(club.slug, entry.id)} className="home-v2-marquee-item">
+                    <span className="home-v2-marquee-date">{dateDisplay}</span>
+                    <span className="home-v2-marquee-title">{entry.title}</span>
+                    {hasTime && <span className="home-v2-marquee-time">{timeDisplay}</span>}
+                  </Link>
+                  <span className="home-v2-marquee-separator">
+                     <div className="home-v2-marquee-logo-mark">{clubShortName}</div>
+                  </span>
+                </React.Fragment>
+              );
                     })}
                   </>
                 ) : (
@@ -196,7 +197,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Forum – seneste aktivitet</h2>
-                <Link className="home-v2-link-soft" href={`/${club.slug}/forum`}>Åbn forum</Link>
+                <Link className="home-v2-link-soft" href={publicRoutes.forum(club.slug)}>Åbn forum</Link>
               </div>
               <div className="home-v2-thread-list">
                 {latestForumActivity.length === 0 ? (
@@ -218,7 +219,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                     return (
                       <Link 
                         key={thread.id} 
-                        href={`/${club.slug}/forum/${thread.category.slug}/${thread.slug}`}
+                        href={publicRoutes.forumThread(club.slug, thread.category.slug, thread.slug)}
                         className="home-v2-row-item group"
                       >
                         <div className="home-v2-row-icon flex items-center justify-center">
@@ -241,30 +242,30 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Seneste billeder</h2>
-                <Link className="home-v2-link-soft" href={`/${club.slug}/galleri`}>Åbn galleri</Link>
+                <Link className="home-v2-link-soft" href={publicRoutes.gallery(club.slug)}>Åbn galleri</Link>
               </div>
               <div className="home-v2-gallery-grid">
-                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
+                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1508615070457-7baeba4003ab?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">ASW-28 · I dag</div>
                 </Link>
-                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
+                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">Klubpladsen</div>
                 </Link>
-                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
+                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">Skoleflyvning</div>
                 </Link>
-                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
+                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1496449903678-68ddcb189a24?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">Skræntdag</div>
                 </Link>
-                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
+                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">Klubhuset</div>
                 </Link>
-                <Link href={`/${club.slug}/galleri`} className="home-v2-gallery-item">
+                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
                   <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80')"}} />
                   <div className="home-v2-gallery-label">Solnedgang</div>
                 </Link>
@@ -279,7 +280,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Aktivitet på pladsen</h2>
-                <Link className="home-v2-link-soft" href={`/${club.slug}/jeg-flyver/liste`}>Se alle flyvemeddelser</Link>
+                <Link className="home-v2-link-soft" href={publicRoutes.jegFlyverList(club.slug)}>Se alle flyvemeddelser</Link>
               </div>
 
               <div className="home-v2-griffin">
@@ -299,13 +300,13 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                   </p>
                   <div className="home-v2-activity-actions">
                     <Link
-                        href={`/${club.slug}/jeg-flyver`}
+                        href={publicRoutes.jegFlyver(club.slug)}
                         className="home-v2-activity-cta home-v2-activity-cta-primary"
                     >
                       Skriv “jeg flyver”
                     </Link>
                     <Link
-                        href={`/${club.slug}/jeg-flyver/liste`}
+                        href={publicRoutes.jegFlyverList(club.slug)}
                         className="home-v2-activity-cta home-v2-activity-cta-secondary"
                     >
                       Se dagens indtjekninger
@@ -468,8 +469,8 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 </div>
               </div>
               <div className="home-v2-cta-row">
-                <Link className="home-v2-pill home-v2-primary" href={`/${club.slug}/forum`}>Skriv i chatten</Link>
-                <Link className="home-v2-pill" href={`/${club.slug}/forum`}>Se alle beskeder</Link>
+                <Link className="home-v2-pill home-v2-primary" href={publicRoutes.forum(club.slug)}>Skriv i chatten</Link>
+                <Link className="home-v2-pill" href={publicRoutes.forum(club.slug)}>Se alle beskeder</Link>
               </div>
             </article>
 
@@ -478,7 +479,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 <h2>Hurtige genveje</h2>
               </div>
               <div className="home-v2-quick-list">
-                <Link className="home-v2-row-item" href={`/${club.slug}/about`}>
+                <Link className="home-v2-row-item" href={publicRoutes.about(club.slug)}>
                   <div className="home-v2-row-icon">📜</div>
                   <div>
                     <div className="home-v2-row-title">Vedtægter</div>
@@ -486,7 +487,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                   </div>
                   <span className="home-v2-status-badge home-v2-info">Åbn</span>
                 </Link>
-                <Link className="home-v2-row-item" href={`/${club.slug}/about`}>
+                <Link className="home-v2-row-item" href={publicRoutes.about(club.slug)}>
                   <div className="home-v2-row-icon">⚠️</div>
                   <div>
                     <div className="home-v2-row-title">Pladsregler</div>
@@ -494,7 +495,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                   </div>
                   <span className="home-v2-status-badge home-v2-info">Åbn</span>
                 </Link>
-                <Link className="home-v2-row-item" href={`/${club.slug}/flyveskole/skolekalender`}>
+                <Link className="home-v2-row-item" href={publicRoutes.flightSchoolCalendar(club.slug)}>
                   <div className="home-v2-row-icon">🗓️</div>
                   <div>
                     <div className="home-v2-row-title">Skolekalender</div>
@@ -561,10 +562,10 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           <div>
             <h3>Links</h3>
             <p className="home-v2-small" style={{marginTop: '10px'}}>
-              <Link href={`/${club.slug}/forum`} style={{ color: 'inherit', textDecoration: 'none' }}>Forum</Link><br/>
-              <Link href={`/${club.slug}/galleri`} style={{ color: 'inherit', textDecoration: 'none' }}>Galleri</Link><br/>
-              <Link href={`/${club.slug}/flyveskole`} style={{ color: 'inherit', textDecoration: 'none' }}>Flyveskole</Link><br/>
-              <Link href={`/${club.slug}/about`} style={{ color: 'inherit', textDecoration: 'none' }}>Om {clubShortName}</Link>
+              <Link href={publicRoutes.forum(club.slug)} style={{ color: 'inherit', textDecoration: 'none' }}>Forum</Link><br/>
+              <Link href={publicRoutes.gallery(club.slug)} style={{ color: 'inherit', textDecoration: 'none' }}>Galleri</Link><br/>
+              <Link href={publicRoutes.flightSchool(club.slug)} style={{ color: 'inherit', textDecoration: 'none' }}>Flyveskole</Link><br/>
+              <Link href={publicRoutes.about(club.slug)} style={{ color: 'inherit', textDecoration: 'none' }}>Om {clubShortName}</Link>
             </p>
           </div>
         </footer>

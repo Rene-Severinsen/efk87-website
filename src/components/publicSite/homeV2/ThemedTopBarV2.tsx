@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { PublicNavigationItem } from "../../../lib/publicSite/publicNavigation";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface ThemedTopBarV2Props {
   clubSlug: string;
@@ -75,7 +76,7 @@ export const ThemedTopBarV2: React.FC<ThemedTopBarV2Props> = ({
               <Link
                 key={item.key}
                 className={`home-v2-btn home-v2-chip-btn ${isPrimary ? 'home-v2-primary' : ''}`}
-                href={item.href === `/${clubSlug}/login` ? `/api/auth/signin?callbackUrl=/${clubSlug}` : item.href}
+                href={item.href === publicRoutes.login(clubSlug) ? `/api/auth/signin?callbackUrl=${publicRoutes.home(clubSlug)}` : item.href}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.label}

@@ -4,6 +4,7 @@ import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 import { getForumCategories } from "../../../lib/forum/forumService";
 import Link from "next/link";
 import { MessageCircle, ChevronRight, MessageSquare } from "lucide-react";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface ForumPageProps {
   params: Promise<{
@@ -17,7 +18,7 @@ export default async function ForumPage({ params }: ForumPageProps) {
   const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member
-  await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/forum`);
+  await requireActiveMemberForClub(club.id, club.slug, publicRoutes.forum(clubSlug));
 
   const categories = await getForumCategories(club.id, true);
 
@@ -33,7 +34,7 @@ export default async function ForumPage({ params }: ForumPageProps) {
       actionItems={actionItems}
       title="Forum"
       subtitle="Velkommen til klubbens forum. Her kan du stille spørgsmål, dele erfaringer og hygge med de andre medlemmer."
-      currentPath={`/${clubSlug}/forum`}
+      currentPath={publicRoutes.forum(clubSlug)}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
         {categories.length === 0 ? (
@@ -44,7 +45,7 @@ export default async function ForumPage({ params }: ForumPageProps) {
           categories.map((category) => (
             <Link
               key={category.id}
-              href={`/${clubSlug}/forum/${category.slug}`}
+              href={publicRoutes.forumCategory(clubSlug, category.slug)}
               className="group flex items-start gap-6 p-6 backdrop-blur-md bg-[var(--public-card)] hover:bg-[var(--public-nav-hover)] border border-[var(--public-card-border)] rounded-3xl transition-all shadow-xl hover:shadow-[var(--public-primary-soft)]"
             >
               <div className="flex-shrink-0 p-4 rounded-2xl bg-[var(--public-primary-soft)] text-[var(--public-primary)] group-hover:bg-[var(--public-primary-soft)] group-hover:scale-110 transition-all">

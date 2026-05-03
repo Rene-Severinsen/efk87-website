@@ -8,6 +8,7 @@ import { formatMemberName } from "../../../../../lib/members/memberHelpers";
 import { HomepageContentSignupMode } from "../../../../../generated/prisma";
 import { Users, Calendar, Hash, MessageSquare } from "lucide-react";
 import Link from "next/link";
+import { publicRoutes } from "../../../../../lib/publicRoutes";
 
 interface ParticipantListPageProps {
   params: Promise<{
@@ -22,7 +23,7 @@ export default async function ParticipantListPage({ params }: ParticipantListPag
   const { club, theme, footerData, navigationItems, actionItems, viewer } = context;
 
   if (!viewer.isAuthenticated || !viewer.isMember) {
-    redirect(`/${clubSlug}/login?callbackUrl=/${clubSlug}/forside-indhold/${contentId}/tilmeldinger`);
+    redirect(`${publicRoutes.login(clubSlug)}?callbackUrl=${publicRoutes.homepageContentSignups(clubSlug, contentId)}`);
   }
 
   const content = await getHomepageContentById(contentId, club.id);
@@ -43,7 +44,7 @@ export default async function ParticipantListPage({ params }: ParticipantListPag
       navigationItems={navigationItems}
       actionItems={actionItems}
       title={`Tilmeldinger: ${content.title}`}
-      currentPath={`/${clubSlug}/forside-indhold/${contentId}/tilmeldinger`}
+      currentPath={publicRoutes.homepageContentSignups(clubSlug, contentId)}
     >
       <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-slate-400">
         <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">
@@ -129,7 +130,7 @@ export default async function ParticipantListPage({ params }: ParticipantListPag
 
       <div className="mt-8 flex justify-center">
         <Link 
-          href={`/${clubSlug}`}
+          href={publicRoutes.home(clubSlug)}
           className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-all text-sm font-semibold"
         >
           Tilbage til forsiden

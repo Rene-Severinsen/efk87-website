@@ -3,6 +3,7 @@ import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPag
 import { ThemedSectionCard, ThemedPageHeader } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { getPublicInstructorContacts } from "../../../../lib/members/instructorContactService";
 import Avatar from "../../../../components/shared/Avatar";
+import { publicRoutes } from "../../../../lib/publicRoutes";
 
 interface ContactPageProps {
   params: Promise<{
@@ -28,7 +29,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title="Kontakt"
-      currentPath={`/${clubSlug}/om/kontakt`}
+      currentPath={publicRoutes.contact(clubSlug)}
     >
       <ThemedPageHeader 
         title="Kontakt" 

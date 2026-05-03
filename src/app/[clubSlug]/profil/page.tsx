@@ -4,6 +4,7 @@ import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 import { MemberProfile } from "../../../components/member/MemberProfile";
 import { getOrCreateOwnMemberProfile } from "../../../lib/members/memberProfileService";
 import { getActiveClubMailingLists } from "../../../lib/mailingLists/clubMailingListService";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface ProfilePageProps {
   params: Promise<{
@@ -21,7 +22,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member and get viewer data
-  const viewer = await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/profil`);
+  const viewer = await requireActiveMemberForClub(club.id, club.slug, publicRoutes.profile(clubSlug));
 
   const profile = await getOrCreateOwnMemberProfile(club.id, viewer.userId!);
   const mailingLists = await getActiveClubMailingLists(club.id);
@@ -37,7 +38,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title="Min profil"
-      currentPath={`/${clubSlug}/profil`}
+      currentPath={publicRoutes.profile(clubSlug)}
       maxWidth="1440px"
     >
       <MemberProfile 

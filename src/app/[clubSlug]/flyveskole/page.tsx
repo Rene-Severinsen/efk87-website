@@ -5,6 +5,7 @@ import { getPublishedFlightSchoolPage, getPublishedFlightSchoolDocuments } from 
 import { getPublicInstructorContacts } from "../../../lib/members/instructorContactService";
 import Link from "next/link";
 import Avatar from "../../../components/shared/Avatar";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -36,7 +37,7 @@ export default async function FlyveskolePage({ params }: PageProps) {
       actionItems={actionItems}
       title={title}
       eyebrow="Uddannelse"
-      currentPath={`/${clubSlug}/flyveskole`}
+      currentPath={publicRoutes.flightSchool(clubSlug)}
     >
       {!page ? (
         <ThemedSectionCard>
@@ -114,7 +115,7 @@ export default async function FlyveskolePage({ params }: PageProps) {
                 {documents.map((doc) => (
                   <Link 
                     key={doc.id}
-                    href={`/${clubSlug}/flyveskole/${doc.slug}`}
+                    href={publicRoutes.flightSchoolDocument(clubSlug, doc.slug)}
                     className="group flex flex-col p-6 rounded-2xl bg-[var(--public-card)] border border-[var(--public-card-border)] hover:border-sky-500/50 hover:bg-sky-500/10 transition-all h-auto min-h-0"
                   >
                     <h3 className="text-xl font-bold mb-3 group-hover:text-sky-400 transition-colors leading-tight text-[var(--public-text)]">

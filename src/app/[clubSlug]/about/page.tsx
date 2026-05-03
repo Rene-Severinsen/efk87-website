@@ -2,6 +2,7 @@ import Link from "next/link";
 import { resolvePublicPageForClub } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
 import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuildingBlocks";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface AboutPageProps {
   params: Promise<{
@@ -27,7 +28,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title={title}
-      currentPath={`/${clubSlug}/about`}
+      currentPath={publicRoutes.about(clubSlug)}
     >
       <ThemedSectionCard className="p-5 sm:p-8">
         <div className="prose prose-invert max-w-none">
@@ -42,7 +43,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
             Har du spørgsmål eller brug for hjælp? Find vores instruktører og kontaktpersoner her.
           </p>
           <Link 
-            href={`/${clubSlug}/om/kontakt`}
+            href={publicRoutes.contact(clubSlug)}
             className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-[var(--public-primary-soft)] hover:bg-[var(--public-primary-soft)] hover:opacity-90 text-[var(--public-primary)] border border-[var(--public-card-border)] transition-all text-sm sm:text-base font-semibold group"
           >
             Se instruktører

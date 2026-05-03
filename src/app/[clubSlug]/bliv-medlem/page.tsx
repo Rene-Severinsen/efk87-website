@@ -3,6 +3,7 @@ import { resolvePublicPageForClub } from "../../../lib/publicSite/publicPageRout
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
 import { ThemedPageHeader } from "../../../components/publicSite/ThemedBuildingBlocks";
 import MemberApplicationForm from "./MemberApplicationForm";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -55,7 +56,7 @@ export default async function BlivMedlemPage({ params }: PageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title="Bliv medlem"
-      currentPath={`/${clubSlug}/bliv-medlem`}
+      currentPath={publicRoutes.becomeMember(clubSlug)}
     >
       <div className="max-w-3xl mx-auto">
 

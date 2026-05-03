@@ -10,6 +10,7 @@ import {
   getMemberRecentFlightIntents, 
   getActiveFlightIntentForMemberDate 
 } from "../../../lib/flightIntents/memberFlightIntentService";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface JegFlyverPageProps {
   params: Promise<{
@@ -32,7 +33,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
   const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member
-  const viewer = await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/jeg-flyver`);
+  const viewer = await requireActiveMemberForClub(club.id, club.slug, publicRoutes.jegFlyver(clubSlug));
 
   const recentIntents = await getMemberRecentFlightIntents(club.id, viewer);
 
@@ -54,7 +55,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
       actionItems={actionItems}
       title="Jeg flyver"
       subtitle={<span className="text-[var(--public-text-muted)] font-medium">Her kan medlemmer melde, at de tager ud på pladsen.</span>}
-      currentPath={`/${clubSlug}/jeg-flyver`}
+      currentPath={publicRoutes.jegFlyver(clubSlug)}
       maxWidth="800px"
     >
       <div className="jeg-flyver-container">

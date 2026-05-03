@@ -7,6 +7,7 @@ import { format, startOfDay, isSameDay } from "date-fns";
 import { da } from "date-fns/locale";
 import FlightSchoolCalendarClient from "./FlightSchoolCalendarClient";
 import { getMemberProfileId } from "../../../../lib/members/memberProfileService";
+import { publicRoutes } from "../../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -51,7 +52,7 @@ export default async function SkolekalenderPage({ params }: PageProps) {
       actionItems={actionItems}
       title="Skolekalender"
       eyebrow="Flyveskole"
-      currentPath={`/${clubSlug}/flyveskole/skolekalender`}
+      currentPath={publicRoutes.flightSchoolCalendar(clubSlug)}
     >
       <div className="space-y-8">
         <ThemedSectionCard>

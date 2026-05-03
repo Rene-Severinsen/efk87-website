@@ -5,6 +5,7 @@ import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPag
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { getPublishedGalleryAlbumBySlug } from "../../../../lib/gallery/galleryService";
 import { getServerViewerForClub } from "../../../../lib/auth/viewer";
+import { publicRoutes } from "../../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -39,11 +40,11 @@ export default async function AlbumDetailPage({ params }: PageProps) {
       actionItems={actionItems}
       title={album.title}
       subtitle={album.description || undefined}
-      currentPath={`/${clubSlug}/galleri/${albumSlug}`}
+      currentPath={publicRoutes.galleryAlbum(clubSlug, albumSlug)}
     >
       <div className="mb-6 sm:mb-8">
         <Link 
-          href={`/${clubSlug}/galleri`}
+          href={publicRoutes.gallery(clubSlug)}
           className="text-xs sm:text-sm opacity-70 hover:opacity-100 hover:text-[var(--club-accent)] no-underline flex items-center gap-2 mb-4 transition-opacity"
         >
           ← Tilbage til galleri

@@ -1,5 +1,6 @@
 import { resolvePublicPageForClub } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface MembersPageProps {
   params: Promise<{
@@ -33,7 +34,7 @@ export default async function MembersPage({ params }: MembersPageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title={title}
-      currentPath={`/${clubSlug}/${pageSlug}`}
+      currentPath={publicRoutes.members(clubSlug)}
     >
       <div className="bg-[var(--club-panel)] border border-[var(--club-line)] rounded-[var(--club-radius)] p-8 shadow-[var(--club-shadow)]">
         <p className="text-[var(--club-text)] text-lg">

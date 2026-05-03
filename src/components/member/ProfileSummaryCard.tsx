@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ThemedSectionCard } from '../publicSite/ThemedBuildingBlocks';
 import { ClubMemberCertificateType } from '@/generated/prisma';
 import Avatar from '../shared/Avatar';
+import { publicRoutes } from '../../lib/publicRoutes';
 
 interface ProfileSummaryCardProps {
   clubSlug: string;
@@ -71,7 +72,7 @@ export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({
             <p>Her kan du udskrive dit medlemskort til brug i klubben.</p>
             <div style={{ marginTop: '1rem' }}>
               <Link
-                  href={`/${clubSlug}/profil/medlemskort`}
+                  href={publicRoutes.profileMemberCard(clubSlug)}
                   className="themed-button"
                   style={{
                     display: 'inline-block',

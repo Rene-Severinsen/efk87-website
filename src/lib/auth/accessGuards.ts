@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getServerViewerForClub, ServerViewerContext } from "./viewer";
+import { publicRoutes } from "../publicRoutes";
 
 /**
  * Ensures the current viewer is an active member of the specified club.
@@ -23,7 +24,7 @@ export async function requireActiveMemberForClub(
   }
 
   // Not a member or not authenticated
-  const loginUrl = new URL(`/${clubSlug}/login`, "http://localhost"); // Base URL doesn't matter for path only
+  const loginUrl = new URL(publicRoutes.login(clubSlug), "http://localhost"); // Base URL doesn't matter for path only
   loginUrl.searchParams.set("reason", "member-required");
   if (callbackUrl) {
     loginUrl.searchParams.set("callbackUrl", callbackUrl);

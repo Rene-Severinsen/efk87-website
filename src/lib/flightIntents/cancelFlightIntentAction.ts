@@ -3,6 +3,7 @@ import prisma from "../db/prisma";
 import { requireClubBySlug } from "../tenancy/tenantService";
 import { requireActiveMemberForClub } from "../auth/accessGuards";
 import { ClubFlightIntentStatus } from "../../generated/prisma";
+import { publicRoutes } from "../publicRoutes";
 
 export async function cancelFlightIntentAction(formData: FormData) {
   "use server";
@@ -48,5 +49,5 @@ export async function cancelFlightIntentAction(formData: FormData) {
     },
   });
 
-  redirect(`/${clubSlug}/jeg-flyver?cancelled=1`);
+  redirect(publicRoutes.jegFlyver(clubSlug) + "?cancelled=1");
 }

@@ -1,5 +1,6 @@
 import { resolveClubContext } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface EventsPageProps {
   params: Promise<{
@@ -29,7 +30,7 @@ export default async function EventsPage({ params }: EventsPageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title="Begivenheder"
-      currentPath={`/${clubSlug}/events`}
+      currentPath={publicRoutes.events(clubSlug)}
     >
       <div className="bg-[var(--club-panel)] border border-[var(--club-line)] rounded-[var(--club-radius)] p-8 shadow-[var(--club-shadow)]">
         <p className="text-[var(--club-text)] text-lg">

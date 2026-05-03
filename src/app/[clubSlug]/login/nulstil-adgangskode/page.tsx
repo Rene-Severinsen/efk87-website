@@ -4,6 +4,7 @@ import { use, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { resetPasswordAction } from "../../../../lib/auth/passwordActions";
+import { publicRoutes } from "../../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -38,7 +39,7 @@ export default function ResetPasswordPage({ params, searchParams: searchParamsPr
         setError(result.error);
       } else {
         // Redirect to login with success message
-        router.push(`/${clubSlug}/login?success=Din adgangskode er opdateret. Log ind med din nye adgangskode.`);
+        router.push(`${publicRoutes.login(clubSlug)}?success=Din adgangskode er opdateret. Log ind med din nye adgangskode.`);
       }
     });
   }
@@ -52,7 +53,7 @@ export default function ResetPasswordPage({ params, searchParams: searchParamsPr
             <p className="text-center opacity-80 mb-6">Linket til nulstilling af adgangskode er ugyldigt.</p>
             <div className="text-center">
               <button
-                onClick={() => router.push(`/${clubSlug}/login`)}
+                onClick={() => router.push(publicRoutes.login(clubSlug))}
                 className="text-blue-400 hover:text-blue-300 transition-colors"
               >
                 Gå til login

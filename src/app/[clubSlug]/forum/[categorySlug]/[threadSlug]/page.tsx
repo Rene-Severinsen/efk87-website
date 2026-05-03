@@ -9,6 +9,7 @@ import ReplyForm from "../../../../../components/forum/ReplyForm";
 import { createForumReply } from "../../../../../lib/forum/actions/memberForumActions";
 import { Clock, Lock } from "lucide-react";
 import Avatar from "../../../../../components/shared/Avatar";
+import { publicRoutes } from "../../../../../lib/publicRoutes";
 
 interface ThreadDetailPageProps {
   params: Promise<{
@@ -24,7 +25,7 @@ export default async function ThreadDetailPage({ params }: ThreadDetailPageProps
   const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolveClubContext(clubSlug);
 
   // Ensure user is an active member
-  await requireActiveMemberForClub(club.id, club.slug, `/${clubSlug}/forum/${categorySlug}/${threadSlug}`);
+  await requireActiveMemberForClub(club.id, club.slug, publicRoutes.forumThread(clubSlug, categorySlug, threadSlug));
 
   const category = await getForumCategoryBySlug(club.id, categorySlug);
   if (!category) notFound();
@@ -48,7 +49,7 @@ export default async function ThreadDetailPage({ params }: ThreadDetailPageProps
       actionItems={actionItems}
       title={thread.title}
       eyebrow={category.title}
-      currentPath={`/${clubSlug}/forum/${categorySlug}/${threadSlug}`}
+      currentPath={publicRoutes.forumThread(clubSlug, categorySlug, threadSlug)}
     >
       <div className="space-y-8 mt-8">
         {/* OP Thread Body */}

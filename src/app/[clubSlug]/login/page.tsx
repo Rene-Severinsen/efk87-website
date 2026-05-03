@@ -1,6 +1,7 @@
 import { resolveClubContext } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
 import LoginForm from "./LoginForm";
+import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -19,11 +20,11 @@ interface PageProps {
  */
 function validateCallbackUrl(url: string | undefined, clubSlug: string): string {
   if (!url) {
-    return `/${clubSlug}`;
+    return publicRoutes.home(clubSlug);
   }
-  const prefix = `/${clubSlug}`;
+  const prefix = publicRoutes.home(clubSlug);
   const isValid = url.startsWith(prefix) && !url.startsWith("//") && !url.includes("://");
-  return isValid ? url : `/${clubSlug}`;
+  return isValid ? url : publicRoutes.home(clubSlug);
 }
 
 export default async function LoginPage({ params, searchParams }: PageProps) {
@@ -43,7 +44,7 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title="Log ind"
-      currentPath={`/${clubSlug}/login`}
+      currentPath={publicRoutes.login(clubSlug)}
       maxWidth="500px"
     >
       <LoginForm 

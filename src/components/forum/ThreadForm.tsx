@@ -4,6 +4,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import Link from 'next/link';
+import { publicRoutes } from "../../lib/publicRoutes";
 
 const ArticleRichTextEditor = dynamic(() => import('../admin/articles/ArticleRichTextEditor'), {
   ssr: false,
@@ -70,7 +71,7 @@ export default function ThreadForm({ clubSlug, categorySlug, action }: ThreadFor
 
       <div className="flex items-center justify-end gap-6">
         <Link
-          href={`/${clubSlug}/forum/${categorySlug}`}
+          href={publicRoutes.forumCategory(clubSlug, categorySlug)}
           className="px-8 py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-bold transition-all"
         >
           Annuller

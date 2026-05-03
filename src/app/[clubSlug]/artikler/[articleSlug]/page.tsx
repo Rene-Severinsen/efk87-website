@@ -3,6 +3,7 @@ import { resolveClubContext } from "../../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPageShell";
 import { getPublishedArticleBySlug } from "../../../../lib/articles/articleService";
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
+import { publicRoutes } from "../../../../lib/publicRoutes";
 
 interface PageProps {
   params: Promise<{
@@ -35,7 +36,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
       title={article.title}
       eyebrow={`Artikel · ${article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}`}
       subtitle={article.excerpt || undefined}
-      currentPath={`/${clubSlug}/artikler/${articleSlug}`}
+      currentPath={publicRoutes.article(clubSlug, articleSlug)}
       maxWidth="1120px"
     >
       {article.heroImageUrl && (

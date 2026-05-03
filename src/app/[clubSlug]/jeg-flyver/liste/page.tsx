@@ -4,6 +4,7 @@ import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPag
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { getTodayFlightIntentList } from "../../../../lib/publicSite/publicFlightIntentService";
 import Avatar from "../../../../components/shared/Avatar";
+import { publicRoutes } from "../../../../lib/publicRoutes";
 
 interface JegFlyverListePageProps {
   params: Promise<{
@@ -50,7 +51,7 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
       actionItems={actionItems}
       title="Jeg flyver"
       subtitle="Her kan du se dagens flyvemeldinger."
-      currentPath={`/${clubSlug}/jeg-flyver/liste`}
+      currentPath={publicRoutes.jegFlyverList(clubSlug)}
       maxWidth="800px"
     >
       <ThemedSectionCard className="p-4 sm:p-8">
@@ -98,7 +99,7 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
       
       <div className="mt-8 flex justify-center">
         <Link 
-          href={`/${clubSlug}/jeg-flyver`}
+          href={publicRoutes.jegFlyver(clubSlug)}
           className="pill primary px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all hover:scale-[1.02]"
         >
           Skriv jeg flyver
