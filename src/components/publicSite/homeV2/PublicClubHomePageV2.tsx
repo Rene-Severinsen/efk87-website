@@ -244,12 +244,30 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 <a className="home-v2-link-soft" href="#">Åbn galleri</a>
               </div>
               <div className="home-v2-gallery-grid">
-                <div className="home-v2-gallery-item" style={{backgroundImage: "url('https://images.unsplash.com/photo-1508615070457-7baeba4003ab?auto=format&fit=crop&w=900&q=80')"}}><span>ASW-28 · I dag</span></div>
-                <div className="home-v2-gallery-item" style={{backgroundImage: "url('https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?auto=format&fit=crop&w=900&q=80')"}}><span>Klubpladsen</span></div>
-                <div className="home-v2-gallery-item" style={{backgroundImage: "url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80')"}}><span>Skoleflyvning</span></div>
-                <div className="home-v2-gallery-item" style={{backgroundImage: "url('https://images.unsplash.com/photo-1496449903678-68ddcb189a24?auto=format&fit=crop&w=900&q=80')"}}><span>Skræntdag</span></div>
-                <div className="home-v2-gallery-item" style={{backgroundImage: "url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=80')"}}><span>Klubhuset</span></div>
-                <div className="home-v2-gallery-item" style={{backgroundImage: "url('https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80')"}}><span>Solnedgang</span></div>
+                <div className="home-v2-gallery-item">
+                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1508615070457-7baeba4003ab?auto=format&fit=crop&w=900&q=80')"}} />
+                  <div className="home-v2-gallery-label">ASW-28 · I dag</div>
+                </div>
+                <div className="home-v2-gallery-item">
+                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?auto=format&fit=crop&w=900&q=80')"}} />
+                  <div className="home-v2-gallery-label">Klubpladsen</div>
+                </div>
+                <div className="home-v2-gallery-item">
+                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80')"}} />
+                  <div className="home-v2-gallery-label">Skoleflyvning</div>
+                </div>
+                <div className="home-v2-gallery-item">
+                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1496449903678-68ddcb189a24?auto=format&fit=crop&w=900&q=80')"}} />
+                  <div className="home-v2-gallery-label">Skræntdag</div>
+                </div>
+                <div className="home-v2-gallery-item">
+                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=80')"}} />
+                  <div className="home-v2-gallery-label">Klubhuset</div>
+                </div>
+                <div className="home-v2-gallery-item">
+                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80')"}} />
+                  <div className="home-v2-gallery-label">Solnedgang</div>
+                </div>
               </div>
             </article>
           </div>
