@@ -21,8 +21,15 @@ type AboutTile = {
 export default async function AboutPage({ params }: AboutPageProps) {
   const { clubSlug } = await params;
 
-  const { club, page, theme, footerData, navigationItems, actionItems } =
-      await resolvePublicPageForClub(clubSlug, "about");
+  const {
+    club,
+    page,
+    theme,
+    footerData,
+    navigationItems,
+    actionItems,
+    publicSettings,
+  } = await resolvePublicPageForClub(clubSlug, "about");
 
   const title = page?.title ?? `Om ${club.settings?.shortName || club.name}`;
   const body = page?.body?.trim();
@@ -63,11 +70,12 @@ export default async function AboutPage({ params }: AboutPageProps) {
       title: "Her bor vi",
       description: "Se hvor klubben holder til og få praktisk info om pladsen.",
       icon: "📍",
-      available: false,
+      href: publicRoutes.whereWeLive(clubSlug),
+      available: true,
     },
     {
       title: "Kontakt",
-      description: "Find bestyrelse, instruktører og kontaktpersoner.",
+      description: "Find formand, kasserer, instruktører og kontaktpersoner.",
       icon: "☎️",
       href: publicRoutes.contact(clubSlug),
       available: true,
@@ -98,8 +106,9 @@ export default async function AboutPage({ params }: AboutPageProps) {
       <ThemedClubPageShell
           clubSlug={clubSlug}
           clubName={club.settings?.shortName || club.name}
-          clubDisplayName={club.settings?.displayName || club.name}
+          clubDisplayName={publicSettings?.displayName || club.settings?.displayName || club.name}
           theme={theme}
+          publicThemeMode={publicSettings?.publicThemeMode}
           footerData={footerData}
           navigationItems={navigationItems}
           actionItems={actionItems}
@@ -107,13 +116,13 @@ export default async function AboutPage({ params }: AboutPageProps) {
           currentPath={publicRoutes.about(clubSlug)}
       >
         <div className="space-y-8 sm:space-y-10">
-          {showIntro && (
+          {showIntro ? (
               <ThemedSectionCard className="p-5 sm:p-7">
                 <p className="max-w-4xl text-base leading-relaxed text-[var(--public-text)] sm:text-lg">
                   {body}
                 </p>
               </ThemedSectionCard>
-          )}
+          ) : null}
 
           <section>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">

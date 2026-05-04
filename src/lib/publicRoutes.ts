@@ -1,9 +1,9 @@
 /**
  * Shared route helpers for club-scoped public and member routes.
- * 
+ *
  * These helpers centralize route string construction to ensure consistency
  * and make it easier to update routes in the future.
- * 
+ *
  * NOTE: These routes MUST return absolute app paths starting with /.
  */
 
@@ -12,6 +12,7 @@ export const publicRoutes = {
   about: (clubSlug: string) => `/${clubSlug}/about`,
   board: (clubSlug: string) => `/${clubSlug}/om/bestyrelsen`,
   contact: (clubSlug: string) => `/${clubSlug}/om/kontakt`,
+  whereWeLive: (clubSlug: string) => `/${clubSlug}/om/her-bor-vi`,
   forum: (clubSlug: string) => `/${clubSlug}/forum`,
   gallery: (clubSlug: string) => `/${clubSlug}/galleri`,
   articles: (clubSlug: string) => `/${clubSlug}/artikler`,
@@ -25,7 +26,7 @@ export const publicRoutes = {
   becomeMember: (clubSlug: string) => `/${clubSlug}/bliv-medlem`,
   login: (clubSlug: string) => `/${clubSlug}/login`,
   logout: (clubSlug: string) => `/${clubSlug}/logout`,
-  
+
   // Specific dynamic routes
   calendarEntry: (clubSlug: string, entryId: string | number) => `/${clubSlug}/kalender/${entryId}`,
   forumCategory: (clubSlug: string, categorySlug: string) => `/${clubSlug}/forum/${categorySlug}`,
