@@ -778,9 +778,9 @@
 
 .new-member-info {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   flex-wrap: wrap;
-  gap: 0;
+  gap: 0.35rem;
 }
 
 .new-member-item .member-name {
