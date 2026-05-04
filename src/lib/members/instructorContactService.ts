@@ -1,6 +1,7 @@
 import prisma from "../db/prisma";
 
 export interface PublicInstructorContactDTO {
+  id: string;
   displayName: string;
   profileImageUrl: string | null;
   email: string | null;
@@ -35,6 +36,7 @@ export async function getPublicInstructorContacts(clubId: string): Promise<Publi
   });
 
   return instructors.map(instructor => ({
+    id: instructor.id,
     displayName: instructor.user.name || `${instructor.firstName || ''} ${instructor.lastName || ''}`.trim() || 'Instruktør',
     profileImageUrl: instructor.profileImageUrl,
     email: instructor.user.email,

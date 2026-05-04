@@ -153,3 +153,73 @@ export async function getMemberProfileId(clubId: string, userId: string): Promis
   });
   return profile?.id ?? null;
 }
+
+export interface MemberDirectoryItemDTO {
+  userId: string;
+  firstName: string | null;
+  lastName: string | null;
+  addressLine: string | null;
+  postalCode: string | null;
+  city: string | null;
+  mobilePhone: string | null;
+  email: string | null;
+  memberNumber: number | null;
+  mdkNumber: string | null;
+  profileImageUrl: string | null;
+  certificates: ClubMemberCertificateType[];
+}
+
+export async function getMemberDirectoryForClub(clubId: string): Promise<MemberDirectoryItemDTO[]> {
+  const profiles = await prisma.clubMemberProfile.findMany({
+    where: {
+      clubId,
+    },
+    include: {
+      user: {
+        select: {
+          email: true,
+        },
+      },
+    },
+    orderBy: [
+      { firstName: "asc" },
+      { lastName: "asc" },
+    ],
+  });
+
+  const certificates = await prisma.clubMemberCertificate.findMany({
+    where: {
+      clubId,
+      userId: {
+        in: profiles.map((profile) => profile.userId),
+      },
+    },
+    select: {
+      userId: true,
+      certificateType: true,
+    },
+  });
+
+  const certificatesByUserId = new Map<string, ClubMemberCertificateType[]>();
+
+  for (const certificate of certificates) {
+    const existing = certificatesByUserId.get(certificate.userId) ?? [];
+    existing.push(certificate.certificateType);
+    certificatesByUserId.set(certificate.userId, existing);
+  }
+
+  return profiles.map((profile) => ({
+    userId: profile.userId,
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+    addressLine: profile.addressLine,
+    postalCode: profile.postalCode,
+    city: profile.city,
+    mobilePhone: profile.mobilePhone,
+    email: profile.user.email,
+    memberNumber: profile.memberNumber,
+    mdkNumber: profile.mdkNumber,
+    profileImageUrl: profile.profileImageUrl,
+    certificates: certificatesByUserId.get(profile.userId) ?? [],
+  }));
+}
