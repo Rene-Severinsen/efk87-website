@@ -75,27 +75,38 @@ export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({
           {getStatusLabel(status)} · {getRoleLabel(role)}
           {memberNumber ? ` · Medlemsnr. ${memberNumber}` : ''}
         </p>
+          <div className="profile-summary-actions">
+              <div className="profile-summary-action">
+                  <h4>Udskriv medlemskort</h4>
+                  <p>Her kan du udskrive dit medlemskort til brug i klubben.</p>
 
-        <div className="profile-summary-actions">
-          <div className="profile-summary-action">
-            <h4>Udskriv medlemskort</h4>
-            <p>Her kan du udskrive dit medlemskort til brug i klubben.</p>
+                  <div className="mt-5 flex justify-center">
+                      <Link
+                          href={publicRoutes.profileMemberCard(clubSlug)}
+                          className="public-primary-button"
+                      >
+                          Gå til medlemskort
+                      </Link>
+                  </div>
+              </div>
 
-            <div className="mt-5 flex justify-center">
-              <Link
-                  href={publicRoutes.profileMemberCard(clubSlug)}
-                  className="public-primary-button"
-              >
-                Gå til medlemskort
-              </Link>
-            </div>
+              <div className="profile-summary-action">
+                  <h4>Skift adgangskode</h4>
+                  <p>Her kan du skifte din adgangskode.</p>
+
+                  <div className="mt-5 flex justify-center">
+                      <Link
+                          href={publicRoutes.forgotPassword(clubSlug)}
+                          className="public-secondary-button"
+                      >
+                          Skift adgangskode
+                      </Link>
+                  </div>
+              </div>
           </div>
-
-          <div className="profile-summary-action">
-            <h4>Skift adgangskode</h4>
-            <p>Her kan du skifte din adgangskode.</p>
-          </div>
-        </div>
       </ThemedSectionCard>
+
+
+
   );
 };
