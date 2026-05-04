@@ -937,7 +937,6 @@ model ClubRulesPage {
 
   ownRulesPdfUrl     String
   flightZoneImageUrl String?
-  flightZoneImageAlt String?
   legalTextHtml      String  @db.Text
   practicalTextHtml  String  @db.Text
 

@@ -64,7 +64,8 @@ export default async function AboutPage({ params }: AboutPageProps) {
       title: "Regler og bestemmelser",
       description: "Vedtægter, regler og retningslinjer for klubben.",
       icon: "📘",
-      available: false,
+      href: publicRoutes.rules(clubSlug),
+      available: true,
     },
     {
       title: "Her bor vi",
