@@ -43,6 +43,13 @@ Hardcoded Tailwind color families and hex values are **not allowed** in public/m
 - **Intentional Visuals**: SVG/icon strokes or fills may use fixed colors only when visually intentional and documented.
 - **Text on Primary**: Must use `--public-text-on-primary` or `--home-text-on-primary`.
 
+### 7. Theme Compliance Check
+To ensure compliance with these rules, run the following command before submitting public or member UI changes:
+```bash
+npm run check:public-theme
+```
+This script scans relevant files for prohibited hardcoded theme patterns and reports any violations.
+
 ---
 
 ## ClubTheme Model (Tenant Scoping)
