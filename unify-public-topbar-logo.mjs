@@ -1,3 +1,38 @@
+import fs from "fs";
+import path from "path";
+
+const root = process.cwd();
+
+function patchFile(relativePath, patcher) {
+  const absolutePath = path.join(root, relativePath);
+
+  if (!fs.existsSync(absolutePath)) {
+    console.warn(`Skipped ${relativePath} — file not found`);
+    return;
+  }
+
+  const current = fs.readFileSync(absolutePath, "utf8");
+  const next = patcher(current);
+
+  if (next === current) {
+    console.log(`No change ${relativePath}`);
+    return;
+  }
+
+  fs.writeFileSync(absolutePath, next, "utf8");
+  console.log(`Patched ${relativePath}`);
+}
+
+function writeFile(relativePath, content) {
+  const absolutePath = path.join(root, relativePath);
+  fs.mkdirSync(path.dirname(absolutePath), { recursive: true });
+  fs.writeFileSync(absolutePath, content.trimStart(), "utf8");
+  console.log(`Wrote ${relativePath}`);
+}
+
+writeFile(
+  "src/components/publicSite/ThemedTopBar.tsx",
+  `
 import React from 'react';
 import Link from 'next/link';
 import { PublicNavigationItem } from '../../lib/publicSite/publicNavigation';
@@ -30,17 +65,17 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
     if (currentPath === item.href) return true;
 
     if (item.key === 'home') {
-      return currentPath === `/${clubSlug}`;
+      return currentPath === \`/\${clubSlug}\`;
     }
 
-    return currentPath.startsWith(`${item.href}/`);
+    return currentPath.startsWith(\`\${item.href}/\`);
   };
 
   const brandLabel = logoAltText || clubDisplayName || clubName;
 
   const renderBrand = (mobile = false) => (
     <Link
-      href={`/${clubSlug}`}
+      href={\`/\${clubSlug}\`}
       className={[
         'flex min-w-0 items-center no-underline',
         mobile ? 'gap-3' : 'gap-4',
@@ -177,3 +212,66 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
     </header>
   );
 };
+`,
+);
+
+patchFile("src/components/publicSite/ThemedClubPageShell.tsx", (current) => {
+  let next = current;
+
+  if (!next.includes("logoUrl?: string | null")) {
+    next = next.replace(
+      "clubDisplayName: string;",
+      `clubDisplayName: string;
+  logoUrl?: string | null;
+  logoAltText?: string | null;`,
+    );
+  }
+
+  if (!next.includes("logoUrl,")) {
+    next = next.replace(
+      "clubDisplayName,",
+      `clubDisplayName,
+  logoUrl,
+  logoAltText,`,
+    );
+  }
+
+  if (!next.includes("logoUrl={logoUrl}")) {
+    next = next.replace(
+      `clubDisplayName={clubDisplayName}
+          navigationItems={navigationItems}`,
+      `clubDisplayName={clubDisplayName}
+          logoUrl={logoUrl}
+          logoAltText={logoAltText}
+          navigationItems={navigationItems}`,
+    );
+  }
+
+  return next;
+});
+
+patchFile("src/components/publicSite/homeV2/PublicClubHomePageV2.tsx", (current) => {
+  let next = current;
+
+  if (!next.includes("logoUrl={homeLogoUrl}")) {
+    next = next.replace(
+      `clubDisplayName={clubDisplayName}
+          navigationItems={navigationItems}`,
+      `clubDisplayName={clubDisplayName}
+          logoUrl={homeLogoUrl}
+          logoAltText={homeLogoAltText}
+          navigationItems={navigationItems}`,
+    );
+  }
+
+  return next;
+});
+
+console.log("");
+console.log("Done.");
+console.log("");
+console.log("Next:");
+console.log("rm -rf .next");
+console.log("npm run check:public-theme");
+console.log("npx tsc --noEmit");
+console.log("npm run build");

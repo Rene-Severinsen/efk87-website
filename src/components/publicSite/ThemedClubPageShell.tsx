@@ -75,6 +75,8 @@ export default function ThemedClubPageShell({
           clubSlug={clubSlug}
           clubName={clubName}
           clubDisplayName={clubDisplayName}
+          logoUrl={logoUrl}
+          logoAltText={logoAltText}
           navigationItems={navigationItems}
           actionItems={actionItems}
           currentPath={currentPath}

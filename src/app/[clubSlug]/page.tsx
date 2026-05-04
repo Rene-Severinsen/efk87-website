@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../lib/tenancy/tenantService";
 import PublicClubHomePageV2 from "../../components/publicSite/homeV2/PublicClubHomePageV2";
@@ -24,6 +25,7 @@ import { getOpenMeteoWeather } from "../../lib/weather/openMeteoWeatherService";
 import { getActiveHomepageContentForClub } from "../../lib/homepageContent/homepageContentService";
 import { getFlightSchoolHomepageView } from "../../lib/flightSchool/flightSchoolBookingService";
 import { getHomepageGalleryPreview } from "../../lib/gallery/galleryService";
+import { getClubBrandingMetadata } from "../../lib/branding/clubBrandingMetadata";
 
 interface ClubPageProps {
   params: Promise<{
@@ -117,4 +119,14 @@ export default async function ClubPage({ params }: ClubPageProps) {
           galleryPreview={galleryPreview}
       />
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ clubSlug: string }>;
+}): Promise<Metadata> {
+  const { clubSlug } = await params;
+
+  return getClubBrandingMetadata(clubSlug);
 }

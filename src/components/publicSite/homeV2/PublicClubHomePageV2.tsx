@@ -59,6 +59,10 @@ interface PublicClubHomePageV2Props {
       shortName: string;
       publicEmail: string | null;
       publicThemeMode: string;
+      logoUrl: string | null;
+      logoAltText: string | null;
+      faviconUrl?: string | null;
+      appleIconUrl?: string | null;
     } | null;
   };
   viewer: ServerViewerContext;
@@ -97,6 +101,10 @@ interface PublicClubHomePageV2Props {
  * Renders public homepage with tenant data.
  */
 export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, flightSchoolHomepage, galleryPreview, weather, footerData }: PublicClubHomePageV2Props) {
+  const homeLogoUrl = club.settings?.logoUrl ?? null;
+  const homeLogoAltText =
+    club.settings?.logoAltText || club.settings?.displayName || club.name;
+
   const safeGalleryPreview = galleryPreview ?? {
     latestImages: [],
     latestAlbums: [],
@@ -116,6 +124,8 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           clubSlug={club.slug}
           clubName={clubShortName}
           clubDisplayName={clubDisplayName}
+          logoUrl={homeLogoUrl}
+          logoAltText={homeLogoAltText}
           navigationItems={navigationItems}
           actionItems={actionItems}
           currentPath={`/${club.slug}`}

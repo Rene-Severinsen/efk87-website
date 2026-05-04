@@ -1,3 +1,17 @@
+import fs from "fs";
+import path from "path";
+
+const filePath = path.join(
+  process.cwd(),
+  "src/lib/branding/clubBrandingMetadata.ts",
+);
+
+if (!fs.existsSync(filePath)) {
+  console.error("File not found:", filePath);
+  process.exit(1);
+}
+
+const content = `
 import type { Metadata } from "next";
 import prisma from "../db/prisma";
 
@@ -7,7 +21,7 @@ function withVersion(url: string | null | undefined, version: Date | null | unde
   const separator = url.includes("?") ? "&" : "?";
   const value = version ? version.getTime() : Date.now();
 
-  return `${url}${separator}v=${value}`;
+  return \`\${url}\${separator}v=\${value}\`;
 }
 
 export async function getClubBrandingMetadata(clubSlug: string): Promise<Metadata> {
@@ -65,3 +79,14 @@ export async function getClubBrandingMetadata(clubSlug: string): Promise<Metadat
     icons,
   };
 }
+`;
+
+fs.writeFileSync(filePath, content.trimStart(), "utf8");
+
+console.log("Patched src/lib/branding/clubBrandingMetadata.ts");
+console.log("");
+console.log("Next:");
+console.log("rm -rf .next");
+console.log("npm run check:public-theme");
+console.log("npx tsc --noEmit");
+console.log("npm run build");
