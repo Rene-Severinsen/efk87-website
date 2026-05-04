@@ -6,7 +6,7 @@ export default function PrintButton() {
   return (
     <button
       onClick={() => window.print()}
-      className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-medium transition-colors print:hidden h-auto min-h-0 border border-white/10"
+      className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--public-primary-soft)] hover:bg-[var(--public-primary-soft)]/80 rounded-lg text-sm font-medium transition-colors print:hidden h-auto min-h-0 border border-[var(--public-card-border)]"
     >
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="6 9 6 2 18 2 18 9"></polyline>

@@ -41,7 +41,7 @@ export default async function FlightSchoolDocumentPage({ params }: PageProps) {
       <div className="mb-6 flex justify-between items-center print:hidden">
         <Link 
           href={publicRoutes.flightSchool(clubSlug)} 
-          className="text-sm opacity-60 hover:opacity-100 hover:text-sky-400 flex items-center gap-1 h-auto min-h-0 transition-colors"
+          className="text-sm opacity-60 hover:opacity-100 hover:text-[var(--public-primary)] flex items-center gap-1 h-auto min-h-0 transition-colors"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -113,7 +113,7 @@ export default async function FlightSchoolDocumentPage({ params }: PageProps) {
             font-size: 24pt !important;
           }
           .themed-page-header .eyebrow {
-            color: #666 !important;
+            color: #666 !important; /* THEME_EXCEPTION: Print-only hardcoded color for better legibility on paper */
           }
           .article-detail-prose {
              color: black !important;
