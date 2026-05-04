@@ -43,6 +43,7 @@ model Club {
   forumReplies    ClubForumReply[]
   homepageContent HomepageContent[]
   locationPage ClubLocationPage?
+  financePage ClubFinancePage?
   membershipPage ClubMembershipPage?
   rulesPage    ClubRulesPage?
 
@@ -991,4 +992,22 @@ model ClubMembershipFee {
   membershipPage ClubMembershipPage @relation(fields: [clubMembershipPageId], references: [id], onDelete: Cascade)
 
   @@index([clubMembershipPageId, sortOrder])
+}
+
+
+model ClubFinancePage {
+  id     String @id @default(cuid())
+  clubId String @unique
+
+  introText           String @db.Text
+  expenseEmail        String
+  requiredInfoText    String @db.Text
+  approvalText        String @db.Text
+  advanceText         String @db.Text
+  payoutText          String @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
 }

@@ -63,9 +63,10 @@ export default async function AboutPage({ params }: AboutPageProps) {
     },
     {
       title: "Økonomi",
-      description: "Kontingent, klubøkonomi og praktiske forhold.",
+      description: "Udgiftsbilag, refusion, forskud og praktiske økonomiforhold.",
       icon: "💰",
-      available: false,
+      href: publicRoutes.finance(clubSlug),
+      available: true,
     },
     {
       title: "Regler og bestemmelser",
