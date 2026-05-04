@@ -153,14 +153,14 @@
 .home-v2-root .home-v2-primary,
 .home-v2-root .home-v2-activity-cta-primary {
   background: var(--home-primary);
-  color: #ffffff;
+  color: var(--home-text-on-primary, #ffffff);
   border-color: var(--home-primary);
 }
 
 .home-v2-root .home-v2-primary:hover,
 .home-v2-root .home-v2-activity-cta-primary:hover {
   background: color-mix(in srgb, var(--home-primary) 88%, #000000);
-  color: #ffffff;
+  color: var(--home-text-on-primary, #ffffff);
   border-color: var(--home-primary);
 }
 
