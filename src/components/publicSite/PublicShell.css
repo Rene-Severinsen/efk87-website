@@ -443,3 +443,149 @@
   border-color: var(--public-primary);
   text-decoration: none;
 }
+
+/* -------------------------------------------------------------------------- */
+/* Flight school contact/action stabilization                                  */
+/* Ensures instructor links and document buttons stay readable in public shell. */
+/* -------------------------------------------------------------------------- */
+
+.public-home .flight-school-contact-card {
+  background: var(--public-card);
+  color: var(--public-text);
+  border: 1px solid var(--public-card-border);
+  box-shadow: var(--public-shadow);
+}
+
+.public-home .flight-school-contact-card h3,
+.public-home .flight-school-contact-card .flight-school-contact-name {
+  color: var(--public-text);
+  font-weight: 800;
+}
+
+.public-home .flight-school-contact-card .flight-school-contact-label {
+  color: var(--public-text-muted);
+  font-weight: 700;
+}
+
+.public-home .flight-school-contact-card a.flight-school-contact-link,
+.public-home .flight-school-contact-card .flight-school-contact-link {
+  color: var(--public-primary);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.public-home .flight-school-contact-card a.flight-school-contact-link:hover {
+  color: var(--public-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.public-home a.flight-school-action-button,
+.public-home button.flight-school-action-button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.75rem 1.1rem;
+  border: 1px solid var(--public-card-border);
+  background: var(--public-surface-strong);
+  color: var(--public-text);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--public-text) 8%, transparent);
+  font-size: 0.925rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.public-home a.flight-school-action-button:hover,
+.public-home button.flight-school-action-button:hover {
+  background: var(--public-primary-soft);
+  color: var(--public-primary);
+  border-color: var(--public-primary);
+  text-decoration: none;
+}
+
+.public-home .flight-school-contact-card dl,
+.public-home .flight-school-contact-card dt,
+.public-home .flight-school-contact-card dd {
+  margin: 0;
+}
+
+.public-home .flight-school-contact-card dd {
+  min-width: 0;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* Flight school instructor contact compact layout                             */
+/* Prevent generic public link/button reset from making contact links 44px tall */
+/* -------------------------------------------------------------------------- */
+
+.public-home .flight-school-contact-card {
+  align-items: flex-start;
+}
+
+.public-home .flight-school-contact-card .flight-school-contact-avatar {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+
+.public-home .flight-school-contact-card .flight-school-contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.public-home .flight-school-contact-card .flight-school-contact-name {
+  color: var(--public-text);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.public-home .flight-school-contact-card .flight-school-contact-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
+}
+
+.public-home .flight-school-contact-card .flight-school-contact-row {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.5rem;
+  min-height: 0;
+}
+
+.public-home .flight-school-contact-card .flight-school-contact-label {
+  color: var(--public-text-muted);
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.public-home .flight-school-contact-card a.flight-school-contact-link,
+.public-home .flight-school-contact-card .flight-school-contact-link {
+  min-height: 0;
+  height: auto;
+  display: block;
+  padding: 0;
+  margin: 0;
+  color: var(--public-primary);
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+}
+
+.public-home .flight-school-contact-card a.flight-school-contact-link:hover {
+  color: var(--public-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
