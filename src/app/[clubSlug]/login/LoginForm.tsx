@@ -84,19 +84,19 @@ export default function LoginForm({
   return (
     <ThemedSectionCard>
       {isMemberRequired && (
-        <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-700 dark:text-amber-300 text-sm">
+        <div className="public-alert public-alert-warning">
           Du skal være logget ind som aktivt medlem for at se denne side.
         </div>
       )}
 
       {error && (
-        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-700 dark:text-red-300 text-sm">
+        <div className="public-alert public-alert-danger">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-green-700 dark:text-green-300 text-sm">
+        <div className="public-alert public-alert-success">
           {success}
         </div>
       )}
@@ -146,13 +146,13 @@ export default function LoginForm({
                 setSuccess(null);
                 setMode("magic-link");
               }}
-              className="text-sm text-[var(--public-primary)] hover:opacity-80 transition-opacity"
+              className="public-link"
             >
               Send loginlink i stedet
             </button>
             <Link
               href={publicRoutes.forgotPassword(clubSlug)}
-              className="text-sm text-[var(--public-primary)] hover:opacity-80 transition-opacity"
+              className="public-link"
             >
               Glemt adgangskode?
             </Link>
@@ -191,7 +191,7 @@ export default function LoginForm({
                 setSuccess(null);
                 setMode("password");
               }}
-              className="text-sm text-[var(--public-primary)] hover:opacity-80 transition-opacity"
+              className="public-link"
             >
               Log ind med adgangskode i stedet
             </button>

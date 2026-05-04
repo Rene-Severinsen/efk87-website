@@ -37,13 +37,13 @@ export default function ForgotPasswordPage({ params }: PageProps) {
 
           {message ? (
             <div className="space-y-6">
-              <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl text-blue-700 dark:text-blue-300 text-sm">
+              <div className="public-alert public-alert-info">
                 {message}
               </div>
               <div className="text-center">
                 <Link
                   href={publicRoutes.login(clubSlug)}
-                  className="text-[var(--public-primary)] hover:opacity-80 transition-opacity font-medium"
+                  className="public-link font-medium"
                 >
                   Tilbage til login
                 </Link>
@@ -80,7 +80,7 @@ export default function ForgotPasswordPage({ params }: PageProps) {
               <div className="text-center pt-2">
                 <Link
                   href={publicRoutes.login(clubSlug)}
-                  className="text-sm text-[var(--public-primary)] hover:opacity-80 transition-opacity"
+                  className="public-link"
                 >
                   Tilbage til login
                 </Link>
