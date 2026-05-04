@@ -1,6 +1,6 @@
 import { resolvePublicPageForClub } from "../../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPageShell";
-import { ThemedSectionCard, ThemedPageHeader } from "../../../../components/publicSite/ThemedBuildingBlocks";
+import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { getPublicInstructorContacts } from "../../../../lib/members/instructorContactService";
 import Avatar from "../../../../components/shared/Avatar";
 import { publicRoutes } from "../../../../lib/publicRoutes";
@@ -11,97 +11,234 @@ interface ContactPageProps {
   }>;
 }
 
+type ContactPerson = Awaited<
+    ReturnType<typeof getPublicInstructorContacts>
+>[number];
+
+const boardRoles = [
+  "CHAIRMAN",
+  "VICE_CHAIRMAN",
+  "TREASURER",
+  "BOARD_MEMBER",
+  "BOARD_SUPPLEANT",
+];
+
+function getRoleLabel(role?: string | null) {
+  switch (role) {
+    case "CHAIRMAN":
+      return "Formand";
+    case "VICE_CHAIRMAN":
+      return "Næstformand";
+    case "TREASURER":
+      return "Kasserer";
+    case "BOARD_MEMBER":
+      return "Bestyrelsesmedlem";
+    case "BOARD_SUPPLEANT":
+      return "Suppleant";
+    case "REGULAR":
+      return "Medlem";
+    default:
+      return role || null;
+  }
+}
+
+function ContactCard({
+                       person,
+                       badgeLabel,
+                     }: {
+  person: ContactPerson;
+  badgeLabel: string;
+}) {
+  const roleLabel = getRoleLabel(person.memberRoleType);
+
+  return (
+      <ThemedSectionCard className="flex h-full flex-col p-5 sm:p-6">
+        <div className="mb-6 flex items-center gap-4">
+          <Avatar
+              imageUrl={person.profileImageUrl}
+              name={person.displayName}
+              size="lg"
+              shape="rounded"
+              className="h-16 w-16 shrink-0 sm:h-20 sm:w-20"
+          />
+
+          <div className="min-w-0">
+            <h3 className="truncate text-lg font-bold leading-tight text-[var(--public-text)] sm:text-xl">
+              {person.displayName}
+            </h3>
+
+            {roleLabel && roleLabel !== "Medlem" && (
+                <p className="mt-1 truncate text-sm font-semibold text-[var(--public-text-muted)]">
+                  {roleLabel}
+                </p>
+            )}
+
+            <p className="mt-1 text-xs font-bold uppercase tracking-wider text-[var(--public-primary)]">
+              {badgeLabel}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-auto flex flex-col gap-3">
+          {person.email && (
+              <a
+                  href={`mailto:${person.email}`}
+                  className="flex min-h-0 items-center gap-3 rounded-2xl border border-[var(--public-card-border)] bg-[var(--public-surface)] p-3 text-[var(--public-text)] transition hover:border-[var(--public-primary)] hover:bg-[var(--public-primary-soft)]"
+              >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--public-primary-soft)] text-[var(--public-primary)]">
+                  <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                  >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+
+                <span className="min-w-0 truncate text-sm font-semibold text-[var(--public-primary)]">
+              {person.email}
+            </span>
+              </a>
+          )}
+
+          {person.mobilePhone && (
+              <a
+                  href={`tel:${person.mobilePhone}`}
+                  className="flex min-h-0 items-center gap-3 rounded-2xl border border-[var(--public-card-border)] bg-[var(--public-surface)] p-3 text-[var(--public-text)] transition hover:border-[var(--public-primary)] hover:bg-[var(--public-primary-soft)]"
+              >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--public-primary-soft)] text-[var(--public-primary)]">
+                  <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                  >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                    />
+                  </svg>
+                </div>
+
+                <span className="text-sm font-semibold text-[var(--public-primary)]">
+              {person.mobilePhone}
+            </span>
+              </a>
+          )}
+        </div>
+      </ThemedSectionCard>
+  );
+}
+
+function ContactSection({
+                          title,
+                          description,
+                          people,
+                          badgeLabel,
+                          emptyText,
+                        }: {
+  title: string;
+  description: string;
+  people: ContactPerson[];
+  badgeLabel: string;
+  emptyText: string;
+}) {
+  return (
+      <section>
+        <div className="mb-5">
+          <h2 className="text-2xl font-bold tracking-tight text-[var(--public-text)]">
+            {title}
+          </h2>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--public-text-muted)] sm:text-base">
+            {description}
+          </p>
+        </div>
+
+        {people.length > 0 ? (
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {people.map((person) => (
+                  <ContactCard
+                      key={person.id ?? person.displayName}
+                      person={person}
+                      badgeLabel={badgeLabel}
+                  />
+              ))}
+            </div>
+        ) : (
+            <ThemedSectionCard className="py-10 text-center">
+              <p className="text-base italic text-[var(--public-text-muted)]">
+                {emptyText}
+              </p>
+            </ThemedSectionCard>
+        )}
+      </section>
+  );
+}
+
 export default async function ContactPage({ params }: ContactPageProps) {
   const { clubSlug } = await params;
   const pageSlug = "kontakt";
-  const { club, theme, footerData, navigationItems, actionItems, publicSettings } = await resolvePublicPageForClub(clubSlug, pageSlug);
 
-  const instructors = await getPublicInstructorContacts(club.id);
+  const {
+    club,
+    theme,
+    footerData,
+    navigationItems,
+    actionItems,
+    publicSettings,
+  } = await resolvePublicPageForClub(clubSlug, pageSlug);
+
+  const contacts = await getPublicInstructorContacts(club.id);
+
+  const boardMembers = contacts.filter((person) =>
+      boardRoles.includes(person.memberRoleType || "")
+  );
+
+  const instructors = contacts;
 
   return (
-    <ThemedClubPageShell
-      clubSlug={clubSlug}
-      clubName={club.settings?.shortName || club.name}
-      clubDisplayName={club.settings?.displayName || club.name}
-      theme={theme}
-      publicThemeMode={publicSettings?.publicThemeMode}
-      footerData={footerData}
-      navigationItems={navigationItems}
-      actionItems={actionItems}
-      title="Kontakt"
-      currentPath={publicRoutes.contact(clubSlug)}
-    >
-      <ThemedPageHeader 
-        title="Kontakt" 
-        subtitle="Find klubbens instruktører og kontaktpersoner." 
-      />
+      <ThemedClubPageShell
+          clubSlug={clubSlug}
+          clubName={club.settings?.shortName || club.name}
+          clubDisplayName={club.settings?.displayName || club.name}
+          theme={theme}
+          publicThemeMode={publicSettings?.publicThemeMode}
+          footerData={footerData}
+          navigationItems={navigationItems}
+          actionItems={actionItems}
+          title="Kontakt"
+          subtitle="Find klubbens bestyrelse, instruktører og kontaktpersoner."
+          currentPath={publicRoutes.contact(clubSlug)}
+      >
+        <div className="mt-6 space-y-12">
+          <ContactSection
+              title="Bestyrelsen"
+              description="Her finder du klubbens bestyrelsesmedlemmer og centrale kontaktpersoner."
+              people={boardMembers}
+              badgeLabel="Bestyrelse"
+              emptyText="Der er endnu ikke registreret bestyrelsesmedlemmer til offentlig visning."
+          />
 
-      {instructors.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-6 sm:mt-8">
-          {instructors.map((instructor, index) => (
-            <ThemedSectionCard key={index} className="flex flex-col h-full p-4 sm:p-6">
-              <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-                <Avatar 
-                  imageUrl={instructor.profileImageUrl} 
-                  name={instructor.displayName} 
-                  size="lg"
-                  shape="rounded"
-                  className="w-16 h-16 sm:w-20 sm:h-20"
-                />
-                <div className="min-w-0">
-                  <h3 className="text-lg sm:text-xl font-bold text-[var(--public-text)] leading-tight truncate">{instructor.displayName}</h3>
-                  {instructor.memberRoleType && instructor.memberRoleType !== 'REGULAR' && (
-                    <p className="text-[var(--public-primary)] text-[11px] sm:text-sm font-medium mt-0.5 sm:mt-1 truncate">
-                      {instructor.memberRoleType === 'CHAIRMAN' ? 'Formand' :
-                       instructor.memberRoleType === 'VICE_CHAIRMAN' ? 'Næstformand' :
-                       instructor.memberRoleType === 'BOARD_MEMBER' ? 'Bestyrelsesmedlem' :
-                       instructor.memberRoleType === 'TREASURER' ? 'Kasserer' :
-                       instructor.memberRoleType === 'BOARD_SUPPLEANT' ? 'Suppleant' :
-                       instructor.memberRoleType}
-                    </p>
-                  )}
-                  <p className="text-[var(--public-primary)] text-[10px] sm:text-xs font-semibold uppercase tracking-wider mt-0.5 sm:mt-1">Instruktør</p>
-                </div>
-              </div>
-
-              <div className="space-y-2 sm:space-y-3 mt-auto">
-                {instructor.email && (
-                  <a 
-                    href={`mailto:${instructor.email}`}
-                    className="flex items-center gap-2.5 sm:gap-3 text-[var(--public-text-muted)] hover:text-[var(--public-text)] transition-colors group"
-                  >
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[var(--public-surface)] flex items-center justify-center group-hover:bg-[var(--public-primary-soft)] transition-colors">
-                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <span className="text-xs sm:text-sm truncate">{instructor.email}</span>
-                  </a>
-                )}
-                {instructor.mobilePhone && (
-                  <a 
-                    href={`tel:${instructor.mobilePhone}`}
-                    className="flex items-center gap-2.5 sm:gap-3 text-[var(--public-text-muted)] hover:text-[var(--public-text)] transition-colors group"
-                  >
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[var(--public-surface)] flex items-center justify-center group-hover:bg-[var(--public-primary-soft)] transition-colors">
-                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
-                    </div>
-                    <span className="text-xs sm:text-sm">{instructor.mobilePhone}</span>
-                  </a>
-                )}
-              </div>
-            </ThemedSectionCard>
-          ))}
+          <div className="border-t border-[var(--public-card-border)] pt-10">
+            <ContactSection
+                title="Instruktører"
+                description="Her finder du klubbens instruktører, som kan hjælpe med skoleflyvning, certifikater og praktiske spørgsmål."
+                people={instructors}
+                badgeLabel="Instruktør"
+                emptyText="Der er endnu ikke registreret instruktører til offentlig visning."
+            />
+          </div>
         </div>
-      ) : (
-        <ThemedSectionCard className="mt-8 text-center py-12">
-          <p className="text-[var(--public-text-soft)] text-lg italic">
-            Der er endnu ikke registreret instruktører til offentlig visning.
-          </p>
-        </ThemedSectionCard>
-      )}
-    </ThemedClubPageShell>
+      </ThemedClubPageShell>
   );
 }
