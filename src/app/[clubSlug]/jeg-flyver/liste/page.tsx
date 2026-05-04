@@ -100,7 +100,7 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
       <div className="mt-8 flex justify-center">
         <Link 
           href={publicRoutes.jegFlyver(clubSlug)}
-          className="pill primary px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all hover:scale-[1.02]"
+          className="public-primary-button"
         >
           Skriv jeg flyver
         </Link>

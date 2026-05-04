@@ -46,15 +46,15 @@ export default function ResetPasswordPage({ params, searchParams: searchParamsPr
 
   if (!token) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen public-page-shell flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-[500px]">
           <ThemedSectionCard>
-            <h1 className="text-3xl font-bold mb-8 text-center text-red-500">Fejl</h1>
-            <p className="text-center opacity-80 mb-6">Linket til nulstilling af adgangskode er ugyldigt.</p>
+            <h1 className="text-3xl font-bold mb-8 text-center text-[var(--public-danger)]">Fejl</h1>
+            <p className="text-center public-soft-text mb-6">Linket til nulstilling af adgangskode er ugyldigt.</p>
             <div className="text-center">
               <button
                 onClick={() => router.push(publicRoutes.login(clubSlug))}
-                className="text-blue-400 hover:text-blue-300 transition-colors"
+                className="public-link"
               >
                 Gå til login
               </button>
@@ -66,20 +66,20 @@ export default function ResetPasswordPage({ params, searchParams: searchParamsPr
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen public-page-shell flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-[500px]">
         <ThemedSectionCard>
           <h1 className="text-3xl font-bold mb-8 text-center">Nulstil adgangskode</h1>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-900/30 border border-red-500/50 rounded-md text-red-200 text-sm">
+            <div className="public-alert public-alert-danger">
               {error}
             </div>
           )}
 
           <form action={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="password" title="Ny adgangskode" className="block text-sm font-medium opacity-80 mb-2">
+              <label htmlFor="password" title="Ny adgangskode" className="public-label">
                 Ny adgangskode
               </label>
               <input
@@ -88,13 +88,13 @@ export default function ResetPasswordPage({ params, searchParams: searchParamsPr
                 id="password"
                 required
                 minLength={8}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-white/30"
+                className="public-input"
               />
-              <p className="text-xs opacity-50 mt-2">Mindst 8 tegn.</p>
+              <p className="text-xs public-soft-text mt-2">Mindst 8 tegn.</p>
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" title="Gentag adgangskode" className="block text-sm font-medium opacity-80 mb-2">
+              <label htmlFor="confirmPassword" title="Gentag adgangskode" className="public-label">
                 Gentag adgangskode
               </label>
               <input
@@ -102,14 +102,14 @@ export default function ResetPasswordPage({ params, searchParams: searchParamsPr
                 name="confirmPassword"
                 id="confirmPassword"
                 required
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-white/30"
+                className="public-input"
               />
             </div>
 
             <button
               type="submit"
               disabled={isPending}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-base font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
+              className="w-full public-primary-button"
             >
               {isPending ? "Opdaterer..." : "Opdater adgangskode"}
             </button>

@@ -46,16 +46,16 @@ export default async function ParticipantListPage({ params }: ParticipantListPag
       title={`Tilmeldinger: ${content.title}`}
       currentPath={publicRoutes.homepageContentSignups(clubSlug, contentId)}
     >
-      <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-slate-400">
-        <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">
-          <Users size={16} className="text-sky-400" />
-          <span className="text-white font-medium">{signups.length}</span>
+      <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-[var(--public-text-soft)]">
+        <div className="flex items-center gap-1.5 bg-[var(--public-surface)] px-3 py-1.5 rounded-lg border border-[var(--public-card-border)]">
+          <Users size={16} className="text-[var(--public-primary)]" />
+          <span className="text-[var(--public-text)] font-medium">{signups.length}</span>
           <span>{content.signupMode === HomepageContentSignupMode.QUANTITY ? 'bestillinger' : 'deltagere'}</span>
         </div>
         {content.signupMode === HomepageContentSignupMode.QUANTITY && quantityTotal > signups.length && (
-          <div className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">
-            <Hash size={16} className="text-emerald-400" />
-            <span className="text-white font-medium">{quantityTotal}</span>
+          <div className="flex items-center gap-1.5 bg-[var(--public-surface)] px-3 py-1.5 rounded-lg border border-[var(--public-card-border)]">
+            <Hash size={16} className="text-[var(--public-success)]" />
+            <span className="text-[var(--public-text)] font-medium">{quantityTotal}</span>
             <span>antal i alt</span>
           </div>
         )}
@@ -65,27 +65,27 @@ export default async function ParticipantListPage({ params }: ParticipantListPag
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="border-b border-white/10">
-                <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Deltager</th>
+              <tr className="border-b border-[var(--public-card-border)]">
+                <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-wider text-[var(--public-text-soft)]">Deltager</th>
                 {content.signupMode === HomepageContentSignupMode.QUANTITY && (
-                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Antal</th>
+                  <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-wider text-[var(--public-text-soft)]">Antal</th>
                 )}
-                <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Note</th>
-                <th className="px-5 py-4 text-right text-xs font-bold uppercase tracking-wider text-slate-500">Tilmeldt</th>
+                <th className="px-5 py-4 text-left text-xs font-bold uppercase tracking-wider text-[var(--public-text-soft)]">Note</th>
+                <th className="px-5 py-4 text-right text-xs font-bold uppercase tracking-wider text-[var(--public-text-soft)]">Tilmeldt</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-[var(--public-card-border)]">
               {signups.length > 0 ? signups.map((signup) => (
-                <tr key={signup.id} className="group hover:bg-white/[0.02] transition-colors">
+                <tr key={signup.id} className="group hover:bg-[var(--public-surface)] transition-colors">
                   <td className="px-5 py-4">
-                    <div className="font-semibold text-white group-hover:text-sky-400 transition-colors">
+                    <div className="font-semibold text-[var(--public-text)] group-hover:text-[var(--public-primary)] transition-colors">
                       {formatMemberName(signup.user)}
                     </div>
                   </td>
                   {content.signupMode === HomepageContentSignupMode.QUANTITY && (
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-1.5">
-                        <span className="bg-white/5 px-2.5 py-0.5 rounded text-sm font-medium text-emerald-400 border border-emerald-500/20">
+                        <span className="bg-[var(--public-surface)] px-2.5 py-0.5 rounded text-sm font-medium text-[var(--public-success)] border border-[var(--public-success-border)]">
                           {signup.quantity}
                         </span>
                       </div>
@@ -93,16 +93,16 @@ export default async function ParticipantListPage({ params }: ParticipantListPag
                   )}
                   <td className="px-5 py-4">
                     {signup.note ? (
-                      <div className="flex items-start gap-2 text-slate-400 text-sm italic max-w-xs sm:max-w-md">
+                      <div className="flex items-start gap-2 text-[var(--public-text-muted)] text-sm italic max-w-xs sm:max-w-md">
                         <MessageSquare size={14} className="mt-1 flex-shrink-0 opacity-50" />
                         <span>{signup.note}</span>
                       </div>
                     ) : (
-                      <span className="text-slate-600">—</span>
+                      <span className="text-[var(--public-text-soft)]">—</span>
                     )}
                   </td>
                   <td className="px-5 py-4 text-right">
-                    <div className="flex flex-col items-end gap-0.5 text-xs text-slate-500">
+                    <div className="flex flex-col items-end gap-0.5 text-xs text-[var(--public-text-soft)]">
                       <div className="flex items-center gap-1">
                         <Calendar size={12} />
                         {new Date(signup.createdAt).toLocaleDateString('da-DK')}
@@ -115,7 +115,7 @@ export default async function ParticipantListPage({ params }: ParticipantListPag
                 </tr>
               )) : (
                 <tr>
-                  <td colSpan={content.signupMode === HomepageContentSignupMode.QUANTITY ? 4 : 3} className="px-5 py-12 text-center text-slate-500">
+                  <td colSpan={content.signupMode === HomepageContentSignupMode.QUANTITY ? 4 : 3} className="px-5 py-12 text-center text-[var(--public-text-soft)]">
                     <div className="flex flex-col items-center gap-2">
                       <Users size={32} className="opacity-20" />
                       <p>Ingen tilmeldinger endnu.</p>
@@ -131,7 +131,7 @@ export default async function ParticipantListPage({ params }: ParticipantListPag
       <div className="mt-8 flex justify-center">
         <Link 
           href={publicRoutes.home(clubSlug)}
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-all text-sm font-semibold"
+          className="public-secondary-button"
         >
           Tilbage til forsiden
         </Link>
