@@ -1376,3 +1376,185 @@
     max-width: 8rem;
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/* Homepage defensive layout hardening                                         */
+/* Prevents avatar/profile images from breaking the homepage layout.           */
+/* -------------------------------------------------------------------------- */
+
+.home-v2-root *,
+.home-v2-root *::before,
+.home-v2-root *::after {
+  box-sizing: border-box;
+}
+
+.home-v2-root img {
+  max-width: 100%;
+}
+
+.home-v2-side-stack {
+  min-width: 0;
+}
+
+.home-v2-side-stack .new-members-highlight-card {
+  height: 100%;
+  max-height: 420px;
+  overflow: hidden;
+}
+
+.new-members-highlight-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.new-members-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.new-members-logo-slot {
+  display: flex;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--home-card-border);
+  border-radius: 14px;
+  background: var(--home-subtle-surface);
+}
+
+.logo-placeholder {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.new-members-header h2 {
+  margin: 0;
+  color: var(--home-text);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.new-members-content {
+  min-width: 0;
+  overflow: auto;
+}
+
+.new-members-content p {
+  margin: 0 0 14px;
+  color: var(--home-text);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.new-members-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.new-member-item {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 10px;
+  border-radius: 14px;
+}
+
+.new-member-item img {
+  width: 44px !important;
+  height: 44px !important;
+  max-width: 44px !important;
+  max-height: 44px !important;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.new-member-info {
+  min-width: 0;
+}
+
+.new-member-info .member-name {
+  display: block;
+  overflow: hidden;
+  color: var(--home-text);
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.new-member-info .member-date {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+
+/* Senest online / profile avatar containment */
+
+.home-v2-stat {
+  min-width: 0;
+  overflow: hidden;
+  padding: 24px;
+}
+
+.home-v2-stat img {
+  width: 64px !important;
+  height: 64px !important;
+  max-width: 64px !important;
+  max-height: 64px !important;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.home-v2-stat .home-v2-row-item img,
+.home-v2-stat .new-member-item img {
+  width: 44px !important;
+  height: 44px !important;
+  max-width: 44px !important;
+  max-height: 44px !important;
+}
+
+.home-v2-section-card {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.home-v2-main-grid,
+.home-v2-lower-grid {
+  min-width: 0;
+}
+
+@media (max-width: 1099px) {
+  .home-v2-side-stack .new-members-highlight-card {
+    max-height: none;
+  }
+
+  .new-members-highlight-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .new-members-highlight-card,
+  .home-v2-stat {
+    padding: 18px;
+  }
+
+  .new-members-header h2 {
+    font-size: 1.15rem;
+  }
+}
