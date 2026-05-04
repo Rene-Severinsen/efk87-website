@@ -1,48 +1,82 @@
 .pageIntro {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.9rem;
     border: 1px solid var(--public-border);
     border-radius: var(--public-radius-lg);
     background: var(--public-surface);
     box-shadow: var(--public-shadow-soft);
-    padding: 1.25rem;
+    padding: 0.9rem 1rem;
 }
 
 .pageIntro p {
     margin: 0;
     max-width: 72ch;
     color: var(--public-text);
-    font-size: 1rem;
-    line-height: 1.65;
+    font-size: 0.98rem;
+    line-height: 1.55;
 }
 
-.memberGrid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-}
-
-.memberCard {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 1rem;
+.memberDirectory {
     border: 1px solid var(--public-border);
     border-radius: var(--public-radius-lg);
     background: var(--public-surface);
     box-shadow: var(--public-shadow-soft);
-    padding: 1rem;
+    overflow: hidden;
+    color: var(--public-text);
+}
+
+.memberCount {
+    border-bottom: 1px solid var(--public-border);
+    background: var(--public-surface-muted);
+    padding: 0.65rem 1rem;
+    color: var(--public-text);
+    font-size: 0.92rem;
+    font-weight: 750;
+}
+
+.memberList {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.memberRow {
+    display: grid;
+    grid-template-columns: 4.85rem minmax(0, 1fr);
+    gap: 0.85rem;
+    align-items: start;
+    border-bottom: 1px solid var(--public-border);
+    padding: 0.95rem 1rem;
+    background: var(--public-surface);
+}
+
+.memberRow:nth-child(odd) {
+    border-right: 1px solid var(--public-border);
+}
+
+.memberRow:nth-last-child(-n + 2) {
+    border-bottom: 0;
+}
+
+.avatarColumn {
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: 0.35rem;
+    min-width: 0;
 }
 
 .avatarWrap {
-    width: 4.75rem;
-    height: 4.75rem;
-    flex-shrink: 0;
+    width: 5.0rem;
+    height: 5.0rem;
 }
 
 .avatarImage,
 .avatarFallback {
-    width: 4.75rem;
-    height: 4.75rem;
-    border-radius: 999px;
+    width: 5.0rem;
+    height: 5.0rem;
+    border-radius: 0.5rem;
     border: 1px solid var(--public-border);
     object-fit: cover;
 }
@@ -53,118 +87,148 @@
     justify-content: center;
     background: var(--public-surface-muted);
     color: var(--public-primary);
-    font-size: 1.25rem;
-    font-weight: 700;
-}
-
-.memberContent {
-    min-width: 0;
-}
-
-.memberHeader {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 0.75rem;
-    margin-bottom: 0.9rem;
-}
-
-.memberHeader h2 {
-    margin: 0;
-    color: var(--public-heading);
     font-size: 1.08rem;
-    font-weight: 750;
-    line-height: 1.25;
+    font-weight: 850;
 }
 
-.memberHeader p {
-    margin: 0.2rem 0 0;
-    color: var(--public-muted);
-    font-size: 0.86rem;
-    line-height: 1.35;
+.memberChips {
+    display: grid;
+    justify-items: center;
+    gap: 0.22rem;
+    width: 100%;
 }
 
-.mdkBadge,
-.mutedBadge,
-.certificateBadge {
+.metaBadge {
     display: inline-flex;
     align-items: center;
-    border-radius: 999px;
+    width: fit-content;
+    max-width: 100%;
     border: 1px solid var(--public-border);
-    padding: 0.28rem 0.55rem;
-    white-space: nowrap;
-    font-size: 0.75rem;
-    font-weight: 650;
-    line-height: 1;
-}
-
-.mdkBadge {
+    border-radius: 999px;
     background: var(--public-primary-soft);
     color: var(--public-primary);
+    padding: 0.2rem 0.44rem;
+    font-size: 0.72rem;
+    font-weight: 850;
+    line-height: 1.05;
+    white-space: nowrap;
 }
 
-.mutedBadge {
-    background: var(--public-surface-muted);
-    color: var(--public-muted);
-}
-
-.memberDetails {
-    display: grid;
-    gap: 0.65rem;
-    margin: 0;
-}
-
-.memberDetails div {
-    min-width: 0;
-}
-
-.memberDetails dt {
-    margin-bottom: 0.15rem;
-    color: var(--public-muted);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
-}
-
-.memberDetails dd {
-    margin: 0;
-    color: var(--public-text);
-    font-size: 0.92rem;
-    line-height: 1.4;
-    overflow-wrap: anywhere;
-}
-
-.certificates {
-    margin-top: 1rem;
-    border-top: 1px solid var(--public-border);
-    padding-top: 0.85rem;
-}
-
-.certificatesLabel {
+.memberText {
     display: block;
-    margin-bottom: 0.45rem;
-    color: var(--public-muted);
-    font-size: 0.75rem;
+    min-width: 0;
+    color: var(--public-text);
+    text-align: left;
+}
+
+.memberText h2 {
+    margin: 0;
+    color: var(--public-heading);
+    font-size: 1rem;
+    font-weight: 850;
+    line-height: 1.22;
+}
+
+.addressBlock {
+    display: block;
+    margin: 0.16rem 0 0;
+    color: var(--public-text);
+    font-size: 1rem;
+    font-style: normal;
     font-weight: 700;
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
+    line-height: 1.24;
+    text-align: left;
+}
+
+.addressBlock span {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.contactStack {
+    display: block;
+    margin: 0.16rem 0 0;
+    padding: 0;
+    color: var(--public-text);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.24;
+    text-align: left;
+}
+
+.contactItem {
+    display: block;
+    margin: 0;
+    padding: 0;
+    color: var(--public-text);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.24;
+    text-align: left;
+    white-space: normal;
+}
+
+.contactItem + .contactItem {
+    margin-top: 0.08rem;
+}
+
+.contactItem span,
+.contactItem a {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    color: var(--public-text);
+    font: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    text-align: left;
+    text-decoration: none;
+}
+
+.contactItem a:hover {
+    text-decoration: underline;
 }
 
 .certificateList {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+    column-gap: 0.38rem;
+    row-gap: 0.22rem;
+    width: 100%;
+    margin: 0.72rem 0 0;
+    padding: 0;
+    text-align: left;
 }
 
 .certificateBadge {
-    background: var(--public-surface-muted);
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
     color: var(--public-text);
+    font-size: 0.78rem;
+    font-weight: 850;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
-.noCertificates {
+.mutedText {
+    display: block;
+    margin: 0;
+    padding: 0;
     color: var(--public-muted);
-    font-size: 0.88rem;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.24;
+    text-align: left;
 }
 
 .emptyState {
@@ -172,50 +236,100 @@
     border-radius: var(--public-radius-lg);
     background: var(--public-surface);
     box-shadow: var(--public-shadow-soft);
-    padding: 1.5rem;
+    padding: 1.15rem;
 }
 
 .emptyState h2 {
     margin: 0;
     color: var(--public-heading);
-    font-size: 1.15rem;
+    font-size: 1.08rem;
 }
 
 .emptyState p {
     margin: 0.35rem 0 0;
     color: var(--public-muted);
-    line-height: 1.55;
+    line-height: 1.45;
 }
 
 @media (max-width: 1024px) {
-    .memberGrid {
+    .memberList {
         grid-template-columns: 1fr;
+    }
+
+    .memberRow:nth-child(odd) {
+        border-right: 0;
+    }
+
+    .memberRow:nth-last-child(-n + 2) {
+        border-bottom: 1px solid var(--public-border);
+    }
+
+    .memberRow:last-child {
+        border-bottom: 0;
     }
 }
 
-@media (max-width: 520px) {
-    .pageIntro {
-        padding: 1rem;
-    }
-
-    .memberCard {
-        grid-template-columns: 1fr;
+@media (max-width: 700px) {
+    .memberRow {
+        grid-template-columns: 4.35rem minmax(0, 1fr);
+        gap: 0.75rem;
+        padding: 0.85rem 0.8rem;
     }
 
     .avatarWrap,
     .avatarImage,
     .avatarFallback {
-        width: 4.25rem;
-        height: 4.25rem;
+        width: 3.75rem;
+        height: 3.75rem;
     }
 
-    .memberHeader {
-        flex-direction: column;
-        align-items: flex-start;
+    .memberText h2,
+    .addressBlock,
+    .contactStack,
+    .contactItem,
+    .mutedText {
+        font-size: 0.98rem;
+    }
+}
+
+@media (max-width: 430px) {
+    .memberCount {
+        padding: 0.6rem 0.75rem;
     }
 
-    .mdkBadge,
-    .mutedBadge {
-        white-space: normal;
+    .memberRow {
+        grid-template-columns: 3.95rem minmax(0, 1fr);
+        gap: 0.7rem;
+        padding: 0.8rem 0.7rem;
+    }
+
+    .avatarWrap,
+    .avatarImage,
+    .avatarFallback {
+        width: 3.35rem;
+        height: 3.35rem;
+    }
+
+    .memberChips {
+        gap: 0.18rem;
+    }
+
+    .metaBadge {
+        font-size: 0.68rem;
+        padding: 0.18rem 0.38rem;
+    }
+
+    .certificateBadge {
+        font-size: 0.72rem;
+        line-height: 1.22;
+    }
+
+    .memberText h2,
+    .addressBlock,
+    .contactStack,
+    .contactItem,
+    .mutedText {
+        font-size: 0.95rem;
+        line-height: 1.25;
     }
 }

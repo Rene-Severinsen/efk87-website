@@ -23,15 +23,19 @@ function getInitials(firstName: string | null, lastName: string | null): string 
   return initials || "M";
 }
 
-function formatAddress(addressLine: string | null, postalCode: string | null, city: string | null): string {
+function getAddressLines(
+    addressLine: string | null,
+    postalCode: string | null,
+    city: string | null,
+): string[] {
+  const lines: string[] = [];
   const address = addressLine?.trim();
   const postalAndCity = [postalCode, city].filter(Boolean).join(" ").trim();
 
-  if (address && postalAndCity) return `${address}, ${postalAndCity}`;
-  if (address) return address;
-  if (postalAndCity) return postalAndCity;
+  if (address) lines.push(address);
+  if (postalAndCity) lines.push(postalAndCity);
 
-  return "Adresse ikke angivet";
+  return lines;
 }
 
 function formatCertificate(certificate: string): string {
@@ -39,6 +43,10 @@ function formatCertificate(certificate: string): string {
       .replaceAll("_", " ")
       .toLowerCase()
       .replace(/^\w/, (char) => char.toUpperCase());
+}
+
+function getPhoneHref(phone: string): string {
+  return `tel:${phone.replaceAll(" ", "")}`;
 }
 
 export default async function MembersPage({ params }: MembersPageProps) {
@@ -57,10 +65,10 @@ export default async function MembersPage({ params }: MembersPageProps) {
 
   const members = await getMemberDirectoryForClub(club.id);
 
-  const title = page?.title || "Medlemmer";
   const introText =
-      page?.body ||
-      "Her kan klubbens medlemmer se kontaktoplysninger og relevante medlemsinformationer.";
+      page?.body && page.body !== "Member access foundation will be added later."
+          ? page.body
+          : "";
 
   return (
       <ThemedClubPageShell
@@ -71,84 +79,82 @@ export default async function MembersPage({ params }: MembersPageProps) {
           footerData={footerData}
           navigationItems={navigationItems}
           actionItems={actionItems}
-          title={title}
+          title="Medlemmer"
           currentPath={publicRoutes.members(clubSlug)}
       >
-        <section className={styles.pageIntro} aria-label="Introduktion">
-          <p>{introText}</p>
-        </section>
+        {introText ? (
+            <section className={styles.pageIntro} aria-label="Introduktion">
+              <p>{introText}</p>
+            </section>
+        ) : null}
 
         {members.length > 0 ? (
-            <section className={styles.memberGrid} aria-label="Medlemsliste">
-              {members.map((member) => {
-                const displayName = getDisplayName(member.firstName, member.lastName);
-                const address = formatAddress(member.addressLine, member.postalCode, member.city);
+            <section className={styles.memberDirectory} aria-label="Medlemsliste">
+              <div className={styles.memberCount}>{members.length} medlemmer</div>
 
-                return (
-                    <article key={member.userId} className={styles.memberCard}>
-                      <div className={styles.avatarWrap}>
-                        {member.profileImageUrl ? (
-                            <img
-                                src={member.profileImageUrl}
-                                alt={`Profilbillede af ${displayName}`}
-                                className={styles.avatarImage}
-                            />
-                        ) : (
-                            <div className={styles.avatarFallback} aria-hidden="true">
-                              {getInitials(member.firstName, member.lastName)}
-                            </div>
-                        )}
-                      </div>
+              <ol className={styles.memberList}>
+                {members.map((member) => {
+                  const displayName = getDisplayName(member.firstName, member.lastName);
+                  const addressLines = getAddressLines(member.addressLine, member.postalCode, member.city);
 
-                      <div className={styles.memberContent}>
-                        <div className={styles.memberHeader}>
-                          <div>
-                            <h2>{displayName}</h2>
-                            <p>Medlemsnr. {member.memberNumber ?? "ikke angivet"}</p>
+                  return (
+                      <li key={member.userId} className={styles.memberRow}>
+                        <div className={styles.avatarColumn}>
+                          <div className={styles.avatarWrap}>
+                            {member.profileImageUrl ? (
+                                <img
+                                    src={member.profileImageUrl}
+                                    alt={`Profilbillede af ${displayName}`}
+                                    className={styles.avatarImage}
+                                />
+                            ) : (
+                                <div className={styles.avatarFallback} aria-hidden="true">
+                                  {getInitials(member.firstName, member.lastName)}
+                                </div>
+                            )}
                           </div>
 
-                          {member.mdkNumber ? (
-                              <span className={styles.mdkBadge}>MDK {member.mdkNumber}</span>
-                          ) : (
-                              <span className={styles.mutedBadge}>MDK ikke angivet</span>
-                          )}
+                          <div className={styles.memberChips}>
+                            <span className={styles.metaBadge}>Nr. {member.memberNumber ?? "—"}</span>
+
+                            {member.mdkNumber ? (
+                                <span className={styles.metaBadge}>MDK {member.mdkNumber}</span>
+                            ) : null}
+                          </div>
                         </div>
 
-                        <dl className={styles.memberDetails}>
-                          <div>
-                            <dt>Adresse</dt>
-                            <dd>{address}</dd>
-                          </div>
+                        <div className={styles.memberText}>
+                          <h2>{displayName}</h2>
 
-                          <div>
-                            <dt>Telefon</dt>
-                            <dd>
+                          {addressLines.length > 0 ? (
+                              <address className={styles.addressBlock}>
+                                {addressLines.map((line) => (
+                                    <span key={line}>{line}</span>
+                                ))}
+                              </address>
+                          ) : (
+                              <p className={styles.mutedText}>Adresse ikke angivet</p>
+                          )}
+
+                          <div className={styles.contactStack}>
+                            <div className={styles.contactItem}>
+                              <span>Mobil: </span>
                               {member.mobilePhone ? (
-                                  <a className="public-link" href={`tel:${member.mobilePhone}`}>
-                                    {member.mobilePhone}
-                                  </a>
+                                  <a href={getPhoneHref(member.mobilePhone)}>{member.mobilePhone}</a>
                               ) : (
-                                  "Ikke angivet"
+                                  <span>ikke angivet</span>
                               )}
-                            </dd>
-                          </div>
+                            </div>
 
-                          <div>
-                            <dt>Mail</dt>
-                            <dd>
+                            <div className={styles.contactItem}>
+                              <span>Email: </span>
                               {member.email ? (
-                                  <a className="public-link" href={`mailto:${member.email}`}>
-                                    {member.email}
-                                  </a>
+                                  <a href={`mailto:${member.email}`}>{member.email}</a>
                               ) : (
-                                  "Ikke angivet"
+                                  <span>ikke angivet</span>
                               )}
-                            </dd>
+                            </div>
                           </div>
-                        </dl>
-
-                        <div className={styles.certificates}>
-                          <span className={styles.certificatesLabel}>Certifikater</span>
 
                           {member.certificates.length > 0 ? (
                               <div className={styles.certificateList}>
@@ -158,14 +164,12 @@ export default async function MembersPage({ params }: MembersPageProps) {
                           </span>
                                 ))}
                               </div>
-                          ) : (
-                              <span className={styles.noCertificates}>Ingen registreret</span>
-                          )}
+                          ) : null}
                         </div>
-                      </div>
-                    </article>
-                );
-              })}
+                      </li>
+                  );
+                })}
+              </ol>
             </section>
         ) : (
             <section className={styles.emptyState} aria-label="Ingen medlemmer">
