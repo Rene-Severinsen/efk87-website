@@ -201,3 +201,42 @@ Frontpage V2 is now the active live homepage for all clubs.
   - Forum backend is not implemented.
   - No CMS editor or Admin UI for managing these pages yet.
 - **Content Management**: Real content for these pages will later be CMS/admin-managed where relevant.
+
+<!-- BEGIN:docs-sync-2026-05-04-om-media-gallery:om-media-gallery-public -->
+
+## Om Module
+
+The Om module currently includes public/member pages for:
+
+- about landing page
+- members
+- membership
+- board
+- economy
+- rules
+- location
+- contact
+- statistics
+
+Current status: the individual Om blocks/pages are implemented and closed.
+
+## Gallery Public Flow
+
+Public gallery routes:
+
+- /[clubSlug]/galleri
+- /[clubSlug]/galleri/[albumSlug]
+
+Members can create galleries at:
+
+- /[clubSlug]/galleri/nyt
+
+Members can add images to existing galleries from the gallery detail page.
+
+The homepage shows gallery activity through a toggle between:
+
+- latest images
+- latest updated galleries
+
+<!-- END:docs-sync-2026-05-04-om-media-gallery:om-media-gallery-public -->
+

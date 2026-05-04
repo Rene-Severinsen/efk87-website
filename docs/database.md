@@ -154,3 +154,23 @@ The principle of separation between `dev`, `qa`, and `prod` environments is main
 - **Migrations as Source of Truth**: Migrations are the definitive source of truth for the database schema history. All schema changes must be captured in migration files before being deployed to shared environments.
 - **Environment Isolation**: QA may later import sanitized production data for testing, but it must never use production secrets or trigger real notifications (e.g., emails) to actual users.
 - **Idempotency**: All database tasks, especially seeding, must be idempotent to ensure they can be safely re-run without causing data corruption or duplication.
+
+<!-- BEGIN:docs-sync-2026-05-04-om-media-gallery:media-gallery-models -->
+
+## Media & Gallery Models
+
+ClubMediaAsset is used for admin/CMS image assets.
+
+GalleryAlbum and GalleryImage are used for member-generated gallery content.
+
+Current image storage provider is LOCAL.
+
+Local storage paths:
+
+/public/uploads/{clubSlug}/media
+/public/uploads/{clubSlug}/gallery/{albumId}
+
+The storage services are centralized to support future migration to S3/Object Storage.
+
+<!-- END:docs-sync-2026-05-04-om-media-gallery:media-gallery-models -->
+

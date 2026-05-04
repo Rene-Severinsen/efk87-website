@@ -79,3 +79,21 @@ Follow this order of operations:
 4. [ ] **Do not redesign** or change current CSS tokens.
 5. [ ] **Search for hardcoded color leftovers** in changed files before submitting.
 6. [ ] **Verify** by running `npx tsc --noEmit` and `npm run build`.
+
+<!-- BEGIN:docs-sync-2026-05-04-om-media-gallery:media-gallery-theme-rules -->
+
+## Media & Gallery Theme Notes
+
+Public/member gallery pages must follow the Light Premium Solid Contrast theme.
+
+Rules:
+
+- Use --public-* tokens.
+- Use semantic public classes such as public-input, public-primary-button and public-alert.
+- Do not use hardcoded Tailwind color families in public/member gallery components.
+- File input button text must use var(--public-primary-contrast), not text-white.
+
+Admin media/gallery pages remain admin-scoped and are not governed by the public theme checker in the same way.
+
+<!-- END:docs-sync-2026-05-04-om-media-gallery:media-gallery-theme-rules -->
+

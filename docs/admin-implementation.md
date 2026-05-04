@@ -179,3 +179,46 @@ A test admin user is provided for local development:
 - **Status:** `ACTIVE`
 
 This user is only seeded when `APP_ENV=development`.
+
+<!-- BEGIN:docs-sync-2026-05-04-om-media-gallery:media-gallery-admin -->
+
+## Media Library Admin
+
+Admin Media Library is available at:
+
+- /[clubSlug]/admin/media
+
+It supports:
+
+- image upload
+- compact grid
+- click-to-preview
+- copy public URL
+- open image
+- soft remove/deactivate
+
+Uploaded files are normalized to WebP through sharp and stored locally under:
+
+/public/uploads/{clubSlug}/media
+
+## Gallery Admin
+
+Admin Gallery is available at:
+
+- /[clubSlug]/admin/galleri
+- /[clubSlug]/admin/galleri/[albumId]
+
+Admin can:
+
+- view galleries as cover cards
+- see status, visibility, image count and creator
+- open/edit gallery
+- change title/description/status/visibility
+- set cover image
+- hide/show images
+- archive/delete gallery with confirmation
+
+Gallery archive/delete is a soft delete. It sets the album status to ARCHIVED; it does not permanently delete images or database rows.
+
+<!-- END:docs-sync-2026-05-04-om-media-gallery:media-gallery-admin -->
+

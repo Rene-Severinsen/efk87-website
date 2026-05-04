@@ -115,3 +115,23 @@ Flight intents support both visibility and privacy masking.
 ### Footer and Sponsors
 
 Currently, the club footer and sponsors remain `PUBLIC` for all visitors and do not yet support granular visibility settings.
+
+<!-- BEGIN:docs-sync-2026-05-04-om-media-gallery:gallery-visibility -->
+
+## Gallery Visibility
+
+Gallery albums use PublicSurfaceVisibility.
+
+Rules:
+
+- PUBLIC: visible to anonymous visitors and members.
+- MEMBERS_ONLY: visible only to logged-in members/admins of the club.
+
+Members choose visibility when creating a gallery.
+
+Member-created galleries are published immediately. There is no approval/pending-review state.
+
+Admin can archive galleries. Archived galleries are hidden from public/member views but retained in admin as soft-deleted records.
+
+<!-- END:docs-sync-2026-05-04-om-media-gallery:gallery-visibility -->
+

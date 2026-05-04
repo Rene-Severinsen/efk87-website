@@ -30,3 +30,39 @@ This document outlines the canonical structure of the EFK87 Next.js application.
 - `/`: Minimal platform placeholder.
 - `/[clubSlug]`: Entry point for individual clubs (tenants).
 - `/[clubSlug]/[pageSlug]`: Individual club pages (About, Articles, Gallery, etc.) using the shared themed shell.
+
+<!-- BEGIN:docs-sync-2026-05-04-om-media-gallery:media-gallery-structure -->
+
+## Media & Gallery Structure
+
+Media Library:
+
+- src/app/[clubSlug]/admin/media
+- src/app/[clubSlug]/admin/media/upload/route.ts
+- src/lib/media/mediaStorageService.ts
+- src/components/admin/media/MediaUrlPicker.tsx
+
+Gallery:
+
+- src/app/[clubSlug]/galleri
+- src/app/[clubSlug]/galleri/nyt
+- src/app/[clubSlug]/galleri/nyt/upload/route.ts
+- src/app/[clubSlug]/galleri/[albumSlug]
+- src/app/[clubSlug]/galleri/[albumSlug]/upload/route.ts
+- src/app/[clubSlug]/admin/galleri
+- src/app/[clubSlug]/admin/galleri/[albumId]
+
+Shared gallery services/components:
+
+- src/lib/gallery/galleryService.ts
+- src/lib/gallery/galleryMemberService.ts
+- src/lib/gallery/galleryImageStorageService.ts
+- src/components/gallery/GalleryLightbox.tsx
+- src/components/gallery/GalleryAddImagesForm.tsx
+
+Homepage integration:
+
+- src/components/publicSite/homeV2/HomeGalleryToggle.tsx
+
+<!-- END:docs-sync-2026-05-04-om-media-gallery:media-gallery-structure -->
+

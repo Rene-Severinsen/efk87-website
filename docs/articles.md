@@ -49,3 +49,26 @@ All models are scoped by `clubId`. Every query and write operation must ensure t
 - Legacy import scripts (mapping old tags into `ArticleTag`).
 - Comments.
 - Approval workflow.
+
+<!-- BEGIN:docs-sync-2026-05-04-om-media-gallery:media-library-article-hero -->
+
+## Article Hero Images
+
+Article hero image fields are now connected to Media Library.
+
+Admin article forms use:
+
+- src/components/admin/media/MediaUrlPicker.tsx
+
+This allows selecting a local Media Library image or entering an external URL.
+
+Supported image URL formats:
+
+- https URLs
+- http URLs
+- local /uploads/... URLs
+
+Public article overview uses real img rendering for hero images so local /uploads/... assets display correctly.
+
+<!-- END:docs-sync-2026-05-04-om-media-gallery:media-library-article-hero -->
+

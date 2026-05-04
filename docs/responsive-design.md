@@ -53,3 +53,26 @@ We use a standardized set of breakpoints for all public/member pages:
   - 390px (Small Mobile)
   - 768px (Tablet)
   - 1440px (Desktop)
+
+<!-- BEGIN:docs-sync-2026-05-04-om-media-gallery:gallery-responsive -->
+
+## Gallery Responsive Requirements
+
+Gallery pages must remain usable on:
+
+- 390px mobile
+- 768px tablet
+- 1024px tablet/desktop
+- 1440px desktop
+
+Gallery cards and homepage previews must use fixed aspect ratios so portrait and landscape images do not break layout.
+
+Upload forms must support:
+
+- drag/drop on desktop
+- multi-select from phone photo albums
+- readable selected-file previews
+- usable touch targets
+
+<!-- END:docs-sync-2026-05-04-om-media-gallery:gallery-responsive -->
+
