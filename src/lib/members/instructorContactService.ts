@@ -1,3 +1,4 @@
+import { ClubMemberRoleType } from "@/generated/prisma";
 import prisma from "../db/prisma";
 
 export interface PublicInstructorContactDTO {
@@ -8,18 +9,31 @@ export interface PublicInstructorContactDTO {
   mobilePhone: string | null;
   memberRoleType: string | null;
   schoolStatus: string | null;
+  isInstructor: boolean;
 }
 
 /**
- * Gets public contact information for instructors in a specific club.
- * Only shows ACTIVE members marked as isInstructor.
+ * Gets public contact information for the club contact page.
+ * Includes ACTIVE members who are either instructors or primary board contacts.
  */
 export async function getPublicInstructorContacts(clubId: string): Promise<PublicInstructorContactDTO[]> {
-  const instructors = await prisma.clubMemberProfile.findMany({
+  const contacts = await prisma.clubMemberProfile.findMany({
     where: {
       clubId,
-      isInstructor: true,
       memberStatus: "ACTIVE",
+      OR: [
+        {
+          isInstructor: true,
+        },
+        {
+          memberRoleType: {
+            in: [
+              ClubMemberRoleType.CHAIRMAN,
+              ClubMemberRoleType.TREASURER,
+            ],
+          },
+        },
+      ],
     },
     include: {
       user: {
@@ -30,18 +44,22 @@ export async function getPublicInstructorContacts(clubId: string): Promise<Publi
       },
     },
     orderBy: [
-      { firstName: 'asc' },
-      { lastName: 'asc' },
+      { firstName: "asc" },
+      { lastName: "asc" },
     ],
   });
 
-  return instructors.map(instructor => ({
-    id: instructor.id,
-    displayName: instructor.user.name || `${instructor.firstName || ''} ${instructor.lastName || ''}`.trim() || 'Instruktør',
-    profileImageUrl: instructor.profileImageUrl,
-    email: instructor.user.email,
-    mobilePhone: instructor.mobilePhone,
-    memberRoleType: instructor.memberRoleType,
-    schoolStatus: instructor.schoolStatus,
+  return contacts.map((contact) => ({
+    id: contact.id,
+    displayName:
+        contact.user.name ||
+        `${contact.firstName || ""} ${contact.lastName || ""}`.trim() ||
+        "Kontaktperson",
+    profileImageUrl: contact.profileImageUrl,
+    email: contact.user.email,
+    mobilePhone: contact.mobilePhone,
+    memberRoleType: contact.memberRoleType,
+    schoolStatus: contact.schoolStatus,
+    isInstructor: contact.isInstructor,
   }));
 }

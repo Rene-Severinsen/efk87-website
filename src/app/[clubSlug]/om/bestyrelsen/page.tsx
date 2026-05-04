@@ -52,7 +52,7 @@ function BoardMemberCard({ member }: { member: BoardContact }) {
                     </h3>
 
                     {addressLines.length > 0 ? (
-                        <div className="mt-1 text-sm font-normal not-italic leading-snug text-[var(--public-text)]">
+                        <div className="mt-1 text-sm font-normal not-italic leading-snug text-[var(--public-text)] sm:text-base">
                             {addressLines.map((line) => (
                                 <span key={line} className="block not-italic">
                   {line}
@@ -160,7 +160,7 @@ export default async function BoardPage({ params }: BoardPageProps) {
             <div className="mt-6 space-y-8">
                 <section>
                     {boardMembers.length > 0 ? (
-                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
                             {boardMembers.map((member) => (
                                 <BoardMemberCard key={member.id} member={member} />
                             ))}

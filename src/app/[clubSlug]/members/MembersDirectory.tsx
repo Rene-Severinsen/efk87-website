@@ -268,7 +268,7 @@ export default function MembersDirectory({ members }: MembersDirectoryProps) {
             </ThemedSectionCard>
 
             {filteredMembers.length > 0 ? (
-                <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3">
+                <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
                     {filteredMembers.map((member) => (
                         <MemberCard key={member.userId} member={member} />
                     ))}
