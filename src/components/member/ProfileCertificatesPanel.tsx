@@ -3,7 +3,7 @@
 import React, { useState, useTransition } from 'react';
 import { ThemedSectionCard } from '../publicSite/ThemedBuildingBlocks';
 import { ClubMemberCertificateType } from '@/generated/prisma';
-import { CERTIFICATE_LABELS, ALL_CERTIFICATE_TYPES } from '@/lib/members/memberConstants';
+import { ALL_CERTIFICATE_TYPES, CERTIFICATE_LABELS } from '@/lib/members/memberConstants';
 import { updateOwnMemberCertificatesAction } from '@/lib/members/memberProfileActions';
 
 interface ProfileCertificatesPanelProps {
@@ -12,10 +12,10 @@ interface ProfileCertificatesPanelProps {
   certificates?: ClubMemberCertificateType[];
 }
 
-export const ProfileCertificatesPanel: React.FC<ProfileCertificatesPanelProps> = ({ 
+export const ProfileCertificatesPanel: React.FC<ProfileCertificatesPanelProps> = ({
   clubId,
   clubSlug,
-  certificates = [] 
+  certificates = [],
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedCerts, setSelectedCerts] = useState<ClubMemberCertificateType[]>(certificates);
@@ -23,9 +23,9 @@ export const ProfileCertificatesPanel: React.FC<ProfileCertificatesPanelProps> =
   const [error, setError] = useState<string | null>(null);
 
   const handleToggleCert = (cert: ClubMemberCertificateType) => {
-    setSelectedCerts(prev => 
-      prev.includes(cert) 
-        ? prev.filter(c => c !== cert) 
+    setSelectedCerts((prev) =>
+      prev.includes(cert)
+        ? prev.filter((item) => item !== cert)
         : [...prev, cert]
     );
   };
@@ -50,32 +50,31 @@ export const ProfileCertificatesPanel: React.FC<ProfileCertificatesPanelProps> =
 
   return (
     <ThemedSectionCard>
-      <div className="section-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="section-head">
         <h2>Certifikater</h2>
         {!isEditing ? (
-          <button 
-            className="link-soft" 
+          <button
+            className="link-soft"
             onClick={() => setIsEditing(true)}
             type="button"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
           >
             Rediger
           </button>
         ) : (
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button 
+          <div className="profile-submit-actions">
+            <button
+              type="button"
               onClick={handleCancel}
               disabled={isPending}
-              className="text-sm font-medium"
-              style={{ color: 'var(--club-muted)', background: 'none', border: 'none', cursor: 'pointer', opacity: isPending ? 0.5 : 1 }}
+              className="public-secondary-button"
             >
               Annuller
             </button>
-            <button 
+            <button
+              type="button"
               onClick={handleSave}
               disabled={isPending}
-              className="text-sm font-bold"
-              style={{ color: 'var(--club-accent)', background: 'none', border: 'none', cursor: 'pointer', opacity: isPending ? 0.5 : 1 }}
+              className="public-primary-button"
             >
               {isPending ? 'Gemmer...' : 'Gem'}
             </button>
@@ -83,60 +82,37 @@ export const ProfileCertificatesPanel: React.FC<ProfileCertificatesPanelProps> =
         )}
       </div>
 
-      {error && (
-        <div style={{ color: '#ff4d4f', fontSize: '13px', marginTop: '8px', padding: '8px', background: 'rgba(255, 77, 79, 0.1)', borderRadius: '4px' }}>
-          {error}
-        </div>
-      )}
+      {error && <div className="profile-error-alert">{error}</div>}
 
-      <div className="cert-list" style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '12px' }}>
+      <div className="cert-list">
         {isEditing ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-            {ALL_CERTIFICATE_TYPES.map((cert) => (
-              <label 
-                key={cert} 
-                style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '8px', 
-                  padding: '10px', 
-                  background: 'rgba(255,255,255,0.05)', 
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  border: selectedCerts.includes(cert) ? '1px solid var(--club-accent)' : '1px solid transparent'
-                }}
-              >
-                <input 
-                  type="checkbox" 
-                  checked={selectedCerts.includes(cert)}
-                  onChange={() => handleToggleCert(cert)}
-                  style={{ accentColor: 'var(--club-accent)' }}
-                />
-                <span style={{ fontSize: '14px', color: selectedCerts.includes(cert) ? 'white' : 'var(--club-muted)' }}>
-                  {CERTIFICATE_LABELS[cert]}
-                </span>
-              </label>
-            ))}
+          <div className="cert-edit-grid">
+            {ALL_CERTIFICATE_TYPES.map((cert) => {
+              const isSelected = selectedCerts.includes(cert);
+              return (
+                <label
+                  key={cert}
+                  className={`cert-edit-option${isSelected ? ' is-selected' : ''}`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => handleToggleCert(cert)}
+                  />
+                  <span>{CERTIFICATE_LABELS[cert]}</span>
+                </label>
+              );
+            })}
           </div>
+        ) : certificates.length === 0 ? (
+          <p className="profile-empty-state">Ingen certifikater registreret.</p>
         ) : (
-          certificates.length === 0 ? (
-            <p style={{ opacity: 0.5, fontStyle: 'italic', padding: '12px 0' }}>
-              Ingen certifikater registreret.
-            </p>
-          ) : (
-            certificates.map((cert) => (
-              <div key={cert} className="cert-item" style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center', 
-                padding: '12px 0', 
-                borderBottom: '1px solid var(--club-line)' 
-              }}>
-                <span style={{ fontWeight: 500 }}>{CERTIFICATE_LABELS[cert]}</span>
-                <span style={{ color: 'var(--club-accent)', fontSize: '12px', fontWeight: 'bold' }}>✓ AKTIV</span>
-              </div>
-            ))
-          )
+          certificates.map((cert) => (
+            <div key={cert} className="cert-item">
+              <span className="cert-item-name">{CERTIFICATE_LABELS[cert]}</span>
+              <span className="cert-status-badge">✓ Aktiv</span>
+            </div>
+          ))
         )}
       </div>
     </ThemedSectionCard>

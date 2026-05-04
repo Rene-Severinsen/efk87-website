@@ -16,90 +16,86 @@ interface ProfileSummaryCardProps {
   memberNumber?: number | null;
 }
 
-export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({ 
-  clubSlug,
-  name, 
-  role, 
-  status,
-  profileImageUrl,
-  memberNumber
-}) => {
-  const getRoleLabel = (r: string) => {
-    switch (r) {
-      case 'REGULAR': return 'Almindelig medlem';
-      case 'BOARD_MEMBER': return 'Bestyrelsesmedlem';
-      case 'BOARD_SUPPLEANT': return 'Bestyrelsessuppleant';
-      case 'TREASURER': return 'Kasserer';
-      case 'CHAIRMAN': return 'Formand';
-      case 'VICE_CHAIRMAN': return 'Næstformand';
-      default: return r;
+export const ProfileSummaryCard: React.FC<ProfileSummaryCardProps> = ({
+                                                                        clubSlug,
+                                                                        name,
+                                                                        role,
+                                                                        status,
+                                                                        profileImageUrl,
+                                                                        memberNumber,
+                                                                      }) => {
+  const getRoleLabel = (value: string) => {
+    switch (value) {
+      case 'REGULAR':
+        return 'Almindelig medlem';
+      case 'BOARD_MEMBER':
+        return 'Bestyrelsesmedlem';
+      case 'BOARD_SUPPLEANT':
+        return 'Bestyrelsessuppleant';
+      case 'TREASURER':
+        return 'Kasserer';
+      case 'CHAIRMAN':
+        return 'Formand';
+      case 'VICE_CHAIRMAN':
+        return 'Næstformand';
+      default:
+        return value;
     }
   };
 
-  const getStatusLabel = (s: string) => {
-    switch (s) {
-      case 'ACTIVE': return 'Aktiv';
-      case 'RESIGNED': return 'Udmeldt';
-      case 'NEW': return 'Ny';
-      default: return s;
+  const getStatusLabel = (value: string) => {
+    switch (value) {
+      case 'ACTIVE':
+        return 'Aktiv';
+      case 'RESIGNED':
+        return 'Udmeldt';
+      case 'NEW':
+        return 'Ny';
+      default:
+        return value;
     }
   };
 
   return (
-    <>
       <ThemedSectionCard className="profile-box">
         <div className="avatar-wrap">
-          <Avatar 
-            imageUrl={profileImageUrl} 
-            name={name} 
-            size="lg" 
-            className="avatar"
-            shape="rounded"
-            objectPosition="center 1%"
+          <Avatar
+              imageUrl={profileImageUrl}
+              name={name}
+              size="lg"
+              className="avatar"
+              shape="rounded"
+              objectPosition="center 1%"
           />
         </div>
 
         <h3>{name}</h3>
-        <p className="small" style={{ fontSize: '13px', color: 'var(--club-muted)' }}>
+
+        <p className="profile-summary-meta">
           {getStatusLabel(status)} · {getRoleLabel(role)}
-          {memberNumber && ` · Medlemsnr. ${memberNumber}`}
+          {memberNumber ? ` · Medlemsnr. ${memberNumber}` : ''}
         </p>
 
-
-        <div className="info-list" style={{ marginTop: '1.5rem' }}>
-          <div className="info-item">
+        <div className="profile-summary-actions">
+          <div className="profile-summary-action">
             <h4>Udskriv medlemskort</h4>
             <p>Her kan du udskrive dit medlemskort til brug i klubben.</p>
-            <div style={{ marginTop: '1rem' }}>
+
+            <div className="mt-5 flex justify-center">
               <Link
                   href={publicRoutes.profileMemberCard(clubSlug)}
-                  className="themed-button"
-                  style={{
-                    display: 'inline-block',
-                    padding: '0.5rem 1rem',
-                    backgroundColor: 'var(--club-accent)',
-                    color: 'white',
-                    borderRadius: '4px',
-                    textDecoration: 'none',
-                    fontSize: '14px',
-                    fontWeight: 'bold'
-                  }}
+                  className="public-primary-button"
               >
                 Gå til medlemskort
               </Link>
             </div>
           </div>
-          <div className="info-item">
+
+          <div className="profile-summary-action">
             <h4>Skift adgangskode</h4>
             <p>Her kan du skifte din adgangskode.</p>
-            <div style={{ marginTop: '1rem' }}>
-
-            </div>
           </div>
         </div>
       </ThemedSectionCard>
-
-
-    </>
   );
 };
