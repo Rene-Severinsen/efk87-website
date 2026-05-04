@@ -20,6 +20,7 @@
   --public-text-muted: #334155;
   --public-text-soft: #64748b;
   --public-primary: #0369a1;
+  --public-text-on-primary: #ffffff;
   --public-primary-soft: rgba(3, 105, 161, 0.1);
   --public-success: #047857;
   --public-warning: #b45309;
@@ -41,6 +42,7 @@
   --public-text-muted: #aab7d4;
   --public-text-soft: #7f8ea3;
   --public-primary: #7dd3fc;
+  --public-text-on-primary: #08101c;
   --public-primary-soft: rgba(125, 211, 252, 0.1);
   --public-success: #6ee7b7;
   --public-warning: #fcd34d;
@@ -160,7 +162,7 @@ body {
 .public-primary-button {
   border: 1px solid var(--public-primary);
   background: var(--public-primary);
-  color: #ffffff;
+  color: var(--public-text-on-primary);
   box-shadow: 0 12px 30px rgba(3, 105, 161, 0.2);
 }
 

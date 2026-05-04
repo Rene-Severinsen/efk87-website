@@ -72,7 +72,7 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
             'flex min-h-[44px] items-center justify-center rounded-full text-sm font-semibold transition-all duration-200',
             mobile ? 'w-full rounded-xl px-4 py-2.5' : 'px-4 py-2',
             item.isPrimary
-                ? 'border border-[var(--public-primary)] bg-[var(--public-primary)] text-white hover:opacity-90'
+                ? 'border border-[var(--public-primary)] bg-[var(--public-primary)] text-[var(--public-text-on-primary)] hover:opacity-90'
                 : 'border border-[var(--public-card-border)] bg-[var(--public-card)] text-[var(--public-text)] hover:bg-[var(--public-nav-hover)]',
           ].join(' ');
 

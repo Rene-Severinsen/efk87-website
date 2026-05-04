@@ -7,6 +7,7 @@
   --home-subtle-surface: color-mix(in srgb, var(--home-surface) 86%, var(--home-primary-soft));
   --home-interactive-surface: color-mix(in srgb, var(--home-card) 88%, var(--home-primary-soft));
   --home-interactive-border: color-mix(in srgb, var(--home-primary) 26%, var(--home-card-border));
+  --home-text-on-primary: var(--public-text-on-primary);
   --home-success-soft: color-mix(in srgb, var(--home-success) 12%, transparent);
   --home-success-border: color-mix(in srgb, var(--home-success) 28%, transparent);
   --home-warning-soft: color-mix(in srgb, var(--home-warning) 14%, transparent);
@@ -153,14 +154,14 @@
 .home-v2-root .home-v2-primary,
 .home-v2-root .home-v2-activity-cta-primary {
   background: var(--home-primary);
-  color: var(--home-text-on-primary, #ffffff);
+  color: var(--home-text-on-primary);
   border-color: var(--home-primary);
 }
 
 .home-v2-root .home-v2-primary:hover,
 .home-v2-root .home-v2-activity-cta-primary:hover {
   background: color-mix(in srgb, var(--home-primary) 88%, #000000);
-  color: var(--home-text-on-primary, #ffffff);
+  color: var(--home-text-on-primary);
   border-color: var(--home-primary);
 }
 
