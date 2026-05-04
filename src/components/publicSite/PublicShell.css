@@ -210,3 +210,65 @@
 .public-home .efk-topbar-mobile-summary > div:last-child:hover {
   background: var(--public-nav-hover, var(--public-primary-soft));
 }
+
+/* -------------------------------------------------------------------------- */
+/* Shared footer color stabilization                                           */
+/* Ensures footer renders with solid contrast on subpages.                     */
+/* Must stay below the generic .public-home a/button reset.                    */
+/* -------------------------------------------------------------------------- */
+
+.public-home .footer {
+  background: var(--public-card);
+  color: var(--public-text);
+  border: 1px solid var(--public-card-border);
+  box-shadow: var(--public-shadow);
+}
+
+.public-home .footer h1,
+.public-home .footer h2,
+.public-home .footer h3,
+.public-home .footer h4 {
+  color: var(--public-text);
+  font-weight: 700;
+}
+
+.public-home .footer p,
+.public-home .footer .small {
+  color: var(--public-text-muted);
+}
+
+.public-home .footer a {
+  color: var(--public-text-muted);
+  min-height: auto;
+  display: inline-flex;
+  width: fit-content;
+}
+
+.public-home .footer a:hover {
+  color: var(--public-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.public-home .footer .sponsor,
+.public-home .footer .sponsors a,
+.public-home .footer .sponsors span {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: var(--public-surface);
+  color: var(--public-text);
+  border: 1px solid var(--public-card-border);
+  font-weight: 500;
+}
+
+.public-home .footer .sponsor:hover,
+.public-home .footer .sponsors a:hover {
+  color: var(--public-primary);
+  border-color: var(--public-primary);
+  background: var(--public-primary-soft);
+  text-decoration: none;
+}
