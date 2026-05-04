@@ -589,3 +589,25 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+/* -------------------------------------------------------------------------- */
+/* Shared topbar typography                                                    */
+/* -------------------------------------------------------------------------- */
+
+.public-home .efk-topbar-desktop nav a {
+  font-size: 0.98rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.public-home .efk-topbar-root form button,
+.public-home .efk-topbar-root a.public-primary-button,
+.public-home .efk-topbar-root a.public-secondary-button {
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+.public-home .efk-topbar-mobile-menu nav a {
+  font-size: 1rem;
+  font-weight: 650;
+}
