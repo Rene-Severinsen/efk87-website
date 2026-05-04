@@ -369,3 +369,105 @@ body {
   border-radius: 16px;
   margin: 1rem 0;
 }
+
+/* -------------------------------------------------------------------------- */
+/* Public auth pages                                                           */
+/* -------------------------------------------------------------------------- */
+
+.public-auth-shell {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 0 8px;
+}
+
+.public-auth-header {
+  margin-bottom: 18px;
+}
+
+.public-auth-title {
+  margin: 0 0 10px;
+  font-size: clamp(2.2rem, 4vw, 3.25rem);
+  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--public-text);
+}
+
+.public-auth-subtitle {
+  margin: 0;
+  max-width: 44ch;
+  color: var(--public-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.public-auth-card,
+.public-auth-card-wrap {
+  margin-top: 8px;
+}
+
+.public-auth-card .public-alert,
+.public-auth-card-wrap .public-alert {
+  margin-bottom: 20px;
+}
+
+.public-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.public-auth-secondary-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  padding-top: 6px;
+}
+
+.public-auth-secondary-actions .public-link {
+  font-weight: 500;
+}
+
+.public-auth-footer-note {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--public-card-border);
+  text-align: center;
+}
+
+.public-auth-footer-note .public-muted-text {
+  max-width: 42ch;
+  margin: 0 auto;
+  color: var(--public-text-muted);
+}
+
+@media (max-width: 640px) {
+  .public-auth-shell {
+    max-width: 100%;
+    padding: 8px 0 0;
+  }
+
+  .public-auth-header {
+    margin-bottom: 14px;
+  }
+
+  .public-auth-title {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+  }
+
+  .public-auth-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .public-auth-secondary-actions {
+    gap: 10px;
+  }
+
+  .public-auth-footer-note {
+    margin-top: 22px;
+    padding-top: 18px;
+  }
+}
