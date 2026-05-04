@@ -59,7 +59,7 @@ export default function FlightSchoolCalendarClient({
   return (
     <div className="space-y-4">
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-200 text-sm">
+        <div className="bg-[var(--public-danger-soft)] border border-[var(--public-danger-border)] rounded-lg p-3 text-[var(--public-danger)] text-sm">
           {error}
         </div>
       )}
@@ -72,13 +72,13 @@ export default function FlightSchoolCalendarClient({
           const isLoading = loadingSlotId === slot.id;
 
           let statusLabel = "Ledig";
-          let statusColor = "text-emerald-400";
+          let statusColor = "text-[var(--public-success)]";
           if (isBookedByMe) {
             statusLabel = "Booket af dig";
-            statusColor = "text-sky-400";
+            statusColor = "text-[var(--public-info)]";
           } else if (isOccupied) {
             statusLabel = "Optaget";
-            statusColor = "text-amber-400/60";
+            statusColor = "text-[var(--public-warning)] opacity-60";
           } else if (isInactive) {
             statusLabel = "Inaktiv";
             statusColor = "opacity-30";
@@ -89,10 +89,10 @@ export default function FlightSchoolCalendarClient({
               key={slot.id}
               className={`flex flex-col p-4 rounded-xl border transition-all ${
                 isBookedByMe 
-                  ? "bg-sky-500/10 border-sky-500/30" 
+                  ? "bg-[var(--public-info-soft)] border-[var(--public-info-border)]" 
                   : isOccupied || isInactive
-                    ? "bg-white/[0.02] border-white/5 opacity-60"
-                    : "bg-white/5 border-white/10 hover:border-white/20"
+                    ? "bg-[var(--public-card)] border-[var(--public-card-border)] opacity-60"
+                    : "bg-[var(--public-card)] border-[var(--public-card-border)] hover:border-[var(--public-primary)]"
               }`}
             >
               <div className="flex justify-between items-start mb-3">
@@ -116,7 +116,7 @@ export default function FlightSchoolCalendarClient({
                   <button
                     onClick={() => handleCancel(slot.bookingId!, slot.id)}
                     disabled={!!loadingSlotId}
-                    className="w-full py-2 px-4 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-200 text-sm font-semibold transition-colors disabled:opacity-50"
+                    className="w-full py-2 px-4 rounded-lg bg-[var(--public-danger-soft)] hover:bg-[var(--public-danger)] hover:text-[var(--public-text-on-primary)] text-[var(--public-danger)] text-sm font-semibold transition-colors disabled:opacity-50"
                   >
                     {isLoading ? "Annullerer..." : "Afmeld"}
                   </button>
@@ -124,7 +124,7 @@ export default function FlightSchoolCalendarClient({
                   <button
                     onClick={() => handleBook(slot.id)}
                     disabled={!!loadingSlotId}
-                    className="w-full py-2 px-4 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 text-sm font-semibold transition-colors disabled:opacity-50"
+                    className="w-full py-2 px-4 rounded-lg bg-[var(--public-success-soft)] hover:bg-[var(--public-success)] hover:text-[var(--public-text-on-primary)] text-[var(--public-success)] text-sm font-semibold transition-colors disabled:opacity-50"
                   >
                     {isLoading ? "Booker..." : "Book tid"}
                   </button>

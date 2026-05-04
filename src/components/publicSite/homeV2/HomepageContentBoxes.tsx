@@ -84,15 +84,15 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
       {content.signupMode !== HomepageContentSignupMode.NONE && (
         <div className="home-v2-signup-area">
           {content.signupDeadlineAt && !isClosed && (
-            <div className="home-v2-signup-deadline" style={{ fontSize: '13px', color: 'var(--home-v2-muted)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px', opacity: 0.8 }}>
-              <Info size={14} className="text-blue-400" />
+            <div className="home-v2-signup-deadline" style={{ fontSize: '13px', color: 'var(--public-text-soft)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Info size={14} style={{ color: 'var(--public-info)' }} />
               <span>Tilmelding lukker: {new Date(content.signupDeadlineAt).toLocaleString('da-DK', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
             </div>
           )}
 
           {!viewer.isAuthenticated ? (
             <div className="home-v2-signup-status">
-              <Info size={20} className="text-blue-400" />
+              <Info size={20} style={{ color: 'var(--public-info)' }} />
               <span style={{ flex: 1 }}>Log ind for at {signupLabel.toLowerCase()}.</span>
               <Link href={publicRoutes.login(clubSlug)} className="home-v2-pill home-v2-primary">
                 <LogIn size={18} />
@@ -101,11 +101,11 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
             </div>
           ) : isClosed ? (
             <div className="home-v2-signup-status">
-              <Info size={20} className="text-amber-400" />
+              <Info size={20} style={{ color: 'var(--public-warning)' }} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600 }}>Tilmeldingen er lukket</div>
                 {isRegistered && (
-                  <div style={{ fontSize: '13px', color: 'var(--home-v2-muted)' }}>
+                  <div style={{ fontSize: '13px', color: 'var(--public-text-soft)' }}>
                     Du er tilmeldt{content.signupMode === HomepageContentSignupMode.QUANTITY ? ` med ${mySignup.quantity}` : ''}.
                   </div>
                 )}
@@ -113,11 +113,11 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
             </div>
           ) : isRegistered && !isUpdating ? (
             <div className="home-v2-signup-status">
-              <CheckCircle size={24} style={{ color: '#52c41a' }} />
+              <CheckCircle size={24} style={{ color: 'var(--public-success)' }} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600 }}>Du er tilmeldt!</div>
                 {content.signupMode === HomepageContentSignupMode.QUANTITY && (
-                  <div style={{ fontSize: '14px', color: 'var(--home-v2-muted)' }}>Antal: {mySignup.quantity}</div>
+                  <div style={{ fontSize: '14px', color: 'var(--public-text-soft)' }}>Antal: {mySignup.quantity}</div>
                 )}
               </div>
               <div className="home-v2-signup-actions">
@@ -133,7 +133,7 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
                 <button 
                   onClick={handleCancel}
                   className="home-v2-pill" 
-                  style={{ minHeight: '36px', padding: '0 12px', fontSize: '13px', color: '#ff4d4f', borderColor: 'rgba(255, 77, 79, 0.2)' }}
+                  style={{ minHeight: '36px', padding: '0 12px', fontSize: '13px', color: 'var(--public-danger)', borderColor: 'var(--public-danger-border)' }}
                 >
                   Afmeld
                 </button>

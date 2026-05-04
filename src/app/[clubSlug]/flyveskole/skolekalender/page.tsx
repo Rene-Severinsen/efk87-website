@@ -63,7 +63,7 @@ export default async function SkolekalenderPage({ params }: PageProps) {
               </p>
             </div>
             {!viewer.isMember && (
-              <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 text-amber-200 text-sm">
+              <div className="bg-[var(--public-warning-soft)] border border-[var(--public-warning-border)] rounded-xl p-4 text-[var(--public-warning)] text-sm">
                 Du skal være logget ind som medlem for at booke en skoletid.
               </div>
             )}
@@ -87,7 +87,7 @@ export default async function SkolekalenderPage({ params }: PageProps) {
                   <h2 className="text-xl font-bold mb-6 px-1 text-[var(--public-text)] border-b border-[var(--public-card-border)] pb-2 flex items-baseline gap-3">
                     <span className="capitalize">{format(date, "EEEE 'd.' d. MMMM", { locale: da })}</span>
                     {isSameDay(date, new Date()) && (
-                      <span className="text-xs uppercase tracking-wider bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded-full font-bold">I dag</span>
+                      <span className="text-xs uppercase tracking-wider bg-[var(--public-info-soft)] text-[var(--public-info)] px-2 py-0.5 rounded-full font-bold">I dag</span>
                     )}
                   </h2>
 
@@ -95,23 +95,23 @@ export default async function SkolekalenderPage({ params }: PageProps) {
                     {daySessions.map((session) => (
                       <div 
                         key={session.id}
-                        className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden"
+                        className="bg-[var(--public-card)] border border-[var(--public-card-border)] rounded-2xl overflow-hidden"
                       >
-                        <div className="p-5 border-b border-white/5 bg-white/[0.02] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="p-5 border-b border-[var(--public-card-border)] bg-[var(--public-surface-strong)]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                           <div>
                             <div className="text-sm opacity-50 uppercase tracking-wider font-semibold mb-1">Instruktør</div>
                             <div className="font-bold text-lg text-[var(--public-text)]">{session.instructor.firstName} {session.instructor.lastName}</div>
                           </div>
                           <div className="text-right sm:text-right">
                             <div className="text-sm opacity-50 uppercase tracking-wider font-semibold mb-1">Tidsrum</div>
-                            <div className="font-medium text-white/90">
+                            <div className="font-medium text-[var(--public-text)]">
                               {session.startsAt ? format(session.startsAt, "HH:mm") : "??"} - {session.endsAt ? format(session.endsAt, "HH:mm") : "??"}
                             </div>
                           </div>
                         </div>
 
                         {session.note && (
-                          <div className="px-5 py-3 bg-sky-500/5 text-sky-200/80 text-sm border-b border-white/5 italic">
+                          <div className="px-5 py-3 bg-[var(--public-info-soft)] text-[var(--public-info)] text-sm border-b border-[var(--public-card-border)] italic">
                             {session.note}
                           </div>
                         )}
