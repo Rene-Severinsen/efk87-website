@@ -10,31 +10,93 @@ interface AboutPageProps {
   }>;
 }
 
+type AboutTile = {
+  title: string;
+  description: string;
+  icon: string;
+  href?: string;
+  available?: boolean;
+};
+
 export default async function AboutPage({ params }: AboutPageProps) {
   const { clubSlug } = await params;
-  const pageSlug = "about";
 
-  const {
-    club,
-    page,
-    theme,
-    footerData,
-    navigationItems,
-    actionItems,
-  } = await resolvePublicPageForClub(clubSlug, pageSlug);
+  const { club, page, theme, footerData, navigationItems, actionItems } =
+      await resolvePublicPageForClub(clubSlug, "about");
 
-  const clubShortName = club.settings?.shortName || club.name;
+  const title = page?.title ?? `Om ${club.settings?.shortName || club.name}`;
+  const body = page?.body?.trim();
 
-  const title = `Om ${clubShortName}`;
+  const showIntro =
+      !!body &&
+      body !== "Information om klubben vil snart være tilgængelig." &&
+      body !== "Club profile content will be managed here.";
 
-  const body =
-      page?.body?.trim() ||
-      `${clubShortName} er en modelflyveklub med fokus på fællesskab, flyvning, læring og gode oplevelser på pladsen. Her finder du information om klubben, aktiviteterne og hvordan du kommer i kontakt med os.`;
+  const tiles: AboutTile[] = [
+    {
+      title: "Medlemmerne",
+      description: "Overblik over klubbens medlemmer og medlemsliv.",
+      icon: "👥",
+      href: publicRoutes.members(clubSlug),
+      available: true,
+    },
+    {
+      title: "Bestyrelsen",
+      description: "Læs om klubbens bestyrelse og ansvarlige personer.",
+      icon: "🧑‍💼",
+      available: false,
+    },
+    {
+      title: "Økonomi",
+      description: "Kontingent, klubøkonomi og praktiske forhold.",
+      icon: "💰",
+      available: false,
+    },
+    {
+      title: "Regler og bestemmelser",
+      description: "Vedtægter, regler og retningslinjer for klubben.",
+      icon: "📘",
+      available: false,
+    },
+    {
+      title: "Her bor vi",
+      description: "Se hvor klubben holder til og få praktisk info om pladsen.",
+      icon: "📍",
+      available: false,
+    },
+    {
+      title: "Kontakt",
+      description: "Find bestyrelse, instruktører og kontaktpersoner.",
+      icon: "☎️",
+      href: publicRoutes.contact(clubSlug),
+      available: true,
+    },
+    {
+      title: "Statistik",
+      description: "Historik, udvikling og nøgletal om klubben.",
+      icon: "📊",
+      available: false,
+    },
+    {
+      title: "Klubmestre",
+      description: "Se tidligere og nuværende klubmestre.",
+      icon: "🏆",
+      available: false,
+    },
+  ];
+
+  const sponsors = [
+    "Nordea-fonden",
+    "Friluftsrådet",
+    "Lokale og Anlægsfonden",
+    "Ellehammerfonden",
+    "Modelflyvning Danmark",
+  ];
 
   return (
       <ThemedClubPageShell
           clubSlug={clubSlug}
-          clubName={clubShortName}
+          clubName={club.settings?.shortName || club.name}
           clubDisplayName={club.settings?.displayName || club.name}
           theme={theme}
           footerData={footerData}
@@ -43,47 +105,109 @@ export default async function AboutPage({ params }: AboutPageProps) {
           title={title}
           currentPath={publicRoutes.about(clubSlug)}
       >
-        <ThemedSectionCard className="p-5 sm:p-8">
-          <div className="max-w-4xl">
-            <p className="text-base leading-relaxed text-[var(--public-text)] sm:text-lg">
-              {body}
-            </p>
-          </div>
+        <div className="space-y-8 sm:space-y-10">
+          {showIntro && (
+              <ThemedSectionCard className="p-5 sm:p-7">
+                <p className="max-w-4xl text-base leading-relaxed text-[var(--public-text)] sm:text-lg">
+                  {body}
+                </p>
+              </ThemedSectionCard>
+          )}
 
-          <div className="mt-8 border-t border-[var(--public-card-border)] pt-6 sm:mt-10 sm:pt-8">
-            <div className="max-w-3xl">
-              <h2 className="mb-3 text-xl font-bold tracking-tight text-[var(--public-text)] sm:text-2xl">
-                Kontakt
-              </h2>
+          <section>
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              {tiles.map((tile) => {
+                const cardContent = (
+                    <div
+                        className={`group flex h-full min-h-[210px] flex-col rounded-3xl border p-6 shadow-[var(--public-shadow)] transition ${
+                            tile.available && tile.href
+                                ? "border-[var(--public-card-border)] bg-[var(--public-card)] hover:border-[var(--public-primary)] hover:bg-[var(--public-surface)]"
+                                : "border-[var(--public-card-border)] bg-[var(--public-card)]"
+                        }`}
+                    >
+                      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--public-card-border)] bg-[var(--public-primary-soft)] text-2xl">
+                        <span aria-hidden="true">{tile.icon}</span>
+                      </div>
 
-              <p className="mb-6 text-sm leading-relaxed text-[var(--public-text-muted)] sm:text-base">
-                Har du spørgsmål, eller vil du vide mere om klubben? Find vores
-                instruktører og kontaktpersoner her.
-              </p>
+                      <div className="mb-2 text-2xl font-bold leading-tight text-[var(--public-text)]">
+                        {tile.title}
+                      </div>
 
-              <Link
-                  href={publicRoutes.contact(clubSlug)}
-                  className="public-secondary-button"
-              >
-                Se instruktører
-                <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                >
-                  <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </Link>
+                      <p className="text-sm leading-relaxed text-[var(--public-text-muted)] sm:text-base">
+                        {tile.description}
+                      </p>
+
+                      <div className="mt-auto pt-6">
+                        {tile.available && tile.href ? (
+                            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--public-card-border)] bg-[var(--public-primary-soft)] px-4 py-2 text-sm font-semibold text-[var(--public-primary)] transition group-hover:border-[var(--public-primary)]">
+                        Åbn
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="transition-transform group-hover:translate-x-1"
+                        >
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </span>
+                        ) : (
+                            <span className="inline-flex items-center rounded-full border border-[var(--public-card-border)] bg-[var(--public-surface)] px-4 py-2 text-sm font-semibold text-[var(--public-text-soft)]">
+                        Kommer senere
+                      </span>
+                        )}
+                      </div>
+                    </div>
+                );
+
+                if (tile.available && tile.href) {
+                  return (
+                      <Link
+                          key={tile.title}
+                          href={tile.href}
+                          className="block h-full"
+                      >
+                        {cardContent}
+                      </Link>
+                  );
+                }
+
+                return <div key={tile.title}>{cardContent}</div>;
+              })}
             </div>
-          </div>
-        </ThemedSectionCard>
+          </section>
+
+          <section>
+            <ThemedSectionCard className="p-5 sm:p-7">
+              <div className="mb-5">
+                <h2 className="text-xl font-bold text-[var(--public-text)] sm:text-2xl">
+                  Sponsorer og samarbejdspartnere
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--public-text-muted)] sm:text-base">
+                  Vi er sponsoreret af og samarbejder med følgende organisationer.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {sponsors.map((sponsor) => (
+                    <div
+                        key={sponsor}
+                        className="flex min-h-[92px] items-center justify-center rounded-2xl border border-[var(--public-card-border)] bg-[var(--public-surface)] px-5 py-6 text-center shadow-[var(--public-shadow)]"
+                    >
+                  <span className="text-base font-semibold text-[var(--public-text)] sm:text-lg">
+                    {sponsor}
+                  </span>
+                    </div>
+                ))}
+              </div>
+            </ThemedSectionCard>
+          </section>
+        </div>
       </ThemedClubPageShell>
   );
 }
