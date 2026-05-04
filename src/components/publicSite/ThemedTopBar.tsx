@@ -29,7 +29,6 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
       return currentPath === `/${clubSlug}`;
     }
 
-    // Active state for forum and its subpages
     if (item.key === 'forum') {
       return currentPath.startsWith(`${item.href}/`);
     }
@@ -49,13 +48,13 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
                   className={[
                     'transition-colors duration-200',
                     mobile
-                        ? 'flex min-h-[44px] w-full items-center rounded-xl px-4 py-2.5 text-sm'
-                        : 'inline-flex min-h-[44px] items-center whitespace-nowrap rounded-full px-3 py-2 text-sm',
+                        ? 'flex min-h-[44px] w-full items-center rounded-xl px-4 py-2.5 text-[1rem] font-semibold'
+                        : 'inline-flex min-h-[44px] items-center whitespace-nowrap rounded-full px-3.5 py-2 text-[0.98rem] font-semibold tracking-[-0.01em]',
                     isActive
                         ? mobile
-                            ? 'border border-[var(--public-primary)] bg-[var(--public-primary-soft)] font-semibold active text-[var(--public-primary)]'
-                            : 'border border-[var(--public-primary)] bg-[var(--public-primary-soft)] active text-[var(--public-primary)]'
-                        : 'text-[var(--public-nav-text)] hover:bg-[var(--public-nav-hover)]',
+                            ? 'active border border-[var(--public-primary)] bg-[var(--public-primary-soft)] text-[var(--public-primary)]'
+                            : 'active border border-[var(--public-primary)] bg-[var(--public-primary-soft)] text-[var(--public-primary)]'
+                        : 'border border-transparent text-[var(--public-nav-text)] hover:bg-[var(--public-nav-hover)] hover:text-[var(--public-text)]',
                   ].join(' ')}
               >
                 {item.label}
@@ -69,7 +68,7 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
       <>
         {actionItems.map((item) => {
           const baseClassName = [
-            'flex min-h-[44px] items-center justify-center rounded-full text-sm font-semibold transition-all duration-200',
+            'flex min-h-[44px] items-center justify-center rounded-full text-[0.96rem] font-bold transition-all duration-200',
             mobile ? 'w-full rounded-xl px-4 py-2.5' : 'px-4 py-2',
             item.isPrimary
                 ? 'border border-[var(--public-primary)] bg-[var(--public-primary)] text-[var(--public-text-on-primary)] hover:opacity-90'
@@ -105,7 +104,6 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
 
   return (
       <header className="efk-topbar-root sticky top-4 z-[900] relative isolation-isolate mx-auto w-full max-w-[1400px] pointer-events-auto">
-        {/* Desktop Header */}
         <div className="efk-topbar-desktop hidden items-center justify-between gap-6 min-[1100px]:flex rounded-full border border-[var(--public-card-border)] bg-[var(--public-card)] px-6 py-3 shadow-[var(--public-shadow)] backdrop-blur-xl">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--public-card-border)] bg-[var(--public-primary-soft)] text-[var(--public-primary)] text-xs font-bold">
@@ -131,7 +129,6 @@ export const ThemedTopBar: React.FC<ThemedTopBarProps> = ({
           </div>
         </div>
 
-        {/* Mobile/Tablet Header */}
         <details className="efk-topbar-mobile-details group min-[1100px]:hidden rounded-[24px] border border-[var(--public-card-border)] bg-[var(--public-card)] shadow-[var(--public-shadow)] backdrop-blur-xl">
           <summary className="efk-topbar-mobile-summary flex items-center justify-between cursor-pointer list-none select-none touch-manipulation min-h-[56px] px-4 py-3 [&::-webkit-details-marker]:hidden">
             <div className="flex min-w-0 items-center gap-3">
