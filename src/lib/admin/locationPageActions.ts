@@ -8,23 +8,27 @@ import { upsertClubLocationPageContent } from "../locationPage/locationPageServi
 import { DEFAULT_LOCATION_PAGE_CONTENT } from "../locationPage/locationPageDefaults";
 
 const optionalUrlSchema = z
-    .string()
-    .trim()
-    .optional()
-    .transform((value) => (value ? value : null))
-    .refine(
-        (value) => {
-            if (!value) return true;
+  .string()
+  .trim()
+  .optional()
+  .transform((value) => (value ? value : null))
+  .refine(
+    (value) => {
+      if (!value) return true;
 
-            try {
-                const url = new URL(value);
-                return url.protocol === "http:" || url.protocol === "https:";
-            } catch {
-                return false;
-            }
-        },
-        { message: "Billed-URL skal være en gyldig http/https URL." },
-    );
+      if (value.startsWith("/uploads/")) {
+        return true;
+      }
+
+      try {
+        const url = new URL(value);
+        return url.protocol === "http:" || url.protocol === "https:";
+      } catch {
+        return false;
+      }
+    },
+    { message: "Billed-URL skal være en gyldig http/https URL eller en lokal Media URL." },
+  );
 
 const locationPageSchema = z.object({
     accessNotice: z.string().trim().min(1, "Vigtig adgangsinformation skal udfyldes."),

@@ -3,6 +3,7 @@ import AdminShell from "../../../../components/admin/AdminShell";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { getClubRulesPageContent } from "../../../../lib/rulesPage/rulesPageService";
+import { listClubMediaAssets } from "../../../../lib/media/mediaStorageService";
 import RulesPageAdminForm from "./RulesPageAdminForm";
 
 interface PageProps {
@@ -32,7 +33,10 @@ export default async function Page({ params }: PageProps) {
     `/${clubSlug}/admin/regler-og-bestemmelser`,
   );
 
-  const content = await getClubRulesPageContent(club.id);
+  const [content, mediaAssets] = await Promise.all([
+    getClubRulesPageContent(club.id),
+    listClubMediaAssets(club.id),
+  ]);
 
   return (
     <AdminShell
@@ -55,6 +59,7 @@ export default async function Page({ params }: PageProps) {
         <RulesPageAdminForm
           clubSlug={clubSlug}
           initialContent={content}
+          mediaAssets={mediaAssets}
         />
       </div>
     </AdminShell>

@@ -185,11 +185,10 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                           href={publicRoutes.article(clubSlug, featuredArticle.slug)}
                           className="block overflow-hidden rounded-2xl border border-[var(--public-card-border)]"
                       >
-                        <div
-                            className="min-h-[220px] bg-cover bg-center bg-no-repeat transition duration-300 hover:scale-[1.02]"
-                            style={{
-                              backgroundImage: `url(${featuredArticle.heroImageUrl})`,
-                            }}
+                        <img
+                            src={featuredArticle.heroImageUrl}
+                            alt={featuredArticle.title}
+                            className="h-[220px] w-full object-cover transition duration-300 hover:scale-[1.02]"
                         />
                       </Link>
                   )}
@@ -267,11 +266,10 @@ export default async function ArtiklerPage({ params, searchParams }: PageProps) 
                                 href={publicRoutes.article(clubSlug, article.slug)}
                                 className="block overflow-hidden rounded-2xl border border-[var(--public-card-border)]"
                             >
-                              <div
-                                  className="min-h-[160px] bg-cover bg-center bg-no-repeat transition duration-300 hover:scale-[1.02]"
-                                  style={{
-                                    backgroundImage: `url(${article.heroImageUrl})`,
-                                  }}
+                              <img
+                                  src={article.heroImageUrl}
+                                  alt={article.title}
+                                  className="h-[160px] w-full object-cover transition duration-300 hover:scale-[1.02]"
                               />
                             </Link>
                         )}

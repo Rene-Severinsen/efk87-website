@@ -57,6 +57,10 @@ const optionalUrlSchema = z
     (value) => {
       if (!value) return true;
 
+      if (value.startsWith("/uploads/")) {
+        return true;
+      }
+
       try {
         const url = new URL(value);
         return url.protocol === "http:" || url.protocol === "https:";
@@ -64,7 +68,7 @@ const optionalUrlSchema = z
         return false;
       }
     },
-    { message: "URL skal være en gyldig http/https URL." },
+    { message: "URL skal være en gyldig http/https URL eller en lokal Media URL." },
   );
 
 const rulesPageSchema = z.object({

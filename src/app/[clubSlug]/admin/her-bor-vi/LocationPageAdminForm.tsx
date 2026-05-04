@@ -3,10 +3,13 @@
 import { useState } from "react";
 import { updateLocationPageContentAction } from "../../../../lib/admin/locationPageActions";
 import { ClubLocationPageContent } from "../../../../lib/locationPage/locationPageDefaults";
+import { ClubMediaAssetDTO } from "../../../../lib/media/mediaTypes";
+import MediaUrlPicker from "../../../../components/admin/media/MediaUrlPicker";
 
 interface LocationPageAdminFormProps {
     clubSlug: string;
     initialContent: ClubLocationPageContent;
+    mediaAssets: ClubMediaAssetDTO[];
 }
 
 function TextInput({
@@ -80,6 +83,7 @@ function ImageFieldset({
                            titleValue,
                            descriptionValue,
                            altValue,
+                           mediaAssets,
                        }: {
     title: string;
     urlName: keyof ClubLocationPageContent;
@@ -90,6 +94,7 @@ function ImageFieldset({
     titleValue: string;
     descriptionValue: string;
     altValue: string;
+    mediaAssets: ClubMediaAssetDTO[];
 }) {
     return (
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
@@ -98,11 +103,11 @@ function ImageFieldset({
             </h3>
 
             <div className="grid grid-cols-1 gap-4">
-                <TextInput
+                <MediaUrlPicker
                     name={urlName}
-                    label="Billed-URL"
+                    label="Billede"
                     value={urlValue}
-                    placeholder="https://..."
+                    assets={mediaAssets}
                 />
 
                 <TextInput
@@ -131,6 +136,7 @@ function ImageFieldset({
 export default function LocationPageAdminForm({
                                                   clubSlug,
                                                   initialContent,
+                                                  mediaAssets,
                                               }: LocationPageAdminFormProps) {
     const [isSaving, setIsSaving] = useState(false);
     const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -199,7 +205,7 @@ export default function LocationPageAdminForm({
                         Billeder til plads og adgang
                     </h2>
                     <p className="mt-1 text-sm text-slate-400">
-                        V1 bruger billed-URL’er. Upload/media-bibliotek kobles på senere.
+                        Vælg billeder fra Media Library eller indsæt en ekstern URL manuelt.
                     </p>
                 </div>
 
@@ -214,6 +220,7 @@ export default function LocationPageAdminForm({
                         titleValue={initialContent.accessImageTitle}
                         descriptionValue={initialContent.accessImageDescription}
                         altValue={initialContent.accessImageAlt}
+                        mediaAssets={mediaAssets}
                     />
 
                     <ImageFieldset
@@ -226,6 +233,7 @@ export default function LocationPageAdminForm({
                         titleValue={initialContent.drivingImageTitle}
                         descriptionValue={initialContent.drivingImageDescription}
                         altValue={initialContent.drivingImageAlt}
+                        mediaAssets={mediaAssets}
                     />
 
                     <ImageFieldset
@@ -238,6 +246,7 @@ export default function LocationPageAdminForm({
                         titleValue={initialContent.parkingImageTitle}
                         descriptionValue={initialContent.parkingImageDescription}
                         altValue={initialContent.parkingImageAlt}
+                        mediaAssets={mediaAssets}
                     />
                 </div>
             </div>
@@ -302,6 +311,7 @@ export default function LocationPageAdminForm({
                         titleValue={initialContent.indoorImageTitle}
                         descriptionValue={initialContent.indoorImageDescription}
                         altValue={initialContent.indoorImageAlt}
+                        mediaAssets={mediaAssets}
                     />
                 </div>
             </div>

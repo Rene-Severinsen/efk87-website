@@ -3,6 +3,7 @@ import AdminShell from "../../../../components/admin/AdminShell";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { getClubLocationPageContent } from "../../../../lib/locationPage/locationPageService";
+import { listClubMediaAssets } from "../../../../lib/media/mediaStorageService";
 import LocationPageAdminForm from "./LocationPageAdminForm";
 
 interface PageProps {
@@ -32,7 +33,10 @@ export default async function Page({ params }: PageProps) {
         `/${clubSlug}/admin/her-bor-vi`,
     );
 
-    const content = await getClubLocationPageContent(club.id);
+    const [content, mediaAssets] = await Promise.all([
+        getClubLocationPageContent(club.id),
+        listClubMediaAssets(club.id),
+    ]);
 
     return (
         <AdminShell
@@ -55,6 +59,7 @@ export default async function Page({ params }: PageProps) {
                 <LocationPageAdminForm
                     clubSlug={clubSlug}
                     initialContent={content}
+                    mediaAssets={mediaAssets}
                 />
             </div>
         </AdminShell>
