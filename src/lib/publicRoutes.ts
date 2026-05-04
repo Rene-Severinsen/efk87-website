@@ -15,6 +15,7 @@ export const publicRoutes = {
   rules: (clubSlug: string) => `/${clubSlug}/om/regler-og-bestemmelser`,
   membership: (clubSlug: string) => `/${clubSlug}/om/medlemsskab`,
   finance: (clubSlug: string) => `/${clubSlug}/om/oekonomi`,
+  statistics: (clubSlug: string) => `/${clubSlug}/om/statistik`,
   whereWeLive: (clubSlug: string) => `/${clubSlug}/om/her-bor-vi`,
   forum: (clubSlug: string) => `/${clubSlug}/forum`,
   gallery: (clubSlug: string) => `/${clubSlug}/galleri`,

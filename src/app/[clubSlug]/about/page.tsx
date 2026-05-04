@@ -41,6 +41,12 @@ export default async function AboutPage({ params }: AboutPageProps) {
 
   const tiles: AboutTile[] = [
     {
+      title: "Medlemmerne",
+      description: "Overblik over klubbens medlemmer og medlemsliv.",
+      icon: "👥",
+      href: publicRoutes.members(clubSlug),
+      available: true,
+    },   {
       title: "Medlemsskab",
       description: "Læs om indmeldelse, kontingenter og opkrævning.",
       icon: "🪪",
@@ -48,10 +54,10 @@ export default async function AboutPage({ params }: AboutPageProps) {
       available: true,
     },
     {
-      title: "Medlemmerne",
-      description: "Overblik over klubbens medlemmer og medlemsliv.",
-      icon: "👥",
-      href: publicRoutes.members(clubSlug),
+      title: "Her bor vi",
+      description: "Se hvor klubben holder til og få praktisk info om pladsen.",
+      icon: "📍",
+      href: publicRoutes.whereWeLive(clubSlug),
       available: true,
     },
     {
@@ -59,6 +65,13 @@ export default async function AboutPage({ params }: AboutPageProps) {
       description: "Læs om klubbens bestyrelse og ansvarlige personer.",
       icon: "🧑‍💼",
       href: publicRoutes.board(clubSlug),
+      available: true,
+    },
+    {
+      title: "Kontakt",
+      description: "Find formand, kasserer, instruktører og kontaktpersoner.",
+      icon: "☎️",
+      href: publicRoutes.contact(clubSlug),
       available: true,
     },
     {
@@ -76,24 +89,11 @@ export default async function AboutPage({ params }: AboutPageProps) {
       available: true,
     },
     {
-      title: "Her bor vi",
-      description: "Se hvor klubben holder til og få praktisk info om pladsen.",
-      icon: "📍",
-      href: publicRoutes.whereWeLive(clubSlug),
-      available: true,
-    },
-    {
-      title: "Kontakt",
-      description: "Find formand, kasserer, instruktører og kontaktpersoner.",
-      icon: "☎️",
-      href: publicRoutes.contact(clubSlug),
-      available: true,
-    },
-    {
       title: "Statistik",
-      description: "Historik, udvikling og nøgletal om klubben.",
+      description: "Medlemmer, medlemsudvikling og aktivitet i klubben.",
       icon: "📊",
-      available: false,
+      href: publicRoutes.statistics(clubSlug),
+      available: true,
     },
 
 
