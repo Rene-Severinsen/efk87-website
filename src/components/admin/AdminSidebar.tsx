@@ -165,7 +165,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               Site settings
             </a>
           </div>
-        </nav>
+        
+          <a
+            href={`/${clubSlug}/admin/settings/branding`}
+            className={`admin-sidebar-item ${pathname?.startsWith(`/${clubSlug}/admin/settings/branding`) ? "active" : ""}`}
+          >
+            Branding
+          </a>
+</nav>
 
         <div className="admin-sidebar-footer">
           <div className="admin-user-card">

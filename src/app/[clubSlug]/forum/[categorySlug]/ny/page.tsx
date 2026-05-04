@@ -36,6 +36,8 @@ export default async function CreateThreadPage({ params }: CreateThreadPageProps
       clubSlug={clubSlug}
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
+      logoUrl={publicSettings?.logoUrl ?? null}
+      logoAltText={publicSettings?.logoAltText ?? null}
       theme={theme}
       publicThemeMode={publicSettings?.publicThemeMode}
       footerData={footerData}

@@ -16,6 +16,8 @@ interface ThemedClubPageShellProps {
   clubSlug: string;
   clubName: string;
   clubDisplayName: string;
+  logoUrl?: string | null;
+  logoAltText?: string | null;
   theme?: ClubTheme;
   footerData?: PublicFooterData;
   navigationItems?: PublicNavigationItem[];
@@ -35,7 +37,9 @@ interface ThemedClubPageShellProps {
 export default function ThemedClubPageShell({ 
   clubSlug,
   clubName, 
-  clubDisplayName, 
+  clubDisplayName,
+  logoUrl,
+  logoAltText, 
   theme, 
   publicThemeMode,
   footerData,

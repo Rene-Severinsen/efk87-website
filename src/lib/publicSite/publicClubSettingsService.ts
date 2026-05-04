@@ -10,7 +10,11 @@ export async function getPublicClubSettings(clubId: string) {
       displayName: true,
       shortName: true,
       publicEmail: true,
-      publicThemeMode: true
+      publicThemeMode: true,
+      logoUrl: true,
+      logoAltText: true,
+      faviconUrl: true,
+      appleIconUrl: true
     }
   });
 }

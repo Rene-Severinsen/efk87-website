@@ -25,6 +25,8 @@ export default async function EventsPage({ params }: EventsPageProps) {
       clubSlug={clubSlug}
       clubName={club.name}
       clubDisplayName={publicSettings?.displayName || club.name}
+      logoUrl={publicSettings?.logoUrl ?? null}
+      logoAltText={publicSettings?.logoAltText ?? null}
       theme={theme}
       footerData={footerData}
       navigationItems={navigationItems}

@@ -39,6 +39,8 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
       clubSlug={clubSlug}
       clubName={club.settings?.shortName || club.name}
       clubDisplayName={club.settings?.displayName || club.name}
+      logoUrl={club.settings?.logoUrl ?? null}
+      logoAltText={club.settings?.logoAltText ?? null}
       theme={theme}
       footerData={footerData}
       navigationItems={navigationItems}

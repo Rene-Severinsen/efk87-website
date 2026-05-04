@@ -148,6 +148,8 @@ export default async function BoardPage({ params }: BoardPageProps) {
             clubSlug={clubSlug}
             clubName={club.settings?.shortName || club.name}
             clubDisplayName={club.settings?.displayName || publicSettings?.displayName || club.name}
+      logoUrl={publicSettings?.logoUrl ?? null}
+      logoAltText={publicSettings?.logoAltText ?? null}
             theme={theme}
             publicThemeMode={publicSettings?.publicThemeMode}
             footerData={footerData}

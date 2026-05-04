@@ -154,6 +154,8 @@ export default async function WhereWeLivePage({ params }: WhereWeLivePageProps) 
             clubSlug={clubSlug}
             clubName={club.settings?.shortName || club.name}
             clubDisplayName={publicSettings?.displayName || club.settings?.displayName || club.name}
+      logoUrl={publicSettings?.logoUrl ?? null}
+      logoAltText={publicSettings?.logoAltText ?? null}
             theme={theme}
             publicThemeMode={publicSettings?.publicThemeMode}
             footerData={footerData}

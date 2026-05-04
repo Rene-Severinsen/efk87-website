@@ -37,6 +37,8 @@ export default async function MembersPage({ params }: MembersPageProps) {
           clubSlug={clubSlug}
           clubName={club.name}
           clubDisplayName={publicSettings?.displayName || club.name}
+      logoUrl={publicSettings?.logoUrl ?? null}
+      logoAltText={publicSettings?.logoAltText ?? null}
           theme={theme}
           footerData={footerData}
           navigationItems={navigationItems}

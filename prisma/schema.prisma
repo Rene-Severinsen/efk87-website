@@ -476,6 +476,10 @@ model ClubSettings {
   updatedAt       DateTime @updatedAt
 
   club Club @relation(fields: [clubId], references: [id])
+  logoUrl      String?
+  logoAltText  String?
+  faviconUrl   String?
+  appleIconUrl String?
 }
 
 model User {
