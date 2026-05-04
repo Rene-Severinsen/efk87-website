@@ -45,19 +45,19 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
     return (
       <ThemedSectionCard className="text-center py-12">
         <div className="mb-6 flex justify-center">
-          <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-16 h-16 bg-[var(--public-success-soft)] rounded-full flex items-center justify-center">
+            <svg className="w-8 h-8 text-[var(--public-success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
             </svg>
           </div>
         </div>
         <h2 className="text-2xl font-bold text-[var(--public-text)] mb-4">Tak for din ansøgning</h2>
-        <p className="text-[var(--public-text-muted)]">
+        <p className="public-muted-text">
           Vi har modtaget din indmeldelse. Vi kontakter dig, når den er gennemgået.
         </p>
         <button 
           onClick={() => window.location.reload()} 
-          className="mt-8 text-[var(--public-primary)] hover:opacity-80 transition-colors"
+          className="mt-8 public-link"
         >
           Send en anden ansøgning
         </button>
@@ -69,7 +69,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
     <ThemedSectionCard>
       <form action={action} className="space-y-6">
         {state.error && (
-          <div className="p-4 bg-[var(--public-danger)]/10 border border-[var(--public-danger)]/30 rounded-md text-[var(--public-danger)] text-sm">
+          <div className="public-alert public-alert-danger">
             {state.error}
           </div>
         )}
@@ -77,7 +77,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Fornavn */}
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
+            <label htmlFor="firstName" className="public-label">
               Fornavn *
             </label>
             <input
@@ -85,7 +85,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               name="firstName"
               id="firstName"
               required
-              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)] placeholder-[var(--public-text-soft)]"
+              className="public-input"
             />
             {state.fieldErrors?.firstName && (
               <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.firstName}</p>
@@ -94,7 +94,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
 
           {/* Efternavn */}
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
+            <label htmlFor="lastName" className="public-label">
               Efternavn *
             </label>
             <input
@@ -102,7 +102,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               name="lastName"
               id="lastName"
               required
-              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)] placeholder-[var(--public-text-soft)]"
+              className="public-input"
             />
             {state.fieldErrors?.lastName && (
               <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.lastName}</p>
@@ -112,7 +112,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
 
         {/* Adresse */}
         <div>
-          <label htmlFor="address" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
+          <label htmlFor="address" className="public-label">
             Adresse *
           </label>
           <input
@@ -120,7 +120,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
             name="address"
             id="address"
             required
-            className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)] placeholder-[var(--public-text-soft)]"
+            className="public-input"
           />
           {state.fieldErrors?.address && (
             <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.address}</p>
@@ -130,7 +130,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Postnummer */}
           <div>
-            <label htmlFor="postalCode" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
+            <label htmlFor="postalCode" className="public-label">
               Postnummer *
             </label>
             <input
@@ -138,7 +138,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               name="postalCode"
               id="postalCode"
               required
-              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)] placeholder-[var(--public-text-soft)]"
+              className="public-input"
             />
             {state.fieldErrors?.postalCode && (
               <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.postalCode}</p>
@@ -147,7 +147,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
 
           {/* By */}
           <div>
-            <label htmlFor="city" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
+            <label htmlFor="city" className="public-label">
               By *
             </label>
             <input
@@ -155,7 +155,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               name="city"
               id="city"
               required
-              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)] placeholder-[var(--public-text-soft)]"
+              className="public-input"
             />
             {state.fieldErrors?.city && (
               <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.city}</p>
@@ -166,7 +166,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* E-mail */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
+            <label htmlFor="email" className="public-label">
               E-mail *
             </label>
             <input
@@ -175,7 +175,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
                 id="email"
                 required
                 autoComplete="email"
-                className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)] placeholder-[var(--public-text-soft)]"
+                className="public-input"
             />
             {state.fieldErrors?.email && (
                 <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.email}</p>
@@ -184,7 +184,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
 
           {/* Mobilnummer */}
           <div>
-            <label htmlFor="mobilePhone" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
+            <label htmlFor="mobilePhone" className="public-label">
               Mobilnummer *
             </label>
             <input
@@ -192,7 +192,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
                 name="mobilePhone"
                 id="mobilePhone"
                 required
-                className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)] placeholder-[var(--public-text-soft)]"
+                className="public-input"
             />
             {state.fieldErrors?.mobilePhone && (
                 <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.mobilePhone}</p>
@@ -203,7 +203,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Fødselsdato */}
           <div>
-            <label htmlFor="birthDate" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
+            <label htmlFor="birthDate" className="public-label">
               Fødselsdato *
             </label>
             <input
@@ -213,7 +213,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               required
               value={birthDate}
               onChange={(e) => setBirthDate(e.target.value)}
-              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)]"
+              className="public-input"
             />
             {state.fieldErrors?.birthDate && (
               <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.birthDate}</p>
@@ -222,7 +222,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
 
           {/* MDK nr. */}
           <div>
-            <label htmlFor="mdkNumber" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
+            <label htmlFor="mdkNumber" className="public-label">
               MDK nr. {membershipType === ClubMemberMembershipType.PASSIVE ? '(valgfri)' : '*'}
             </label>
             <input
@@ -230,9 +230,9 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
               name="mdkNumber"
               id="mdkNumber"
               required={membershipType === ClubMemberMembershipType.SENIOR || membershipType === ClubMemberMembershipType.JUNIOR}
-              className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)] placeholder-[var(--public-text-soft)]"
+              className="public-input"
             />
-            <p className="mt-1 text-[10px] text-[var(--public-text-soft)]">
+            <p className="public-help-text mt-1" style={{ fontSize: '10px' }}>
               MDK nr. er påkrævet for Senior og Junior. Passivt medlemskab kan oprettes uden MDK nr.
             </p>
             {state.fieldErrors?.mdkNumber && (
@@ -243,7 +243,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
 
         {/* Medlemskab */}
         <div>
-          <label htmlFor="membershipType" className="block text-sm font-medium text-[var(--public-text-muted)] mb-2">
+          <label htmlFor="membershipType" className="public-label">
             Medlemskab *
           </label>
           <select
@@ -252,7 +252,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
             required
             value={membershipType}
             onChange={(e) => setMembershipType(e.target.value)}
-            className="w-full px-4 py-3 bg-[var(--public-surface)] border border-[var(--public-card-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--public-primary)]/50 text-[var(--public-text)] appearance-none"
+            className="public-input appearance-none"
           >
             <option value="" disabled>Vælg medlemskab</option>
             <option value={ClubMemberMembershipType.SENIOR}>Senior</option>
@@ -271,7 +271,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
           <button
             type="submit"
             disabled={isPending || !!ageError}
-            className="w-full py-4 px-6 bg-[var(--public-primary)] hover:opacity-90 disabled:bg-[var(--public-primary)]/50 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg shadow-lg transition-all transform active:scale-[0.98]"
+            className="public-primary-button w-full"
           >
             {isPending ? "Sender ansøgning..." : "Indsend indmeldelse"}
           </button>

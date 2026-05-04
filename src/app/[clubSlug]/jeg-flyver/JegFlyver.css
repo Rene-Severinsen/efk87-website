@@ -2,66 +2,18 @@
   color: var(--public-text);
 }
 
-/* Main cards */
-
-.premium-glass-card {
-  background: var(--public-card);
-  border: 1px solid var(--public-card-border);
-  box-shadow: var(--public-shadow);
-  border-radius: 24px;
-}
-
-/* Form elements */
-
-.premium-input {
-  width: 100%;
-  min-height: 44px;
-  border-radius: 14px;
-  border: 1px solid var(--public-card-border);
-  background: var(--public-surface);
-  color: var(--public-text);
-  padding: 0.75rem 1rem;
-  outline: none;
-  transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    background-color 160ms ease;
-}
-
-.premium-input::placeholder {
-  color: var(--public-text-soft);
-}
-
-.premium-input:focus {
-  background: var(--public-card);
-  border-color: var(--public-primary);
-  box-shadow: 0 0 0 3px var(--public-primary-soft);
-}
-
-.premium-input:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-/* Touch friendly min-height */
-
-.premium-input,
-.premium-button {
-  min-height: 44px;
-}
-
 /* Status badges */
 
 .status-badge-active {
-  background: color-mix(in srgb, var(--public-success) 12%, transparent);
+  background: var(--public-success-soft);
   color: var(--public-success);
-  border: 1px solid color-mix(in srgb, var(--public-success) 28%, transparent);
+  border: 1px solid var(--public-success-border);
 }
 
 .status-badge-cancelled {
-  background: color-mix(in srgb, var(--public-danger) 12%, transparent);
+  background: var(--public-danger-soft);
   color: var(--public-danger);
-  border: 1px solid color-mix(in srgb, var(--public-danger) 28%, transparent);
+  border: 1px solid var(--public-danger-border);
 }
 
 /* Intent / history cards */
@@ -88,27 +40,7 @@
   filter: grayscale(0.35);
 }
 
-/* Dark mode keeps premium depth without forcing dark styling in light mode */
-
-[data-theme="dark"] .premium-glass-card {
-  background: var(--public-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-[data-theme="dark"] .premium-input {
-  background: var(--public-surface-strong);
-}
-
-[data-theme="dark"] .premium-input:focus {
-  background: var(--public-card);
-}
-
-[data-theme="dark"] .intent-card {
-  background: var(--public-surface-strong);
-}
-
+/* Dark mode overrides for cards if needed, but mostly uses variables */
 [data-theme="dark"] .intent-card:hover {
-  background: var(--public-card);
   box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
 }

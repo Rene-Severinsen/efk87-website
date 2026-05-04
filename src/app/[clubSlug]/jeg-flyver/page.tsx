@@ -59,27 +59,27 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
       maxWidth="800px"
     >
       <div className="jeg-flyver-container">
-        <ThemedSectionCard className="premium-glass-card p-6 sm:p-10 border-none">
+        <ThemedSectionCard className="p-6 sm:p-10">
         {created === "1" && (
-          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-[var(--public-success)]/10 border border-[var(--public-success)]/30 text-[var(--public-success)] rounded-lg text-sm sm:text-base">
+          <div className="public-alert public-alert-success">
             Din flyvemelding er oprettet!
           </div>
         )}
 
         {cancelled === "1" && (
-          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-[var(--public-success)]/10 border border-[var(--public-success)]/30 text-[var(--public-success)] rounded-lg text-sm sm:text-base">
+          <div className="public-alert public-alert-success">
             Din melding er aflyst.
           </div>
         )}
 
         {duplicate === "1" && (
-          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-[var(--public-danger)]/10 border border-[var(--public-danger)]/30 text-[var(--public-danger)] rounded-lg text-sm sm:text-base">
+          <div className="public-alert public-alert-danger">
             Du har allerede en aktiv &apos;Jeg flyver&apos;-melding for den valgte dag. Aflys den først, hvis du vil oprette en ny.
           </div>
         )}
 
         {hasActiveToday && (
-          <div className="mb-5 sm:mb-6 p-3 bg-[var(--public-primary)]/10 border border-[var(--public-primary)]/30 text-[var(--public-primary)] text-sm rounded-lg">
+          <div className="public-alert public-alert-info">
             Du har allerede en aktiv melding for i dag.
           </div>
         )}
@@ -89,7 +89,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="flightDate" className="block text-sm font-semibold text-[var(--public-text)] mb-2.5">
+              <label htmlFor="flightDate" className="public-label">
                 Dato <span className="text-[var(--public-danger)] opacity-70">*</span>
               </label>
               <input
@@ -99,25 +99,25 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                 required
                 defaultValue={todayStr}
                 min={todayStr}
-                className="premium-input w-full px-4 py-2.5 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--public-primary)]/30"
+                className="public-input"
               />
             </div>
 
             <div>
-              <label htmlFor="plannedTime" className="block text-sm font-semibold text-[var(--public-text)] mb-2.5">
+              <label htmlFor="plannedTime" className="public-label">
                 Forventet tidspunkt
               </label>
               <input
                 type="time"
                 id="plannedTime"
                 name="plannedTime"
-                className="premium-input w-full px-4 py-2.5 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--public-primary)]/30"
+                className="public-input"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="activityType" className="block text-sm font-semibold text-[var(--public-text)] mb-2.5">
+            <label htmlFor="activityType" className="public-label">
               Aktivitetstype <span className="text-[var(--public-danger)] opacity-70">*</span>
             </label>
             <select
@@ -125,7 +125,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
               name="activityType"
               required
               defaultValue={ClubFlightIntentType.FLYING}
-              className="premium-input w-full px-4 py-2.5 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--public-primary)]/30 appearance-none"
+              className="public-input appearance-none"
               style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1.25rem' }}
             >
               <option value={ClubFlightIntentType.FLYING}>Flyvning</option>
@@ -138,8 +138,8 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
           </div>
 
           <div>
-            <label htmlFor="message" className="block text-sm font-semibold text-[var(--public-text)] mb-2.5">
-              Besked <span className="text-[var(--public-text-muted)] font-normal text-xs ml-1">(valgfrit, max 240 tegn)</span>
+            <label htmlFor="message" className="public-label">
+              Besked <span className="public-muted-text font-normal text-xs ml-1">(valgfrit, max 240 tegn)</span>
             </label>
             <textarea
               id="message"
@@ -147,27 +147,27 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
               rows={3}
               maxLength={240}
               placeholder="F.eks. hvilke fly du tager med, eller om der er noget specielt..."
-              className="premium-input w-full px-4 py-2.5 rounded-xl shadow-sm focus:ring-2 focus:ring-[var(--public-primary)]/30 placeholder-[var(--public-text-soft)]"
+              className="public-input"
             ></textarea>
           </div>
 
           <button
             type="submit"
-            className="premium-button w-full flex justify-center items-center py-3.5 px-6 border border-transparent rounded-xl shadow-xl text-base font-bold text-white bg-gradient-to-r from-[var(--public-primary)] to-[var(--public-primary-soft)] hover:brightness-110 active:scale-[0.98] transition-all"
+            className="public-primary-button w-full"
           >
             Meld ankomst
           </button>
         </form>
 
-        <div className="mt-12 sm:mt-16 pt-8 sm:pt-10 border-t border-white/5">
+        <div className="mt-12 sm:mt-16 pt-8 sm:pt-10 border-t border-[var(--public-card-border)]">
           <h2 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 text-[var(--public-text)] flex items-center gap-3">
             <span className="w-1.5 h-8 bg-[var(--public-primary)] rounded-full"></span>
             Dine seneste meldinger
           </h2>
           
           {recentIntents.length === 0 ? (
-            <div className="p-8 text-center rounded-2xl bg-white/5 border border-white/5">
-              <p className="italic text-[var(--public-text-soft)]">
+            <div className="p-8 text-center rounded-2xl bg-[var(--public-surface)] border border-[var(--public-card-border)]">
+              <p className="italic public-text-soft">
                 Du har endnu ikke oprettet nogen &apos;Jeg flyver&apos;-meldinger.
               </p>
             </div>
@@ -190,7 +190,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                         })}
                       </span>
                       {intent.plannedAt && (
-                        <span className="text-sm font-medium px-2 py-0.5 rounded-md bg-white/10 text-[var(--public-text-muted)]">
+                        <span className="text-sm font-medium px-2 py-0.5 rounded-md bg-[var(--public-primary-soft)] text-[var(--public-text-muted)]">
                           kl. {new Date(intent.plannedAt).toLocaleTimeString("da-DK", { 
                             hour: '2-digit', 
                             minute: '2-digit' 
@@ -201,7 +201,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                     <span className={`text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg ${
                       intent.status === ClubFlightIntentStatus.ACTIVE ? 'status-badge-active' : 
                       intent.status === ClubFlightIntentStatus.CANCELLED ? 'status-badge-cancelled' :
-                      'bg-white/10 text-[var(--public-text-soft)]'
+                      'bg-[var(--public-primary-soft)] text-[var(--public-text-soft)]'
                     }`}>
                       {getFlightIntentStatusLabel(intent.status)}
                     </span>
@@ -212,7 +212,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                         <span className="font-semibold text-[var(--public-text)]">{getActivityLabel(intent.activityType)}</span>
                       </div>
                       {intent.message && (
-                        <div className="text-sm italic text-[var(--public-text-muted)] leading-relaxed">
+                        <div className="text-sm italic public-muted-text leading-relaxed">
                           &ldquo;{intent.message}&rdquo;
                         </div>
                       )}
@@ -224,7 +224,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                         <input type="hidden" name="flightIntentId" value={intent.id} />
                         <button 
                           type="submit"
-                          className="premium-button text-xs font-bold px-4 py-2 bg-[var(--public-danger)]/10 hover:bg-[var(--public-danger)]/20 text-[var(--public-danger)] border border-[var(--public-danger)]/20 rounded-xl transition-all active:scale-95"
+                          className="text-xs font-bold px-4 py-2 bg-[var(--public-danger-soft)] hover:opacity-80 text-[var(--public-danger)] border border-[var(--public-danger-border)] rounded-xl transition-all active:scale-95"
                         >
                           Aflys
                         </button>
@@ -233,7 +233,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
                   </div>
                 </div>
               ))}
-              <div className="flex items-center gap-2 mt-8 text-[var(--public-text-soft)] opacity-60">
+              <div className="flex items-center gap-2 mt-8 public-soft-text opacity-60">
                 <div className="w-1 h-1 rounded-full bg-current"></div>
                 <p className="text-[10px] uppercase tracking-widest font-bold">
                   Redigering er planlagt til en fremtidig opdatering
@@ -243,8 +243,8 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
           )}
         </div>
 
-        <div className="mt-12 pt-10 border-t border-white/5 text-center">
-          <p className="text-sm font-medium text-[var(--public-text-soft)] opacity-60">
+        <div className="mt-12 pt-10 border-t border-[var(--public-card-border)] text-center">
+          <p className="text-sm font-medium public-soft-text opacity-60">
             Dagens offentlige aktivitetsliste vises på forsiden.
           </p>
         </div>
