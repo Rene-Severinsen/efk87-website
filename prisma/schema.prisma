@@ -42,7 +42,8 @@ model Club {
   forumThreads    ClubForumThread[]
   forumReplies    ClubForumReply[]
   homepageContent HomepageContent[]
-  locationPage ClubLocationPage[]
+  locationPage ClubLocationPage?
+  rulesPage    ClubRulesPage?
 
   flightSchoolPage      FlightSchoolPage?
   flightSchoolDocuments FlightSchoolDocument[]
@@ -862,7 +863,7 @@ model ClubMemberCertificate {
 }
 
 /// Represents a pending membership application submitted via the public site.
-/// This is a temporary model and NOT a permanent member table. 
+/// This is a temporary model and NOT a permanent member table.
 /// It exists because applications can be submitted without a user account/login.
 model PublicMemberApplication {
   id              String                  @id @default(cuid())
@@ -929,3 +930,20 @@ model ClubLocationPage {
 
   club Club @relation(fields: [clubId], references: [id])
 }
+
+model ClubRulesPage {
+  id     String @id @default(cuid())
+  clubId String @unique
+
+  ownRulesPdfUrl     String
+  flightZoneImageUrl String?
+  flightZoneImageAlt String?
+  legalTextHtml      String  @db.Text
+  practicalTextHtml  String  @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+}
+

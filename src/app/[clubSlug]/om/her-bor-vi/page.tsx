@@ -2,6 +2,7 @@ import { resolvePublicPageForClub } from "../../../../lib/publicSite/publicPageR
 import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPageShell";
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { publicRoutes } from "../../../../lib/publicRoutes";
+import { getClubLocationPageContent } from "../../../../lib/locationPage/locationPageService";
 
 interface WhereWeLivePageProps {
     params: Promise<{
@@ -48,39 +49,67 @@ function getMapsLinks(latitude: number | null | undefined, longitude: number | n
     };
 }
 
-function ImagePlaceholder({
-                              title,
-                              description,
-                          }: {
+function getParagraphs(text: string): string[] {
+    return text
+        .split(/\n\s*\n/)
+        .map((paragraph) => paragraph.trim())
+        .filter(Boolean);
+}
+
+function getLines(text: string): string[] {
+    return text
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+}
+
+function ImageBlock({
+                        imageUrl,
+                        title,
+                        description,
+                        alt,
+                    }: {
+    imageUrl: string | null;
     title: string;
     description: string;
+    alt: string;
 }) {
     return (
         <div className="mt-5 overflow-hidden rounded-2xl border border-[var(--public-card-border)] bg-[var(--public-surface)]">
-            <div className="flex aspect-[16/9] items-center justify-center border-b border-[var(--public-card-border)] bg-[var(--public-primary-soft)]">
-                <div className="flex flex-col items-center gap-3 px-6 text-center">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--public-card-border)] bg-[var(--public-card)] text-[var(--public-primary)]">
-                        <svg
-                            className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                        </svg>
-                    </div>
-
-                    <p className="text-sm font-semibold text-[var(--public-primary)]">
-                        Billede tilføjes senere fra Admin
-                    </p>
+            {imageUrl ? (
+                <div className="aspect-[16/9] border-b border-[var(--public-card-border)] bg-[var(--public-surface)]">
+                    <img
+                        src={imageUrl}
+                        alt={alt}
+                        className="h-full w-full object-cover"
+                    />
                 </div>
-            </div>
+            ) : (
+                <div className="flex aspect-[16/9] items-center justify-center border-b border-[var(--public-card-border)] bg-[var(--public-primary-soft)]">
+                    <div className="flex flex-col items-center gap-3 px-6 text-center">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--public-card-border)] bg-[var(--public-card)] text-[var(--public-primary)]">
+                            <svg
+                                className="h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                            </svg>
+                        </div>
+
+                        <p className="text-sm font-semibold text-[var(--public-primary)]">
+                            Billede tilføjes senere fra Admin
+                        </p>
+                    </div>
+                </div>
+            )}
 
             <div className="p-4">
                 <h3 className="text-base font-bold text-[var(--public-text)]">
@@ -108,11 +137,17 @@ export default async function WhereWeLivePage({ params }: WhereWeLivePageProps) 
         publicSettings,
     } = await resolvePublicPageForClub(clubSlug, pageSlug);
 
+    const content = await getClubLocationPageContent(club.id);
+
     const latitude = club.settings?.weatherLatitude ?? null;
     const longitude = club.settings?.weatherLongitude ?? null;
     const formattedLatitude = formatCoordinate(latitude);
     const formattedLongitude = formatCoordinate(longitude);
     const mapsLinks = getMapsLinks(latitude, longitude);
+
+    const drivingGuideParagraphs = getParagraphs(content.drivingGuide);
+    const parkingGuideParagraphs = getParagraphs(content.parkingGuide);
+    const indoorAddressLines = getLines(content.indoorAddress);
 
     return (
         <ThemedClubPageShell
@@ -201,9 +236,11 @@ export default async function WhereWeLivePage({ params }: WhereWeLivePageProps) 
                         ) : null}
                     </div>
 
-                    <ImagePlaceholder
-                        title="Kort over adgangsvej til pladsen"
-                        description="Her vises senere et tydeligt billede/kort, der viser den korrekte adgangsvej til klubområdet."
+                    <ImageBlock
+                        imageUrl={content.accessImageUrl}
+                        title={content.accessImageTitle}
+                        description={content.accessImageDescription}
+                        alt={content.accessImageAlt}
                     />
                 </ThemedSectionCard>
 
@@ -239,8 +276,7 @@ export default async function WhereWeLivePage({ params }: WhereWeLivePageProps) 
 
                     <div className="rounded-2xl border border-[var(--public-card-border)] bg-[var(--public-primary-soft)] p-4">
                         <p className="text-base font-semibold leading-relaxed text-[var(--public-text)]">
-                            Kør efter Faldskærmsvej, 3500 Værløse, men drej til højre ad betonbanen
-                            ved Propelvej. Følg derefter anvisningen til klubområdet.
+                            {content.accessNotice}
                         </p>
                     </div>
                 </ThemedSectionCard>
@@ -252,26 +288,16 @@ export default async function WhereWeLivePage({ params }: WhereWeLivePageProps) 
                         </h2>
 
                         <div className="mt-4 space-y-4 text-base font-normal leading-relaxed text-[var(--public-text)]">
-                            <p>
-                                Kør efter Faldskærmsvej, 3500 Værløse, men drej til højre ad betonbanen
-                                ved Propelvej. Lige før Faldskærmsvej starter, kører du ind på betonbanen.
-                            </p>
-
-                            <p>
-                                For enden af betonbanen er der en bom. Cykler og gående kan komme igennem.
-                                Det kan give problemer, hvis navigationsapps forsøger at føre dig via andre
-                                adgangsveje i området.
-                            </p>
-
-                            <p>
-                                Skal du ind med bil, kræver det normalt adgang efter aftale med klubben.
-                                Kontakt en relevant kontaktperson, hvis du er i tvivl.
-                            </p>
+                            {drivingGuideParagraphs.map((paragraph) => (
+                                <p key={paragraph}>{paragraph}</p>
+                            ))}
                         </div>
 
-                        <ImagePlaceholder
-                            title="Kørselsvej og betonbane"
-                            description="Her vises senere billede/kort over betonbanen, bommen og den korrekte vej ind."
+                        <ImageBlock
+                            imageUrl={content.drivingImageUrl}
+                            title={content.drivingImageTitle}
+                            description={content.drivingImageDescription}
+                            alt={content.drivingImageAlt}
                         />
                     </ThemedSectionCard>
 
@@ -281,60 +307,51 @@ export default async function WhereWeLivePage({ params }: WhereWeLivePageProps) 
                         </h2>
 
                         <div className="mt-4 space-y-4 text-base font-normal leading-relaxed text-[var(--public-text)]">
-                            <p>
-                                Parkér på skrå på modsat side af betonklodserne inden bommen helt ind
-                                mod flyvestationen. Parkér ikke på betonbanen eller foran bommen.
-                            </p>
-
-                            <p>
-                                Undgå at køre efter kortforslag, der fører gennem private eller lukkede
-                                områder. Det giver unødig gene for naboer og andre brugere af området.
-                            </p>
-
-                            <p>
-                                Er du ny besøgende, så spørg hellere en ekstra gang. Det er lettere end
-                                at skulle vende et sted, hvor man egentlig ikke skulle have været.
-                            </p>
+                            {parkingGuideParagraphs.map((paragraph) => (
+                                <p key={paragraph}>{paragraph}</p>
+                            ))}
                         </div>
 
-                        <ImagePlaceholder
-                            title="Parkering og bom"
-                            description="Her vises senere billede/kort over parkering, bom og praktisk adgang til flyveområdet."
+                        <ImageBlock
+                            imageUrl={content.parkingImageUrl}
+                            title={content.parkingImageTitle}
+                            description={content.parkingImageDescription}
+                            alt={content.parkingImageAlt}
                         />
                     </ThemedSectionCard>
                 </section>
 
                 <ThemedSectionCard className="p-5 sm:p-6">
                     <h2 className="text-xl font-bold text-[var(--public-text)] sm:text-2xl">
-                        Indendørs flyvning
+                        {content.indoorTitle}
                     </h2>
 
                     <p className="mt-3 text-base font-normal leading-relaxed text-[var(--public-text)]">
-                        Klubben har også indendørsflyvning i vintersæsonen. Her flyves der med
-                        mindre modeller i hal, når vejret og sæsonen kalder på indendørs aktivitet.
+                        {content.indoorDescription}
                     </p>
 
                     <div className="mt-5 rounded-2xl border border-[var(--public-card-border)] bg-[var(--public-surface)] p-4">
                         <h3 className="text-lg font-bold text-[var(--public-text)]">
-                            Solvanghallen
+                            {content.indoorVenueName}
                         </h3>
 
                         <div className="mt-2 space-y-1 text-base font-normal leading-relaxed text-[var(--public-text)]">
-                            <p>Solvangskolen</p>
-                            <p>Nordtoftevej 58</p>
-                            <p>3520 Farum</p>
-                            <p>Typisk søndag kl. 18–22 i sæsonen.</p>
+                            {indoorAddressLines.map((line) => (
+                                <p key={line}>{line}</p>
+                            ))}
+                            <p>{content.indoorSchedule}</p>
                         </div>
 
                         <p className="mt-4 text-sm leading-relaxed text-[var(--public-text-muted)]">
-                            Tider og adgang kan ændre sig. Følg klubbens aktuelle informationer,
-                            hvis der annonceres særskilte tider for indendørsflyvning.
+                            {content.indoorNote}
                         </p>
                     </div>
 
-                    <ImagePlaceholder
-                        title="Indendørsflyvning og parkering"
-                        description="Her vises senere billede/kort over hal, indgang og parkering til indendørsflyvning."
+                    <ImageBlock
+                        imageUrl={content.indoorImageUrl}
+                        title={content.indoorImageTitle}
+                        description={content.indoorImageDescription}
+                        alt={content.indoorImageAlt}
                     />
                 </ThemedSectionCard>
             </div>
