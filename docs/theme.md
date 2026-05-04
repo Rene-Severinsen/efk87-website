@@ -20,7 +20,7 @@ The `ClubTheme` model stores visual settings for a specific club:
 
 ## Application
 
-Themes are applied to the public homepage through CSS variables. The `PublicClubHomePage` component maps `ClubTheme` fields to the following CSS variables on its root element:
+Themes are applied to the public homepage through CSS variables. The `PublicClubHomePageV2` component maps `ClubTheme` fields to the following CSS variables on its root element:
 
 - `--club-bg`
 - `--club-panel`
@@ -33,7 +33,7 @@ Themes are applied to the public homepage through CSS variables. The `PublicClub
 - `--club-shadow`
 - `--club-radius`
 
-If no theme is found for a club, the component falls back to the default values defined in `PublicClubHomePage.css`.
+If no theme is found for a club, the component falls back to the default values defined in `PublicClubHomePageV2.css`.
 
 ## Management
 

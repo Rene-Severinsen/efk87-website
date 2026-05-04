@@ -46,7 +46,7 @@ We use a standardized set of breakpoints for all public/member pages:
 - **ThemedPageHeader**: Headings scale automatically using `clamp()`.
 
 ## Implementation Approach
-- Use existing CSS classes from `PublicClubHomePage.css` where possible.
+- Use existing CSS classes from `PublicClubHomePageV2.css` where possible.
 - Prefer Tailwind's responsive utilities for new components.
 - Avoid per-page hacks; use shared responsive patterns.
 - Always verify at:

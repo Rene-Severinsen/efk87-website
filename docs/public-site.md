@@ -164,27 +164,6 @@ Frontpage V2 is now the active live homepage for all clubs.
 ### ThemedClubPageShell
 `src/components/publicSite/ThemedClubPageShell.tsx` is the shared layout for all non-home club pages. It uses `src/components/publicSite/PublicShell.css` for base styles.
 
-- **Visual Consistency**: Uses the same dark premium visual language as the homepage.
-- **Theme Support**: Applies `ClubTheme` CSS variables consistently across the site.
-- **Navigation**: Uses the approved `ThemedTopBar` with visibility-aware navigation and actions.
-- **Footer**: Uses the approved `ThemedFooter` with club contact info and sponsors.
-- **Content Area**: Provides a centered content area (default max-width 1000px) with a themed header.
-
-### ThemedBuildingBlocks
-Reusable small themed components for consistent internal page styling:
-- **ThemedPageHeader**: Standard title and optional subtitle/eyebrow.
-- **ThemedSectionCard**: A card container matching the homepage "section-card" style.
-- **ThemedCard**: Standard card container matching the homepage "card" style.
-
-### PublicClubShell (Deleted)
-`src/components/publicSite/PublicClubShell.tsx` was the old white/default layout and has been deleted. Use `ThemedClubPageShell`.
-
-### PublicContentPage (Deleted)
-`src/components/publicSite/PublicContentPage.tsx` has been deleted in favor of `ThemedClubPageShell` and `ThemedSectionCard`.
-
-### PublicClubHomePage (Deleted)
-`src/components/publicSite/PublicClubHomePage.tsx` has been deleted. Use `PublicClubHomePageV2`.
-
 ## Implementation Guidelines
 
 - **No Hardcoding**: Public site components must not hardcode `EFK87` or any other specific club data. Use the data provided by the `club` object.

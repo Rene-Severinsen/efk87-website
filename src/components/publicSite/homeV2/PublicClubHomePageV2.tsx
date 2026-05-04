@@ -90,7 +90,7 @@ interface PublicClubHomePageV2Props {
 }
 
 /**
- * PublicClubHomePageV2 - Isolated V2 homepage component.
+ * PublicClubHomePageV2 - Active premium homepage component.
  * Renders public homepage with tenant data.
  */
 export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, flightSchoolHomepage, weather, footerData }: PublicClubHomePageV2Props) {

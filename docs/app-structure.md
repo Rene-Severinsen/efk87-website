@@ -22,7 +22,7 @@ This document outlines the canonical structure of the EFK87 Next.js application.
 - **Design Foundation**: Modern business/club-platform expression. Future design phases will reuse existing mockup examples.
 
 ## Visual Design
-- **Homepage Design Master**: The homepage (`PublicClubHomePage.tsx`) is the visual master for the platform's premium dark theme.
+- **Homepage Design Master**: The homepage (`PublicClubHomePageV2.tsx`) is the visual master for the platform's premium dark theme.
 - **Shared Themed Shell**: All non-home pages within a club must use `ThemedClubPageShell.tsx` to ensure visual consistency and correct navigation.
 - **Themed Components**: Use `ThemedSectionCard`, `ThemedCard`, and `ThemedPageHeader` for consistent content presentation.
 
