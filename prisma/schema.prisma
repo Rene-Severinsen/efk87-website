@@ -42,6 +42,7 @@ model Club {
   forumThreads    ClubForumThread[]
   forumReplies    ClubForumReply[]
   homepageContent HomepageContent[]
+  locationPage ClubLocationPage[]
 
   flightSchoolPage      FlightSchoolPage?
   flightSchoolDocuments FlightSchoolDocument[]
@@ -886,4 +887,45 @@ model PublicMemberApplication {
 
   @@index([clubId, status])
   @@index([clubId, createdAt])
+}
+
+model ClubLocationPage {
+  id        String   @id @default(cuid())
+  clubId    String   @unique
+
+  accessNotice String @db.Text
+  drivingGuide String @db.Text
+  parkingGuide String @db.Text
+
+  accessImageUrl         String?
+  accessImageTitle       String?
+  accessImageDescription String? @db.Text
+  accessImageAlt         String?
+
+  drivingImageUrl         String?
+  drivingImageTitle       String?
+  drivingImageDescription String? @db.Text
+  drivingImageAlt         String?
+
+  parkingImageUrl         String?
+  parkingImageTitle       String?
+  parkingImageDescription String? @db.Text
+  parkingImageAlt         String?
+
+  indoorTitle       String
+  indoorDescription String @db.Text
+  indoorVenueName   String
+  indoorAddress     String @db.Text
+  indoorSchedule    String
+  indoorNote        String @db.Text
+
+  indoorImageUrl         String?
+  indoorImageTitle       String?
+  indoorImageDescription String? @db.Text
+  indoorImageAlt         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
 }
