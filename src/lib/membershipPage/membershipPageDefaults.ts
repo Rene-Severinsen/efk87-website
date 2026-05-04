@@ -43,7 +43,7 @@ export const DEFAULT_MEMBERSHIP_PAGE_CONTENT: ClubMembershipPageContent = {
     "Efter indmeldelse fremsendes faktura. Betaling skal ske med korrekt betalingsreference. Medlemsnummer bruges som reference, når det fremgår af opkrævningen. Medlemskabet er først aktivt, når betalingen er registreret.",
   practicalText:
     "Har du spørgsmål om kontingent og betaling, kan du kontakte kassereren. Har du spørgsmål om skoleflyvning eller praktisk opstart, kan du kontakte klubbens instruktører.",
-  ctaLabel: "Meld dig ind",
+  ctaLabel: "Bliv medlem",
   contactCtaLabel: "Se kontaktpersoner",
   fees: [
     {

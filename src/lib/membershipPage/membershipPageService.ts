@@ -11,6 +11,16 @@ function normalizeText(value: string | null, fallback: string): string {
   return trimmed || fallback;
 }
 
+function normalizePrimaryCtaLabel(value: string | null): string {
+  const trimmed = value?.trim();
+
+  if (!trimmed || trimmed === "Meld dig ind") {
+    return "Bliv medlem";
+  }
+
+  return trimmed;
+}
+
 function normalizeFee(fee: MembershipFeeContent, index: number): MembershipFeeContent {
   return {
     id: fee.id,
@@ -54,7 +64,7 @@ export async function getClubMembershipPageContent(
     stepThreeText: normalizeText(membershipPage.stepThreeText, DEFAULT_MEMBERSHIP_PAGE_CONTENT.stepThreeText),
     paymentText: normalizeText(membershipPage.paymentText, DEFAULT_MEMBERSHIP_PAGE_CONTENT.paymentText),
     practicalText: normalizeText(membershipPage.practicalText, DEFAULT_MEMBERSHIP_PAGE_CONTENT.practicalText),
-    ctaLabel: normalizeText(membershipPage.ctaLabel, DEFAULT_MEMBERSHIP_PAGE_CONTENT.ctaLabel),
+    ctaLabel: normalizePrimaryCtaLabel(membershipPage.ctaLabel),
     contactCtaLabel: normalizeText(membershipPage.contactCtaLabel, DEFAULT_MEMBERSHIP_PAGE_CONTENT.contactCtaLabel),
     fees:
       membershipPage.fees.length > 0

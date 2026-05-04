@@ -497,3 +497,25 @@ body {
     padding-top: 18px;
   }
 }
+
+/* Public primary button hardening */
+.public-primary-button {
+  color: var(--public-text-on-primary);
+}
+
+.public-primary-button:hover,
+.public-primary-button:focus-visible {
+  color: var(--public-text-on-primary);
+}
+
+/* Public primary CTA text contrast hardening */
+.efk-topbar-primary-action,
+.efk-topbar-primary-action:visited,
+.efk-topbar-primary-action:hover,
+.efk-topbar-primary-action:focus-visible,
+.public-primary-button,
+.public-primary-button:visited,
+.public-primary-button:hover,
+.public-primary-button:focus-visible {
+  color: rgb(255 255 255) !important;
+}
