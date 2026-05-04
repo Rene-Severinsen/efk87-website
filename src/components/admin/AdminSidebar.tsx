@@ -131,6 +131,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               Forum
             </a>
             <a
+            href={`/${clubSlug}/admin/media`}
+            className={`admin-sidebar-item ${pathname?.startsWith(`/${clubSlug}/admin/media`) ? "active" : ""}`}
+          >
+            Media
+          </a>
+          <a
                 href={`/${clubSlug}/admin/galleri`}
                 className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/galleri` ? "active" : ""}`}
             >

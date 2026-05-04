@@ -43,6 +43,7 @@ model Club {
   forumReplies    ClubForumReply[]
   homepageContent HomepageContent[]
   locationPage ClubLocationPage?
+  mediaAssets ClubMediaAsset[]
   financePage ClubFinancePage?
   membershipPage ClubMembershipPage?
   rulesPage    ClubRulesPage?
@@ -1010,4 +1011,35 @@ model ClubFinancePage {
   updatedAt DateTime @updatedAt
 
   club Club @relation(fields: [clubId], references: [id])
+}
+
+
+model ClubMediaAsset {
+  id String @id @default(cuid())
+
+  clubId String
+
+  title        String?
+  altText      String?
+  originalName String
+  fileName     String
+  mimeType     String
+  sizeBytes    Int
+
+  storageProvider String @default("LOCAL")
+  storageKey      String
+  publicUrl       String
+
+  isActive Boolean @default(true)
+
+  uploadedByName  String?
+  uploadedByEmail String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id], onDelete: Cascade)
+
+  @@index([clubId, createdAt])
+  @@index([clubId, isActive])
 }
