@@ -14,42 +14,66 @@ interface ArticleTagCloudProps {
   getFilterUrl: (params: Record<string, string | null>) => string;
 }
 
-export default function ArticleTagCloud({ tags, selectedTagSlug, getFilterUrl }: ArticleTagCloudProps) {
-  const maxCount = Math.max(...tags.map(t => t.articleCount), 1);
-  
+export default function ArticleTagCloud({
+                                          tags,
+                                          selectedTagSlug,
+                                          getFilterUrl,
+                                        }: ArticleTagCloudProps) {
+  const maxCount = Math.max(...tags.map((tag) => tag.articleCount), 1);
+
   const getTagTierClasses = (count: number) => {
     const ratio = count / maxCount;
-    if (ratio > 0.75) return 'px-3 sm:px-4 py-1.5 sm:py-2.5 text-base sm:text-lg'; // tier-4
-    if (ratio > 0.4) return 'px-2.5 sm:px-3.5 py-1 sm:py-2 text-sm sm:text-base'; // tier-3
-    if (ratio > 0.15) return 'px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm'; // tier-2
-    return 'px-2 sm:px-2.5 py-1 sm:py-1.5 text-[10px] sm:text-xs'; // tier-1
+
+    if (ratio > 0.75) {
+      return "px-4 py-2 text-sm";
+    }
+
+    if (ratio > 0.4) {
+      return "px-3.5 py-2 text-sm";
+    }
+
+    if (ratio > 0.15) {
+      return "px-3 py-1.5 text-xs";
+    }
+
+    return "px-2.5 py-1.5 text-xs";
   };
 
-  const baseChipClasses = "inline-flex items-center rounded-full border border-sky-300/25 bg-sky-300/10 text-sky-50 font-bold no-underline whitespace-nowrap transition hover:bg-sky-300/20 hover:border-sky-300/40";
-  const activeClasses = "bg-sky-300/25 border-sky-300/50 text-white";
+  const getChipClasses = (isActive: boolean, tierClasses: string) =>
+      [
+        "inline-flex min-h-[32px] items-center rounded-full border font-bold no-underline transition",
+        "whitespace-nowrap",
+        tierClasses,
+        isActive
+            ? "border-[var(--public-primary)] bg-[var(--public-primary)] text-[var(--public-text-on-primary)]"
+            : "border-[var(--public-card-border)] bg-[var(--public-primary-soft)] text-[var(--public-primary)] hover:border-[var(--public-primary)] hover:bg-[var(--public-card)]",
+      ].join(" ");
 
   return (
-    <div className="article-tag-cloud flex flex-wrap items-center gap-2">
-      <Link
-        href={getFilterUrl({ tag: null })}
-        className={`${baseChipClasses} px-2.5 py-1.5 text-xs ${!selectedTagSlug ? activeClasses : ''}`}
-      >
-        Alle emner
-      </Link>
-      {tags.filter(t => t.articleCount > 0).map(tag => {
-        const tierClasses = getTagTierClasses(tag.articleCount);
-        const isActive = selectedTagSlug === tag.slug;
-        
-        return (
-          <Link
-            key={tag.id}
-            href={getFilterUrl({ tag: tag.slug })}
-            className={`${baseChipClasses} ${tierClasses} ${isActive ? activeClasses : ''}`}
-          >
-            {tag.name}
-          </Link>
-        );
-      })}
-    </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <Link
+            href={getFilterUrl({ tag: null })}
+            className={getChipClasses(!selectedTagSlug, "px-3 py-1.5 text-xs")}
+        >
+          Alle emner
+        </Link>
+
+        {tags
+            .filter((tag) => tag.articleCount > 0)
+            .map((tag) => {
+              const tierClasses = getTagTierClasses(tag.articleCount);
+              const isActive = selectedTagSlug === tag.slug;
+
+              return (
+                  <Link
+                      key={tag.id}
+                      href={getFilterUrl({ tag: tag.slug })}
+                      className={getChipClasses(isActive, tierClasses)}
+                  >
+                    {tag.name}
+                  </Link>
+              );
+            })}
+      </div>
   );
 }

@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { publicRoutes } from "../../lib/publicRoutes";
 
 interface ArticleSortSelectProps {
@@ -9,32 +10,40 @@ interface ArticleSortSelectProps {
   clubSlug: string;
 }
 
-export default function ArticleSortSelect({ currentSort, clubSlug }: ArticleSortSelectProps) {
+export default function ArticleSortSelect({
+                                            currentSort,
+                                            clubSlug,
+                                          }: ArticleSortSelectProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value;
+    const value = e.target.value;
     const params = new URLSearchParams(searchParams.toString());
-    
-    if (val === 'newest') {
-      params.delete('sort');
+
+    if (value === "newest") {
+      params.delete("sort");
     } else {
-      params.set('sort', val);
+      params.set("sort", value);
     }
-    
-    router.push(`${publicRoutes.articles(clubSlug)}?${params.toString()}`);
+
+    const queryString = params.toString();
+    router.push(
+        queryString
+            ? `${publicRoutes.articles(clubSlug)}?${queryString}`
+            : publicRoutes.articles(clubSlug)
+    );
   };
 
   return (
-    <select 
-      defaultValue={currentSort}
-      onChange={handleChange}
-      className="w-full appearance-none flex items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-[14px] bg-[var(--club-panel-soft)] border border-[var(--club-line)] text-[#dbe7ff] text-sm sm:text-[15px] outline-none cursor-pointer focus:border-sky-300/40 focus:ring-2 focus:ring-sky-300/10 transition-all"
-    >
-      <option value="newest">Nyeste først</option>
-      <option value="oldest">Ældste først</option>
-      <option value="title">Titel (A-Å)</option>
-    </select>
+      <select
+          defaultValue={currentSort}
+          onChange={handleChange}
+          className="public-input cursor-pointer appearance-none pr-12"
+      >
+        <option value="newest">Nyeste først</option>
+        <option value="oldest">Ældste først</option>
+        <option value="title">Titel (A-Å)</option>
+      </select>
   );
 }
