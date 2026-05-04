@@ -1,16 +1,23 @@
-import React from 'react';
-import { ForumBadge } from '../../lib/forum/forumHelpers';
+import React from "react";
+
+import { ForumBadge } from "../../lib/forum/forumHelpers";
 
 export default function ForumReplyBadge({ badge }: { badge: ForumBadge }) {
-  const colorClasses = {
-    green: "bg-emerald-500/20 text-emerald-400 border-emerald-500/20",
-    blue: "bg-blue-500/20 text-blue-400 border-blue-500/20",
-    cyan: "bg-sky-500/20 text-sky-400 border-sky-500/20",
-    amber: "bg-amber-500/20 text-amber-400 border-amber-500/20",
+  const badgeClasses: Record<ForumBadge["color"], string> = {
+    green:
+        "bg-[var(--public-success-soft)] text-[var(--public-success)] border-[var(--public-success-border)]",
+    blue:
+        "bg-[var(--public-info-soft)] text-[var(--public-info)] border-[var(--public-info-border)]",
+    cyan:
+        "bg-[var(--public-primary-soft)] text-[var(--public-primary)] border-[var(--public-info-border)]",
+    amber:
+        "bg-[var(--public-warning-soft)] text-[var(--public-warning)] border-[var(--public-warning-border)]",
   };
 
   return (
-    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border ${colorClasses[badge.color]}`}>
+      <span
+          className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${badgeClasses[badge.color]}`}
+      >
       {badge.text}
     </span>
   );

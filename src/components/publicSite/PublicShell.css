@@ -280,3 +280,166 @@
   max-width: 1000px;
   margin: 0 auto;
 }
+
+/* -------------------------------------------------------------------------- */
+/* Forum thread prose                                                          */
+/* -------------------------------------------------------------------------- */
+
+.public-home .forum-prose {
+  color: var(--public-text);
+  font-size: 1rem;
+  line-height: 1.8;
+  font-weight: 400;
+}
+
+.public-home .forum-prose-sm {
+  font-size: 0.975rem;
+  line-height: 1.75;
+}
+
+.public-home .forum-prose > *:first-child {
+  margin-top: 0;
+}
+
+.public-home .forum-prose > *:last-child {
+  margin-bottom: 0;
+}
+
+.public-home .forum-prose p {
+  margin: 0 0 1rem;
+  color: var(--public-text);
+}
+
+.public-home .forum-prose strong,
+.public-home .forum-prose b {
+  color: var(--public-text);
+  font-weight: 700;
+}
+
+.public-home .forum-prose em,
+.public-home .forum-prose i {
+  color: var(--public-text);
+}
+
+.public-home .forum-prose h1,
+.public-home .forum-prose h2,
+.public-home .forum-prose h3,
+.public-home .forum-prose h4 {
+  margin: 1.5rem 0 0.75rem;
+  color: var(--public-text);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.public-home .forum-prose ul,
+.public-home .forum-prose ol {
+  margin: 1rem 0 1rem 1.25rem;
+  padding-left: 0.5rem;
+  color: var(--public-text);
+}
+
+.public-home .forum-prose li {
+  margin: 0.4rem 0;
+  color: var(--public-text);
+}
+
+.public-home .forum-prose li::marker {
+  color: var(--public-text-muted);
+}
+
+.public-home .forum-prose a {
+  color: var(--public-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.public-home .forum-prose a:hover {
+  opacity: 0.85;
+}
+
+.public-home .forum-prose blockquote {
+  margin: 1.25rem 0;
+  padding: 0.875rem 1rem;
+  border-left: 4px solid var(--public-primary);
+  border-radius: 0 14px 14px 0;
+  background: var(--public-surface);
+  color: var(--public-text);
+}
+
+.public-home .forum-prose code {
+  padding: 0.15rem 0.4rem;
+  border-radius: 8px;
+  background: var(--public-surface);
+  color: var(--public-text);
+  border: 1px solid var(--public-card-border);
+  font-size: 0.92em;
+}
+
+.public-home .forum-prose pre {
+  margin: 1.25rem 0;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 16px;
+  background: var(--public-surface);
+  color: var(--public-text);
+  border: 1px solid var(--public-card-border);
+}
+
+.public-home .forum-prose pre code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.public-home .forum-prose hr {
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid var(--public-card-border);
+}
+
+.public-home .forum-prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 16px;
+  border: 1px solid var(--public-card-border);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Public button stabilization inside public shell                             */
+/* Ensures shared button primitives are not weakened by generic a/button reset. */
+/* -------------------------------------------------------------------------- */
+
+.public-home a.public-primary-button,
+.public-home button.public-primary-button {
+  background: var(--public-primary);
+  color: var(--public-text-on-primary);
+  border: 1px solid var(--public-primary);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--public-primary) 20%, transparent);
+}
+
+.public-home a.public-primary-button:hover,
+.public-home button.public-primary-button:hover {
+  background: color-mix(in srgb, var(--public-primary) 92%, var(--public-text));
+  color: var(--public-text-on-primary);
+  border-color: color-mix(in srgb, var(--public-primary) 92%, var(--public-text));
+  text-decoration: none;
+}
+
+.public-home a.public-secondary-button,
+.public-home button.public-secondary-button {
+  background: var(--public-surface-strong);
+  color: var(--public-text);
+  border: 1px solid var(--public-card-border);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--public-text) 8%, transparent);
+}
+
+.public-home a.public-secondary-button:hover,
+.public-home button.public-secondary-button:hover {
+  background: var(--public-primary-soft);
+  color: var(--public-primary);
+  border-color: var(--public-primary);
+  text-decoration: none;
+}

@@ -215,41 +215,67 @@ body {
   font-size: 0.925rem;
   font-weight: 700;
   line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
   transition:
           transform 160ms ease,
           box-shadow 160ms ease,
           border-color 160ms ease,
           background-color 160ms ease,
-          color 160ms ease;
+          color 160ms ease,
+          opacity 160ms ease;
 }
 
 .public-primary-button {
   border: 1px solid var(--public-primary);
   background: var(--public-primary);
   color: var(--public-text-on-primary);
-  box-shadow: 0 12px 30px rgba(3, 105, 161, 0.2);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--public-primary) 20%, transparent);
 }
 
 .public-primary-button:hover {
+  background: color-mix(in srgb, var(--public-primary) 92%, var(--public-text));
+  border-color: color-mix(in srgb, var(--public-primary) 92%, var(--public-text));
+  color: var(--public-text-on-primary);
+  text-decoration: none;
   transform: translateY(-1px);
-  box-shadow: 0 16px 36px rgba(3, 105, 161, 0.26);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--public-primary) 24%, transparent);
+}
+
+.public-primary-button:focus-visible {
+  outline: none;
+  box-shadow:
+          0 0 0 3px var(--public-primary-soft),
+          0 10px 24px color-mix(in srgb, var(--public-primary) 20%, transparent);
 }
 
 .public-secondary-button {
   border: 1px solid var(--public-card-border);
-  background: var(--public-card);
+  background: var(--public-surface-strong);
   color: var(--public-text);
-  box-shadow: var(--public-shadow);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--public-text) 8%, transparent);
 }
 
 .public-secondary-button:hover {
-  transform: translateY(-1px);
+  background: var(--public-primary-soft);
   border-color: var(--public-primary);
   color: var(--public-primary);
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--public-primary) 16%, transparent);
+}
+
+.public-secondary-button:focus-visible {
+  outline: none;
+  box-shadow:
+          0 0 0 3px var(--public-primary-soft),
+          var(--public-shadow);
 }
 
 .public-primary-button:disabled,
-.public-secondary-button:disabled {
+.public-primary-button[aria-disabled="true"],
+.public-secondary-button:disabled,
+.public-secondary-button[aria-disabled="true"] {
   cursor: not-allowed;
   opacity: 0.6;
   transform: none;
