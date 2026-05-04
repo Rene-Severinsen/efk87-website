@@ -30,20 +30,20 @@ export default function ForgotPasswordPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen public-page-shell flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-[500px]">
         <ThemedSectionCard>
-          <h1 className="text-3xl font-bold mb-8 text-center">Glemt adgangskode</h1>
+          <h1 className="text-3xl font-bold mb-8 text-center text-[var(--public-text)]">Glemt adgangskode</h1>
 
           {message ? (
             <div className="space-y-6">
-              <div className="p-4 bg-blue-900/30 border border-blue-500/50 rounded-md text-blue-200 text-sm">
+              <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl text-blue-700 dark:text-blue-300 text-sm">
                 {message}
               </div>
               <div className="text-center">
                 <Link
                   href={publicRoutes.login(clubSlug)}
-                  className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
+                  className="text-[var(--public-primary)] hover:opacity-80 transition-opacity font-medium"
                 >
                   Tilbage til login
                 </Link>
@@ -51,12 +51,12 @@ export default function ForgotPasswordPage({ params }: PageProps) {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
-              <p className="text-sm opacity-80 leading-relaxed">
+              <p className="public-muted-text">
                 Indtast din e-mailadresse nedenfor, så sender vi dig et link til at vælge en ny adgangskode.
               </p>
               
               <div>
-                <label htmlFor="email" className="block text-sm font-medium opacity-80 mb-2">
+                <label htmlFor="email" className="public-label">
                   E-mail adresse
                 </label>
                 <input
@@ -65,14 +65,14 @@ export default function ForgotPasswordPage({ params }: PageProps) {
                   id="email"
                   required
                   placeholder="din@email.dk"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-white/30"
+                  className="public-input"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isPending}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-base font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
+                className="public-primary-button w-full"
               >
                 {isPending ? "Sender..." : "Send nulstillingslink"}
               </button>
@@ -80,7 +80,7 @@ export default function ForgotPasswordPage({ params }: PageProps) {
               <div className="text-center pt-2">
                 <Link
                   href={publicRoutes.login(clubSlug)}
-                  className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                  className="text-sm text-[var(--public-primary)] hover:opacity-80 transition-opacity"
                 >
                   Tilbage til login
                 </Link>

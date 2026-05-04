@@ -84,19 +84,19 @@ export default function LoginForm({
   return (
     <ThemedSectionCard>
       {isMemberRequired && (
-        <div className="mb-6 p-4 bg-amber-900/30 border border-amber-500/50 rounded-md text-amber-200 text-sm">
+        <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-700 dark:text-amber-300 text-sm">
           Du skal være logget ind som aktivt medlem for at se denne side.
         </div>
       )}
 
       {error && (
-        <div className="mb-6 p-4 bg-red-900/30 border border-red-500/50 rounded-md text-red-200 text-sm">
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-700 dark:text-red-300 text-sm">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="mb-6 p-4 bg-green-900/30 border border-green-500/50 rounded-md text-green-200 text-sm">
+        <div className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-green-700 dark:text-green-300 text-sm">
           {success}
         </div>
       )}
@@ -104,7 +104,7 @@ export default function LoginForm({
       {mode === "password" ? (
         <form onSubmit={handlePasswordLogin} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium opacity-80 mb-2">
+            <label htmlFor="email" className="public-label">
               E-mail adresse
             </label>
             <input
@@ -115,11 +115,11 @@ export default function LoginForm({
               placeholder="din@email.dk"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-white/30"
+              className="public-input"
             />
           </div>
           <div>
-            <label htmlFor="password" title="Adgangskode" className="block text-sm font-medium opacity-80 mb-2">
+            <label htmlFor="password" title="Adgangskode" className="public-label">
               Adgangskode
             </label>
             <input
@@ -127,13 +127,13 @@ export default function LoginForm({
               name="password"
               id="password"
               required
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-white/30"
+              className="public-input"
             />
           </div>
           <button
             type="submit"
             disabled={isPending}
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-base font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
+            className="public-primary-button w-full"
           >
             {isPending ? "Logger ind..." : "Log ind"}
           </button>
@@ -146,13 +146,13 @@ export default function LoginForm({
                 setSuccess(null);
                 setMode("magic-link");
               }}
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-sm text-[var(--public-primary)] hover:opacity-80 transition-opacity"
             >
               Send loginlink i stedet
             </button>
             <Link
               href={publicRoutes.forgotPassword(clubSlug)}
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-sm text-[var(--public-primary)] hover:opacity-80 transition-opacity"
             >
               Glemt adgangskode?
             </Link>
@@ -161,7 +161,7 @@ export default function LoginForm({
       ) : (
         <form onSubmit={handleMagicLinkLogin} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium opacity-80 mb-2">
+            <label htmlFor="email" className="public-label">
               E-mail adresse
             </label>
             <input
@@ -172,13 +172,13 @@ export default function LoginForm({
               placeholder="din@email.dk"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 text-white placeholder-white/30"
+              className="public-input"
             />
           </div>
           <button
             type="submit"
             disabled={isPending}
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-base font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
+            className="public-primary-button w-full"
           >
             {isPending ? "Sender..." : "Send magic link"}
           </button>
@@ -191,7 +191,7 @@ export default function LoginForm({
                 setSuccess(null);
                 setMode("password");
               }}
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              className="text-sm text-[var(--public-primary)] hover:opacity-80 transition-opacity"
             >
               Log ind med adgangskode i stedet
             </button>
@@ -199,8 +199,8 @@ export default function LoginForm({
         </form>
       )}
 
-      <div className="mt-10 pt-8 border-t border-white/5 text-center">
-        <p className="text-sm opacity-60">
+      <div className="mt-10 pt-8 border-t border-[var(--public-card-border)] text-center">
+        <p className="public-muted-text">
           Login giver kun adgang, hvis din bruger har aktivt medlemskab af klubben.
         </p>
       </div>
