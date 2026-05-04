@@ -44,7 +44,8 @@ export default async function AboutPage({ params }: AboutPageProps) {
       title: "Bestyrelsen",
       description: "Læs om klubbens bestyrelse og ansvarlige personer.",
       icon: "🧑‍💼",
-      available: false,
+      href: publicRoutes.board(clubSlug),
+      available: true,
     },
     {
       title: "Økonomi",

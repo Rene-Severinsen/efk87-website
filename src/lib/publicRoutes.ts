@@ -10,6 +10,7 @@
 export const publicRoutes = {
   home: (clubSlug: string) => `/${clubSlug}`,
   about: (clubSlug: string) => `/${clubSlug}/about`,
+  board: (clubSlug: string) => `/${clubSlug}/om/bestyrelsen`,
   contact: (clubSlug: string) => `/${clubSlug}/om/kontakt`,
   forum: (clubSlug: string) => `/${clubSlug}/forum`,
   gallery: (clubSlug: string) => `/${clubSlug}/galleri`,
