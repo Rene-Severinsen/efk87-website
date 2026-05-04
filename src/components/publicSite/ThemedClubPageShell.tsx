@@ -77,14 +77,17 @@ export default function ThemedClubPageShell({
         />
 
         <main className="px-4 py-6 sm:px-6 sm:py-12 min-h-[60vh]">
-          <div style={{ maxWidth: maxWidth, margin: '0 auto' }}>
+          <div className="public-page-header-container">
             {!currentPath?.endsWith('/profil') && (
-              <ThemedPageHeader 
-                title={title}
-                subtitle={subtitle}
-                eyebrow={eyebrow}
-              />
+                <ThemedPageHeader
+                    title={title}
+                    subtitle={subtitle}
+                    eyebrow={eyebrow}
+                />
             )}
+          </div>
+
+          <div style={{ maxWidth: maxWidth, margin: '0 auto' }}>
             {children}
           </div>
         </main>

@@ -45,7 +45,7 @@ export default async function LoginPage({ params, searchParams }: PageProps) {
       actionItems={actionItems}
       title="Log ind"
       currentPath={publicRoutes.login(clubSlug)}
-      maxWidth="500px"
+      maxWidth="1000px"
     >
       <LoginForm 
         clubSlug={clubSlug}
