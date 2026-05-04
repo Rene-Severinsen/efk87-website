@@ -49,7 +49,7 @@ export default async function FlyveskolePage({ params }: PageProps) {
       ) : (
         <div className="space-y-12">
           {page.intro && (
-            <ThemedSectionCard className="border-l-4 border-l-sky-400/50">
+            <ThemedSectionCard className="border-l-4 border-l-[var(--public-info-border)]">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <p className="text-xl sm:text-2xl font-medium text-[var(--public-text)] leading-relaxed">
                   {page.intro}
@@ -87,7 +87,7 @@ export default async function FlyveskolePage({ params }: PageProps) {
                         {instructor.email && (
                           <div className="flex gap-2 items-baseline whitespace-nowrap">
                             <span className="opacity-50 flex-shrink-0 text-[var(--public-text)]">E-mail:</span>
-                            <a href={`mailto:${instructor.email}`} className="text-[var(--public-text)] opacity-90 hover:opacity-100 hover:text-sky-400 transition-colors truncate block">
+                            <a href={`mailto:${instructor.email}`} className="text-[var(--public-text)] opacity-90 hover:opacity-100 hover:text-[var(--public-primary)] transition-colors truncate block">
                               {instructor.email}
                             </a>
                           </div>
@@ -95,7 +95,7 @@ export default async function FlyveskolePage({ params }: PageProps) {
                         {instructor.mobilePhone && (
                           <div className="flex gap-2 items-baseline whitespace-nowrap">
                             <span className="opacity-50 flex-shrink-0 text-[var(--public-text)]">Telefon:</span>
-                            <a href={`tel:${instructor.mobilePhone}`} className="text-[var(--public-text)] opacity-90 hover:opacity-100 hover:text-sky-400 transition-colors truncate block">
+                            <a href={`tel:${instructor.mobilePhone}`} className="text-[var(--public-text)] opacity-90 hover:opacity-100 hover:text-[var(--public-primary)] transition-colors truncate block">
                               {instructor.mobilePhone}
                             </a>
                           </div>
@@ -116,9 +116,9 @@ export default async function FlyveskolePage({ params }: PageProps) {
                   <Link 
                     key={doc.id}
                     href={publicRoutes.flightSchoolDocument(clubSlug, doc.slug)}
-                    className="group flex flex-col p-6 rounded-2xl bg-[var(--public-card)] border border-[var(--public-card-border)] hover:border-sky-500/50 hover:bg-sky-500/10 transition-all h-auto min-h-0"
+                    className="group flex flex-col p-6 rounded-2xl bg-[var(--public-card)] border border-[var(--public-card-border)] hover:border-[var(--public-info-border)] hover:bg-[var(--public-info-soft)] transition-all h-auto min-h-0"
                   >
-                    <h3 className="text-xl font-bold mb-3 group-hover:text-sky-400 transition-colors leading-tight text-[var(--public-text)]">
+                    <h3 className="text-xl font-bold mb-3 group-hover:text-[var(--public-primary)] transition-colors leading-tight text-[var(--public-text)]">
                       {doc.title}
                     </h3>
                     {doc.excerpt && (
@@ -126,7 +126,7 @@ export default async function FlyveskolePage({ params }: PageProps) {
                         {doc.excerpt}
                       </p>
                     )}
-                    <div className="mt-auto text-sm font-semibold text-sky-400 flex items-center gap-2 uppercase tracking-wider">
+                    <div className="mt-auto text-sm font-semibold text-[var(--public-primary)] flex items-center gap-2 uppercase tracking-wider">
                       Læs dokument 
                       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform">
                         <path d="M5 12h14M12 5l7 7-7 7"/>

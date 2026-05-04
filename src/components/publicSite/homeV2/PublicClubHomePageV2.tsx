@@ -226,7 +226,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                           <ForumIcon iconKey={thread.iconKey} className="w-5 h-5" />
                         </div>
                         <div className="flex-grow min-w-0">
-                          <div className="home-v2-row-title truncate group-hover:text-sky-400 transition-colors">
+                          <div className="home-v2-row-title truncate group-hover:text-[var(--home-primary)] transition-colors">
                             {thread.title}
                           </div>
                           <div className="home-v2-row-sub truncate">{metaLine}</div>
@@ -368,7 +368,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                         <span>👨‍✈️ {flightSchoolHomepage.totalInstructors} {flightSchoolHomepage.totalInstructors === 1 ? 'instruktør' : 'instruktører'}</span>
                         <span>👥 {flightSchoolHomepage.totalBookedStudents} {flightSchoolHomepage.totalBookedStudents === 1 ? 'elev' : 'elever'}</span>
                         {flightSchoolHomepage.totalAvailableSlots > 0 && (
-                          <span className="text-emerald-400">🟢 {flightSchoolHomepage.totalAvailableSlots} ledige</span>
+                          <span className="text-[var(--home-success)]">🟢 {flightSchoolHomepage.totalAvailableSlots} ledige</span>
                         )}
                       </div>
                     </div>
@@ -404,7 +404,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                           <span className="home-v2-muted">{day.instructorCount} {day.instructorCount === 1 ? 'instruktør' : 'instruktører'}</span>
                           {day.availableSlots > 0 ? (
-                            <span className="text-emerald-400" style={{ fontSize: '12px' }}>{day.availableSlots} ledige</span>
+                            <span className="text-[var(--home-success)]" style={{ fontSize: '12px' }}>{day.availableSlots} ledige</span>
                           ) : (
                             <span className="home-v2-muted" style={{ fontSize: '12px' }}>Fuldt booket</span>
                           )}

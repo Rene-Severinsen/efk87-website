@@ -160,7 +160,7 @@
 
 .home-v2-root .home-v2-primary:hover,
 .home-v2-root .home-v2-activity-cta-primary:hover {
-  background: color-mix(in srgb, var(--home-primary) 88%, #000000);
+  background: color-mix(in srgb, var(--home-primary) 88%, var(--home-text));
   color: var(--home-text-on-primary);
   border-color: var(--home-primary);
 }
@@ -195,7 +195,7 @@
 }
 
 .home-v2-root .home-v2-link-cyan:hover {
-  color: color-mix(in srgb, var(--home-primary) 82%, #000000);
+  color: color-mix(in srgb, var(--home-primary) 82%, var(--home-text));
 }
 
 /* Dark mode depth tuning */

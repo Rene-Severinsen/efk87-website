@@ -33,7 +33,7 @@ export default async function BlivMedlemPage({ params }: PageProps) {
             href="https://modelflyvningdanmark.dk"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-sky-300 underline underline-offset-4 decoration-2 hover:text-sky-100 transition-colors"
+            className="font-semibold text-[var(--public-primary)] underline underline-offset-4 decoration-2 opacity-90 hover:opacity-100 transition-colors"
         >
           Modelflyvning Danmark
         </a>
