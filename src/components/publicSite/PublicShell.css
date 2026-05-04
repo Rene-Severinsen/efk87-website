@@ -131,3 +131,82 @@
     padding: 24px;
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/* Shared topbar color stabilization                                           */
+/* Ensures ThemedTopBar renders identically on homepage and subpages.           */
+/* Must stay below the generic .public-home a/button reset.                     */
+/* -------------------------------------------------------------------------- */
+
+.public-home .efk-topbar-root {
+  color: var(--public-text);
+}
+
+.public-home .efk-topbar-root a,
+.public-home .efk-topbar-root button,
+.public-home .efk-topbar-root summary {
+  color: var(--public-text);
+  text-decoration: none;
+}
+
+.public-home .efk-topbar-desktop,
+.public-home .efk-topbar-mobile-details,
+.public-home .efk-topbar-mobile-menu {
+  background: var(--public-card);
+  border-color: var(--public-card-border);
+  box-shadow: var(--public-shadow);
+}
+
+/* Main navigation links */
+
+.public-home .efk-topbar-desktop nav a,
+.public-home .efk-topbar-mobile-menu nav a {
+  color: var(--public-nav-text, var(--public-text-muted));
+  background: transparent;
+  border-color: transparent;
+}
+
+.public-home .efk-topbar-desktop nav a:hover,
+.public-home .efk-topbar-mobile-menu nav a:hover {
+  color: var(--public-text);
+  background: var(--public-nav-hover, var(--public-primary-soft));
+}
+
+/* Active navigation state */
+
+.public-home .efk-topbar-desktop nav a.active,
+.public-home .efk-topbar-mobile-menu nav a.active {
+  color: var(--public-primary);
+  background: var(--public-primary-soft);
+  border-color: var(--public-primary);
+  font-weight: 600;
+}
+
+/* Brand text */
+
+.public-home .efk-topbar-root .efk-topbar-desktop span,
+.public-home .efk-topbar-root .efk-topbar-mobile-summary span {
+  color: inherit;
+}
+
+/* Action buttons/links */
+
+.public-home .efk-topbar-root form button {
+  color: var(--public-text);
+}
+
+.public-home .efk-topbar-root form button:hover {
+  background: var(--public-nav-hover, var(--public-primary-soft));
+}
+
+/* Mobile toggle */
+
+.public-home .efk-topbar-mobile-summary > div:last-child {
+  color: var(--public-text);
+  background: var(--public-card);
+  border-color: var(--public-card-border);
+}
+
+.public-home .efk-topbar-mobile-summary > div:last-child:hover {
+  background: var(--public-nav-hover, var(--public-primary-soft));
+}
