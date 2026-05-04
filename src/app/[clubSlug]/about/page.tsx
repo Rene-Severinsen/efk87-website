@@ -31,7 +31,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
     publicSettings,
   } = await resolvePublicPageForClub(clubSlug, "about");
 
-  const title = page?.title ?? `Om ${club.settings?.shortName || club.name}`;
+  const title = `Om ${club.settings?.shortName || club.name}`;
   const body = page?.body?.trim();
 
   const showIntro =
@@ -95,12 +95,14 @@ export default async function AboutPage({ params }: AboutPageProps) {
       icon: "📊",
       available: false,
     },
-    {
-      title: "Klubmestre",
-      description: "Se tidligere og nuværende klubmestre.",
-      icon: "🏆",
-      available: false,
-    },
+
+
+    // {
+    //   title: "Klubmestre",
+    //   description: "Se tidligere og nuværende klubmestre.",
+    //   icon: "🏆",
+    //   available: false,
+    // },
   ];
 
   const sponsors = [
