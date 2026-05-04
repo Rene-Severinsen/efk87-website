@@ -23,6 +23,7 @@ import { getPublicClubSettings } from "../../lib/publicSite/publicClubSettingsSe
 import { getOpenMeteoWeather } from "../../lib/weather/openMeteoWeatherService";
 import { getActiveHomepageContentForClub } from "../../lib/homepageContent/homepageContentService";
 import { getFlightSchoolHomepageView } from "../../lib/flightSchool/flightSchoolBookingService";
+import { getHomepageGalleryPreview } from "../../lib/gallery/galleryService";
 
 interface ClubPageProps {
   params: Promise<{
@@ -86,6 +87,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const latestForumActivity = await getLatestForumActivity(club.id);
   const homepageContents = await getActiveHomepageContentForClub(club.id, viewer);
   const flightSchoolHomepage = await getFlightSchoolHomepageView(club.id);
+  const galleryPreview = await getHomepageGalleryPreview(club.id, viewer);
   const publicSettings = await getPublicClubSettings(club.id);
   
   const weather = await getOpenMeteoWeather(
@@ -112,6 +114,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
           flightSchoolHomepage={flightSchoolHomepage}
           weather={weather}
           footerData={footerData}
+          galleryPreview={galleryPreview}
       />
   );
 }

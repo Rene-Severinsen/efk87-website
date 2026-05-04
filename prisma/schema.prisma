@@ -336,6 +336,9 @@ model GalleryAlbum {
   legacySource  String?
   legacyId      String?
   publishedAt   DateTime?
+  createdByMemberProfileId String?
+  createdByName            String?
+  createdByEmail           String?
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
 
@@ -354,6 +357,12 @@ model GalleryImage {
   title        String?
   caption      String?
   imageUrl     String
+  originalName String?
+  fileName     String?
+  mimeType     String?
+  sizeBytes    Int?
+  storageProvider String @default("LOCAL")
+  storageKey      String?
   thumbnailUrl String?
   sortOrder    Int                @default(0)
   status       GalleryImageStatus
@@ -361,6 +370,9 @@ model GalleryImage {
   legacyId     String?
   takenAt      DateTime?
   uploadedAt   DateTime?
+  uploadedByMemberProfileId String?
+  uploadedByName            String?
+  uploadedByEmail           String?
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
 

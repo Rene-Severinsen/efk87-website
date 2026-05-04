@@ -16,7 +16,8 @@ interface PageProps {
 export default async function GalleriPage({ params }: PageProps) {
   const { clubSlug } = await params;
   const pageSlug = "galleri";
-  const { club, page, theme, footerData, navigationItems, actionItems, publicSettings } = await resolvePublicPageForClub(clubSlug, pageSlug);
+  const { club, page, theme, footerData, navigationItems, actionItems, publicSettings } =
+    await resolvePublicPageForClub(clubSlug, pageSlug);
 
   if (!page) {
     notFound();
@@ -38,45 +39,74 @@ export default async function GalleriPage({ params }: PageProps) {
       title="Galleri"
       subtitle="Billeder og albums fra klubbens liv."
       currentPath={publicRoutes.gallery(clubSlug)}
+      maxWidth="1120px"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        {albums.length > 0 ? (
-          albums.map((album) => (
-            <Link key={album.id} href={publicRoutes.galleryAlbum(clubSlug, album.slug)} className="no-underline group">
-              <ThemedSectionCard className="h-full p-4 sm:p-6 hover:scale-[1.01] transition-transform duration-200">
-                {album.coverImageUrl && (
-                  <div 
-                    className="w-full h-40 sm:h-48 bg-cover bg-center rounded-xl -mx-4 -mt-4 sm:-mx-6 sm:-mt-6 mb-4 sm:mb-6" 
-                    style={{ backgroundImage: `url(${album.coverImageUrl})` }}
-                  />
-                )}
-                <h3 className="text-lg sm:text-xl font-bold mb-1.5 sm:mb-2 group-hover:text-[var(--club-accent)] transition-colors leading-tight">
-                  {album.title}
-                </h3>
-                {album.description && (
-                  <p className="text-xs sm:text-sm opacity-70 line-clamp-2 mb-4">
-                    {album.description}
-                  </p>
-                )}
-                <div className="mt-auto flex justify-between items-center text-[10px] sm:text-xs opacity-50">
-                  <span>{album.imageCount} billeder</span>
-                  {album.publishedAt && (
-                    <span>{new Date(album.publishedAt).toLocaleDateString('da-DK')}</span>
-                  )}
+      {viewer.isMember ? (
+        <div className="mb-6 flex justify-end">
+          <Link href={publicRoutes.galleryNew(clubSlug)} className="public-primary-button">
+            Opret galleri
+          </Link>
+        </div>
+      ) : null}
+
+      {albums.length > 0 ? (
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {albums.map((album) => (
+            <Link
+              key={album.id}
+              href={publicRoutes.galleryAlbum(clubSlug, album.slug)}
+              className="group no-underline"
+            >
+              <ThemedSectionCard className="flex h-full overflow-hidden p-0 transition duration-200 group-hover:-translate-y-1 group-hover:shadow-xl">
+                <div className="flex h-full w-full flex-col">
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[var(--public-surface)]">
+                    {album.coverImageUrl ? (
+                      <img
+                        src={album.coverImageUrl}
+                        alt={album.title}
+                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-[var(--public-text-muted)]">
+                        Ingen billeder endnu
+                      </div>
+                    )}
+
+                    {album.visibility === "MEMBERS_ONLY" ? (
+                      <div className="absolute right-3 top-3 rounded-full bg-[var(--public-card)] px-3 py-1 text-xs font-bold text-[var(--public-primary)] shadow">
+                        Kun medlemmer
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="flex flex-1 flex-col p-5">
+                    <h2 className="text-xl font-bold leading-tight text-[var(--public-text)]">
+                      {album.title}
+                    </h2>
+
+                    {album.description ? (
+                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[var(--public-text-muted)]">
+                        {album.description}
+                      </p>
+                    ) : null}
+
+                    <div className="mt-auto flex items-center justify-between pt-5 text-xs font-medium text-[var(--public-text-muted)]">
+                      <span>{album.imageCount} billeder</span>
+                      <span>{album.updatedAt.toLocaleDateString("da-DK")}</span>
+                    </div>
+                  </div>
                 </div>
               </ThemedSectionCard>
             </Link>
-          ))
-        ) : (
-          <div className="col-span-full">
-            <ThemedSectionCard>
-              <p className="text-center py-8 opacity-70">
-                Der er endnu ingen albums i galleriet.
-              </p>
-            </ThemedSectionCard>
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <ThemedSectionCard>
+          <p className="py-8 text-center text-[var(--public-text-muted)]">
+            Der er endnu ingen albums i galleriet.
+          </p>
+        </ThemedSectionCard>
+      )}
     </ThemedClubPageShell>
   );
 }

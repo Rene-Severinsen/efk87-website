@@ -37,6 +37,7 @@ export const publicRoutes = {
   forumThread: (clubSlug: string, categorySlug: string, threadSlug: string) => `/${clubSlug}/forum/${categorySlug}/${threadSlug}`,
   article: (clubSlug: string, articleSlug: string) => `/${clubSlug}/artikler/${articleSlug}`,
   galleryAlbum: (clubSlug: string, albumSlug: string) => `/${clubSlug}/galleri/${albumSlug}`,
+  galleryNew: (clubSlug: string) => `/${clubSlug}/galleri/nyt`,
   flightSchoolDocument: (clubSlug: string, documentSlug: string) => `/${clubSlug}/flyveskole/${documentSlug}`,
   profileMemberCard: (clubSlug: string) => `/${clubSlug}/profil/medlemskort`,
   forgotPassword: (clubSlug: string) => `/${clubSlug}/login/glemt-adgangskode`,

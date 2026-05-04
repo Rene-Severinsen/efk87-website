@@ -1,30 +1,61 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
-import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
-import AdminShell from "../../../../components/admin/AdminShell";
+import { GalleryAlbumStatus } from "../../../../generated/prisma";
+import ArchiveGalleryButton from "./ArchiveGalleryButton";
 import { getAdminGalleryOverview } from "../../../../lib/admin/galleryAdminService";
+import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
+import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
+import AdminShell from "../../../../components/admin/AdminShell";
 import "../../../../components/admin/AdminDashboard.css";
 
 interface PageProps {
   params: Promise<{
     clubSlug: string;
   }>;
+  searchParams?: Promise<{
+    saved?: string;
+  }>;
 }
 
-export default async function Page({ params }: PageProps) {
+function statusLabel(status: GalleryAlbumStatus): string {
+  switch (status) {
+    case GalleryAlbumStatus.PUBLISHED:
+      return "Publiceret";
+    case GalleryAlbumStatus.DRAFT:
+      return "Kladde";
+    case GalleryAlbumStatus.ARCHIVED:
+      return "Arkiveret";
+    default:
+      return status;
+  }
+}
+
+function visibilityLabel(visibility: string): string {
+  return visibility === "MEMBERS_ONLY" ? "Kun medlemmer" : "Offentlig";
+}
+
+export default async function Page({ params, searchParams }: PageProps) {
   const { clubSlug } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const wasDeleted = resolvedSearchParams.saved === "deleted";
 
   let club;
+
   try {
     club = await requireClubBySlug(clubSlug);
   } catch (error) {
     if (error instanceof TenancyError) {
       notFound();
     }
+
     throw error;
   }
 
-  const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin/galleri`);
+  const viewer = await requireClubAdminForClub(
+    club.id,
+    clubSlug,
+    `/${clubSlug}/admin/galleri`,
+  );
 
   const { albums, stats } = await getAdminGalleryOverview(club.id);
 
@@ -37,92 +68,220 @@ export default async function Page({ params }: PageProps) {
       userEmail={viewer.email}
     >
       <div className="admin-gallery-page">
-        <div className="admin-header-section" style={{ marginBottom: '24px' }}>
+        <div className="admin-header-section" style={{ marginBottom: "24px" }}>
           <h1 className="admin-section-title">Galleri</h1>
-          <p className="admin-section-subtitle">Overblik over albums og billeder. Upload og moderation kommer senere.</p>
+          <p className="admin-section-subtitle">
+            Administrér medlemsgallerier, synlighed, status og billeder.
+          </p>
         </div>
 
-        <div style={{ 
-          backgroundColor: '#e6f7ff', 
-          border: '1px solid #91d5ff', 
-          padding: '16px', 
-          borderRadius: '4px', 
-          marginBottom: '24px',
-          fontSize: '0.875rem'
-        }}>
-          <strong>Legacy-import:</strong> Data fra det gamle site skal senere kunne importeres. Denne side viser kun databaseindhold.
+        {wasDeleted ? (
+          <div
+            style={{
+              marginBottom: "24px",
+              border: "1px solid rgba(16,185,129,0.25)",
+              background: "rgba(16,185,129,0.12)",
+              color: "#86efac",
+              borderRadius: "12px",
+              padding: "14px 16px",
+              fontWeight: 700,
+            }}
+          >
+            Galleriet er slettet/arkiveret.
+          </div>
+        ) : null}
+
+        <div
+          className="admin-stats-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "16px",
+            marginBottom: "32px",
+          }}
+        >
+          <div className="admin-card">
+            <div style={{ fontSize: "0.875rem", color: "#8c8c8c" }}>Albums</div>
+            <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{stats.totalAlbums}</div>
+          </div>
+          <div className="admin-card">
+            <div style={{ fontSize: "0.875rem", color: "#8c8c8c" }}>Billeder</div>
+            <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{stats.totalImages}</div>
+          </div>
+          <div className="admin-card">
+            <div style={{ fontSize: "0.875rem", color: "#8c8c8c" }}>Publicerede albums</div>
+            <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{stats.publishedAlbums}</div>
+          </div>
         </div>
 
-        <div className="admin-stats-grid" style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-          gap: '16px',
-          marginBottom: '32px'
-        }}>
-          <div className="admin-card">
-            <div style={{ fontSize: '0.875rem', color: '#8c8c8c' }}>Albums</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.totalAlbums}</div>
-          </div>
-          <div className="admin-card">
-            <div style={{ fontSize: '0.875rem', color: '#8c8c8c' }}>Billeder</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.totalImages}</div>
-          </div>
-          <div className="admin-card">
-            <div style={{ fontSize: '0.875rem', color: '#8c8c8c' }}>Publicerede albums</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.publishedAlbums}</div>
-          </div>
-          <div className="admin-card">
-            <div style={{ fontSize: '0.875rem', color: '#8c8c8c' }}>Legacy-import</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Ikke kørt</div>
-          </div>
-        </div>
+        {albums.length > 0 ? (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+              gap: "18px",
+            }}
+          >
+            {albums.map((album) => {
+              const isArchived = album.status === GalleryAlbumStatus.ARCHIVED;
 
-        <div className="admin-card">
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid #f0f0f0', textAlign: 'left' }}>
-                <th style={{ padding: '12px 8px' }}>Titel</th>
-                <th style={{ padding: '12px 8px' }}>Status</th>
-                <th style={{ padding: '12px 8px' }}>Synlighed</th>
-                <th style={{ padding: '12px 8px' }}>Billeder</th>
-                <th style={{ padding: '12px 8px' }}>Legacy</th>
-                <th style={{ padding: '12px 8px' }}>Opdateret</th>
-              </tr>
-            </thead>
-            <tbody>
-              {albums.length > 0 ? (
-                albums.map((album) => (
-                  <tr key={album.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
-                    <td style={{ padding: '12px 8px' }}>{album.title}</td>
-                    <td style={{ padding: '12px 8px' }}>
-                      <span className={`admin-badge ${album.status.toLowerCase()}`}>
-                        {album.status}
-                      </span>
-                    </td>
-                    <td style={{ padding: '12px 8px' }}>{album.visibility}</td>
-                    <td style={{ padding: '12px 8px' }}>{album.imageCount}</td>
-                    <td style={{ padding: '12px 8px' }}>
-                      {album.legacySource ? (
-                        <span title={`ID: ${album.legacyId}`}>{album.legacySource}</span>
-                      ) : (
-                        <span style={{ opacity: 0.4 }}>-</span>
-                      )}
-                    </td>
-                    <td style={{ padding: '12px 8px', fontSize: '0.875rem' }}>
-                      {album.updatedAt.toLocaleDateString('da-DK')}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={6} style={{ padding: '32px', textAlign: 'center', color: '#8c8c8c' }}>
-                    Ingen albums fundet.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              return (
+                <article
+                  key={album.id}
+                  className="admin-card"
+                  style={{
+                    overflow: "hidden",
+                    padding: 0,
+                    opacity: isArchived ? 0.58 : 1,
+                  }}
+                >
+                  <div
+                    style={{
+                      aspectRatio: "16 / 10",
+                      background: "#0b1120",
+                      position: "relative",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {album.coverImageUrl ? (
+                      <img
+                        src={album.coverImageUrl}
+                        alt={album.title}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          display: "block",
+                        }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#64748b",
+                          fontWeight: 700,
+                        }}
+                      >
+                        Ingen cover
+                      </div>
+                    )}
+
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "10px",
+                        left: "10px",
+                        borderRadius: "999px",
+                        background: isArchived ? "#64748b" : "#0ea5e9",
+                        color: "white",
+                        fontSize: "0.7rem",
+                        fontWeight: 800,
+                        padding: "5px 9px",
+                      }}
+                    >
+                      {statusLabel(album.status)}
+                    </div>
+
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "10px",
+                        right: "10px",
+                        borderRadius: "999px",
+                        background: "rgba(15,23,42,0.82)",
+                        color: "white",
+                        fontSize: "0.7rem",
+                        fontWeight: 800,
+                        padding: "5px 9px",
+                      }}
+                    >
+                      {visibilityLabel(album.visibility)}
+                    </div>
+                  </div>
+
+                  <div style={{ padding: "16px", display: "grid", gap: "12px" }}>
+                    <div>
+                      <h2
+                        style={{
+                          fontSize: "1.05rem",
+                          fontWeight: 800,
+                          color: "white",
+                          margin: 0,
+                        }}
+                      >
+                        {album.title}
+                      </h2>
+
+                      {album.description ? (
+                        <p
+                          style={{
+                            marginTop: "6px",
+                            color: "#94a3b8",
+                            fontSize: "0.85rem",
+                            lineHeight: 1.45,
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                          }}
+                        >
+                          {album.description}
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: "8px",
+                        color: "#94a3b8",
+                        fontSize: "0.8rem",
+                      }}
+                    >
+                      <div>
+                        <strong style={{ color: "#cbd5e1" }}>Billeder</strong>
+                        <br />
+                        {album.imageCount}
+                      </div>
+                      <div>
+                        <strong style={{ color: "#cbd5e1" }}>Opdateret</strong>
+                        <br />
+                        {album.updatedAt.toLocaleDateString("da-DK")}
+                      </div>
+                      <div style={{ gridColumn: "1 / -1" }}>
+                        <strong style={{ color: "#cbd5e1" }}>Oprettet af</strong>
+                        <br />
+                        {album.createdByName || album.createdByEmail || "-"}
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                      <Link href={`/${clubSlug}/admin/galleri/${album.id}`} className="admin-btn">
+                        Åbn
+                      </Link>
+
+                      {!isArchived ? (
+                        <ArchiveGalleryButton
+                          clubSlug={clubSlug}
+                          albumId={album.id}
+                          albumTitle={album.title}
+                        />
+                      ) : null}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="admin-card" style={{ padding: "32px", textAlign: "center", color: "#8c8c8c" }}>
+            Ingen albums fundet.
+          </div>
+        )}
       </div>
     </AdminShell>
   );

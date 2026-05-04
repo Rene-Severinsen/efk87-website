@@ -20,6 +20,8 @@ import { FlightSchoolHomepageViewModel } from '../../../lib/flightSchool/flightS
 import { publicRoutes } from '../../../lib/publicRoutes';
 import HomepageContentBoxes from './HomepageContentBoxes';
 import Avatar from '../../shared/Avatar';
+import HomeGalleryToggle from './HomeGalleryToggle';
+import { HomepageGalleryPreviewDTO } from '../../../lib/gallery/galleryService';
 
 type ThreadWithRelations = ClubForumThread & {
   category: ClubForumCategory;
@@ -69,6 +71,7 @@ interface PublicClubHomePageV2Props {
   latestForumActivity: ThreadWithRelations[];
   homepageContents: HomepageContentWithSignups[];
   flightSchoolHomepage: FlightSchoolHomepageViewModel;
+  galleryPreview?: HomepageGalleryPreviewDTO;
   weather?: WeatherData | null;
   footerData?: {
     footer: PublicClubFooter | null;
@@ -93,7 +96,12 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Active premium homepage component.
  * Renders public homepage with tenant data.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, flightSchoolHomepage, weather, footerData }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, flightSchoolHomepage, galleryPreview, weather, footerData }: PublicClubHomePageV2Props) {
+  const safeGalleryPreview = galleryPreview ?? {
+    latestImages: [],
+    latestAlbums: [],
+  };
+
   const clubDisplayName = club.settings?.displayName || club.name;
   const clubShortName = club.settings?.shortName || club.name;
   const firstName = viewer.firstName || viewer.name?.split(' ')[0] || 'Gæst';
@@ -239,38 +247,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               </div>
             </article>
 
-            <article className="home-v2-card home-v2-section-card">
-              <div className="home-v2-section-head">
-                <h2>Seneste billeder</h2>
-                <Link className="home-v2-link-soft" href={publicRoutes.gallery(club.slug)}>Åbn galleri</Link>
-              </div>
-              <div className="home-v2-gallery-grid">
-                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
-                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1508615070457-7baeba4003ab?auto=format&fit=crop&w=900&q=80')"}} />
-                  <div className="home-v2-gallery-label">ASW-28 · I dag</div>
-                </Link>
-                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
-                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?auto=format&fit=crop&w=900&q=80')"}} />
-                  <div className="home-v2-gallery-label">Klubpladsen</div>
-                </Link>
-                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
-                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80')"}} />
-                  <div className="home-v2-gallery-label">Skoleflyvning</div>
-                </Link>
-                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
-                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1496449903678-68ddcb189a24?auto=format&fit=crop&w=900&q=80')"}} />
-                  <div className="home-v2-gallery-label">Skræntdag</div>
-                </Link>
-                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
-                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=80')"}} />
-                  <div className="home-v2-gallery-label">Klubhuset</div>
-                </Link>
-                <Link href={publicRoutes.gallery(club.slug)} className="home-v2-gallery-item">
-                  <div className="home-v2-gallery-image" style={{backgroundImage: "url('https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=900&q=80')"}} />
-                  <div className="home-v2-gallery-label">Solnedgang</div>
-                </Link>
-              </div>
-            </article>
+            <HomeGalleryToggle clubSlug={club.slug} galleryPreview={safeGalleryPreview} />
           </div>
 
           <div className="home-v2-stack">
