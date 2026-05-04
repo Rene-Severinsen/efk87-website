@@ -13,6 +13,7 @@ export const publicRoutes = {
   board: (clubSlug: string) => `/${clubSlug}/om/bestyrelsen`,
   contact: (clubSlug: string) => `/${clubSlug}/om/kontakt`,
   rules: (clubSlug: string) => `/${clubSlug}/om/regler-og-bestemmelser`,
+  membership: (clubSlug: string) => `/${clubSlug}/om/medlemsskab`,
   whereWeLive: (clubSlug: string) => `/${clubSlug}/om/her-bor-vi`,
   forum: (clubSlug: string) => `/${clubSlug}/forum`,
   gallery: (clubSlug: string) => `/${clubSlug}/galleri`,

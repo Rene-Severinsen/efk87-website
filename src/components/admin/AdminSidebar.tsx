@@ -100,6 +100,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           >
             Regler og bestemmelser
           </a>
+          <a
+            href={`/${clubSlug}/admin/medlemsskab`}
+            className={`admin-sidebar-item ${pathname?.startsWith(`/${clubSlug}/admin/medlemsskab`) ? "active" : ""}`}
+          >
+            Medlemsskab
+          </a>
             <a
                 href={`/${clubSlug}/admin/artikler`}
                 className={`admin-sidebar-item ${pathname?.startsWith(`/${clubSlug}/admin/artikler`) ? "active" : ""}`}

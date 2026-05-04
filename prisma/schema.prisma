@@ -43,6 +43,7 @@ model Club {
   forumReplies    ClubForumReply[]
   homepageContent HomepageContent[]
   locationPage ClubLocationPage?
+  membershipPage ClubMembershipPage?
   rulesPage    ClubRulesPage?
 
   flightSchoolPage      FlightSchoolPage?
@@ -946,3 +947,48 @@ model ClubRulesPage {
   club Club @relation(fields: [clubId], references: [id])
 }
 
+
+
+model ClubMembershipPage {
+  id     String @id @default(cuid())
+  clubId String @unique
+
+  introText       String @db.Text
+  processIntro    String @db.Text
+  stepOneTitle    String
+  stepOneText     String @db.Text
+  stepTwoTitle    String
+  stepTwoText     String @db.Text
+  stepThreeTitle  String
+  stepThreeText   String @db.Text
+  paymentText     String @db.Text
+  practicalText   String @db.Text
+  ctaLabel        String
+  contactCtaLabel String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  club Club @relation(fields: [clubId], references: [id])
+  fees ClubMembershipFee[]
+}
+
+model ClubMembershipFee {
+  id String @id @default(cuid())
+
+  clubMembershipPageId String
+  title       String
+  price       String
+  signupFee   String @default("Udfyld gebyr")
+  period      String
+  description String @db.Text
+  sortOrder   Int    @default(0)
+  isActive    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  membershipPage ClubMembershipPage @relation(fields: [clubMembershipPageId], references: [id], onDelete: Cascade)
+
+  @@index([clubMembershipPageId, sortOrder])
+}

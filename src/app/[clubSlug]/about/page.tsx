@@ -41,6 +41,13 @@ export default async function AboutPage({ params }: AboutPageProps) {
 
   const tiles: AboutTile[] = [
     {
+      title: "Medlemsskab",
+      description: "Læs om indmeldelse, kontingenter og opkrævning.",
+      icon: "🪪",
+      href: publicRoutes.membership(clubSlug),
+      available: true,
+    },
+    {
       title: "Medlemmerne",
       description: "Overblik over klubbens medlemmer og medlemsliv.",
       icon: "👥",
