@@ -451,37 +451,37 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               </div>
             </article>
 
-            <article className="home-v2-card home-v2-section-card">
-              <div className="home-v2-section-head">
-                <h2>Hurtige genveje</h2>
-              </div>
-              <div className="home-v2-quick-list">
-                <Link className="home-v2-row-item" href={publicRoutes.about(club.slug)}>
-                  <div className="home-v2-row-icon">📜</div>
-                  <div>
-                    <div className="home-v2-row-title">Vedtægter</div>
-                    <div className="home-v2-row-sub">Klubbens formelle vedtægter og rammer for medlemskab</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-info">Åbn</span>
-                </Link>
-                <Link className="home-v2-row-item" href={publicRoutes.about(club.slug)}>
-                  <div className="home-v2-row-icon">⚠️</div>
-                  <div>
-                    <div className="home-v2-row-title">Pladsregler</div>
-                    <div className="home-v2-row-sub">Sikkerhed, flyvning, brug af bane og fælles regler på pladsen</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-info">Åbn</span>
-                </Link>
-                <Link className="home-v2-row-item" href={publicRoutes.flightSchoolCalendar(club.slug)}>
-                  <div className="home-v2-row-icon">🗓️</div>
-                  <div>
-                    <div className="home-v2-row-title">Skolekalender</div>
-                    <div className="home-v2-row-sub">Se planlagte skoleflyvninger, tider og dagens instruktion</div>
-                  </div>
-                  <span className="home-v2-status-badge home-v2-info">Åbn</span>
-                </Link>
-              </div>
-            </article>
+            {/*<article className="home-v2-card home-v2-section-card">*/}
+            {/*  <div className="home-v2-section-head">*/}
+            {/*    <h2>Hurtige genveje</h2>*/}
+            {/*  </div>*/}
+            {/*  <div className="home-v2-quick-list">*/}
+            {/*    <Link className="home-v2-row-item" href={publicRoutes.about(club.slug)}>*/}
+            {/*      <div className="home-v2-row-icon">📜</div>*/}
+            {/*      <div>*/}
+            {/*        <div className="home-v2-row-title">Vedtægter</div>*/}
+            {/*        <div className="home-v2-row-sub">Klubbens formelle vedtægter og rammer for medlemskab</div>*/}
+            {/*      </div>*/}
+            {/*      <span className="home-v2-status-badge home-v2-info">Åbn</span>*/}
+            {/*    </Link>*/}
+            {/*    <Link className="home-v2-row-item" href={publicRoutes.about(club.slug)}>*/}
+            {/*      <div className="home-v2-row-icon">⚠️</div>*/}
+            {/*      <div>*/}
+            {/*        <div className="home-v2-row-title">Pladsregler</div>*/}
+            {/*        <div className="home-v2-row-sub">Sikkerhed, flyvning, brug af bane og fælles regler på pladsen</div>*/}
+            {/*      </div>*/}
+            {/*      <span className="home-v2-status-badge home-v2-info">Åbn</span>*/}
+            {/*    </Link>*/}
+            {/*    <Link className="home-v2-row-item" href={publicRoutes.flightSchoolCalendar(club.slug)}>*/}
+            {/*      <div className="home-v2-row-icon">🗓️</div>*/}
+            {/*      <div>*/}
+            {/*        <div className="home-v2-row-title">Skolekalender</div>*/}
+            {/*        <div className="home-v2-row-sub">Se planlagte skoleflyvninger, tider og dagens instruktion</div>*/}
+            {/*      </div>*/}
+            {/*      <span className="home-v2-status-badge home-v2-info">Åbn</span>*/}
+            {/*    </Link>*/}
+            {/*  </div>*/}
+            {/*</article>*/}
           </div>
         </section>
 
