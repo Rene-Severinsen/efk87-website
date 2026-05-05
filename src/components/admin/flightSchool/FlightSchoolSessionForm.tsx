@@ -203,75 +203,75 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col">
-        <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+    <div className="admin-modal-backdrop">
+      <div className="admin-modal-panel max-w-5xl">
+        <div className="admin-modal-header">
+          <h3 className="admin-section-title flex items-center gap-2">
             <CalendarIcon className="w-5 h-5 text-sky-400" />
             {initialData ? "Rediger session" : "Opret ny session"}
           </h3>
-          <button onClick={onClose} className="p-2 text-slate-400 hover:text-white transition-colors">
+          <button onClick={onClose} className="admin-icon-button">
             <X className="w-6 h-6" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-8">
           {error && (
-            <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400 text-sm">
+            <div className="admin-alert admin-alert-danger">
               {error}
             </div>
           )}
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-4 space-y-6">
-              <h4 className="text-sm font-bold text-sky-400 uppercase tracking-wider">Grundlæggende information</h4>
+              <h4 className="admin-kicker">Grundlæggende information</h4>
               
-              <div className="space-y-4 bg-white/5 p-5 rounded-xl border border-white/5">
+              <div className="admin-meta-box space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Dato</label>
+                  <label className="admin-form-label">Dato</label>
                   <input
                     type="date"
                     required
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                    className="admin-input"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-1">Session Start</label>
+                    <label className="admin-form-label">Session Start</label>
                     <input
                       type="time"
                       required
                       value={startsAt}
                       onChange={(e) => setStartsAt(e.target.value)}
-                      className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                      className="admin-input"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-1">Session Slut</label>
+                    <label className="admin-form-label">Session Slut</label>
                     <input
                       type="time"
                       required
                       value={endsAt}
                       onChange={(e) => setEndsAt(e.target.value)}
-                      className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                      className="admin-input"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Instruktør</label>
+                  <label className="admin-form-label">Instruktør</label>
                   <select
                     required
                     value={instructorId}
                     onChange={(e) => setInstructorId(e.target.value)}
-                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                    className="admin-input"
                   >
-                    <option value="" disabled className="bg-slate-900 text-slate-500">Vælg instruktør...</option>
+                    <option value="" disabled>Vælg instruktør...</option>
                     {instructors.map((instructor) => (
-                      <option key={instructor.id} value={instructor.id} className="bg-slate-900 text-white">
+                      <option key={instructor.id} value={instructor.id} >
                         {instructor.firstName} {instructor.lastName}
                       </option>
                     ))}
@@ -279,25 +279,25 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Status</label>
+                  <label className="admin-form-label">Status</label>
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value as FlightSchoolSessionStatus)}
-                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                    className="admin-input"
                   >
-                    <option value="DRAFT" className="bg-slate-900">Udkast (Draft)</option>
-                    <option value="PUBLISHED" className="bg-slate-900">Udgivet (Published)</option>
-                    <option value="CANCELLED" className="bg-slate-900">Aflyst (Cancelled)</option>
+                    <option value="DRAFT" >Udkast (Draft)</option>
+                    <option value="PUBLISHED" >Udgivet (Published)</option>
+                    <option value="CANCELLED" >Aflyst (Cancelled)</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">Note (valgfri)</label>
+                  <label className="admin-form-label">Note (valgfri)</label>
                   <textarea
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     rows={3}
-                    className="w-full bg-slate-800 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-sky-500 transition-colors resize-none"
+                    className="admin-textarea"
                     placeholder="Evt. besked til elever..."
                   />
                 </div>
@@ -306,11 +306,11 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
 
             <div className="lg:col-span-8 space-y-6">
               <div className="flex justify-between items-center">
-                <h4 className="text-sm font-bold text-sky-400 uppercase tracking-wider">Tidsrum (Slots)</h4>
+                <h4 className="admin-kicker">Tidsrum (Slots)</h4>
                 <button
                   type="button"
                   onClick={handleAddTimeSlot}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 rounded-lg text-sm font-bold transition-colors border border-sky-500/20"
+                  className="admin-btn admin-btn-primary"
                 >
                   <Plus className="w-4 h-4" />
                   Tilføj tid
@@ -319,14 +319,14 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
 
               <div className="space-y-4">
                 {slots.length === 0 ? (
-                  <div className="p-12 bg-white/5 border border-dashed border-white/10 rounded-2xl flex flex-col items-center text-center">
-                    <Clock className="w-12 h-12 text-slate-600 mb-4" />
-                    <p className="text-slate-400 max-w-xs">Ingen tidsrum tilføjet endnu. Klik på "Tilføj tid" for at oprette det første tidsrum.</p>
+                  <div className="admin-empty-state">
+                    <Clock className="admin-empty-icon mb-4" />
+                    <p className="admin-muted max-w-xs">Ingen tidsrum tilføjet endnu. Klik på "Tilføj tid" for at oprette det første tidsrum.</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 gap-3">
                     {/* Header for slots on larger screens */}
-                    <div className="hidden md:grid md:grid-cols-12 gap-4 px-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    <div className="admin-slot-header hidden md:grid md:grid-cols-12 gap-4 px-4">
                       <div className="col-span-3">Start</div>
                       <div className="col-span-3">Slut</div>
                       <div className="col-span-2 text-center">Aktiv</div>
@@ -335,45 +335,41 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
                     </div>
 
                     {slots.map((slot) => (
-                      <div key={slot.id} className={`p-3 rounded-xl border transition-all ${slot.isActive ? 'bg-white/5 border-white/10' : 'bg-rose-500/5 border-rose-500/20 opacity-80'}`}>
+                      <div key={slot.id} className={`admin-slot-row ${slot.isActive ? "" : "is-inactive"}`}>
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                           <div className="col-span-3">
-                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Start</label>
+                            <label className="admin-mobile-label md:hidden">Start</label>
                             <input
                               type="time"
                               value={slot.startsAt}
                               onChange={(e) => updateLocalSlot(slot.id, { startsAt: e.target.value })}
-                              className="w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-sky-500 transition-colors"
+                              className="admin-input admin-input-sm"
                             />
                           </div>
                           <div className="col-span-3">
-                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Slut</label>
+                            <label className="admin-mobile-label md:hidden">Slut</label>
                             <input
                               type="time"
                               value={slot.endsAt}
                               onChange={(e) => updateLocalSlot(slot.id, { endsAt: e.target.value })}
-                              className="w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-sky-500 transition-colors"
+                              className="admin-input admin-input-sm"
                             />
                           </div>
                           <div className="col-span-2 flex justify-center">
-                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Aktiv</label>
+                            <label className="admin-mobile-label md:hidden">Aktiv</label>
                             <button
                               type="button"
                               onClick={() => updateLocalSlot(slot.id, { isActive: !slot.isActive })}
-                              className={`p-1.5 rounded-lg border transition-all ${
-                                  slot.isActive 
-                                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20' 
-                                  : 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20'
-                              }`}
+                              className={`admin-icon-toggle ${slot.isActive ? "is-active" : "is-inactive"}`}
                               title={slot.isActive ? 'Deaktiver' : 'Aktiver'}
                             >
                               {slot.isActive ? <Power className="w-4 h-4" /> : <PowerOff className="w-4 h-4" />}
                             </button>
                           </div>
                           <div className="col-span-2 text-center">
-                            <label className="md:hidden block text-[10px] font-bold text-slate-500 uppercase mb-1">Status</label>
+                            <label className="admin-mobile-label md:hidden">Status</label>
                             <div className="flex flex-col items-center">
-                              <span className={`text-[10px] font-bold uppercase ${slot.bookingCount > 0 ? 'text-emerald-400' : 'text-slate-500'}`}>
+                              <span className={`admin-slot-status ${slot.bookingCount > 0 ? "is-booked" : ""}`}>
                                 {slot.bookingCount > 0 ? 'Booket' : 'Ledig'}
                               </span>
                             </div>
@@ -388,7 +384,7 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
                                   updateLocalSlot(slot.id, { isActive: false });
                                 }
                               }}
-                              className="p-2 text-slate-500 hover:text-rose-400 transition-colors"
+                              className="admin-icon-button-danger-soft"
                               title={slot.isNew || slot.bookingCount === 0 ? "Fjern" : "Deaktiver (pga. booking)"}
                             >
                               <Trash2 className="w-4 h-4" />
@@ -404,18 +400,18 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
           </div>
         </form>
 
-        <div className="p-6 border-t border-white/10 bg-white/5 flex justify-end gap-3">
+        <div className="admin-modal-footer">
           <button
             type="button"
             onClick={onClose}
-            className="px-6 py-2 rounded-lg font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all"
+            className="admin-btn"
           >
             Annuller
           </button>
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="flex items-center gap-2 px-8 py-2 bg-sky-500 hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-all shadow-lg shadow-sky-500/20"
+            className="admin-btn admin-btn-primary"
           >
             {loading ? "Gemmer..." : (
               <>

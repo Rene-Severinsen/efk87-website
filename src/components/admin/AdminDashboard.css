@@ -2553,3 +2553,225 @@
   background: var(--admin-primary);
   box-shadow: 0 0 8px rgba(0, 119, 182, 0.35);
 }
+
+/* EFK87 admin flight school primitives */
+
+.admin-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.62);
+  padding: 16px;
+  backdrop-filter: blur(6px);
+}
+
+.admin-modal-panel {
+  display: flex;
+  width: 100%;
+  max-height: 90vh;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--admin-card-border);
+  border-radius: 22px;
+  background: var(--admin-card-bg);
+  color: var(--admin-text);
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
+}
+
+.admin-modal-header,
+.admin-modal-footer {
+  display: flex;
+  align-items: center;
+  border-color: var(--admin-card-border);
+  background: var(--admin-surface-soft);
+  padding: 24px;
+}
+
+.admin-modal-header {
+  justify-content: space-between;
+  border-bottom: 1px solid var(--admin-card-border);
+}
+
+.admin-modal-footer {
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid var(--admin-card-border);
+}
+
+.admin-icon-button,
+.admin-icon-button-danger-soft {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--admin-text-muted);
+  padding: 8px;
+  cursor: pointer;
+  transition: color 0.16s ease, background 0.16s ease;
+}
+
+.admin-icon-button:hover {
+  background: var(--admin-primary-soft);
+  color: var(--admin-primary-hover);
+}
+
+.admin-icon-button-danger-soft:hover {
+  background: var(--admin-danger-bg);
+  color: var(--admin-danger-text);
+}
+
+.admin-icon-button-danger-soft.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.admin-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px dashed var(--admin-card-border);
+  border-radius: 18px;
+  background: var(--admin-surface-soft);
+  padding: 48px;
+  text-align: center;
+}
+
+.admin-empty-icon {
+  color: var(--admin-text-soft);
+}
+
+.admin-slot-header {
+  color: var(--admin-text-muted);
+  font-size: 0.75rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-slot-row,
+.admin-slot-card {
+  border: 1px solid var(--admin-card-border);
+  border-radius: 14px;
+  background: var(--admin-surface);
+  padding: 12px;
+  transition: border-color 0.16s ease, background 0.16s ease;
+}
+
+.admin-slot-row.is-inactive,
+.admin-slot-card.is-inactive {
+  border-color: var(--admin-danger-border);
+  background: var(--admin-danger-bg);
+  opacity: 0.75;
+}
+
+.admin-mobile-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--admin-text-muted);
+  font-size: 0.625rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-input-sm {
+  padding: 6px 12px;
+  font-size: 0.875rem;
+}
+
+.admin-icon-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--admin-card-border);
+  border-radius: 10px;
+  padding: 6px;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease;
+}
+
+.admin-icon-toggle.is-active {
+  border-color: var(--admin-success-border);
+  background: var(--admin-success-bg);
+  color: var(--admin-success-text);
+}
+
+.admin-icon-toggle.is-inactive {
+  border-color: var(--admin-danger-border);
+  background: var(--admin-danger-bg);
+  color: var(--admin-danger-text);
+}
+
+.admin-slot-status {
+  color: var(--admin-text-muted);
+  font-size: 0.625rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-slot-status.is-booked {
+  color: var(--admin-success-text);
+}
+
+.admin-table-row.is-expanded,
+.admin-expanded-row {
+  background: var(--admin-surface-soft);
+}
+
+.admin-tabs {
+  border: 1px solid var(--admin-card-border);
+  border-radius: 18px;
+  background: var(--admin-card-bg);
+  padding: 4px;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.04);
+}
+
+.admin-tab-button {
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--admin-text);
+  cursor: pointer;
+  font-weight: 800;
+  padding: 10px 24px;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+
+.admin-tab-button:hover {
+  background: var(--admin-surface-soft);
+}
+
+.admin-tab-button.is-active {
+  background: var(--admin-primary);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(0, 119, 182, 0.18);
+}
+
+.admin-editor-loading {
+  height: 16rem;
+  border-radius: 12px;
+  background: var(--admin-surface-soft);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.admin-list-card {
+  border: 1px solid var(--admin-card-border);
+  border-radius: 14px;
+  background: var(--admin-surface-soft);
+  padding: 12px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 0.42;
+  }
+}

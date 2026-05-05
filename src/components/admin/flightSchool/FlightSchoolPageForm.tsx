@@ -8,7 +8,7 @@ import { FlightSchoolPage } from "../../../generated/prisma";
 
 const ArticleRichTextEditor = dynamic(() => import("../articles/ArticleRichTextEditor"), {
   ssr: false,
-  loading: () => <div className="h-64 bg-white/5 animate-pulse rounded-lg" />,
+  loading: () => <div className="admin-editor-loading" />,
 });
 
 interface FlightSchoolPageFormProps {
@@ -98,19 +98,19 @@ const FlightSchoolPageForm: React.FC<FlightSchoolPageFormProps> = ({
       </div>
 
       {error && (
-        <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl">
+        <div className="admin-alert admin-alert-danger">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-4 bg-green-500/10 border border-green-500/20 text-green-400 rounded-xl">
+        <div className="admin-alert admin-alert-success">
           Ændringerne er gemt!
         </div>
       )}
 
       <div className="flex items-center justify-between">
-        <div className="text-sm text-slate-400">
+        <div className="admin-muted text-sm">
           {initialData?.updatedAt && (
             <span>Sidst ændret: {formatAdminDateTime(initialData.updatedAt)}</span>
           )}
@@ -118,7 +118,7 @@ const FlightSchoolPageForm: React.FC<FlightSchoolPageFormProps> = ({
         <button
           type="submit"
           disabled={isPending}
-          className="admin-btn admin-btn-primary px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white transition-all font-bold shadow-lg shadow-emerald-500/20 disabled:opacity-50"
+          className="admin-btn admin-btn-primary"
         >
           {isPending ? "Gemmer..." : "Gem ændringer"}
         </button>

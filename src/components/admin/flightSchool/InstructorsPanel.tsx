@@ -18,20 +18,20 @@ const InstructorsPanel: React.FC<InstructorsPanelProps> = ({ instructors }) => {
       <h3 className="admin-section-title">Instruktører</h3>
       <p className="admin-form-help mb-4">
         Disse instruktører er aktive i klubben. De kan administreres under{" "}
-        <a href="../admin/medlemmer" className="text-sky-400 hover:underline">
+        <a href="../admin/medlemmer" className="admin-link">
           Admin → Medlemmer
         </a>{" "}
         ved at markere dem som instruktør i deres profil.
       </p>
 
       {instructors.length === 0 ? (
-        <p className="text-slate-400 italic">Ingen aktive instruktører fundet.</p>
+        <p className="admin-form-help italic">Ingen aktive instruktører fundet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {instructors.map((instructor) => (
             <div
               key={instructor.id}
-              className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10"
+              className="admin-list-card flex items-center gap-3"
             >
               <Avatar 
                 imageUrl={instructor.profileImageUrl} 
@@ -39,10 +39,10 @@ const InstructorsPanel: React.FC<InstructorsPanelProps> = ({ instructors }) => {
                 size="md"
               />
               <div>
-                <div className="font-medium text-white">
+                <div className="admin-strong font-medium">
                   {instructor.firstName} {instructor.lastName}
                 </div>
-                <div className="text-xs text-slate-400">Instruktør</div>
+                <div className="admin-muted text-xs">Instruktør</div>
               </div>
             </div>
           ))}

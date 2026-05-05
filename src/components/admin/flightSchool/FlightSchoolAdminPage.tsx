@@ -71,34 +71,22 @@ const FlightSchoolAdminPage: React.FC<FlightSchoolAdminPageProps> = ({
 
       <div className="pt-6">
 
-      <div className="mb-8 grid grid-cols-1 gap-2 rounded-2xl border border-[var(--admin-card-border)] bg-white p-1 shadow-sm sm:grid-cols-3">
+      <div className="admin-tabs mb-8 grid grid-cols-1 gap-2 sm:grid-cols-3">
         <button
           onClick={() => handleTabChange("content")}
-          className={`flex-1 px-6 py-2 rounded-lg font-medium transition-all ${
-            activeTab === "content"
-              ? "bg-sky-600 text-white shadow-sm"
-              : "text-[var(--admin-text)] hover:bg-[var(--admin-surface-soft)]"
-          }`}
+          className={`admin-tab-button ${activeTab === "content" ? "is-active" : ""}`}
         >
           Sideindhold
         </button>
         <button
           onClick={() => handleTabChange("documents")}
-          className={`flex-1 px-6 py-2 rounded-lg font-medium transition-all ${
-            activeTab === "documents"
-              ? "bg-sky-600 text-white shadow-sm"
-              : "text-[var(--admin-text)] hover:bg-[var(--admin-surface-soft)]"
-          }`}
+          className={`admin-tab-button ${activeTab === "documents" ? "is-active" : ""}`}
         >
           Elevdokumenter
         </button>
         <button
           onClick={() => handleTabChange("calendar")}
-          className={`flex-1 px-6 py-2 rounded-lg font-medium transition-all ${
-            activeTab === "calendar"
-              ? "bg-sky-600 text-white shadow-sm"
-              : "text-[var(--admin-text)] hover:bg-[var(--admin-surface-soft)]"
-          }`}
+          className={`admin-tab-button ${activeTab === "calendar" ? "is-active" : ""}`}
         >
           Skolekalender
         </button>
@@ -125,7 +113,7 @@ const FlightSchoolAdminPage: React.FC<FlightSchoolAdminPageProps> = ({
             
             <div className="admin-card">
               <h3 className="admin-section-title text-sm opacity-50">Information</h3>
-              <div className="text-sm text-slate-400 space-y-3">
+              <div className="admin-muted text-sm space-y-3">
                 <p>
                   Flyveskole-modulet bruges til at præsentere information for kommende og nuværende elever.
                 </p>

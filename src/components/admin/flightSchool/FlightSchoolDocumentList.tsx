@@ -34,7 +34,7 @@ const FlightSchoolDocumentList: React.FC<FlightSchoolDocumentListProps> = ({
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-xl font-bold text-white">Nyt elevdokument</h3>
+          <h3 className="admin-section-title">Nyt elevdokument</h3>
           <button
             onClick={() => setIsCreating(false)}
             className="admin-btn admin-btn-ghost"
@@ -54,7 +54,7 @@ const FlightSchoolDocumentList: React.FC<FlightSchoolDocumentListProps> = ({
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-xl font-bold text-white">Rediger: {editingDocument.title}</h3>
+          <h3 className="admin-section-title">Rediger: {editingDocument.title}</h3>
           <button
             onClick={() => setEditingDocument(null)}
             className="admin-btn admin-btn-ghost"
@@ -74,7 +74,7 @@ const FlightSchoolDocumentList: React.FC<FlightSchoolDocumentListProps> = ({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-bold text-white">Elevdokumenter</h3>
+        <h3 className="admin-section-title">Elevdokumenter</h3>
         <button
           onClick={() => setIsCreating(true)}
           className="admin-btn admin-btn-primary"
@@ -99,7 +99,7 @@ const FlightSchoolDocumentList: React.FC<FlightSchoolDocumentListProps> = ({
             <tbody>
               {documents.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-8 text-slate-400">
+                  <td colSpan={6} className="admin-muted text-center py-8">
                     Ingen elevdokumenter fundet.
                   </td>
                 </tr>
@@ -108,7 +108,7 @@ const FlightSchoolDocumentList: React.FC<FlightSchoolDocumentListProps> = ({
                   <tr key={doc.id}>
                     <td>{doc.sortOrder}</td>
                     <td className="font-medium">{doc.title}</td>
-                    <td className="text-slate-400">{doc.slug}</td>
+                    <td className="admin-muted">{doc.slug}</td>
                     <td>
                       {doc.isPublished ? (
                         <span className="admin-badge admin-badge-success">Udgivet</span>
@@ -116,20 +116,20 @@ const FlightSchoolDocumentList: React.FC<FlightSchoolDocumentListProps> = ({
                         <span className="admin-badge admin-badge-warning">Kladde</span>
                       )}
                     </td>
-                    <td className="text-slate-400 text-sm">
+                    <td className="admin-muted text-sm">
                       {formatAdminDateTime(doc.updatedAt)}
                     </td>
                     <td className="text-right">
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => setEditingDocument(doc)}
-                          className="admin-btn admin-btn-ghost text-sky-400 px-2 py-1 text-sm whitespace-nowrap"
+                          className="admin-btn"
                         >
                           Rediger
                         </button>
                         <button
                           onClick={() => handleDelete(doc.id)}
-                          className="admin-btn admin-btn-ghost text-red-400 px-2 py-1 text-sm whitespace-nowrap"
+                          className="admin-btn admin-btn-danger"
                         >
                           Slet
                         </button>
