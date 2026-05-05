@@ -6,6 +6,18 @@ import { getAdminCalendarEntries } from "../../../../lib/admin/calendarAdminServ
 import Link from "next/link";
 import { toggleCalendarEntryPublishedAction, deleteCalendarEntryAction } from "../../../../lib/admin/calendarActions";
 import DeleteCalendarEntryForm from "../../../../components/admin/calendar/DeleteCalendarEntryForm";
+import { PublicSurfaceVisibility } from "../../../../generated/prisma";
+
+function visibilityLabel(visibility: PublicSurfaceVisibility): string {
+  switch (visibility) {
+    case PublicSurfaceVisibility.PUBLIC:
+      return "Offentlig";
+    case PublicSurfaceVisibility.MEMBERS_ONLY:
+      return "Kun medlemmer";
+    default:
+      return visibility;
+  }
+}
 
 interface PageProps {
   params: Promise<{
@@ -85,6 +97,7 @@ export default async function AdminCalendarPage({ params }: PageProps) {
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Dato & Tid</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Titel</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Synlighed</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Marquee</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Handling</th>
                   </tr>
@@ -107,6 +120,11 @@ export default async function AdminCalendarPage({ params }: PageProps) {
                             : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
                         }`}>
                           {entry.isPublished ? 'Publiceret' : 'Kladde'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/5 text-slate-300 border border-white/10">
+                          {visibilityLabel(entry.visibility)}
                         </span>
                       </td>
                       <td className="px-6 py-4">
@@ -153,7 +171,7 @@ export default async function AdminCalendarPage({ params }: PageProps) {
                     </tr>
                   )) : (
                     <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
+                      <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
                         Ingen kalenderindslag fundet.
                       </td>
                     </tr>

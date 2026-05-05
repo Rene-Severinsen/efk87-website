@@ -85,7 +85,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const navigationItems = getVisiblePublicNavigation(clubSlug, viewer);
   const actionItems = getVisiblePublicActions(clubSlug, viewer);
   const newMemberHighlights = await getNewMemberHighlights(club.id);
-  const calendarMarquee = await getHomepageMarqueeCalendarEntries(club.id);
+  const calendarMarquee = await getHomepageMarqueeCalendarEntries(club.id, viewer);
   const latestForumActivity = await getLatestForumActivity(club.id);
   const homepageContents = await getActiveHomepageContentForClub(club.id, viewer);
   const flightSchoolHomepage = await getFlightSchoolHomepageView(club.id);

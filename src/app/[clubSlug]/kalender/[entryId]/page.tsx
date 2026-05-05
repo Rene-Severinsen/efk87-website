@@ -5,6 +5,7 @@ import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPag
 import { getPublicCalendarEntryDetail } from "../../../../lib/publicSite/publicCalendarService";
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { publicRoutes } from "../../../../lib/publicRoutes";
+import { getServerViewerForClub, toViewerVisibilityContext } from "../../../../lib/auth/viewer";
 
 interface PageProps {
   params: Promise<{
@@ -18,7 +19,9 @@ export default async function CalendarDetailPage({ params }: PageProps) {
   const context = await resolveClubContext(clubSlug);
   const { club, theme, footerData, navigationItems, actionItems } = context;
 
-  const entry = await getPublicCalendarEntryDetail(club.id, entryId);
+  const serverViewer = await getServerViewerForClub(club.id);
+  const viewer = toViewerVisibilityContext(serverViewer);
+  const entry = await getPublicCalendarEntryDetail(club.id, entryId, viewer);
 
   if (!entry) {
     notFound();

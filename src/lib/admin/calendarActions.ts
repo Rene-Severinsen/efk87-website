@@ -5,7 +5,14 @@ import { redirect } from "next/navigation";
 import { requireClubBySlug } from "../tenancy/tenantService";
 import { requireClubAdminForClub } from "../auth/adminAccessGuards";
 import prisma from "../db/prisma";
+import { PublicSurfaceVisibility } from "../../generated/prisma";
 import sanitizeHtml from "sanitize-html";
+
+function parsePublicSurfaceVisibility(value: FormDataEntryValue | null): PublicSurfaceVisibility {
+  return value === PublicSurfaceVisibility.MEMBERS_ONLY
+    ? PublicSurfaceVisibility.MEMBERS_ONLY
+    : PublicSurfaceVisibility.PUBLIC;
+}
 
 const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
   allowedTags: [
@@ -41,6 +48,7 @@ export async function createCalendarEntryAction(clubSlug: string, formData: Form
   const endTime = formData.get("endTime") as string;
   const location = formData.get("location") as string;
   const isPublished = formData.get("isPublished") === "true";
+  const visibility = parsePublicSurfaceVisibility(formData.get("visibility"));
   const forceShowInMarquee = formData.get("forceShowInMarquee") === "true";
 
   if (!title || !dateStr) {
@@ -71,6 +79,7 @@ export async function createCalendarEntryAction(clubSlug: string, formData: Form
       endsAt,
       location,
       isPublished,
+      visibility,
       forceShowInMarquee,
     },
   });
@@ -91,6 +100,7 @@ export async function updateCalendarEntryAction(clubSlug: string, entryId: strin
   const endTime = formData.get("endTime") as string;
   const location = formData.get("location") as string;
   const isPublished = formData.get("isPublished") === "true";
+  const visibility = parsePublicSurfaceVisibility(formData.get("visibility"));
   const forceShowInMarquee = formData.get("forceShowInMarquee") === "true";
 
   if (!title || !dateStr) {
@@ -121,6 +131,7 @@ export async function updateCalendarEntryAction(clubSlug: string, entryId: strin
       endsAt,
       location,
       isPublished,
+      visibility,
       forceShowInMarquee,
     },
   });

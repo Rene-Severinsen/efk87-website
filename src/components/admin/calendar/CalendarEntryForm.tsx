@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { PublicSurfaceVisibility } from "../../../generated/prisma";
 import dynamic from "next/dynamic";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import Link from "next/link";
@@ -139,7 +140,33 @@ export default function CalendarEntryForm({
         <GlassCard className="p-8">
           <div className="space-y-8">
             <label className="flex items-start gap-4 group cursor-pointer">
-              <div className="relative flex items-center pt-0.5">
+        <div style={{ marginBottom: "16px" }}>
+          <label
+            style={{
+              display: "block",
+              fontSize: "0.875rem",
+              fontWeight: "600",
+              marginBottom: "8px",
+            }}
+          >
+            Synlighed
+          </label>
+          <select
+            name="visibility"
+            defaultValue={initialData?.visibility || PublicSurfaceVisibility.PUBLIC}
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              borderRadius: "4px",
+              border: "1px solid #d9d9d9",
+            }}
+          >
+            <option value={PublicSurfaceVisibility.PUBLIC}>Offentlig</option>
+            <option value={PublicSurfaceVisibility.MEMBERS_ONLY}>Kun medlemmer</option>
+          </select>
+        </div>
+
+<div className="relative flex items-center pt-0.5">
                 <input
                   name="isPublished"
                   type="checkbox"

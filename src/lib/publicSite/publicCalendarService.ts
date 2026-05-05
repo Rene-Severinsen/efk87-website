@@ -1,5 +1,11 @@
 import prisma from "../db/prisma";
-import { ClubCalendarEntry } from "../../generated/prisma";
+import { ClubCalendarEntry, PublicSurfaceVisibility } from "../../generated/prisma";
+
+function getVisibilityFilter(viewer?: { isMember: boolean }): PublicSurfaceVisibility[] {
+  return viewer?.isMember
+    ? [PublicSurfaceVisibility.PUBLIC, PublicSurfaceVisibility.MEMBERS_ONLY]
+    : [PublicSurfaceVisibility.PUBLIC];
+}
 
 export interface PublicCalendarEntry {
   id: string;
@@ -20,7 +26,10 @@ export interface PublicCalendarEntry {
  * 4. Past entries are never shown.
  * 5. Sort by startsAt ascending.
  */
-export async function getHomepageMarqueeCalendarEntries(clubId: string): Promise<PublicCalendarEntry[]> {
+export async function getHomepageMarqueeCalendarEntries(
+  clubId: string,
+  viewer?: { isMember: boolean },
+): Promise<PublicCalendarEntry[]> {
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   
@@ -31,6 +40,7 @@ export async function getHomepageMarqueeCalendarEntries(clubId: string): Promise
     where: {
       clubId,
       isPublished: true,
+      visibility: { in: getVisibilityFilter(viewer) },
       startsAt: {
         gte: startOfToday
       },
@@ -56,12 +66,17 @@ export async function getHomepageMarqueeCalendarEntries(clubId: string): Promise
 /**
  * Returns a single published calendar entry detail.
  */
-export async function getPublicCalendarEntryDetail(clubId: string, entryId: string): Promise<PublicCalendarEntry | null> {
+export async function getPublicCalendarEntryDetail(
+  clubId: string,
+  entryId: string,
+  viewer?: { isMember: boolean },
+): Promise<PublicCalendarEntry | null> {
   const entry = await prisma.clubCalendarEntry.findFirst({
     where: {
       id: entryId,
       clubId,
-      isPublished: true
+      isPublished: true,
+      visibility: { in: getVisibilityFilter(viewer) }
     }
   });
 

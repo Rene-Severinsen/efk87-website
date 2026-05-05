@@ -147,6 +147,7 @@ model ClubCalendarEntry {
   endsAt             DateTime?
   location           String?
   isPublished        Boolean   @default(true)
+  visibility         PublicSurfaceVisibility @default(PUBLIC)
   forceShowInMarquee Boolean   @default(false)
   sortOrder          Int?
   createdAt          DateTime  @default(now())
@@ -156,6 +157,7 @@ model ClubCalendarEntry {
 
   @@index([clubId, startsAt])
   @@index([clubId, isPublished])
+  @@index([clubId, isPublished, visibility])
 }
 
 model ArticleTag {
