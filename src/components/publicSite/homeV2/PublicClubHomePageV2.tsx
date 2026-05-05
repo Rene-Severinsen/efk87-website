@@ -76,6 +76,8 @@ interface PublicClubHomePageV2Props {
       logoAltText: string | null;
       faviconUrl?: string | null;
       appleIconUrl?: string | null;
+      publicHeroImageUrl?: string | null;
+      publicHeroImageAltText?: string | null;
       publicHeroTitle?: string | null;
       publicHeroSubtitle?: string | null;
       publicHeroPrimaryCtaLabel?: string | null;
@@ -217,6 +219,17 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
     },
   ];
 
+  const publicHeroImageUrl =
+    surface === "public" && club.settings?.publicHeroImageUrl
+      ? club.settings.publicHeroImageUrl
+      : null;
+
+  const publicHeroStyle = publicHeroImageUrl
+    ? ({
+        "--home-public-hero-image": `url(${JSON.stringify(publicHeroImageUrl)})`,
+      } as React.CSSProperties)
+    : undefined;
+
   const publicThemeMode = normalizePublicThemeMode(club.settings?.publicThemeMode);
 
   return (
@@ -234,7 +247,14 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
         />
 
         <section className={`home-v2-hero ${newMemberHighlights.visible ? 'home-v2-hero-top--split' : 'home-v2-hero-top--full'}`}>
-          <article className="home-v2-card home-v2-hero-main">
+          <article className="home-v2-card home-v2-hero-main" style={publicHeroStyle}>
+            {publicHeroImageUrl ? (
+              <img
+                src={publicHeroImageUrl}
+                alt={club.settings?.publicHeroImageAltText || ""}
+                className="home-v2-public-hero-image"
+              />
+            ) : null}
             <div className="home-v2-eyebrow">
               {new Date().toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric', month: 'long' })}
               {weather ? (

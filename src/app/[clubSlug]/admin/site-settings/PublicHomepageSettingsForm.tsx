@@ -2,8 +2,12 @@
 
 import { useState } from "react";
 import { updatePublicHomepageSettingsAction } from "@/lib/admin/siteSettingsActions";
+import MediaUrlPicker from "@/components/admin/media/MediaUrlPicker";
+import { ClubMediaAssetDTO } from "@/lib/media/mediaTypes";
 
 interface PublicHomepageSettingsValues {
+  publicHeroImageUrl?: string | null;
+  publicHeroImageAltText?: string | null;
   publicHeroTitle?: string | null;
   publicHeroSubtitle?: string | null;
   publicHeroPrimaryCtaLabel?: string | null;
@@ -47,9 +51,12 @@ interface PublicHomepageSettingsFormProps {
   clubId: string;
   clubSlug: string;
   initialValues: PublicHomepageSettingsValues | null;
+  mediaAssets: ClubMediaAssetDTO[];
 }
 
 const fallbackValues: Record<keyof PublicHomepageSettingsValues, string> = {
+  publicHeroImageUrl: "",
+  publicHeroImageAltText: "",
   publicHeroTitle: "Velkommen til EFK87",
   publicHeroSubtitle: "Modelsvæveflyvning, fællesskab og flyveskole i en aktiv klub med plads til både nye og erfarne piloter.",
   publicHeroPrimaryCtaLabel: "Bliv medlem",
@@ -189,6 +196,7 @@ export default function PublicHomepageSettingsForm({
   clubId,
   clubSlug,
   initialValues,
+  mediaAssets,
 }: PublicHomepageSettingsFormProps) {
   const [status, setStatus] = useState<string | null>(null);
 
@@ -221,10 +229,19 @@ export default function PublicHomepageSettingsForm({
           label="Hero titel"
           defaultValue={fieldValue(initialValues, "publicHeroTitle")}
         />
-        <TextArea
-          name="publicHeroSubtitle"
-          label="Hero tekst"
-          defaultValue={fieldValue(initialValues, "publicHeroSubtitle")}
+        <MediaUrlPicker
+          name="publicHeroImageUrl"
+          label="Hero billede"
+          value={initialValues?.publicHeroImageUrl ?? ""}
+          assets={mediaAssets}
+          placeholder="Vælg hero billede fra Media"
+          previewFit="cover"
+        />
+
+        <TextInput
+          name="publicHeroImageAltText"
+          label="Hero billede alt-tekst"
+          defaultValue={fieldValue(initialValues, "publicHeroImageAltText")}
         />
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

@@ -6,6 +6,7 @@ import WeatherSettingsForm from "./WeatherSettingsForm";
 import PublicThemeSettingsForm from "./PublicThemeSettingsForm";
 import PublicHomepageSettingsForm from "./PublicHomepageSettingsForm";
 import { getClubSettings } from "@/lib/admin/siteSettingsService";
+import { listClubMediaAssets } from "@/lib/media/mediaStorageService";
 
 interface PageProps {
   params: Promise<{
@@ -35,6 +36,7 @@ export default async function Page({ params }: PageProps) {
 
   const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin/site-settings`);
   const settings = await getClubSettings(club.id);
+  const mediaAssets = await listClubMediaAssets(club.id);
 
   return (
     <AdminShell
@@ -64,6 +66,7 @@ export default async function Page({ params }: PageProps) {
               clubId={club.id}
               clubSlug={clubSlug}
               initialValues={settings}
+              mediaAssets={mediaAssets}
             />
           </GlassCard>
 

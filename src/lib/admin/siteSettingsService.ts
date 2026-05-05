@@ -46,6 +46,8 @@ export async function updateClubPublicTheme(clubId: string, themeMode: string) {
 
 
 export interface PublicHomepageSettingsInput {
+  publicHeroImageUrl: string | null;
+  publicHeroImageAltText: string | null;
   publicHeroTitle: string | null;
   publicHeroSubtitle: string | null;
   publicHeroPrimaryCtaLabel: string | null;

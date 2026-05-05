@@ -15,6 +15,8 @@ export async function getPublicClubSettings(clubId: string) {
       logoUrl: true,
       logoAltText: true,
       faviconUrl: true,
+      publicHeroImageUrl: true,
+      publicHeroImageAltText: true,
       publicHeroTitle: true,
       publicHeroSubtitle: true,
       publicHeroPrimaryCtaLabel: true,

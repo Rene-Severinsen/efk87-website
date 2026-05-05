@@ -73,7 +73,7 @@ export default function MediaUrlPicker({
       : "h-full w-full object-cover";
 
   return (
-    <div className={compact ? "space-y-2" : "space-y-3"}>
+    <div className={compact ? "relative space-y-2" : "relative space-y-3"}>
       <label htmlFor={name} className="block text-sm font-medium text-slate-300">
         {label}
       </label>
@@ -163,13 +163,12 @@ export default function MediaUrlPicker({
 
       {isOpen ? (
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          className="absolute left-0 right-0 top-full z-[9999] mt-3 rounded-3xl border border-white/10 bg-[#0b1120] shadow-2xl"
           role="dialog"
           aria-modal="true"
-          onClick={() => setIsOpen(false)}
         >
           <div
-            className="flex max-h-[90vh] w-full max-w-6xl flex-col rounded-3xl border border-white/10 bg-[#0b1120] shadow-2xl"
+            className="flex max-h-[70vh] w-full flex-col overflow-hidden rounded-3xl"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between border-b border-white/10 p-5">
