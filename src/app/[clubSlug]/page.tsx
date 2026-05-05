@@ -97,6 +97,8 @@ export default async function ClubPage({ params }: ClubPageProps) {
     publicSettings?.weatherLongitude
   );
 
+  const surface = viewer.isMember || viewer.isAdmin ? "member" : "public";
+
   return (
       <PublicClubHomePageV2
           club={{
@@ -104,6 +106,8 @@ export default async function ClubPage({ params }: ClubPageProps) {
             settings: publicSettings
           }}
           viewer={serverViewer}
+          surface={surface}
+          currentPath={`/${clubSlug}`}
           theme={theme}
           todayFlightIntents={flightIntents}
           memberActivity={memberActivity}

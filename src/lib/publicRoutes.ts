@@ -9,6 +9,7 @@
 
 export const publicRoutes = {
   home: (clubSlug: string) => `/${clubSlug}`,
+  memberHome: (clubSlug: string) => `/${clubSlug}/medlem`,
   about: (clubSlug: string) => `/${clubSlug}/about`,
   board: (clubSlug: string) => `/${clubSlug}/om/bestyrelsen`,
   contact: (clubSlug: string) => `/${clubSlug}/om/kontakt`,

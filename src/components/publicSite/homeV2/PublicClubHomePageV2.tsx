@@ -82,6 +82,8 @@ interface PublicClubHomePageV2Props {
     footer: PublicClubFooter | null;
     sponsors: PublicSponsor[];
   };
+  surface?: "public" | "member";
+  currentPath?: string;
   theme?: {
     backgroundColor: string;
     panelColor: string;
@@ -101,7 +103,7 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Active premium homepage component.
  * Renders public homepage with tenant data.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, flightSchoolHomepage, galleryPreview, weather, footerData }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, flightSchoolHomepage, galleryPreview, weather, footerData, surface = "public", currentPath }: PublicClubHomePageV2Props) {
   const homeLogoUrl = club.settings?.logoUrl ?? null;
   const homeLogoAltText =
     club.settings?.logoAltText || club.settings?.displayName || club.name;
@@ -115,6 +117,13 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
   const clubShortName = club.settings?.shortName || club.name;
   const firstName = viewer.firstName || viewer.name?.split(' ')[0] || 'Gæst';
   const todayFlyingCount = todayFlightIntents.length;
+  const isMemberDashboard = surface === "member";
+  const heroTitle = isMemberDashboard
+    ? `Hej ${firstName}.${todayFlyingCount > 0 ? ' Der er liv på pladsen i dag.' : ''}`
+    : `Velkommen til ${clubDisplayName}`;
+  const heroCopy = isMemberDashboard
+    ? `${todayFlightIntents.length} medlemmer har allerede meldt “jeg flyver”.`
+    : "Modelsvæveflyvning, fællesskab og flyveskole i en aktiv klub med plads til både nye og erfarne piloter.";
 
   const publicThemeMode = normalizePublicThemeMode(club.settings?.publicThemeMode);
 
@@ -129,7 +138,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           logoAltText={homeLogoAltText}
           navigationItems={navigationItems}
           actionItems={actionItems}
-          currentPath={`/${club.slug}`}
+          currentPath={currentPath || `/${club.slug}`}
         />
 
         <section className={`home-v2-hero ${newMemberHighlights.visible ? 'home-v2-hero-top--split' : 'home-v2-hero-top--full'}`}>
@@ -144,22 +153,32 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             </div>
             <div className="home-v2-hero-header">
               <div className="home-v2-hero-text">
-                <h1>Hej {firstName}.{todayFlyingCount > 0 ? ' Der er liv på pladsen i dag.' : ''}</h1>
+                <h1>{heroTitle}</h1>
                 <p className="home-v2-hero-copy">
-                  {todayFlightIntents.length} medlemmer har allerede meldt “jeg flyver”.
+                  {heroCopy}
                 </p>
               </div>
             </div>
             <div className="home-v2-inline-actions">
-              <Link className="home-v2-pill home-v2-primary" href={publicRoutes.jegFlyver(club.slug)}>Jeg flyver</Link>
-              <Link className="home-v2-pill" href={publicRoutes.becomeMember(club.slug)}>Bliv medlem</Link>
-              <Link className="home-v2-pill" href={publicRoutes.home(club.slug) + '/kalender'}>Åbn kalender</Link>
-              <Link className="home-v2-pill" href={publicRoutes.flightSchool(club.slug)}>Gå til flyveskole</Link>
-              <Link className="home-v2-pill" href={publicRoutes.gallery(club.slug)}>Upload billeder</Link>
+              {isMemberDashboard ? (
+                <>
+                  <Link className="home-v2-pill home-v2-primary" href={publicRoutes.jegFlyver(club.slug)}>Jeg flyver</Link>
+                  <Link className="home-v2-pill" href={publicRoutes.home(club.slug) + '/kalender'}>Åbn kalender</Link>
+                  <Link className="home-v2-pill" href={publicRoutes.flightSchoolCalendar(club.slug)}>Skolekalender</Link>
+                  <Link className="home-v2-pill" href={publicRoutes.galleryNew(club.slug)}>Upload billeder</Link>
+                </>
+              ) : (
+                <>
+                  <Link className="home-v2-pill home-v2-primary" href={publicRoutes.becomeMember(club.slug)}>Bliv medlem</Link>
+                  <Link className="home-v2-pill" href={publicRoutes.flightSchool(club.slug)}>Flyveskole</Link>
+                  <Link className="home-v2-pill" href={publicRoutes.gallery(club.slug)}>Se galleri</Link>
+                  <Link className="home-v2-pill" href={publicRoutes.about(club.slug)}>Om klubben</Link>
+                </>
+              )}
             </div>
           </article>
 
-          {newMemberHighlights.visible ? (
+          {isMemberDashboard && newMemberHighlights.visible ? (
             <div className="home-v2-side-stack">
               <NewMembersHighlightCard clubName={clubDisplayName} members={newMemberHighlights.members} />
             </div>
@@ -213,6 +232,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 contents={homepageContents}
                 viewer={viewer}
             />
+            {isMemberDashboard ? (
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Forum – seneste aktivitet</h2>
@@ -257,6 +277,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 )}
               </div>
             </article>
+            ) : null}
 
             <HomeGalleryToggle clubSlug={club.slug} galleryPreview={safeGalleryPreview} />
           </div>
@@ -265,6 +286,8 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
 
 
 
+            {isMemberDashboard ? (
+            <>
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Aktivitet på pladsen</h2>
@@ -461,6 +484,33 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 <Link className="home-v2-pill" href={publicRoutes.forum(club.slug)}>Se alle beskeder</Link>
               </div>
             </article>
+
+            </>
+            ) : (
+            <article className="home-v2-card home-v2-section-card">
+              <div className="home-v2-section-head">
+                <h2>Kom i gang med modelflyvning</h2>
+                <Link className="home-v2-link-soft" href={publicRoutes.flightSchool(club.slug)}>Læs om flyveskolen</Link>
+              </div>
+              <div className="home-v2-griffin">
+                <div className="home-v2-row-icon">✈️</div>
+                <div>
+                  <h3>Ny i sporten?</h3>
+                  <p className="home-v2-row-sub">
+                    EFK87 har flyveskole, instruktører og et klubmiljø hvor nye medlemmer kan komme trygt i gang.
+                  </p>
+                  <div className="home-v2-activity-actions">
+                    <Link className="home-v2-activity-cta home-v2-activity-cta-primary" href={publicRoutes.becomeMember(club.slug)}>
+                      Bliv medlem
+                    </Link>
+                    <Link className="home-v2-activity-cta home-v2-activity-cta-secondary" href={publicRoutes.flightSchool(club.slug)}>
+                      Se flyveskole
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </article>
+            )}
 
             {/*<article className="home-v2-card home-v2-section-card">*/}
             {/*  <div className="home-v2-section-head">*/}
