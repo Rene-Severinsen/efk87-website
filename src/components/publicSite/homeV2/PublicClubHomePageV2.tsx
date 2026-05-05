@@ -128,7 +128,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
   const publicThemeMode = normalizePublicThemeMode(club.settings?.publicThemeMode);
 
   return (
-    <div className="home-v2-root" data-theme={publicThemeMode}>
+    <div className="home-v2-root" data-theme={publicThemeMode} data-surface={surface}>
       <div className="home-v2-shell">
         <ThemedTopBar
           clubSlug={club.slug}
@@ -277,6 +277,41 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 )}
               </div>
             </article>
+            ) : null}
+
+            {!isMemberDashboard ? (
+              <article className="home-v2-card home-v2-section-card home-v2-public-intro">
+                <div className="home-v2-section-head">
+                  <h2>En klub for dig, der vil flyve rigtigt</h2>
+                  <Link className="home-v2-link-soft" href={publicRoutes.about(club.slug)}>Læs om klubben</Link>
+                </div>
+
+                <div className="home-v2-public-intro-grid">
+                  <Link className="home-v2-public-intro-card" href={publicRoutes.flightSchool(club.slug)}>
+                    <div className="home-v2-row-icon">🎓</div>
+                    <div>
+                      <h3>Flyveskole</h3>
+                      <p>Kom trygt i gang med instruktører, struktur og hjælp fra første dag.</p>
+                    </div>
+                  </Link>
+
+                  <Link className="home-v2-public-intro-card" href={publicRoutes.gallery(club.slug)}>
+                    <div className="home-v2-row-icon">📸</div>
+                    <div>
+                      <h3>Fællesskab</h3>
+                      <p>Se billeder og aktiviteter fra et klubmiljø med plads til både nye og erfarne piloter.</p>
+                    </div>
+                  </Link>
+
+                  <Link className="home-v2-public-intro-card" href={publicRoutes.whereWeLive(club.slug)}>
+                    <div className="home-v2-row-icon">📍</div>
+                    <div>
+                      <h3>Flyvepladsen</h3>
+                      <p>Find praktisk information om pladsen, klubhuset og hvordan du besøger os.</p>
+                    </div>
+                  </Link>
+                </div>
+              </article>
             ) : null}
 
             <HomeGalleryToggle clubSlug={club.slug} galleryPreview={safeGalleryPreview} />
@@ -487,12 +522,12 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
 
             </>
             ) : (
-            <article className="home-v2-card home-v2-section-card">
+            <article className="home-v2-card home-v2-section-card home-v2-public-cta-band">
               <div className="home-v2-section-head">
                 <h2>Kom i gang med modelflyvning</h2>
                 <Link className="home-v2-link-soft" href={publicRoutes.flightSchool(club.slug)}>Læs om flyveskolen</Link>
               </div>
-              <div className="home-v2-griffin">
+              <div className="home-v2-griffin home-v2-public-cta-panel">
                 <div className="home-v2-row-icon">✈️</div>
                 <div>
                   <h3>Ny i sporten?</h3>
