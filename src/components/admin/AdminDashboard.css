@@ -2201,9 +2201,8 @@
 /* EFK87 admin site settings primitives */
 
 .admin-card-accent {
-  height: 4px;
-  background: linear-gradient(90deg, var(--admin-primary), var(--admin-success-border));
-  opacity: 0.55;
+  height: 1px;
+  background: var(--admin-card-border);
 }
 
 .admin-card-header {
