@@ -36,7 +36,6 @@ model Club {
   articleTags   ArticleTag[]
   memberProfiles ClubMemberProfile[]
   memberCertificates ClubMemberCertificate[]
-  memberApplications PublicMemberApplication[]
   calendarEntries ClubCalendarEntry[]
   forumCategories ClubForumCategory[]
   forumThreads    ClubForumThread[]
@@ -930,33 +929,6 @@ model ClubMemberCertificate {
   @@index([clubId, certificateType])
 }
 
-/// Represents a pending membership application submitted via the public site.
-/// This is a temporary model and NOT a permanent member table.
-/// It exists because applications can be submitted without a user account/login.
-model PublicMemberApplication {
-  id              String                  @id @default(cuid())
-  clubId          String
-  firstName       String
-  lastName        String
-  email           String?
-  address         String
-  postalCode      String
-  city            String
-  mobilePhone     String
-  birthDate       DateTime
-  membershipType  ClubMemberMembershipType
-  mdkNumber       String?
-  memberNumber    Int?
-  status          ClubMemberStatus         @default(NEW)
-  schoolStatus    ClubMemberSchoolStatus   @default(STUDENT)
-  createdAt       DateTime                 @default(now())
-  updatedAt       DateTime                 @updatedAt
-
-  club Club @relation(fields: [clubId], references: [id])
-
-  @@index([clubId, status])
-  @@index([clubId, createdAt])
-}
 
 model ClubLocationPage {
   id        String   @id @default(cuid())

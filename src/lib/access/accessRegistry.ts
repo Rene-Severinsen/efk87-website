@@ -227,15 +227,6 @@ export const ACCESS_MODULES: readonly AccessModuleDefinition[] = [
     note: "Tenant-scoped og rollebeskyttet.",
   },
   {
-    key: "memberApplications",
-    label: "Medlemsansøgninger",
-    area: "Club admin",
-    description: "Ansøgning til behandling og senere konvertering til aktivt medlem.",
-    audiences: ["clubAdmin"],
-    configurability: "roleBased",
-    note: "Næste større admin-flow før betaling/Dinero.",
-  },
-  {
     key: "mediaLibrary",
     label: "Media library",
     area: "Club admin",

@@ -2,18 +2,18 @@
 
 import { useState, useActionState } from "react";
 import { ClubMemberMembershipType } from "@/generated/prisma";
-import { submitPublicMemberApplicationAction, ApplicationState } from "@/lib/publicSite/memberApplicationActions";
+import { submitPublicMemberSignupAction, PublicMemberSignupState } from "@/lib/publicSite/publicMemberSignupActions";
 import { ThemedSectionCard } from "@/components/publicSite/ThemedBuildingBlocks";
 
-interface MemberApplicationFormProps {
+interface PublicMemberSignupFormProps {
   clubSlug: string;
 }
 
-const initialState: ApplicationState = {};
+const initialState: PublicMemberSignupState = {};
 
-export default function MemberApplicationForm({ clubSlug }: MemberApplicationFormProps) {
+export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupFormProps) {
   const [state, action, isPending] = useActionState(
-    submitPublicMemberApplicationAction.bind(null, clubSlug),
+    submitPublicMemberSignupAction.bind(null, clubSlug),
     initialState
   );
 
@@ -51,7 +51,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
             </svg>
           </div>
         </div>
-        <h2 className="text-2xl font-bold text-[var(--public-text)] mb-4">Tak for din ansøgning</h2>
+        <h2 className="text-2xl font-bold text-[var(--public-text)] mb-4">Tak for din indmeldelse</h2>
         <p className="public-muted-text">
           Vi har modtaget din indmeldelse. Vi kontakter dig, når den er gennemgået.
         </p>
@@ -59,7 +59,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
           onClick={() => window.location.reload()} 
           className="mt-8 public-link"
         >
-          Send en anden ansøgning
+          Send en anden indmeldelse
         </button>
       </ThemedSectionCard>
     );
@@ -273,7 +273,7 @@ export default function MemberApplicationForm({ clubSlug }: MemberApplicationFor
             disabled={isPending || !!ageError}
             className="public-primary-button w-full"
           >
-            {isPending ? "Sender ansøgning..." : "Indsend indmeldelse"}
+            {isPending ? "Sender indmeldelse..." : "Indsend indmeldelse"}
           </button>
         </div>
       </form>

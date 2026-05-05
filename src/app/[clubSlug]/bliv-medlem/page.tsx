@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { resolvePublicPageForClub } from "../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../components/publicSite/ThemedClubPageShell";
 import { ThemedPageHeader } from "../../../components/publicSite/ThemedBuildingBlocks";
-import MemberApplicationForm from "./MemberApplicationForm";
+import PublicMemberSignupForm from "./PublicMemberSignupForm";
 import { publicRoutes } from "../../../lib/publicRoutes";
 
 interface PageProps {
@@ -66,7 +66,7 @@ export default async function BlivMedlemPage({ params }: PageProps) {
            subtitle={proseText}
         />
 
-        <MemberApplicationForm clubSlug={clubSlug} />
+        <PublicMemberSignupForm clubSlug={clubSlug} />
       </div>
     </ThemedClubPageShell>
   );

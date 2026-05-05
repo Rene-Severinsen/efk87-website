@@ -23,7 +23,6 @@ export type AccessModuleKey =
   | "siteSettings"
   | "footerAdmin"
   | "memberAdmin"
-  | "memberApplications"
   | "mediaLibrary"
   | "emailTemplates"
   | "systemStatus"
