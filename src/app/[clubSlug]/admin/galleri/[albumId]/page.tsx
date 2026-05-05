@@ -77,6 +77,10 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
       <AdminPageHeader
         title="Rediger galleri"
         description="Administrér medlemsgallerier, synlighed, status og billeder."
+        action={{
+          label: "Tilbage til galleri",
+          href: `/${clubSlug}/admin/galleri`,
+        }}
       />
 
       <div className="admin-gallery-detail-page pt-6">
