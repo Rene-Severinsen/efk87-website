@@ -1,6 +1,7 @@
 import { PublicSurfaceVisibility } from "../../generated/prisma";
 import { canViewSurface, ViewerVisibilityContext } from "./publicVisibility";
 import { publicRoutes } from "../publicRoutes";
+import { publicNavigationVisibility } from "./publicNavigationConfig";
 
 /**
  * Typed navigation item structure for the public site.
@@ -35,7 +36,7 @@ export function getVisiblePublicNavigation(
       label: 'Forum',
       href: publicRoutes.forum(clubSlug),
       key: 'forum',
-      visibility: 'PUBLIC',
+      visibility: publicNavigationVisibility.forum,
     },
     {
       label: 'Galleri',
@@ -47,7 +48,7 @@ export function getVisiblePublicNavigation(
       label: 'Artikler',
       href: publicRoutes.articles(clubSlug),
       key: 'articles',
-      visibility: 'PUBLIC',
+      visibility: publicNavigationVisibility.articles,
     },
     {
       label: 'Flyveskole',
