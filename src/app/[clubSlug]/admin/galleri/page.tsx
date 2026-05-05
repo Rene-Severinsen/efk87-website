@@ -108,15 +108,15 @@ export default async function Page({ params, searchParams }: PageProps) {
           }}
         >
           <div className="admin-card">
-            <div style={{ fontSize: "0.875rem", color: "#8c8c8c" }}>Albums</div>
+            <div style={{ fontSize: "0.875rem", color: "var(--admin-text-muted)" }}>Albums</div>
             <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{stats.totalAlbums}</div>
           </div>
           <div className="admin-card">
-            <div style={{ fontSize: "0.875rem", color: "#8c8c8c" }}>Billeder</div>
+            <div style={{ fontSize: "0.875rem", color: "var(--admin-text-muted)" }}>Billeder</div>
             <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{stats.totalImages}</div>
           </div>
           <div className="admin-card">
-            <div style={{ fontSize: "0.875rem", color: "#8c8c8c" }}>Publicerede albums</div>
+            <div style={{ fontSize: "0.875rem", color: "var(--admin-text-muted)" }}>Publicerede albums</div>
             <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{stats.publishedAlbums}</div>
           </div>
         </div>
@@ -168,7 +168,7 @@ export default async function Page({ params, searchParams }: PageProps) {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          color: "#64748b",
+                          color: "var(--admin-text-muted)",
                           fontWeight: 700,
                         }}
                       >
@@ -244,7 +244,7 @@ export default async function Page({ params, searchParams }: PageProps) {
                         <p
                           style={{
                             marginTop: "6px",
-                            color: "#94a3b8",
+                            color: "var(--admin-text-muted)",
                             fontSize: "0.85rem",
                             lineHeight: 1.45,
                             display: "-webkit-box",
@@ -263,22 +263,22 @@ export default async function Page({ params, searchParams }: PageProps) {
                         display: "grid",
                         gridTemplateColumns: "1fr 1fr",
                         gap: "8px",
-                        color: "#94a3b8",
+                        color: "var(--admin-text-muted)",
                         fontSize: "0.8rem",
                       }}
                     >
                       <div>
-                        <strong style={{ color: "#cbd5e1" }}>Billeder</strong>
+                        <strong style={{ color: "var(--admin-text)" }}>Billeder</strong>
                         <br />
                         {album.imageCount}
                       </div>
                       <div>
-                        <strong style={{ color: "#cbd5e1" }}>Opdateret</strong>
+                        <strong style={{ color: "var(--admin-text)" }}>Opdateret</strong>
                         <br />
                         {album.updatedAt.toLocaleDateString("da-DK")}
                       </div>
                       <div style={{ gridColumn: "1 / -1" }}>
-                        <strong style={{ color: "#cbd5e1" }}>Oprettet af</strong>
+                        <strong style={{ color: "var(--admin-text)" }}>Oprettet af</strong>
                         <br />
                         {album.createdByName || album.createdByEmail || "-"}
                       </div>
@@ -303,7 +303,7 @@ export default async function Page({ params, searchParams }: PageProps) {
             })}
           </div>
         ) : (
-          <div className="admin-card" style={{ padding: "32px", textAlign: "center", color: "#8c8c8c" }}>
+          <div className="admin-card" style={{ padding: "32px", textAlign: "center", color: "var(--admin-text-muted)" }}>
             Ingen albums fundet.
           </div>
         )}

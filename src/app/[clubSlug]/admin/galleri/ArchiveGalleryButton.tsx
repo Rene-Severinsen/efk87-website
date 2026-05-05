@@ -29,8 +29,7 @@ export default function ArchiveGalleryButton({
     <button
       type="button"
       onClick={archiveGallery}
-      className="admin-btn"
-      style={{ color: "#fca5a5" }}
+      className="admin-btn admin-btn-danger"
     >
       Slet galleri
     </button>

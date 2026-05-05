@@ -167,7 +167,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
                 />
                 <span>Vis som udvalgt galleri på public forside</span>
               </label>
-              <p style={{ marginTop: "6px", color: "#94a3b8", fontSize: "0.8rem" }}>
+              <p style={{ marginTop: "6px", color: "var(--admin-text-muted)", fontSize: "0.8rem" }}>
                 Public forsiden viser maks. 3 valgte, publicerede og offentlige albums.
               </p>
             </div>
@@ -266,7 +266,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
                     </div>
 
                     <div style={{ padding: "12px", display: "grid", gap: "8px" }}>
-                      <div style={{ fontSize: "0.8rem", color: "#94a3b8" }}>
+                      <div style={{ fontSize: "0.8rem", color: "var(--admin-text-muted)" }}>
                         {image.status} · {formatFileSize(image.sizeBytes)}
                       </div>
 
@@ -283,7 +283,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
 
                       {isActive ? (
                         <form action={hideGalleryImageAdminAction.bind(null, clubSlug, album.id, image.id)}>
-                          <button type="submit" className="admin-btn" style={{ width: "100%", color: "#fca5a5" }}>
+                          <button type="submit" className="admin-btn admin-btn-danger" style={{ width: "100%" }}>
                             Skjul billede
                           </button>
                         </form>
@@ -300,7 +300,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
               })}
             </div>
           ) : (
-            <p style={{ color: "#8c8c8c" }}>Ingen billeder i dette galleri.</p>
+            <p style={{ color: "var(--admin-text-muted)" }}>Ingen billeder i dette galleri.</p>
           )}
         </div>
       </div>

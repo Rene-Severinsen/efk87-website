@@ -1766,3 +1766,156 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+
+/* Final QA override: admin text contrast and stat tile layout */
+
+.admin-shell {
+  --admin-text-muted: #334155;
+  --admin-text-soft: #475569;
+}
+
+/* Global admin text contrast */
+.admin-shell p,
+.admin-shell td,
+.admin-shell small,
+.admin-shell .admin-page-description,
+.admin-shell .admin-metric-label,
+.admin-shell .admin-card p,
+.admin-shell .admin-table td,
+.admin-shell .admin-activity-time,
+.admin-shell .admin-activity-text,
+.admin-shell .admin-form-help,
+.admin-shell .text-slate-300,
+.admin-shell .text-slate-400,
+.admin-shell .text-slate-500,
+.admin-shell .text-slate-600,
+.admin-shell [class*="text-slate-300"],
+.admin-shell [class*="text-slate-400"],
+.admin-shell [class*="text-slate-500"],
+.admin-shell [class*="text-slate-600"] {
+  color: var(--admin-text-muted) !important;
+}
+
+.admin-shell h1,
+.admin-shell h2,
+.admin-shell h3,
+.admin-shell h4,
+.admin-shell strong,
+.admin-shell .font-bold,
+.admin-shell .font-extrabold,
+.admin-shell .font-black,
+.admin-shell .admin-page-title,
+.admin-shell .admin-section-title,
+.admin-shell .admin-table th {
+  color: var(--admin-text) !important;
+}
+
+/* Global stat tiles: always horizontal when columns=four */
+.admin-shell .admin-stat-tile-grid {
+  display: grid !important;
+  gap: 16px !important;
+  width: 100% !important;
+  margin-bottom: 24px !important;
+}
+
+.admin-shell .admin-stat-tile-grid--four {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.admin-shell .admin-stat-tile-grid--nine {
+  grid-template-columns: repeat(9, minmax(0, 1fr)) !important;
+}
+
+.admin-shell .admin-stat-tile {
+  display: grid !important;
+  align-content: center !important;
+  min-height: 96px !important;
+  border-radius: 22px !important;
+  background: #ffffff !important;
+  border: 1px solid var(--admin-card-border) !important;
+  box-shadow: var(--admin-shadow) !important;
+  padding: 18px 20px !important;
+  text-decoration: none !important;
+}
+
+.admin-shell .admin-stat-tile-label {
+  color: var(--admin-text) !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+}
+
+.admin-shell .admin-stat-tile-value {
+  color: var(--admin-text) !important;
+  font-size: 1.8rem !important;
+  font-weight: 950 !important;
+  line-height: 1.1 !important;
+}
+
+/* Access matrix contrast */
+.admin-shell .access-admin-module-description,
+.admin-shell .access-admin-note,
+.admin-shell .access-admin-card p,
+.admin-shell .access-admin-panel-header p,
+.admin-shell .access-admin-area-item p {
+  color: var(--admin-text-muted) !important;
+}
+
+/* Gallery cards contrast */
+.admin-shell .admin-gallery-card,
+.admin-shell .admin-gallery-card *,
+.admin-shell [class*="gallery"] .text-slate-300,
+.admin-shell [class*="gallery"] .text-slate-400,
+.admin-shell [class*="gallery"] .text-slate-500,
+.admin-shell [class*="gallery"] [class*="text-slate-300"],
+.admin-shell [class*="gallery"] [class*="text-slate-400"],
+.admin-shell [class*="gallery"] [class*="text-slate-500"] {
+  color: var(--admin-text-muted) !important;
+}
+
+.admin-shell [class*="gallery"] h1,
+.admin-shell [class*="gallery"] h2,
+.admin-shell [class*="gallery"] h3,
+.admin-shell [class*="gallery"] .font-bold,
+.admin-shell [class*="gallery"] .font-extrabold {
+  color: var(--admin-text) !important;
+}
+
+/* Keep destructive actions visibly destructive */
+.admin-shell .text-rose-300,
+.admin-shell .text-rose-400,
+.admin-shell .text-red-400,
+.admin-shell [class*="text-rose"],
+.admin-shell [class*="text-red"] {
+  color: #be123c !important;
+}
+
+@media (max-width: 1180px) {
+  .admin-shell .admin-stat-tile-grid--four,
+  .admin-shell .admin-stat-tile-grid--nine {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-shell .admin-stat-tile-grid--four,
+  .admin-shell .admin-stat-tile-grid--nine {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* Final QA override: admin danger buttons */
+.admin-shell .admin-btn-danger {
+  border-color: #fda4af !important;
+  background: #fff1f2 !important;
+  color: #be123c !important;
+}
+
+.admin-shell .admin-btn-danger:hover {
+  border-color: #fb7185 !important;
+  background: #ffe4e6 !important;
+  color: #9f1239 !important;
+}

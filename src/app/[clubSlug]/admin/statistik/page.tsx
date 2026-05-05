@@ -5,6 +5,7 @@ import AdminShell from "../../../../components/admin/AdminShell";
 import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { getAdminStatisticsOverview } from "../../../../lib/admin/adminStatisticsService";
 import "../../../../components/admin/AdminDashboard.css";
+import { AdminStatTile, AdminStatTileGrid } from "@/components/admin/AdminPagePrimitives";
 
 interface AdminStatistikPageProps {
   params: Promise<{
@@ -45,24 +46,12 @@ export default async function AdminStatistikPage({ params }: AdminStatistikPageP
 
       <div className="admin-workspace pt-6">
 
-        <div className="admin-metric-grid">
-          <div className="admin-card admin-metric-card">
-            <span className="admin-metric-label">Aktive medlemmer i dag</span>
-            <span className="admin-metric-value">{stats.today.uniqueActiveMembersToday}</span>
-          </div>
-          <div className="admin-card admin-metric-card">
-            <span className="admin-metric-label">Flyvemeldinger i dag</span>
-            <span className="admin-metric-value">{stats.today.flightIntentCountToday}</span>
-          </div>
-          <div className="admin-card admin-metric-card">
-            <span className="admin-metric-label">Flyvemeldinger i år</span>
-            <span className="admin-metric-value">{stats.year.flightIntentCountThisYear}</span>
-          </div>
-          <div className="admin-card admin-metric-card">
-            <span className="admin-metric-label">Aktive medlemmer i klubben</span>
-            <span className="admin-metric-value">{stats.club.activeMemberCount}</span>
-          </div>
-        </div>
+        <AdminStatTileGrid columns="four">
+          <AdminStatTile label="Aktive medlemmer i dag" value={stats.today.uniqueActiveMembersToday} tone="green" />
+          <AdminStatTile label="Flyvemeldinger i dag" value={stats.today.flightIntentCountToday} tone="blue" />
+          <AdminStatTile label="Flyvemeldinger i år" value={stats.year.flightIntentCountThisYear} tone="amber" />
+          <AdminStatTile label="Aktive medlemmer i klubben" value={stats.club.activeMemberCount} tone="slate" />
+        </AdminStatTileGrid>
 
         <div className="admin-card" style={{ marginBottom: '24px' }}>
           <h2 className="admin-section-title">Aktivitetstrend (Sidste 14 dage)</h2>
