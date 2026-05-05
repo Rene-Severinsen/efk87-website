@@ -25,7 +25,7 @@ function TextInput({
 }) {
   return (
     <div className="space-y-2">
-      <label htmlFor={name} className="block text-sm font-medium text-slate-300">
+      <label htmlFor={name} className="admin-form-label">
         {label}
       </label>
       <input
@@ -33,7 +33,7 @@ function TextInput({
         name={name}
         defaultValue={value}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white placeholder:text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+        className="admin-input"
       />
     </div>
   );
@@ -54,7 +54,7 @@ function TextArea({
 }) {
   return (
     <div className="space-y-2">
-      <label htmlFor={name} className="block text-sm font-medium text-slate-300">
+      <label htmlFor={name} className="admin-form-label">
         {label}
       </label>
       <textarea
@@ -62,10 +62,10 @@ function TextArea({
         name={name}
         defaultValue={value}
         rows={rows}
-        className="w-full resize-y rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white placeholder:text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+        className="admin-textarea"
       />
       {helpText ? (
-        <p className="text-xs text-slate-500">
+        <p className="admin-form-help">
           {helpText}
         </p>
       ) : null}
@@ -135,12 +135,12 @@ export default function MembershipPageAdminForm({
 
   return (
     <form action={handleSubmit} className="space-y-8">
-      <div className="rounded-3xl border border-white/10 bg-[#121b2e]/80 p-6 shadow-2xl backdrop-blur-md">
+      <div className="admin-card">
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="admin-section-title">
             Intro og indmeldelse
           </h2>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="admin-muted">
             Forklar den selvbetjente indmeldelse og de tre trin frem til aktiveret medlemskab.
           </p>
         </div>
@@ -161,7 +161,7 @@ export default function MembershipPageAdminForm({
           />
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-            <div className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <div className="space-y-4 rounded-2xl border bg-white/[0.03] p-5">
               <TextInput
                 name="stepOneTitle"
                 label="Trin 1 titel"
@@ -175,7 +175,7 @@ export default function MembershipPageAdminForm({
               />
             </div>
 
-            <div className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <div className="space-y-4 rounded-2xl border bg-white/[0.03] p-5">
               <TextInput
                 name="stepTwoTitle"
                 label="Trin 2 titel"
@@ -189,7 +189,7 @@ export default function MembershipPageAdminForm({
               />
             </div>
 
-            <div className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <div className="space-y-4 rounded-2xl border bg-white/[0.03] p-5">
               <TextInput
                 name="stepThreeTitle"
                 label="Trin 3 titel"
@@ -206,13 +206,13 @@ export default function MembershipPageAdminForm({
         </div>
       </div>
 
-      <div className="rounded-3xl border border-white/10 bg-[#121b2e]/80 p-6 shadow-2xl backdrop-blur-md">
+      <div className="admin-card">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="admin-section-title">
               Kontingenter
             </h2>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="admin-muted">
               Priser og medlemsformer kan ændres uden kode.
             </p>
           </div>
@@ -220,7 +220,7 @@ export default function MembershipPageAdminForm({
           <button
             type="button"
             onClick={addFee}
-            className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/15"
+            className="admin-btn"
           >
             Tilføj kontingent
           </button>
@@ -232,17 +232,17 @@ export default function MembershipPageAdminForm({
           {fees.map((fee, index) => (
             <div
               key={index}
-              className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+              className="flex h-full flex-col rounded-2xl border bg-white/[0.03] p-5"
             >
               <div className="mb-4 flex items-center justify-between gap-3">
-                <h3 className="text-lg font-bold text-white">
+                <h3 className="admin-section-title">
                   Kontingent {index + 1}
                 </h3>
 
                 <button
                   type="button"
                   onClick={() => removeFee(index)}
-                  className="rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-1 text-xs font-bold text-rose-300 transition hover:bg-rose-500/20"
+                  className="admin-btn admin-btn-danger"
                 >
                   Fjern
                 </button>
@@ -250,83 +250,83 @@ export default function MembershipPageAdminForm({
 
               <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-300">
+                  <label className="admin-form-label">
                     Navn
                   </label>
                   <input
                     value={fee.title}
                     onChange={(event) => updateFee(index, { title: event.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+                    className="admin-input"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-300">
+                  <label className="admin-form-label">
                     Pris
                   </label>
                   <input
                     value={fee.price}
                     onChange={(event) => updateFee(index, { price: event.target.value })}
                     placeholder="fx 750 kr."
-                    className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+                    className="admin-input"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-300">
+                  <label className="admin-form-label">
                     Indmeldelsesgebyr
                   </label>
                   <input
                     value={fee.signupFee}
                     onChange={(event) => updateFee(index, { signupFee: event.target.value })}
                     placeholder="fx 250 kr."
-                    className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+                    className="admin-input"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-300">
+                  <label className="admin-form-label">
                     Periode
                   </label>
                   <input
                     value={fee.period}
                     onChange={(event) => updateFee(index, { period: event.target.value })}
                     placeholder="pr. år"
-                    className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+                    className="admin-input"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-300">
+                  <label className="admin-form-label">
                     Sortering
                   </label>
                   <input
                     type="number"
                     value={fee.sortOrder}
                     onChange={(event) => updateFee(index, { sortOrder: Number(event.target.value) })}
-                    className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+                    className="admin-input"
                   />
                 </div>
               </div>
 
               <div className="mt-4 flex-1 space-y-2">
-                <label className="block text-sm font-medium text-slate-300">
+                <label className="admin-form-label">
                   Beskrivelse
                 </label>
                 <textarea
                   value={fee.description}
                   onChange={(event) => updateFee(index, { description: event.target.value })}
                   rows={3}
-                  className="w-full resize-y rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+                  className="admin-textarea"
                 />
               </div>
 
-              <label className="mt-4 flex items-center gap-3 text-sm font-medium text-slate-300">
+              <label className="admin-checkbox-label">
                 <input
                   type="checkbox"
                   checked={fee.isActive}
                   onChange={(event) => updateFee(index, { isActive: event.target.checked })}
-                  className="h-4 w-4 rounded border-white/10 bg-[#0f172a]"
+                  className="admin-checkbox"
                 />
                 Vis på public-siden
               </label>
@@ -335,9 +335,9 @@ export default function MembershipPageAdminForm({
         </div>
       </div>
 
-      <div className="rounded-3xl border border-white/10 bg-[#121b2e]/80 p-6 shadow-2xl backdrop-blur-md">
+      <div className="admin-card">
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="admin-section-title">
             Opkrævning og praktisk information
           </h2>
         </div>
@@ -375,13 +375,13 @@ export default function MembershipPageAdminForm({
       </div>
 
       {status === "success" ? (
-        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm font-medium text-emerald-400">
+        <div className="admin-alert admin-alert-success">
           Medlemsskab er gemt.
         </div>
       ) : null}
 
       {status === "error" && error ? (
-        <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm font-medium text-rose-400">
+        <div className="admin-alert admin-alert-danger">
           {error}
         </div>
       ) : null}
@@ -390,7 +390,7 @@ export default function MembershipPageAdminForm({
         <button
           type="submit"
           disabled={isSaving}
-          className="rounded-xl bg-sky-600 px-8 py-3 font-bold text-white shadow-lg shadow-sky-900/20 transition-all hover:bg-sky-500 disabled:bg-slate-700 disabled:shadow-none"
+          className="admin-btn admin-btn-primary"
         >
           {isSaving ? "Gemmer..." : "Gem medlemsskab"}
         </button>
