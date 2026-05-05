@@ -4,6 +4,31 @@ import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards"
 import AdminShell from "../../../../components/admin/AdminShell";
 import { getAdminArticleOverview } from "../../../../lib/admin/articleAdminService";
 import Link from "next/link";
+import { PublicSurfaceVisibility } from "../../../../generated/prisma";
+
+function visibilityLabel(visibility: PublicSurfaceVisibility): string {
+  switch (visibility) {
+    case PublicSurfaceVisibility.PUBLIC:
+      return "Offentlig";
+    case PublicSurfaceVisibility.MEMBERS_ONLY:
+      return "Kun medlemmer";
+    default:
+      return visibility;
+  }
+}
+
+function statusLabel(status: string): string {
+  switch (status) {
+    case "PUBLISHED":
+      return "Publiceret";
+    case "DRAFT":
+      return "Kladde";
+    case "ARCHIVED":
+      return "Arkiveret";
+    default:
+      return status;
+  }
+}
 
 interface PageProps {
   params: Promise<{
@@ -92,10 +117,10 @@ export default async function Page({ params }: PageProps) {
                     background: article.status === 'PUBLISHED' ? '#e6f7ff' : article.status === 'DRAFT' ? '#fff7e6' : '#f5f5f5',
                     color: article.status === 'PUBLISHED' ? '#1890ff' : article.status === 'DRAFT' ? '#fa8c16' : '#8c8c8c'
                   }}>
-                    {article.status}
+                    {statusLabel(article.status)}
                   </span>
                 </td>
-                <td style={{ padding: '12px 16px' }}>{article.visibility}</td>
+                <td style={{ padding: '12px 16px' }}>{visibilityLabel(article.visibility)}</td>
                 <td style={{ padding: '12px 16px' }}>{article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('da-DK') : '-'}</td>
                 <td style={{ padding: '12px 16px' }}>{new Date(article.updatedAt).toLocaleDateString('da-DK')}</td>
                 <td style={{ padding: '12px 16px', textAlign: 'right' }}>

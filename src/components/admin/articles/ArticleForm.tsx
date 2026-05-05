@@ -98,7 +98,7 @@ export default function ArticleForm({
                 marginBottom: "8px",
               }}
             >
-              Uddrag (Excerpt)
+              Uddrag
             </label>
             <textarea
               name="excerpt"
@@ -166,9 +166,9 @@ export default function ArticleForm({
                 border: "1px solid #d9d9d9",
               }}
             >
-              <option value={ArticleStatus.DRAFT}>Draft</option>
-              <option value={ArticleStatus.PUBLISHED}>Published</option>
-              <option value={ArticleStatus.ARCHIVED}>Archived</option>
+              <option value={ArticleStatus.DRAFT}>Kladde</option>
+              <option value={ArticleStatus.PUBLISHED}>Publiceret</option>
+              <option value={ArticleStatus.ARCHIVED}>Arkiveret</option>
             </select>
           </div>
 
@@ -193,8 +193,8 @@ export default function ArticleForm({
                 border: "1px solid #d9d9d9",
               }}
             >
-              <option value={PublicSurfaceVisibility.PUBLIC}>Public</option>
-              <option value={PublicSurfaceVisibility.MEMBERS_ONLY}>Members Only</option>
+              <option value={PublicSurfaceVisibility.PUBLIC}>Offentlig</option>
+              <option value={PublicSurfaceVisibility.MEMBERS_ONLY}>Kun medlemmer</option>
             </select>
           </div>
 
