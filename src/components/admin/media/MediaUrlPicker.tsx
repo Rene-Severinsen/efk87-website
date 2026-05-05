@@ -50,20 +50,20 @@ export default function MediaUrlPicker({
   }
 
   const chooseButtonClass = compact
-    ? "w-full rounded-xl border border-sky-500/40 bg-sky-600 px-4 py-2.5 text-left text-xs font-bold text-white shadow-lg shadow-sky-900/20 transition hover:bg-sky-500"
-    : "w-full rounded-xl border border-sky-500/40 bg-sky-600 px-4 py-3 text-left text-sm font-bold text-white shadow-lg shadow-sky-900/20 transition hover:bg-sky-500";
+    ? "admin-btn admin-btn-primary admin-media-picker-button admin-media-picker-button--compact"
+    : "admin-btn admin-btn-primary admin-media-picker-button";
 
   const inputClass = compact
-    ? "w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/50"
-    : "w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white placeholder:text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/50";
+    ? "admin-input admin-media-picker-input admin-media-picker-input--compact"
+    : "admin-input admin-media-picker-input";
 
   const previewShellClass = compact
-    ? "mt-2 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]"
-    : "mt-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]";
+    ? "admin-media-preview admin-media-preview--compact"
+    : "admin-media-preview";
 
   const previewMediaWrapClass = compact
-    ? "flex h-24 items-center justify-center bg-[#0f172a]"
-    : "aspect-[16/9] max-h-[360px] bg-[#0f172a]";
+    ? "admin-media-preview-frame admin-media-preview-frame--compact"
+    : "admin-media-preview-frame";
 
   const previewImageClass =
     previewFit === "contain"
@@ -74,7 +74,7 @@ export default function MediaUrlPicker({
 
   return (
     <div className={compact ? "relative space-y-2" : "relative space-y-3"}>
-      <label htmlFor={name} className="block text-sm font-medium text-slate-300">
+      <label htmlFor={name} className="admin-form-label">
         {label}
       </label>
 
@@ -97,20 +97,22 @@ export default function MediaUrlPicker({
           className={inputClass}
         />
       ) : (
-        <input id={name} name={name} value={selectedUrl} onChange={() => {}} type="hidden" />
+        <input
+          id={name}
+          name={name}
+          value={selectedUrl}
+          onChange={() => {}}
+          type="hidden"
+        />
       )}
 
       {selectedUrl ? (
-        <div className={compact ? "flex flex-wrap gap-2" : "flex flex-wrap gap-2"}>
+        <div className="flex flex-wrap gap-2">
           <a
             href={selectedUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={
-              compact
-                ? "rounded-lg border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-white/15"
-                : "rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/15"
-            }
+            className={compact ? "admin-btn admin-btn-compact" : "admin-btn"}
           >
             Åbn
           </a>
@@ -120,8 +122,8 @@ export default function MediaUrlPicker({
             onClick={clearSelection}
             className={
               compact
-                ? "rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-xs font-bold text-rose-300 transition hover:bg-rose-500/20"
-                : "rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-2 text-sm font-bold text-rose-300 transition hover:bg-rose-500/20"
+                ? "admin-btn admin-btn-danger admin-btn-compact"
+                : "admin-btn admin-btn-danger"
             }
           >
             Ryd
@@ -139,7 +141,13 @@ export default function MediaUrlPicker({
             />
           </div>
           <div className={compact ? "p-2.5" : "p-3"}>
-            <p className={compact ? "truncate text-xs font-bold text-white" : "truncate text-sm font-bold text-white"}>
+            <p
+              className={
+                compact
+                  ? "admin-media-preview-title admin-media-preview-title--compact"
+                  : "admin-media-preview-title"
+              }
+            >
               {selectedAsset.title || selectedAsset.originalName}
             </p>
           </div>
@@ -154,7 +162,7 @@ export default function MediaUrlPicker({
             />
           </div>
           <div className={compact ? "p-2.5" : "p-3"}>
-            <p className="truncate text-xs text-slate-400">
+            <p className="admin-muted truncate text-xs">
               Manuel URL / ekstern URL
             </p>
           </div>
@@ -163,65 +171,68 @@ export default function MediaUrlPicker({
 
       {isOpen ? (
         <div
-          className="absolute left-0 right-0 top-full z-[9999] mt-3 rounded-3xl border border-white/10 bg-[#0b1120] shadow-2xl"
+          className="admin-media-picker-overlay"
           role="dialog"
           aria-modal="true"
+          onClick={() => setIsOpen(false)}
         >
           <div
-            className="flex max-h-[70vh] w-full flex-col overflow-hidden rounded-3xl"
+            className="admin-media-picker-modal"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-white/10 p-5">
-              <div>
-                <h2 className="text-xl font-bold text-white">Vælg billede</h2>
-                <p className="mt-1 text-sm text-slate-400">
-                  {assets.length} aktive billeder i Media Library.
-                </p>
+            <div className="flex max-h-[70vh] w-full flex-col overflow-hidden rounded-3xl">
+              <div className="admin-media-picker-popover-header">
+                <div>
+                  <h2 className="admin-section-title">Vælg billede</h2>
+                  <p className="admin-muted mt-1 text-sm">
+                    {assets.length} aktive billeder i Media Library.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="admin-btn"
+                >
+                  Luk
+                </button>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/15"
-              >
-                Luk
-              </button>
-            </div>
+              <div className="overflow-y-auto p-5">
+                {assets.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
+                    {assets.map((asset) => (
+                      <button
+                        key={asset.id}
+                        type="button"
+                        onClick={() => selectAsset(asset.publicUrl)}
+                        className="admin-media-asset-button group"
+                      >
+                        <div className="admin-media-asset-frame">
+                          <img
+                            src={asset.publicUrl}
+                            alt={asset.altText || asset.title || asset.originalName}
+                            className="h-full w-full object-cover transition duration-200 group-hover:scale-105"
+                          />
+                        </div>
 
-            <div className="overflow-y-auto p-5">
-              {assets.length > 0 ? (
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
-                  {assets.map((asset) => (
-                    <button
-                      key={asset.id}
-                      type="button"
-                      onClick={() => selectAsset(asset.publicUrl)}
-                      className="group overflow-hidden rounded-2xl border border-white/10 bg-[#121b2e]/80 text-left shadow-lg transition hover:border-sky-500/50 hover:bg-[#17233a]"
-                    >
-                      <div className="aspect-square bg-[#0f172a]">
-                        <img
-                          src={asset.publicUrl}
-                          alt={asset.altText || asset.title || asset.originalName}
-                          className="h-full w-full object-cover transition duration-200 group-hover:scale-105"
-                        />
-                      </div>
-
-                      <div className="p-3">
-                        <p className="truncate text-sm font-bold text-white">
-                          {asset.title || asset.originalName}
-                        </p>
-                        <p className="truncate text-xs text-slate-400">
-                          {formatFileSize(asset.sizeBytes)}
-                        </p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center text-slate-400">
-                  Der er endnu ikke uploadet billeder i Media Library.
-                </div>
-              )}
+                        <div className="p-3">
+                          <p className="admin-media-asset-title">
+                            {asset.title || asset.originalName}
+                          </p>
+                          <p className="admin-muted truncate text-xs">
+                            {formatFileSize(asset.sizeBytes)}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="admin-empty-state">
+                    Der er endnu ikke uploadet billeder i Media Library.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
