@@ -28,33 +28,23 @@ const Avatar = ({
     rounded: "rounded-2xl",
   };
 
-  const getInitials = (name: string) => {
-    if (!name) return "?";
-    const parts = name.trim().split(/\s+/);
-    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
-    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  const getInitials = (value: string) => {
+    const trimmedName = value.trim();
+
+    if (!trimmedName) {
+      return "?";
+    }
+
+    const parts = trimmedName.split(/\s+/);
+
+    if (parts.length === 1) {
+      return parts[0].charAt(0).toUpperCase();
+    }
+
+    return `${parts[0].charAt(0)}${parts[parts.length - 1].charAt(0)}`.toUpperCase();
   };
 
   const initials = getInitials(name);
-
-  // Deterministic background color based on name for initials
-  const getBackgroundColor = (name: string) => {
-    const colors = [
-      "bg-blue-600/30",
-      "bg-emerald-600/30",
-      "bg-indigo-600/30",
-      "bg-violet-600/30",
-      "bg-sky-600/30",
-      "bg-cyan-600/30",
-    ];
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return colors[Math.abs(hash) % colors.length];
-  };
-
-  const bgColor = getBackgroundColor(name);
 
   return (
     <div
@@ -71,8 +61,8 @@ const Avatar = ({
           style={{ objectPosition: objectPosition || "center" }}
         />
       ) : (
-        <div className={`w-full h-full flex items-center justify-center font-bold text-white/70 ${bgColor}`}>
-          {initials}
+        <div className="avatar-fallback">
+          <span className="avatar-fallback-initials">{initials}</span>
         </div>
       )}
     </div>

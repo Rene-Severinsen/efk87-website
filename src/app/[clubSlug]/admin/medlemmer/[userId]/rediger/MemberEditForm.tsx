@@ -236,7 +236,7 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
             <Avatar 
               imageUrl={member.profileImageUrl} 
               name={member.displayName || ""} 
-              className="w-48 h-48 !text-5xl"
+              className="admin-avatar-profile-preview"
               shape="rounded"
               objectPosition="center 12%"
             />
