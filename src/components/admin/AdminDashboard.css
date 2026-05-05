@@ -2903,18 +2903,78 @@
 }
 
 .admin-media-picker-modal {
+  --admin-media-picker-text: #f8fafc;
+  --admin-media-picker-muted: #e2e8f0;
+  --admin-media-picker-card-text: #f8fafc;
+  --admin-media-picker-card-muted: #dbeafe;
+
   width: min(1100px, 100%);
   max-height: 82vh;
   overflow: hidden;
-  border: 1px solid var(--admin-card-border);
+  border: 1px solid rgba(148, 163, 184, 0.28);
   border-radius: 24px;
-  background: var(--admin-card-bg);
+  background: #334155;
   box-shadow: 0 30px 90px rgba(15, 23, 42, 0.28);
+}
+
+.admin-media-picker-modal .admin-media-picker-popover-header {
+  border-bottom-color: rgba(148, 163, 184, 0.22);
+  background: #475569;
+}
+
+.admin-media-picker-modal .admin-section-title {
+  color: #f8fafc;
+}
+
+.admin-media-picker-modal .admin-muted {
+  color: #e2e8f0;
+}
+
+.admin-media-picker-modal .admin-media-asset-button {
+  border-color: rgba(148, 163, 184, 0.24);
+  background: #64748b;
+  box-shadow: none;
+}
+
+.admin-media-picker-modal .admin-media-asset-button:hover {
+  border-color: rgba(56, 189, 248, 0.72);
+  background: #718096;
+}
+
+.admin-media-picker-modal .admin-media-asset-frame {
+  background: #e5e7eb;
+}
+
+.admin-media-picker-modal .admin-media-asset-title {
+  color: #f8fafc;
 }
 
 .admin-media-picker-popover {
   position: static;
   margin-top: 0;
+}
+
+/* Media picker carbon text contrast */
+
+.admin-media-picker-modal .admin-section-title,
+.admin-media-picker-modal .admin-media-picker-title,
+.admin-media-picker-modal h2 {
+  color: var(--admin-media-picker-text);
+}
+
+.admin-media-picker-modal .admin-muted,
+.admin-media-picker-modal .admin-media-picker-popover-count,
+.admin-media-picker-modal p {
+  color: var(--admin-media-picker-muted);
+}
+
+.admin-media-picker-modal .admin-media-asset-title {
+  color: var(--admin-media-picker-card-text);
+  font-weight: 800;
+}
+
+.admin-media-picker-modal .admin-media-asset-meta {
+  color: var(--admin-media-picker-card-muted);
 }
 
 /* EFK87 admin calendar primitives */
@@ -3336,3 +3396,90 @@
 .admin-gallery-meta-full {
   grid-column: 1 / -1;
 }
+
+
+/* Media picker light text override */
+
+.admin-media-picker-modal {
+  --admin-media-picker-text: #f8fafc;
+  --admin-media-picker-muted: #dbe4ee;
+  --admin-media-picker-card-text: #f8fafc;
+  --admin-media-picker-card-muted: #dbe4ee;
+}
+
+.admin-media-picker-modal .admin-section-title,
+.admin-media-picker-modal .admin-media-picker-title,
+.admin-media-picker-modal h1,
+.admin-media-picker-modal h2,
+.admin-media-picker-modal h3 {
+  color: var(--admin-media-picker-text) !important;
+}
+
+.admin-media-picker-modal .admin-muted,
+.admin-media-picker-modal .admin-media-picker-popover-count,
+.admin-media-picker-modal p,
+.admin-media-picker-modal small {
+  color: var(--admin-media-picker-muted) !important;
+}
+
+.admin-media-picker-modal .admin-media-asset-button {
+  color: var(--admin-media-picker-card-text);
+}
+
+.admin-media-picker-modal .admin-media-asset-title,
+.admin-media-picker-modal .admin-media-asset-name {
+  color: var(--admin-media-picker-card-text) !important;
+  font-weight: 800;
+}
+
+.admin-media-picker-modal .admin-media-asset-meta,
+.admin-media-picker-modal .admin-media-asset-size,
+.admin-media-picker-modal .admin-media-asset-caption {
+  color: var(--admin-media-picker-card-muted) !important;
+}
+
+/* Media picker final carbon text contrast */
+
+.admin-shell .admin-media-picker-modal,
+.admin-media-picker-modal {
+  --admin-media-picker-text: #f8fafc;
+  --admin-media-picker-muted: #e2e8f0;
+}
+
+.admin-shell .admin-media-picker-modal .admin-section-title,
+.admin-media-picker-modal .admin-section-title,
+.admin-shell .admin-media-picker-modal h1,
+.admin-shell .admin-media-picker-modal h2,
+.admin-shell .admin-media-picker-modal h3,
+.admin-media-picker-modal h1,
+.admin-media-picker-modal h2,
+.admin-media-picker-modal h3 {
+  color: var(--admin-media-picker-text) !important;
+}
+
+.admin-shell .admin-media-picker-modal .admin-muted,
+.admin-media-picker-modal .admin-muted,
+.admin-shell .admin-media-picker-modal p,
+.admin-media-picker-modal p,
+.admin-shell .admin-media-picker-modal small,
+.admin-media-picker-modal small {
+  color: var(--admin-media-picker-muted) !important;
+}
+
+.admin-shell .admin-media-picker-modal .admin-media-asset-button,
+.admin-media-picker-modal .admin-media-asset-button {
+  color: var(--admin-media-picker-text) !important;
+}
+
+.admin-shell .admin-media-picker-modal .admin-media-asset-title,
+.admin-media-picker-modal .admin-media-asset-title {
+  color: var(--admin-media-picker-text) !important;
+  font-weight: 850;
+}
+
+.admin-shell .admin-media-picker-modal .admin-media-asset-button .admin-muted,
+.admin-media-picker-modal .admin-media-asset-button .admin-muted {
+  color: var(--admin-media-picker-muted) !important;
+}
+
+/* END media picker final carbon text contrast */
