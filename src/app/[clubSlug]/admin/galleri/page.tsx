@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { GalleryAlbumStatus } from "../../../../generated/prisma";
+import { GalleryAlbumStatus, PublicSurfaceVisibility } from "../../../../generated/prisma";
 import ArchiveGalleryButton from "./ArchiveGalleryButton";
 import { getAdminGalleryOverview } from "../../../../lib/admin/galleryAdminService";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
@@ -30,8 +30,15 @@ function statusLabel(status: GalleryAlbumStatus): string {
   }
 }
 
-function visibilityLabel(visibility: string): string {
-  return visibility === "MEMBERS_ONLY" ? "Kun medlemmer" : "Offentlig";
+function visibilityLabel(visibility: PublicSurfaceVisibility): string {
+  switch (visibility) {
+    case PublicSurfaceVisibility.PUBLIC:
+      return "Offentlig";
+    case PublicSurfaceVisibility.MEMBERS_ONLY:
+      return "Kun medlemmer";
+    default:
+      return visibility;
+  }
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
