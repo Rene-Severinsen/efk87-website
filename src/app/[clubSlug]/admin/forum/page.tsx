@@ -75,7 +75,7 @@ export default async function Page({ params }: PageProps) {
                   <div className="flex items-center gap-2">
                     <h3 className="font-bold text-white">{category.title}</h3>
                     {!category.isActive && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 uppercase tracking-wider border border-red-500/20">
+                      <span className="admin-badge admin-badge-danger">
                         Inaktiv
                       </span>
                     )}

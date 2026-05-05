@@ -75,24 +75,15 @@ export default async function Page({ params }: PageProps) {
           </div>
           <div className="admin-card admin-metric-card">
             <span className="admin-metric-label">Mailafsendelse</span>
-            <span className="admin-metric-value" style={{ color: '#faad14', fontSize: '1.25rem' }}>Ikke aktiveret</span>
+            <span className="admin-metric-value admin-warning-text text-xl">Ikke aktiveret</span>
           </div>
         </div>
 
-        <div style={{ 
-          backgroundColor: '#fffbe6', 
-          border: '1px solid #ffe58f', 
-          padding: '16px 24px', 
-          borderRadius: '8px', 
-          marginBottom: '24px',
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: '12px'
-        }}>
+        <div className="admin-alert admin-alert-warning">
           <span style={{ fontSize: '1.25rem' }}>⚠️</span>
           <div>
-            <h3 style={{ margin: '0 0 4px 0', fontSize: '1rem', fontWeight: 600, color: '#856404' }}>Vigtig information</h3>
-            <p style={{ margin: 0, fontSize: '0.875rem', color: '#856404', lineHeight: '1.5' }}>
+            <h3 className="admin-warning-text mb-1 text-base font-semibold">Vigtig information</h3>
+            <p className="admin-warning-text m-0 text-sm leading-6">
               Mailafsendelse er ikke aktiveret endnu. SPF, DKIM, DMARC og listeadgang skal afklares før systemet må sende til mailinglister.
             </p>
           </div>
@@ -101,7 +92,7 @@ export default async function Page({ params }: PageProps) {
         <div className="admin-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2 className="admin-section-title" style={{ margin: 0 }}>Konfigurerede lister</h2>
-            <span style={{ fontSize: '0.85rem', color: '#8c8c8c', fontStyle: 'italic' }}>
+            <span className="admin-muted text-sm italic">
               Redigering kommer senere
             </span>
           </div>
@@ -124,50 +115,29 @@ export default async function Page({ params }: PageProps) {
                     <tr key={list.id}>
                       <td style={{ fontWeight: 500 }}>{list.name}</td>
                       <td>
-                        <span style={{ 
-                          padding: '2px 8px', 
-                          borderRadius: '4px', 
-                          fontSize: '0.75rem', 
-                          backgroundColor: '#f0f2f5',
-                          color: '#595959',
-                          border: '1px solid #d9d9d9'
-                        }}>
+                        <span className="admin-badge admin-badge-neutral">
                           {getPurposeLabel(list.purpose)}
                         </span>
                       </td>
                       <td><code>{list.emailAddress}</code></td>
                       <td>
                         {list.isActive ? (
-                          <span style={{ 
-                            padding: '2px 8px', 
-                            borderRadius: '4px', 
-                            fontSize: '0.75rem', 
-                            backgroundColor: '#f6ffed',
-                            color: '#389e0d',
-                            border: '1px solid #b7eb8f'
-                          }}>
+                          <span className="admin-badge admin-badge-success">
                             Aktiv
                           </span>
                         ) : (
-                          <span style={{ 
-                            padding: '2px 8px', 
-                            borderRadius: '4px', 
-                            fontSize: '0.75rem', 
-                            backgroundColor: '#fff1f0',
-                            color: '#cf1322',
-                            border: '1px solid #ffa39e'
-                          }}>
+                          <span className="admin-badge admin-badge-danger">
                             Inaktiv
                           </span>
                         )}
                       </td>
                       <td><code style={{ fontSize: '0.75rem' }}>{list.key}</code></td>
-                      <td style={{ color: '#8c8c8c' }}>{formatAdminDateTime(list.updatedAt)}</td>
+                      <td className="admin-muted">{formatAdminDateTime(list.updatedAt)}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} style={{ textAlign: 'center', padding: '32px', color: '#8c8c8c' }}>
+                    <td colSpan={6} className="admin-muted px-6 py-8 text-center">
                       Ingen mailinglister fundet for denne klub.
                     </td>
                   </tr>

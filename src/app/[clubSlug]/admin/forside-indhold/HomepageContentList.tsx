@@ -71,27 +71,17 @@ const HomepageContentList: React.FC<HomepageContentListProps> = ({ contents, clu
                 </td>
                 <td>
                   <div style={{ fontWeight: 600 }}>{content.title}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>
+                  <div className="admin-muted text-xs">
                     Ordre: {content.sortOrder}
                   </div>
                 </td>
                 <td>
-                  <span className={`admin-badge ${content.isActive ? 'admin-badge-success' : 'admin-badge-draft'}`} style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '2px 8px',
-                    borderRadius: '4px',
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    background: content.isActive ? 'rgba(82, 196, 26, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                    color: content.isActive ? '#52c41a' : 'var(--admin-text-muted)'
-                  }}>
+                  <span className={`admin-badge ${content.isActive ? 'admin-badge-success' : 'admin-badge-draft'}`}>
                     {content.isActive ? <Eye size={12} /> : <EyeOff size={12} />}
                     {content.isActive ? 'Aktiv' : 'Inaktiv'}
                   </span>
                   {(content.visibleFrom || content.visibleUntil) && (
-                    <div style={{ fontSize: '0.7rem', marginTop: '4px', color: 'var(--admin-text-muted)' }}>
+                    <div className="admin-muted mt-1 text-[0.7rem]">
                       {content.visibleFrom ? new Date(content.visibleFrom).toLocaleDateString('da-DK') : '...'} 
                       {' - '}
                       {content.visibleUntil ? new Date(content.visibleUntil).toLocaleDateString('da-DK') : '...'}
@@ -106,23 +96,23 @@ const HomepageContentList: React.FC<HomepageContentListProps> = ({ contents, clu
                 <td>
                   <div style={{ fontSize: '0.85rem' }}>
                     {content.signupMode === HomepageContentSignupMode.NONE ? (
-                      <span style={{ color: 'var(--admin-text-muted)' }}>Ingen</span>
+                      <span className="admin-muted">Ingen</span>
                     ) : (
                       <>
                         <div>{content.signupMode === HomepageContentSignupMode.ONE_PER_MEMBER ? 'En pr. medlem' : 'Antal'}</div>
-                        <div style={{ fontWeight: 600, color: '#1890ff' }}>{content._count.signups} tilmeldte</div>
+                        <div className="admin-info-text font-semibold">{content._count.signups} tilmeldte</div>
                         
                         {content.isSignupClosed && (
                           <div style={{ marginTop: '4px' }}>
-                            <span style={{ background: 'rgba(255, 77, 79, 0.1)', color: '#ff4d4f', fontSize: '0.65rem', padding: '1px 4px', borderRadius: '3px', fontWeight: 600 }}>Lukket manuelt</span>
+                            <span className="admin-badge admin-badge-danger">Lukket manuelt</span>
                           </div>
                         )}
                         
                         {content.signupDeadlineAt && (
-                          <div style={{ marginTop: '4px', fontSize: '0.7rem', color: isHomepageContentSignupClosed(content) ? '#ff4d4f' : 'var(--admin-text-muted)' }}>
+                          <div className={isHomepageContentSignupClosed(content) ? 'admin-danger-text mt-1 text-[0.7rem]' : 'admin-muted mt-1 text-[0.7rem]'}>
                             Frist: {new Date(content.signupDeadlineAt).toLocaleDateString('da-DK', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
                             {isHomepageContentSignupClosed(content) && !content.isSignupClosed && (
-                              <div style={{ background: 'rgba(255, 77, 79, 0.1)', color: '#ff4d4f', fontSize: '0.65rem', padding: '1px 4px', borderRadius: '3px', fontWeight: 600, marginTop: '2px', display: 'inline-block' }}>Tilmelding lukket</div>
+                              <div className="admin-badge admin-badge-danger mt-0.5 inline-flex">Tilmelding lukket</div>
                             )}
                           </div>
                         )}
@@ -152,8 +142,7 @@ const HomepageContentList: React.FC<HomepageContentListProps> = ({ contents, clu
                     </Link>
                     <button 
                       onClick={() => handleDelete(content.id, content.title)}
-                      className="admin-btn admin-btn-ghost"
-                      style={{ padding: '6px', color: '#ff4d4f' }}
+                      className="admin-btn admin-btn-danger admin-btn-compact"
                       title="Slet"
                     >
                       <Trash2 size={16} />
@@ -163,7 +152,7 @@ const HomepageContentList: React.FC<HomepageContentListProps> = ({ contents, clu
               </tr>
             )) : (
               <tr>
-                <td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: 'var(--admin-text-muted)' }}>
+                <td colSpan={6} className="admin-muted px-6 py-10 text-center">
                   Ingen opslag fundet. Opret det første ved at trykke på &quot;Nyt opslag&quot;.
                 </td>
               </tr>

@@ -56,13 +56,7 @@ export default function ArticleForm({
         }}
       >
         <div
-          className="admin-card"
-          style={{
-            padding: "24px",
-            background: "#fff",
-            borderRadius: "8px",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-          }}
+          className="admin-card p-6"
         >
           <div style={{ marginBottom: "16px" }}>
             <label
@@ -84,7 +78,7 @@ export default function ArticleForm({
                 width: "100%",
                 padding: "8px 12px",
                 borderRadius: "4px",
-                border: "1px solid #d9d9d9",
+                border: "1px solid var(--admin-card-border)",
               }}
             />
           </div>
@@ -104,7 +98,7 @@ export default function ArticleForm({
               name="excerpt"
               rows={3}
               defaultValue={initialData?.excerpt ?? undefined}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 resize-y"
+              className="admin-textarea resize-y"
               placeholder="Giv en kort introduktion til artiklen..."
             />
           </div>
@@ -137,13 +131,7 @@ export default function ArticleForm({
         }}
       >
         <div
-          className="admin-card"
-          style={{
-            padding: "24px",
-            background: "#fff",
-            borderRadius: "8px",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-          }}
+          className="admin-card p-6"
         >
           <div style={{ marginBottom: "16px" }}>
             <label
@@ -163,7 +151,7 @@ export default function ArticleForm({
                 width: "100%",
                 padding: "8px 12px",
                 borderRadius: "4px",
-                border: "1px solid #d9d9d9",
+                border: "1px solid var(--admin-card-border)",
               }}
             >
               <option value={ArticleStatus.DRAFT}>Kladde</option>
@@ -190,7 +178,7 @@ export default function ArticleForm({
                 width: "100%",
                 padding: "8px 12px",
                 borderRadius: "4px",
-                border: "1px solid #d9d9d9",
+                border: "1px solid var(--admin-card-border)",
               }}
             >
               <option value={PublicSurfaceVisibility.PUBLIC}>Offentlig</option>
@@ -220,13 +208,7 @@ export default function ArticleForm({
         </div>
 
         <div
-          className="admin-card"
-          style={{
-            padding: "24px",
-            background: "#fff",
-            borderRadius: "8px",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-          }}
+          className="admin-card p-6"
         >
           <div style={{ marginBottom: "16px" }}>
             <label
@@ -247,7 +229,7 @@ export default function ArticleForm({
                 maxHeight: "150px",
                 overflowY: "auto",
                 padding: "8px",
-                border: "1px solid #d9d9d9",
+                border: "1px solid var(--admin-card-border)",
                 borderRadius: "4px",
               }}
             >
@@ -275,13 +257,7 @@ export default function ArticleForm({
         </div>
 
         <div
-          className="admin-card"
-          style={{
-            padding: "24px",
-            background: "#fff",
-            borderRadius: "8px",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-          }}
+          className="admin-card p-6"
         >
           <div style={{ marginBottom: "16px" }}>
             <label
@@ -299,9 +275,9 @@ export default function ArticleForm({
               type="text"
               defaultValue={initialData?.authorName ?? undefined}
               readOnly
-              className="w-full p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500 cursor-not-allowed"
+              className="admin-input cursor-not-allowed opacity-70"
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="admin-form-help mt-1 text-xs">
               Forfatter er server-bestemt og kan ikke ændres her.
             </p>
           </div>
@@ -315,11 +291,7 @@ export default function ArticleForm({
               placeholder="Vælg fra Media eller indsæt URL"
             />
             <p
-              style={{
-                fontSize: "0.75rem",
-                color: "#666",
-                marginTop: "8px",
-              }}
+              className="admin-form-help mt-1 text-xs"
             >
               Dette billede vises øverst i artiklen.
             </p>

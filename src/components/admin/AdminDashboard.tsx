@@ -42,11 +42,11 @@ function DashboardCard({
         }}
       >
         <div>
-          <h2 style={{ color: "var(--admin-text)", fontSize: "1.1rem", fontWeight: 850, margin: 0 }}>
+          <h2 className="admin-dashboard-card-title">
             {title}
           </h2>
           {description ? (
-            <p style={{ color: "var(--admin-text-muted)", fontSize: "0.85rem", marginTop: "4px" }}>
+            <p className="admin-dashboard-card-description">
               {description}
             </p>
           ) : null}
@@ -77,23 +77,23 @@ function KpiCard({
 }) {
   const toneMap = {
     blue: {
-      bg: "rgba(14, 165, 233, 0.12)",
-      border: "rgba(14, 165, 233, 0.28)",
+      bg: "var(--admin-info-bg)",
+      border: "var(--admin-info-border)",
       color: "var(--admin-accent-strong)",
     },
     green: {
-      bg: "rgba(16, 185, 129, 0.12)",
-      border: "rgba(16, 185, 129, 0.28)",
+      bg: "var(--admin-success-bg)",
+      border: "var(--admin-success-border)",
       color: "var(--admin-text)",
     },
     amber: {
-      bg: "rgba(245, 158, 11, 0.12)",
-      border: "rgba(245, 158, 11, 0.28)",
+      bg: "var(--admin-warning-bg)",
+      border: "var(--admin-warning-border)",
       color: "var(--admin-text)",
     },
     slate: {
-      bg: "rgba(148, 163, 184, 0.10)",
-      border: "rgba(148, 163, 184, 0.18)",
+      bg: "var(--admin-surface-soft)",
+      border: "var(--admin-card-border)",
       color: "var(--admin-text-muted)",
     },
   }[tone];
@@ -101,20 +101,13 @@ function KpiCard({
   return (
     <Link
       href={href}
-      style={{
-        display: "grid",
-        gap: "8px",
-        padding: "18px",
-        borderRadius: "20px",
-        background: toneMap.bg,
-        border: `1px solid ${toneMap.border}`,
-        textDecoration: "none",
-      }}
+      className="admin-dashboard-kpi-card"
+      style={{ "--tile-bg": toneMap.bg, "--tile-border": toneMap.border } as React.CSSProperties}
     >
-      <div style={{ color: toneMap.color, fontSize: "2rem", fontWeight: 900, lineHeight: 1 }}>
+      <div className="admin-dashboard-kpi-value" style={{ "--tile-color": toneMap.color } as React.CSSProperties}>
         {value}
       </div>
-      <div style={{ color: "var(--admin-text-muted)", fontSize: "0.86rem", fontWeight: 750 }}>
+      <div className="admin-dashboard-kpi-label">
         {label}
       </div>
     </Link>
@@ -123,16 +116,7 @@ function KpiCard({
 
 function EmptyState({ text }: { text: string }) {
   return (
-    <div
-      style={{
-        padding: "18px",
-        borderRadius: "16px",
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        color: "var(--admin-text-muted)",
-        fontSize: "0.9rem",
-      }}
-    >
+    <div className="admin-empty-state">
       {text}
     </div>
   );
@@ -148,22 +132,14 @@ export default function AdminDashboard({
 
   return (
     <div className="admin-dashboard">
-      <header
-        className="admin-card"
-        style={{
-          padding: "28px",
-          marginBottom: "24px",
-          background:
-            "linear-gradient(135deg, rgba(14,165,233,0.16), rgba(15,23,42,0.78))",
-        }}
-      >
-        <div style={{ color: "var(--admin-accent-strong)", fontSize: "0.75rem", fontWeight: 900, letterSpacing: "0.16em", textTransform: "uppercase" }}>
+      <header className="admin-card admin-dashboard-hero">
+        <div className="admin-page-kicker">
           Overblik
         </div>
-        <h1 style={{ color: "var(--admin-text)", fontSize: "2rem", fontWeight: 900, marginTop: "8px", marginBottom: "8px" }}>
+        <h1 className="admin-page-title">
           {clubName} Admin
         </h1>
-        <p style={{ color: "var(--admin-text-muted)", maxWidth: "760px", lineHeight: 1.6 }}>
+        <p className="admin-page-description">
           Driftsblik på medlemmer, forum, public site, flyveskole og dagens aktivitet.
         </p>
       </header>
@@ -246,18 +222,7 @@ export default function AdminDashboard({
                   <Link
                     key={thread.id}
                     href={`/${clubSlug}/forum/${thread.categorySlug}`}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "minmax(0, 1fr) auto",
-                      gap: "12px",
-                      alignItems: "center",
-                      padding: "14px",
-                      borderRadius: "16px",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      background: "rgba(255,255,255,0.03)",
-                      textDecoration: "none",
-                      color: "var(--admin-text)",
-                    }}
+                    className="admin-dashboard-list-link"
                   >
                     <div style={{ minWidth: 0 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0 }}>
@@ -267,12 +232,12 @@ export default function AdminDashboard({
                           {thread.title}
                         </span>
                       </div>
-                      <div style={{ marginTop: "4px", color: "var(--admin-text-muted)", fontSize: "0.82rem" }}>
+                      <div className="admin-dashboard-list-meta">
                         {thread.categoryTitle} · {thread.replyCount} svar · {thread.authorName || "Ukendt"} · {formatDateTime(thread.lastActivityAt)}
                       </div>
                     </div>
 
-                    <span style={{ color: "var(--admin-accent-strong)", fontSize: "0.8rem", fontWeight: 850 }}>
+                    <span className="admin-dashboard-list-action">
                       Åbn
                     </span>
                   </Link>
@@ -295,15 +260,10 @@ export default function AdminDashboard({
                 {latestHomepageSignups.map((signup) => (
                   <div
                     key={signup.id}
-                    style={{
-                      padding: "14px",
-                      borderRadius: "16px",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      background: "rgba(255,255,255,0.03)",
-                    }}
+                    className="admin-dashboard-list-item"
                   >
-                    <div style={{ color: "var(--admin-text)", fontWeight: 800 }}>{signup.userName || "Ukendt bruger"}</div>
-                    <div style={{ marginTop: "4px", color: "var(--admin-text-muted)", fontSize: "0.82rem" }}>
+                    <div className="admin-dashboard-list-title">{signup.userName || "Ukendt bruger"}</div>
+                    <div className="admin-dashboard-list-meta">
                       {signup.contentTitle} · Antal {signup.quantity} · {formatDateTime(signup.createdAt)}
                     </div>
                   </div>

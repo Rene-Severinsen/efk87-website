@@ -48,7 +48,7 @@ export default function SignupList({ signups, clubSlug }: SignupListProps) {
               <tr key={signup.id} style={{ opacity: signup.cancelledAt ? 0.6 : 1 }}>
                 <td>
                   <div style={{ fontWeight: 600 }}>{formatMemberName(signup.user)}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>{signup.user.email}</div>
+                  <div className="admin-muted text-xs">{signup.user.email}</div>
                 </td>
                 <td>{new Date(signup.createdAt).toLocaleString('da-DK')}</td>
                 <td>{signup.quantity}</td>
@@ -59,11 +59,11 @@ export default function SignupList({ signups, clubSlug }: SignupListProps) {
                 </td>
                 <td>
                   {signup.cancelledAt ? (
-                    <span className="admin-badge admin-badge-error" style={{ background: 'rgba(255, 77, 79, 0.1)', color: '#ff4d4f', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem' }}>
+                    <span className="admin-badge admin-badge-danger">
                       Afmeldt
                     </span>
                   ) : (
-                    <span className="admin-badge admin-badge-success" style={{ background: 'rgba(82, 196, 26, 0.1)', color: '#52c41a', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem' }}>
+                    <span className="admin-badge admin-badge-success">
                       Aktiv
                     </span>
                   )}
@@ -72,8 +72,7 @@ export default function SignupList({ signups, clubSlug }: SignupListProps) {
                   {!signup.cancelledAt && (
                     <button
                       onClick={() => handleCancel(signup.id, formatMemberName(signup.user))}
-                      className="admin-btn admin-btn-ghost"
-                      style={{ color: '#ff4d4f', padding: '6px' }}
+                      className="admin-btn admin-btn-danger admin-btn-compact"
                       title="Afmeld"
                     >
                       <Trash2 size={16} />
@@ -83,7 +82,7 @@ export default function SignupList({ signups, clubSlug }: SignupListProps) {
               </tr>
             )) : (
               <tr>
-                <td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: 'var(--admin-text-muted)' }}>
+                <td colSpan={6} className="admin-muted px-6 py-10 text-center">
                   Ingen tilmeldinger endnu.
                 </td>
               </tr>
@@ -93,13 +92,13 @@ export default function SignupList({ signups, clubSlug }: SignupListProps) {
       </div>
 
       {(activeSignups.length > 0) && (
-        <div style={{ padding: '20px', background: 'rgba(255,255,255,0.02)', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', gap: '24px' }}>
+        <div className="admin-summary-strip">
           <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Aktive tilmeldinger</div>
+            <div className="admin-summary-label">Aktive tilmeldinger</div>
             <div style={{ fontSize: '1.25rem', fontWeight: 700 }}>{activeSignups.length}</div>
           </div>
           <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>Total Antal</div>
+            <div className="admin-summary-label">Total Antal</div>
             <div style={{ fontSize: '1.25rem', fontWeight: 700 }}>{totalQuantity}</div>
           </div>
         </div>

@@ -81,14 +81,14 @@ export default async function AdminStatistikPage({ params }: AdminStatistikPageP
                           <div style={{ 
                             height: '8px', 
                             width: `${memberWidth}%`, 
-                            backgroundColor: '#1890ff', 
+                            backgroundColor: 'var(--admin-info-text)', 
                             borderRadius: '4px',
                             minWidth: day.uniqueActiveMembers > 0 ? '2px' : '0'
                           }} title="Aktive medlemmer" />
                           <div style={{ 
                             height: '8px', 
                             width: `${intentWidth}%`, 
-                            backgroundColor: '#52c41a', 
+                            backgroundColor: 'var(--admin-success-text)', 
                             borderRadius: '4px',
                             minWidth: day.flightIntentCount > 0 ? '2px' : '0'
                           }} title="Flyvemeldinger" />
@@ -100,13 +100,13 @@ export default async function AdminStatistikPage({ params }: AdminStatistikPageP
               </tbody>
             </table>
           </div>
-          <div style={{ marginTop: '12px', display: 'flex', gap: '16px', fontSize: '0.75rem', color: '#8c8c8c' }}>
+          <div className="admin-muted mt-3 flex gap-4 text-xs">
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <div style={{ width: '12px', height: '12px', backgroundColor: '#1890ff', borderRadius: '2px' }} />
+              <span className="admin-chart-legend-dot admin-chart-legend-dot--info" />
               Aktive medlemmer
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <div style={{ width: '12px', height: '12px', backgroundColor: '#52c41a', borderRadius: '2px' }} />
+              <span className="admin-chart-legend-dot admin-chart-legend-dot--success" />
               Flyvemeldinger
             </div>
           </div>
@@ -134,7 +134,7 @@ export default async function AdminStatistikPage({ params }: AdminStatistikPageP
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={2} style={{ textAlign: 'center', color: '#8c8c8c' }}>Ingen aktivitet i dag endnu.</td>
+                        <td colSpan={2} className="admin-muted text-center">Ingen aktivitet i dag endnu.</td>
                       </tr>
                     )}
                   </tbody>
@@ -147,10 +147,10 @@ export default async function AdminStatistikPage({ params }: AdminStatistikPageP
             <div className="admin-card">
               <h2 className="admin-section-title">Dagens flyvemeldinger</h2>
               <div className="admin-quick-links">
-                <div className="admin-quick-link" style={{ backgroundColor: '#e6f7ff', color: '#0050b3' }}>
+                <div className="admin-quick-link admin-quick-link-info">
                   <strong>{stats.today.activeFlightIntentCountToday}</strong> Aktive
                 </div>
-                <div className="admin-quick-link" style={{ backgroundColor: '#fff1f0', color: '#a80710' }}>
+                <div className="admin-quick-link admin-quick-link-danger">
                   <strong>{stats.today.cancelledFlightIntentCountToday}</strong> Aflyst
                 </div>
               </div>
@@ -169,7 +169,7 @@ export default async function AdminStatistikPage({ params }: AdminStatistikPageP
                   ))
                 ) : (
                   <li className="admin-activity-item">
-                    <span className="admin-activity-text" style={{ color: '#8c8c8c' }}>Ingen flyvemeldinger i år.</span>
+                    <span className="admin-activity-text admin-muted">Ingen flyvemeldinger i år.</span>
                   </li>
                 )}
               </ul>

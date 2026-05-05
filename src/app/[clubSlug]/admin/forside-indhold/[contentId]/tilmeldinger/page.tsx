@@ -57,16 +57,16 @@ export default async function Page({ params }: PageProps) {
       <div className="pt-6">
         <div className="admin-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '24px' }}>
           <div className="admin-card" style={{ padding: '20px' }}>
-            <div style={{ fontSize: '0.875rem', color: 'var(--admin-text-muted)', marginBottom: '8px' }}>Aktive tilmeldinger</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#fff' }}>{activeSignups.length}</div>
+            <div className="admin-muted mb-2 text-sm">Aktive tilmeldinger</div>
+            <div className="admin-stat-value">{activeSignups.length}</div>
           </div>
           <div className="admin-card" style={{ padding: '20px' }}>
-            <div style={{ fontSize: '0.875rem', color: 'var(--admin-text-muted)', marginBottom: '8px' }}>Total antal/kuverter</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#fff' }}>{totalQuantity}</div>
+            <div className="admin-muted mb-2 text-sm">Total antal/kuverter</div>
+            <div className="admin-stat-value">{totalQuantity}</div>
           </div>
           <div className="admin-card" style={{ padding: '20px' }}>
-            <div style={{ fontSize: '0.875rem', color: 'var(--admin-text-muted)', marginBottom: '8px' }}>Aflyste</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--admin-text-muted)' }}>{signups.length - activeSignups.length}</div>
+            <div className="admin-muted mb-2 text-sm">Aflyste</div>
+            <div className="admin-stat-value admin-muted">{signups.length - activeSignups.length}</div>
           </div>
         </div>
 

@@ -12,8 +12,7 @@ interface ForumCategoryFormProps {
 }
 
 const GlassCard = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
-  <div className={`backdrop-blur-md bg-[#121b2e]/80 border border-white/10 rounded-3xl shadow-2xl relative overflow-hidden ${className}`}>
-    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500/50 to-emerald-500/50 opacity-30" />
+  <div className={`admin-card relative overflow-hidden ${className}`}>
     {children}
   </div>
 );
@@ -61,8 +60,8 @@ export default function ForumCategoryForm({
     }
   }
 
-  const inputClasses = "w-full bg-slate-950/40 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50 transition-all";
-  const labelClasses = "block text-sm font-bold text-slate-400 mb-2 ml-1 uppercase tracking-wider";
+  const inputClasses = "admin-input";
+  const labelClasses = "admin-form-label";
 
   return (
     <form onSubmit={handleSubmit} className="max-w-4xl space-y-8">
@@ -114,7 +113,7 @@ export default function ForumCategoryForm({
               placeholder="fx bestyrelse@efk87.dk"
               className={inputClasses}
             />
-            <p className="mt-2 text-sm text-slate-500 italic">
+            <p className="admin-form-help mt-2 italic">
               Hvis feltet er udfyldt, sendes der mail ved nye tråde og svar i denne kategori.
             </p>
           </div>
@@ -138,10 +137,10 @@ export default function ForumCategoryForm({
                     defaultChecked={initialData ? initialData.isActive : true}
                     className="sr-only"
                   />
-                  <div className="w-10 h-6 bg-slate-800 rounded-full shadow-inner transition-colors group-has-[:checked]:bg-emerald-500/50"></div>
-                  <div className="absolute left-1 top-1 w-4 h-4 bg-slate-400 rounded-full transition-transform group-has-[:checked]:translate-x-4 group-has-[:checked]:bg-white"></div>
+                  <div className="admin-toggle-track"></div>
+                  <div className="admin-toggle-dot"></div>
                 </div>
-                <span className="ml-3 text-slate-300 font-medium">Aktiv</span>
+                <span className="ml-3 admin-strong font-medium">Aktiv</span>
               </label>
             </div>
           </div>
@@ -151,14 +150,14 @@ export default function ForumCategoryForm({
       <div className="flex items-center justify-end gap-4">
         <Link
           href={`/${clubSlug}/admin/forum`}
-          className="px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium transition-all"
+          className="admin-btn"
         >
           Annuller
         </Link>
         <button
           type="submit"
           disabled={isPending}
-          className="px-8 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-400 hover:to-emerald-400 text-white font-bold shadow-lg shadow-sky-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="admin-btn admin-btn-primary"
         >
           {isPending ? "Gemmer..." : initialData ? "Opdater kategori" : "Opret kategori"}
         </button>

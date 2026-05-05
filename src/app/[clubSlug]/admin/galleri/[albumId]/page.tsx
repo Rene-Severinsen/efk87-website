@@ -83,15 +83,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
 
         {wasSaved ? (
           <div
-            style={{
-              marginBottom: "24px",
-              border: "1px solid rgba(16,185,129,0.25)",
-              background: "rgba(16,185,129,0.12)",
-              color: "#86efac",
-              borderRadius: "12px",
-              padding: "14px 16px",
-              fontWeight: 700,
-            }}
+            className="admin-gallery-success-box"
           >
             Galleriet er gemt.
           </div>
@@ -105,7 +97,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
                 name="title"
                 defaultValue={album.title}
                 required
-                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid #d9d9d9" }}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--admin-card-border)" }}
               />
             </div>
 
@@ -114,7 +106,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
               <select
                 name="status"
                 defaultValue={album.status}
-                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid #d9d9d9" }}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--admin-card-border)" }}
               >
                 <option value={GalleryAlbumStatus.PUBLISHED}>Publiceret</option>
                 <option value={GalleryAlbumStatus.DRAFT}>Kladde</option>
@@ -127,7 +119,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
               <select
                 name="visibility"
                 defaultValue={album.visibility}
-                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid #d9d9d9" }}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--admin-card-border)" }}
               >
                 <option value={PublicSurfaceVisibility.PUBLIC}>Offentlig</option>
                 <option value={PublicSurfaceVisibility.MEMBERS_ONLY}>Kun medlemmer</option>
@@ -139,24 +131,14 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
               <input
                 value={album.slug}
                 readOnly
-                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid #d9d9d9", opacity: 0.7 }}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--admin-card-border)", opacity: 0.7 }}
               />
             </div>
 
             <div>
               <label style={{ display: "block", fontWeight: 700, marginBottom: "8px" }}>Public forside</label>
               <label
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  minHeight: "42px",
-                  padding: "10px 12px",
-                  borderRadius: "8px",
-                  border: "1px solid #d9d9d9",
-                  background: "rgba(255,255,255,0.04)",
-                  cursor: "pointer",
-                }}
+                className="admin-gallery-upload-row"
               >
                 <input
                   name="showOnPublicHomepage"
@@ -167,7 +149,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
                 />
                 <span>Vis som udvalgt galleri på public forside</span>
               </label>
-              <p style={{ marginTop: "6px", color: "var(--admin-text-muted)", fontSize: "0.8rem" }}>
+              <p className="admin-muted mt-1.5 text-xs">
                 Public forsiden viser maks. 3 valgte, publicerede og offentlige albums.
               </p>
             </div>
@@ -179,7 +161,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
                 type="number"
                 min="0"
                 defaultValue={album.homepageSortOrder}
-                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid #d9d9d9" }}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--admin-card-border)" }}
               />
             </div>
 
@@ -189,7 +171,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
                 name="description"
                 defaultValue={album.description || ""}
                 rows={4}
-                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid #d9d9d9" }}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--admin-card-border)" }}
               />
             </div>
           </div>
@@ -213,15 +195,9 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
                 return (
                   <div
                     key={image.id}
-                    style={{
-                      border: isCover ? "2px solid #38bdf8" : "1px solid #263244",
-                      borderRadius: "16px",
-                      overflow: "hidden",
-                      background: "#101827",
-                      opacity: isActive ? 1 : 0.55,
-                    }}
+                    className={isCover ? "admin-gallery-image-card is-cover" : "admin-gallery-image-card"}
                   >
-                    <div style={{ aspectRatio: "1 / 1", background: "#0b1120", position: "relative" }}>
+                    <div className="admin-gallery-image-frame">
                       <img
                         src={image.imageUrl}
                         alt={image.title || image.caption || ""}
@@ -230,17 +206,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
 
                       {isCover ? (
                         <div
-                          style={{
-                            position: "absolute",
-                            top: "8px",
-                            left: "8px",
-                            borderRadius: "999px",
-                            background: "#0ea5e9",
-                            color: "white",
-                            fontSize: "0.7rem",
-                            fontWeight: 800,
-                            padding: "4px 8px",
-                          }}
+                          className="admin-gallery-cover-badge admin-gallery-cover-badge--small"
                         >
                           Cover
                         </div>
@@ -248,17 +214,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
 
                       {!isActive ? (
                         <div
-                          style={{
-                            position: "absolute",
-                            top: "8px",
-                            right: "8px",
-                            borderRadius: "999px",
-                            background: "#64748b",
-                            color: "white",
-                            fontSize: "0.7rem",
-                            fontWeight: 800,
-                            padding: "4px 8px",
-                          }}
+                          className="admin-gallery-cover-badge admin-gallery-cover-badge--small admin-gallery-cover-badge--archived admin-gallery-cover-badge--right"
                         >
                           Skjult
                         </div>
@@ -266,7 +222,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
                     </div>
 
                     <div style={{ padding: "12px", display: "grid", gap: "8px" }}>
-                      <div style={{ fontSize: "0.8rem", color: "var(--admin-text-muted)" }}>
+                      <div className="admin-muted text-xs">
                         {image.status} · {formatFileSize(image.sizeBytes)}
                       </div>
 
@@ -289,7 +245,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
                         </form>
                       ) : (
                         <form action={showGalleryImageAdminAction.bind(null, clubSlug, album.id, image.id)}>
-                          <button type="submit" className="admin-btn" style={{ width: "100%", color: "#86efac" }}>
+                          <button type="submit" className="admin-btn admin-btn-success w-full">
                             Gør synlig
                           </button>
                         </form>
@@ -300,7 +256,7 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
               })}
             </div>
           ) : (
-            <p style={{ color: "var(--admin-text-muted)" }}>Ingen billeder i dette galleri.</p>
+            <p className="admin-muted">Ingen billeder i dette galleri.</p>
           )}
         </div>
       </div>

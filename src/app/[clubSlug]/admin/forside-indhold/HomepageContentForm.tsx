@@ -74,7 +74,7 @@ export default function HomepageContentForm({
 
           <div style={{ marginBottom: '0' }}>
             <label className="admin-form-label">Indhold (tekst/HTML)</label>
-            <div style={{ minHeight: '300px', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', overflow: 'hidden' }}>
+            <div className="admin-editor-shell min-h-[300px] overflow-hidden">
               <RichTextEditor
                 content={bodyHtml}
                 onChange={setBodyHtml}
@@ -110,7 +110,7 @@ export default function HomepageContentForm({
             </div>
           </div>
 
-          <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px' }}>
+          <div className="admin-nested-panel mt-4">
             <label className="admin-form-label">Tilmeldingsfrist</label>
             <input
               name="signupDeadlineAt"
@@ -118,12 +118,12 @@ export default function HomepageContentForm({
               defaultValue={initialData?.signupDeadlineAt ? new Date(initialData.signupDeadlineAt.getTime() - initialData.signupDeadlineAt.getTimezoneOffset() * 60000).toISOString().slice(0, 16) : ""}
               className="admin-input"
             />
-            <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginTop: '6px' }}>
+            <p className="admin-form-help mt-1.5 text-xs">
               Når fristen er passeret, vises opslaget stadig, men medlemmer kan ikke længere tilmelde eller ændre tilmelding.
             </p>
           </div>
 
-          <div style={{ marginTop: '16px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px' }}>
+          <div className="admin-nested-panel mt-4">
             <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontWeight: 500 }}>
               <input
                 name="isSignupClosed"
@@ -134,7 +134,7 @@ export default function HomepageContentForm({
               />
               <span>Luk for tilmelding manuelt</span>
             </label>
-            <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginTop: '6px', marginLeft: '28px' }}>
+            <p className="admin-form-help ml-7 mt-1.5 text-xs">
               Overstyrer tidsfristen og lukker med det samme.
             </p>
           </div>

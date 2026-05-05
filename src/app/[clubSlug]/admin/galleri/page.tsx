@@ -84,15 +84,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
         {wasDeleted ? (
           <div
-            style={{
-              marginBottom: "24px",
-              border: "1px solid rgba(16,185,129,0.25)",
-              background: "rgba(16,185,129,0.12)",
-              color: "#86efac",
-              borderRadius: "12px",
-              padding: "14px 16px",
-              fontWeight: 700,
-            }}
+            className="admin-gallery-success-box"
           >
             Galleriet er slettet/arkiveret.
           </div>
@@ -108,15 +100,15 @@ export default async function Page({ params, searchParams }: PageProps) {
           }}
         >
           <div className="admin-card">
-            <div style={{ fontSize: "0.875rem", color: "var(--admin-text-muted)" }}>Albums</div>
+            <div className="admin-muted text-sm">Albums</div>
             <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{stats.totalAlbums}</div>
           </div>
           <div className="admin-card">
-            <div style={{ fontSize: "0.875rem", color: "var(--admin-text-muted)" }}>Billeder</div>
+            <div className="admin-muted text-sm">Billeder</div>
             <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{stats.totalImages}</div>
           </div>
           <div className="admin-card">
-            <div style={{ fontSize: "0.875rem", color: "var(--admin-text-muted)" }}>Publicerede albums</div>
+            <div className="admin-muted text-sm">Publicerede albums</div>
             <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{stats.publishedAlbums}</div>
           </div>
         </div>
@@ -143,12 +135,7 @@ export default async function Page({ params, searchParams }: PageProps) {
                   }}
                 >
                   <div
-                    style={{
-                      aspectRatio: "16 / 10",
-                      background: "#0b1120",
-                      position: "relative",
-                      overflow: "hidden",
-                    }}
+                    className="admin-gallery-album-cover"
                   >
                     {album.coverImageUrl ? (
                       <img
@@ -163,128 +150,64 @@ export default async function Page({ params, searchParams }: PageProps) {
                       />
                     ) : (
                       <div
-                        style={{
-                          height: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          color: "var(--admin-text-muted)",
-                          fontWeight: 700,
-                        }}
+                        className="admin-gallery-empty-cover"
                       >
                         Ingen cover
                       </div>
                     )}
 
                     <div
-                      style={{
-                        position: "absolute",
-                        top: "10px",
-                        left: "10px",
-                        borderRadius: "999px",
-                        background: isArchived ? "#64748b" : "#0ea5e9",
-                        color: "white",
-                        fontSize: "0.7rem",
-                        fontWeight: 800,
-                        padding: "5px 9px",
-                      }}
+                      className={isArchived ? "admin-gallery-cover-badge admin-gallery-cover-badge--archived" : "admin-gallery-cover-badge"}
                     >
                       {statusLabel(album.status)}
                     </div>
 
                     <div
-                      style={{
-                        position: "absolute",
-                        top: "10px",
-                        right: "10px",
-                        borderRadius: "999px",
-                        background: "rgba(15,23,42,0.82)",
-                        color: "white",
-                        fontSize: "0.7rem",
-                        fontWeight: 800,
-                        padding: "5px 9px",
-                      }}
+                      className="admin-gallery-cover-badge admin-gallery-cover-badge--dark"
                     >
                       {visibilityLabel(album.visibility)}
                     </div>
 
                     {album.showOnPublicHomepage ? (
                       <div
-                        style={{
-                          position: "absolute",
-                          bottom: "10px",
-                          left: "10px",
-                          borderRadius: "999px",
-                          background: "rgba(16,185,129,0.9)",
-                          color: "white",
-                          fontSize: "0.7rem",
-                          fontWeight: 800,
-                          padding: "5px 9px",
-                        }}
+                        className="admin-gallery-cover-badge admin-gallery-cover-badge--success"
                       >
                         Forside · {album.homepageSortOrder}
                       </div>
                     ) : null}
                   </div>
-
-                  <div style={{ padding: "16px", display: "grid", gap: "12px" }}>
+                  <div className="admin-gallery-card-body">
                     <div>
-                      <h2
-                        style={{
-                          fontSize: "1.05rem",
-                          fontWeight: 800,
-                          color: "white",
-                          margin: 0,
-                        }}
-                      >
+                      <h2 className="admin-gallery-card-title">
                         {album.title}
                       </h2>
 
                       {album.description ? (
-                        <p
-                          style={{
-                            marginTop: "6px",
-                            color: "var(--admin-text-muted)",
-                            fontSize: "0.85rem",
-                            lineHeight: 1.45,
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden",
-                          }}
-                        >
+                        <p className="admin-muted mt-1.5 text-sm leading-relaxed">
                           {album.description}
                         </p>
                       ) : null}
                     </div>
 
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                        gap: "8px",
-                        color: "var(--admin-text-muted)",
-                        fontSize: "0.8rem",
-                      }}
-                    >
+                    <div className="admin-gallery-meta-grid">
                       <div>
-                        <strong style={{ color: "var(--admin-text)" }}>Billeder</strong>
+                        <strong className="admin-strong">Billeder</strong>
                         <br />
                         {album.imageCount}
                       </div>
                       <div>
-                        <strong style={{ color: "var(--admin-text)" }}>Opdateret</strong>
+                        <strong className="admin-strong">Opdateret</strong>
                         <br />
                         {album.updatedAt.toLocaleDateString("da-DK")}
                       </div>
-                      <div style={{ gridColumn: "1 / -1" }}>
-                        <strong style={{ color: "var(--admin-text)" }}>Oprettet af</strong>
+                      <div className="admin-gallery-meta-full">
+                        <strong className="admin-strong">Oprettet af</strong>
                         <br />
                         {album.createdByName || album.createdByEmail || "-"}
                       </div>
                     </div>
 
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                    <div className="admin-gallery-card-actions">
                       <Link href={`/${clubSlug}/admin/galleri/${album.id}`} className="admin-btn">
                         Åbn
                       </Link>
@@ -303,7 +226,7 @@ export default async function Page({ params, searchParams }: PageProps) {
             })}
           </div>
         ) : (
-          <div className="admin-card" style={{ padding: "32px", textAlign: "center", color: "var(--admin-text-muted)" }}>
+          <div className="admin-card admin-empty-state">
             Ingen albums fundet.
           </div>
         )}
