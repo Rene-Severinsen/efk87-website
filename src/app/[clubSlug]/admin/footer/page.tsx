@@ -4,6 +4,7 @@ import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards"
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import prisma from "../../../../lib/db/prisma";
 import { listClubMediaAssets } from "../../../../lib/media/mediaStorageService";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import FooterAdminForm from "./FooterAdminForm";
 
 interface PageProps {
@@ -63,19 +64,12 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="space-y-6">
-        <div>
-          <p className="text-sm font-bold uppercase tracking-wide text-sky-300">
-            Public site
-          </p>
-          <h1 className="mt-2 text-3xl font-bold text-white">
-            Footer
-          </h1>
-          <p className="mt-2 max-w-3xl text-slate-400">
-            Administrér footerens klubtekst, kontaktoplysninger og sponsorer. Footeren bruges på både forside og undersider.
-          </p>
-        </div>
+      <AdminPageHeader
+        title="Footer"
+        description="Administrer footerindhold, links og sponsorer."
+      />
 
+      <div className="space-y-6 pt-6">
         <FooterAdminForm
           clubSlug={clubSlug}
           footer={footer}

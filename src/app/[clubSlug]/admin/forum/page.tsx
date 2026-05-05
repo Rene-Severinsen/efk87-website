@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { getForumCategories } from "../../../../lib/forum/forumService";
 import Link from "next/link";
 import { 
@@ -42,22 +43,15 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="admin-page-header" style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'white' }}>
-            <MessageCircle className="w-6 h-6 text-sky-400" />
-            Forum
-          </h1>
-          <p style={{ color: '#999', marginTop: '4px' }}>Administrer forumkategorier og indstillinger.</p>
-        </div>
-        <Link
-          href={`/${clubSlug}/admin/forum/kategorier/ny`}
-          className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-400 hover:to-emerald-400 text-white font-bold shadow-lg shadow-sky-500/20 transition-all"
-        >
-          <Plus className="w-5 h-5" />
-          Ny kategori
-        </Link>
-      </div>
+      <AdminPageHeader
+        title="Forum"
+        description="Administrer forumkategorier og indstillinger."
+        action={{
+          label: "Ny kategori",
+          href: `/${clubSlug}/admin/forum/kategorier/ny`,
+          icon: <Plus className="w-5 h-5" />
+        }}
+      />
 
       <div className="mt-8 space-y-4">
         <h2 className="text-xl font-bold text-white mb-4 px-2">Kategorier</h2>

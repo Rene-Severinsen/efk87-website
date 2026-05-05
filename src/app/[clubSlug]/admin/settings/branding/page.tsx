@@ -3,6 +3,7 @@ import AdminShell from "../../../../../components/admin/AdminShell";
 import { requireClubAdminForClub } from "../../../../../lib/auth/adminAccessGuards";
 import { getClubBranding } from "../../../../../lib/branding/clubBrandingService";
 import { requireClubBySlug, TenancyError } from "../../../../../lib/tenancy/tenantService";
+import { AdminPageHeader } from "../../../../../components/admin/AdminPagePrimitives";
 import BrandingSettingsClient from "./BrandingSettingsClient";
 
 interface PageProps {
@@ -42,16 +43,12 @@ export default async function BrandingSettingsPage({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="py-8">
-        <div className="mb-8">
-          <h1 className="mb-2 text-3xl font-bold text-white">
-            Branding
-          </h1>
-          <p className="max-w-3xl text-slate-400">
-            Upload klubbens logo. Favicon og Apple touch icon dannes automatisk fra logoet.
-          </p>
-        </div>
+      <AdminPageHeader
+        title="Branding"
+        description="Administrer logo, favicon og visuelle klubassets."
+      />
 
+      <div className="py-8">
         <BrandingSettingsClient
           clubSlug={clubSlug}
           initialBranding={branding}

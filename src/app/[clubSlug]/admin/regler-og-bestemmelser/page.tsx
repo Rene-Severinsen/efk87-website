@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { getClubRulesPageContent } from "../../../../lib/rulesPage/rulesPageService";
@@ -46,16 +47,12 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="py-8">
-        <div className="mb-8">
-          <h1 className="mb-2 text-3xl font-bold text-white">
-            Regler og bestemmelser
-          </h1>
-          <p className="max-w-3xl text-slate-400">
-            Redigér klubbens links til flyveregler, flyvezone, lovtekst og praktiske retningslinjer.
-          </p>
-        </div>
+      <AdminPageHeader
+        title="Regler og bestemmelser"
+        description="Vedligehold offentlige regler, dokumenter og praktiske bestemmelser."
+      />
 
+      <div className="py-8">
         <RulesPageAdminForm
           clubSlug={clubSlug}
           initialContent={content}

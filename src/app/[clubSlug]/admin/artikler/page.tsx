@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { getAdminArticleOverview } from "../../../../lib/admin/articleAdminService";
 import Link from "next/link";
 import { PublicSurfaceVisibility } from "../../../../generated/prisma";
@@ -60,17 +61,16 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="admin-page-header" style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>Artikler</h1>
-          <p style={{ color: '#666', marginTop: '4px' }}>Administrer klubbens nyheder og historier.</p>
-        </div>
-        <Link href={`/${clubSlug}/admin/artikler/ny`} className="admin-btn admin-btn-primary">
-          Opret artikel
-        </Link>
-      </div>
+      <AdminPageHeader
+        title="Artikler"
+        description="Administrer klubbens nyheder og historier."
+        action={{
+          label: "Opret artikel",
+          href: `/${clubSlug}/admin/artikler/ny`
+        }}
+      />
 
-      <div className="admin-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+      <div className="admin-stats-grid pt-6" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '24px' }}>
         <div className="admin-card" style={{ padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
           <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '8px' }}>Publicerede</div>
           <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{kpis.published}</div>

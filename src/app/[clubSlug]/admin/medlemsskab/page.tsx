@@ -3,6 +3,7 @@ import AdminShell from "../../../../components/admin/AdminShell";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import { getClubMembershipPageContent } from "../../../../lib/membershipPage/membershipPageService";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import MembershipPageAdminForm from "./MembershipPageAdminForm";
 
 interface PageProps {
@@ -42,16 +43,12 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="py-8">
-        <div className="mb-8">
-          <h1 className="mb-2 text-3xl font-bold text-white">
-            Medlemsskab
-          </h1>
-          <p className="max-w-3xl text-slate-400">
-            Redigér indmeldelsesprocedure, kontingenter, opkrævning og praktisk medlemsinformation.
-          </p>
-        </div>
+      <AdminPageHeader
+        title="Medlemsskab"
+        description="Vedligehold den offentlige medlemsside."
+      />
 
+      <div className="py-8">
         <MembershipPageAdminForm
           clubSlug={clubSlug}
           initialContent={content}

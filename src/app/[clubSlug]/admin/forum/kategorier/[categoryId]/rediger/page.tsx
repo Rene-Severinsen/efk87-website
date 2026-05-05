@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../../../../components/admin/AdminPagePrimitives";
 import { MessageCircle } from "lucide-react";
 import ForumCategoryForm from "../../../../../../../components/admin/forum/ForumCategoryForm";
 import { updateForumCategory } from "../../../../../../../lib/forum/actions/adminForumActions";
@@ -45,13 +46,10 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="admin-page-header" style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'white' }}>
-          <MessageCircle className="w-6 h-6 text-sky-400" />
-          Rediger kategori
-        </h1>
-        <p style={{ color: '#999', marginTop: '4px' }}>Redigerer {category.title}</p>
-      </div>
+      <AdminPageHeader
+        title="Rediger forumkategori"
+        description="Opdater kategoriens navn, slug og indstillinger."
+      />
 
       <div className="mt-8">
         <ForumCategoryForm 

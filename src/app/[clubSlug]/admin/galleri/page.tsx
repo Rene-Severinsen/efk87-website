@@ -6,6 +6,7 @@ import { getAdminGalleryOverview } from "../../../../lib/admin/galleryAdminServi
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import "../../../../components/admin/AdminDashboard.css";
 
 interface PageProps {
@@ -74,13 +75,12 @@ export default async function Page({ params, searchParams }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="admin-gallery-page">
-        <div className="admin-header-section" style={{ marginBottom: "24px" }}>
-          <h1 className="admin-section-title">Galleri</h1>
-          <p className="admin-section-subtitle">
-            Administrér medlemsgallerier, synlighed, status og billeder.
-          </p>
-        </div>
+      <AdminPageHeader
+        title="Galleri"
+        description="Administrér medlemsgallerier, synlighed, status og billeder."
+      />
+
+      <div className="admin-gallery-page pt-6">
 
         {wasDeleted ? (
           <div

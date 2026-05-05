@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../../../components/admin/AdminPagePrimitives";
 import CalendarEntryForm from "../../../../../../components/admin/calendar/CalendarEntryForm";
 import { updateCalendarEntryAction } from "../../../../../../lib/admin/calendarActions";
 import { getAdminCalendarEntryById } from "../../../../../../lib/admin/calendarAdminService";
@@ -44,13 +45,13 @@ export default async function EditCalendarEntryPage({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="mb-8">
-            <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">Rediger kalenderindslag</h1>
-            <p className="text-slate-400 text-lg">Opdater detaljerne for kalenderindslaget.</p>
-          </div>
+      <AdminPageHeader
+        title="Rediger kalenderindslag"
+        description="Opdater detaljerne for kalenderindslaget."
+      />
 
+      <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
+        <div className="max-w-[1200px] mx-auto pt-6">
           <CalendarEntryForm 
             clubSlug={clubSlug}
             initialData={entry}

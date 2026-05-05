@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../../components/admin/AdminPagePrimitives";
 import ArticleForm from "../../../../../components/admin/articles/ArticleForm";
 import { getAdminArticleFormOptions } from "../../../../../lib/admin/articleAdminService";
 import { createArticleAction } from "../../../../../lib/admin/articleActions";
@@ -49,21 +50,19 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div style={{ marginBottom: "24px" }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: "bold", margin: 0 }}>
-          Opret ny artikel
-        </h1>
-        <p style={{ color: "#666", marginTop: "4px" }}>
-          Udfyld felterne for at oprette en ny artikel.
-        </p>
-      </div>
-
-      <ArticleForm
-        clubSlug={clubSlug}
-        tags={tags}
-        action={boundAction}
-        mediaAssets={mediaAssets}
+      <AdminPageHeader
+        title="Opret artikel"
+        description="Opret en ny artikel til klubben."
       />
+
+      <div className="pt-6">
+        <ArticleForm
+          clubSlug={clubSlug}
+          tags={tags}
+          action={boundAction}
+          mediaAssets={mediaAssets}
+        />
+      </div>
     </AdminShell>
   );
 }

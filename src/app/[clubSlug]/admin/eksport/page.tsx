@@ -35,7 +35,7 @@ export default async function Page({ params }: PageProps) {
     >
       <AdminPlaceholderPage 
         title="Eksport"
-        description="Fremtidig sikker data-eksport."
+        description="Eksporter klubbens data til administration, arkiv og videre behandling."
         futureItems={[
           "Eksport af medlemslister",
           "Eksport af flyvedata (CSV/Excel)",

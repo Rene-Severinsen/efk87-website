@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../../../components/admin/AdminPagePrimitives";
 import ArticleForm from "../../../../../../components/admin/articles/ArticleForm";
 import { getAdminArticleById, getAdminArticleFormOptions } from "../../../../../../lib/admin/articleAdminService";
 import { updateArticleAction } from "../../../../../../lib/admin/articleActions";
@@ -55,22 +56,20 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div style={{ marginBottom: "24px" }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: "bold", margin: 0 }}>
-          Rediger artikel
-        </h1>
-        <p style={{ color: "#666", marginTop: "4px" }}>
-          Opdater artiklens indhold og indstillinger.
-        </p>
-      </div>
-
-      <ArticleForm
-        clubSlug={clubSlug}
-        initialData={article}
-        tags={tags}
-        action={boundAction}
-        mediaAssets={mediaAssets}
+      <AdminPageHeader
+        title="Rediger artikel"
+        description="Opdater artikelens indhold, status og synlighed."
       />
+
+      <div className="pt-6">
+        <ArticleForm
+          clubSlug={clubSlug}
+          initialData={article}
+          tags={tags}
+          action={boundAction}
+          mediaAssets={mediaAssets}
+        />
+      </div>
     </AdminShell>
   );
 }

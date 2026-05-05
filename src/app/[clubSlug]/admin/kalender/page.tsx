@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { getAdminCalendarEntries } from "../../../../lib/admin/calendarAdminService";
 import Link from "next/link";
 import { toggleCalendarEntryPublishedAction, deleteCalendarEntryAction } from "../../../../lib/admin/calendarActions";
@@ -71,24 +72,22 @@ export default async function AdminCalendarPage({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
-        <div className="max-w-[1600px] mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-            <div>
-              <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">Kalender</h1>
-              <p className="text-slate-400 text-lg">Administrer klubbens kalenderindslag.</p>
-            </div>
-            <Link 
-              href={`/${clubSlug}/admin/kalender/ny`}
-              className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold transition-all shadow-lg shadow-sky-900/20 gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-              Opret kalenderindslag
-            </Link>
-          </div>
+      <AdminPageHeader
+        title="Kalender"
+        description="Administrer klubbens kalenderindslag."
+        action={{
+          label: "Opret kalenderindslag",
+          href: `/${clubSlug}/admin/kalender/ny`,
+          icon: (
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+          )
+        }}
+      />
 
+      <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
+        <div className="max-w-[1600px] mx-auto pt-6">
           <GlassCard>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">

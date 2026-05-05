@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { getClubLocationPageContent } from "../../../../lib/locationPage/locationPageService";
@@ -46,16 +47,12 @@ export default async function Page({ params }: PageProps) {
             userRole={viewer.clubRole}
             userEmail={viewer.email}
         >
-            <div className="py-8">
-                <div className="mb-8">
-                    <h1 className="mb-2 text-3xl font-bold text-white">
-                        Her bor vi
-                    </h1>
-                    <p className="max-w-3xl text-slate-400">
-                        Redigér kørevejledning, adgangsinformation, indendørsflyvning og billedfelter for den offentlige side.
-                    </p>
-                </div>
+            <AdminPageHeader
+                title="Her bor vi"
+                description="Vedligehold adgang, kørselsvejledning og praktisk information."
+            />
 
+            <div className="py-8">
                 <LocationPageAdminForm
                     clubSlug={clubSlug}
                     initialContent={content}

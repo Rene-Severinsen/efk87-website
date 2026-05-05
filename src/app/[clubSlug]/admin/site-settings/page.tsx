@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "@/lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "@/lib/auth/adminAccessGuards";
 import AdminShell from "@/components/admin/AdminShell";
+import { AdminPageHeader } from "@/components/admin/AdminPagePrimitives";
 import WeatherSettingsForm from "./WeatherSettingsForm";
 import PublicThemeSettingsForm from "./PublicThemeSettingsForm";
 import PublicHomepageSettingsForm from "./PublicHomepageSettingsForm";
@@ -128,19 +129,13 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
+      <AdminPageHeader
+        title="Site settings"
+        description="Konfiguration af klub-indstillinger, public forside, tema og vejr."
+      />
+
       <div className="-m-6 min-h-screen bg-[#0b1220] p-6">
-        <div className="mx-auto max-w-[1180px]">
-          <header className="mb-8">
-            <div className="text-xs font-black uppercase tracking-[0.18em] text-sky-300">
-              Klubopsætning
-            </div>
-            <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-white">
-              Site indstillinger
-            </h1>
-            <p className="mt-2 max-w-3xl text-lg leading-8 text-slate-400">
-              Samlet opsætning af public forside, tema og praktiske data. Indholdet her påvirker den offentlige klubside.
-            </p>
-          </header>
+        <div className="mx-auto max-w-[1180px] pt-6">
 
           <div className="grid gap-8">
             

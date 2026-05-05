@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { ACCESS_AUDIENCES, ACCESS_MODULES, hasAudience } from "../../../../lib/access/accessRegistry";
@@ -56,16 +57,12 @@ export default async function AdminAccessPage({ params }: AdminAccessPageProps) 
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="access-admin-container">
-        <header className="access-admin-hero">
-          <p className="access-admin-kicker">Club admin</p>
-          <h1>Adgangsmatrix</h1>
-          <p>
-            Read-only overblik over hvilke sider og moduler der er tiltænkt public,
-            medlemmer, klubadministratorer og platform admin. Kritiske rettigheder styres
-            fortsat i kode og roller — ikke med frie flueben.
-          </p>
-        </header>
+      <AdminPageHeader
+        title="Adgangsmatrix"
+        description="Read-only overblik over hvilke sider og moduler der er tiltænkt public, medlemmer, klubadministratorer og platform admin."
+      />
+
+      <div className="access-admin-container pt-6">
 
         <section className="access-admin-audience-grid">
           {ACCESS_AUDIENCES.map((audience) => (

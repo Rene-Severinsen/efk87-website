@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { getAdminStatisticsOverview } from "../../../../lib/admin/adminStatisticsService";
 import "../../../../components/admin/AdminDashboard.css";
 
@@ -37,11 +38,12 @@ export default async function AdminStatistikPage({ params }: AdminStatistikPageP
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="admin-workspace">
-        <header className="admin-hero">
-          <h1 className="admin-hero-title">Statistik</h1>
-          <p className="admin-hero-subtitle">Overblik over medlemsaktivitet og flyvemeldinger.</p>
-        </header>
+      <AdminPageHeader
+        title="Statistik"
+        description="Overblik over medlemsaktivitet og flyvemeldinger."
+      />
+
+      <div className="admin-workspace pt-6">
 
         <div className="admin-metric-grid">
           <div className="admin-card admin-metric-card">

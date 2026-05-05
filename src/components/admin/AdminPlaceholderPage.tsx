@@ -1,5 +1,6 @@
 import React from "react";
 import "./AdminDashboard.css";
+import { AdminPageHeader } from "./AdminPagePrimitives";
 
 interface AdminPlaceholderPageProps {
   title: string;

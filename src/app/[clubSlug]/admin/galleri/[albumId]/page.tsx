@@ -4,7 +4,6 @@ import {
   GalleryAlbumStatus,
   PublicSurfaceVisibility,
 } from "../../../../../generated/prisma";
-import AdminShell from "../../../../../components/admin/AdminShell";
 import {
   hideGalleryImageAdminAction,
   setGalleryCoverImageAdminAction,
@@ -14,6 +13,8 @@ import {
 import { getAdminGalleryDetail } from "../../../../../lib/admin/galleryAdminService";
 import { requireClubAdminForClub } from "../../../../../lib/auth/adminAccessGuards";
 import { requireClubBySlug, TenancyError } from "../../../../../lib/tenancy/tenantService";
+import AdminShell from "../../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../../components/admin/AdminPagePrimitives";
 import "../../../../../components/admin/AdminDashboard.css";
 
 interface PageProps {
@@ -73,18 +74,12 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="admin-gallery-detail-page">
-        <div className="admin-header-section" style={{ marginBottom: "24px" }}>
-          <Link href={`/${clubSlug}/admin/galleri`} className="admin-btn" style={{ marginBottom: "16px" }}>
-            ← Tilbage
-          </Link>
+      <AdminPageHeader
+        title="Rediger galleri"
+        description="Administrér medlemsgallerier, synlighed, status og billeder."
+      />
 
-          <h1 className="admin-section-title">{album.title}</h1>
-
-          <p className="admin-section-subtitle">
-            {album.images.length} billeder · {album.createdByName || album.createdByEmail || "Ukendt opretter"}
-          </p>
-        </div>
+      <div className="admin-gallery-detail-page pt-6">
 
         {wasSaved ? (
           <div

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "@/lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "@/lib/auth/adminAccessGuards";
 import AdminShell from "@/components/admin/AdminShell";
+import { AdminPageHeader } from "@/components/admin/AdminPagePrimitives";
 import { getNextMemberNumber } from "@/lib/members/memberNumberService";
 import { createAdminMemberAction } from "@/lib/admin/memberCreateActions";
 import { MemberCreateForm } from "./MemberCreateForm";
@@ -38,15 +39,13 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
+      <AdminPageHeader
+        title="Opret medlem"
+        description="Tilføj et nyt medlem til klubben."
+      />
+
       <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
         <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="mb-10 text-center md:text-left">
-            <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">Opret medlem</h1>
-            <p className="text-slate-400 text-lg">
-              Tilføj et nyt medlem til <span className="text-sky-400 font-semibold">{club.name}</span>
-            </p>
-          </div>
-
           <MemberCreateForm 
             clubSlug={clubSlug} 
             nextMemberNumber={nextNumber}

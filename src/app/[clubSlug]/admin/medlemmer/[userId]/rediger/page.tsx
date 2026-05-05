@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "@/lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "@/lib/auth/adminAccessGuards";
 import AdminShell from "@/components/admin/AdminShell";
+import { AdminPageHeader } from "@/components/admin/AdminPagePrimitives";
 import { getAdminMemberByUserId } from "@/lib/admin/memberAdminService";
 import { updateAdminMemberProfileAction } from "@/lib/admin/memberAdminActions";
 import { MemberEditForm } from "./MemberEditForm";
@@ -43,15 +44,13 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
+      <AdminPageHeader
+        title="Rediger medlem"
+        description="Opdater stamdata og indstillinger for medlemmet."
+      />
+
       <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
         <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="mb-10 text-center md:text-left">
-            <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">Rediger medlem</h1>
-            <p className="text-slate-400 text-lg">
-              Opdater stamdata og indstillinger for <span className="text-sky-400 font-semibold">{member.displayName}</span>
-            </p>
-          </div>
-
           <MemberEditForm 
             clubSlug={clubSlug} 
             member={member} 

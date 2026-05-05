@@ -14,6 +14,7 @@ interface Instructor {
 }
 
 import { FlightSchoolPage, FlightSchoolDocument, FlightSchoolSession, FlightSchoolTimeSlot, FlightSchoolBooking, ClubMemberProfile } from "../../../generated/prisma";
+import { AdminPageHeader } from "../AdminPagePrimitives";
 
 type SessionWithIncludes = FlightSchoolSession & {
   instructor: ClubMemberProfile;
@@ -62,21 +63,21 @@ const FlightSchoolAdminPage: React.FC<FlightSchoolAdminPageProps> = ({
   };
 
   return (
-    <div className="py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">Flyveskole</h1>
-        <p className="text-slate-400">
-          Administrer flyveskolens indhold, dokumenter og se instruktører.
-        </p>
-      </div>
+    <>
+      <AdminPageHeader
+        title="Flyveskole"
+        description="Administrer flyveskolens indhold, dokumenter og se instruktører."
+      />
 
-      <div className="flex gap-1 p-1 bg-white/5 rounded-xl mb-8 w-full">
+      <div className="pt-6">
+
+      <div className="mb-8 grid grid-cols-1 gap-2 rounded-2xl border border-[var(--admin-card-border)] bg-white p-1 shadow-sm sm:grid-cols-3">
         <button
           onClick={() => handleTabChange("content")}
           className={`flex-1 px-6 py-2 rounded-lg font-medium transition-all ${
             activeTab === "content"
-              ? "bg-sky-500 text-white shadow-lg shadow-sky-500/20"
-              : "text-slate-400 hover:text-white hover:bg-white/5"
+              ? "bg-sky-600 text-white shadow-sm"
+              : "text-[var(--admin-text)] hover:bg-[var(--admin-surface-soft)]"
           }`}
         >
           Sideindhold
@@ -85,8 +86,8 @@ const FlightSchoolAdminPage: React.FC<FlightSchoolAdminPageProps> = ({
           onClick={() => handleTabChange("documents")}
           className={`flex-1 px-6 py-2 rounded-lg font-medium transition-all ${
             activeTab === "documents"
-              ? "bg-sky-500 text-white shadow-lg shadow-sky-500/20"
-              : "text-slate-400 hover:text-white hover:bg-white/5"
+              ? "bg-sky-600 text-white shadow-sm"
+              : "text-[var(--admin-text)] hover:bg-[var(--admin-surface-soft)]"
           }`}
         >
           Elevdokumenter
@@ -95,8 +96,8 @@ const FlightSchoolAdminPage: React.FC<FlightSchoolAdminPageProps> = ({
           onClick={() => handleTabChange("calendar")}
           className={`flex-1 px-6 py-2 rounded-lg font-medium transition-all ${
             activeTab === "calendar"
-              ? "bg-sky-500 text-white shadow-lg shadow-sky-500/20"
-              : "text-slate-400 hover:text-white hover:bg-white/5"
+              ? "bg-sky-600 text-white shadow-sm"
+              : "text-[var(--admin-text)] hover:bg-[var(--admin-surface-soft)]"
           }`}
         >
           Skolekalender
@@ -139,7 +140,8 @@ const FlightSchoolAdminPage: React.FC<FlightSchoolAdminPageProps> = ({
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

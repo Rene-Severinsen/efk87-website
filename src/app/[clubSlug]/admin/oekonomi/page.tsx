@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import { getClubFinancePageContent } from "../../../../lib/financePage/financePageService";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
@@ -42,17 +43,12 @@ export default async function FinanceAdminPage({ params }: FinanceAdminPageProps
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-8">
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-950">
-            Økonomi
-          </h1>
-          <p className="mt-2 max-w-3xl text-base text-slate-600">
-            Vedligehold tekster til den offentlige økonomiside om udgiftsbilag,
-            refusion, forskud og udbetaling.
-          </p>
-        </div>
+      <AdminPageHeader
+        title="Økonomi"
+        description="Vedligehold tekster til den offentlige økonomiside om udgiftsbilag, refusion, forskud og udbetaling."
+      />
 
+      <div className="pt-6">
         <FinancePageAdminForm
           clubSlug={clubSlug}
           initialContent={content}

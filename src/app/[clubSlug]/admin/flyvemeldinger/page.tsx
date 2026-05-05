@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { getAdminFlightIntentOverview } from "../../../../lib/admin/flightIntentAdminService";
 import { cancelFlightIntentAsAdminAction } from "../../../../lib/admin/cancelFlightIntentAsAdminAction";
 import { formatAdminDateTime, formatAdminDate, formatAdminTime } from "../../../../lib/format/adminDateFormat";
@@ -42,12 +43,12 @@ export default async function FlyvemeldingerPage({ params, searchParams }: Flyve
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="admin-content-container">
-        <div className="admin-page-header">
-          <h1 className="admin-page-title">Flyvemeldinger</h1>
-          <p className="admin-page-subtitle">Overblik og moderation af dagens &ldquo;Jeg flyver&rdquo;-meldinger.</p>
-        </div>
+      <AdminPageHeader
+        title="Flyvemeldinger"
+        description="Overblik og moderation af dagens Jeg flyver-meldinger."
+      />
 
+      <div className="admin-content-container pt-6">
         {cancelled === "1" && (
           <div style={{
             backgroundColor: "#dcfce7",

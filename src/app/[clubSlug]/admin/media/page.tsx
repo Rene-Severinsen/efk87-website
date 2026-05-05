@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import { listClubMediaAssets } from "../../../../lib/media/mediaStorageService";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
@@ -42,17 +43,12 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="py-8">
-        <div className="mb-8">
-          <h1 className="mb-2 text-3xl font-bold text-white">
-            Media
-          </h1>
-          <p className="max-w-3xl text-slate-400">
-            Upload og administrér billeder til klubsite, galleri, artikler og fremtidige billedsektioner.
-            V1 gemmer billeder lokalt. Storage kan senere skiftes til S3/Object Storage uden at ændre brugerfladen.
-          </p>
-        </div>
+      <AdminPageHeader
+        title="Media"
+        description="Upload og administrér billeder til klubsite, galleri, artikler og fremtidige billedsektioner."
+      />
 
+      <div className="py-8">
         <MediaLibraryClient
           clubSlug={clubSlug}
           assets={assets}

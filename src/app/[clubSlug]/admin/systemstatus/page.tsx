@@ -35,7 +35,7 @@ export default async function Page({ params }: PageProps) {
     >
       <AdminPlaceholderPage 
         title="Systemstatus"
-        description="Fremtidig oversigt over systemets drift og leveringsstatus."
+        description="Teknisk overblik over platform, miljø og centrale driftskontroller."
         futureItems={[
           "Status på e-mail levering",
           "Database performance og helbred",

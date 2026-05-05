@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
 import { getAdminClubMailingLists } from "../../../../lib/mailingLists/clubMailingListService";
 import { formatAdminDateTime } from "../../../../lib/format/adminDateFormat";
 import { ClubMailingListPurpose } from "@/generated/prisma";
@@ -52,13 +53,12 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div className="admin-workspace">
-        <div style={{ marginBottom: '24px' }}>
-          <h1 className="admin-section-title" style={{ fontSize: '1.75rem', marginBottom: '8px' }}>Mailinglister</h1>
-          <p style={{ color: '#595959', margin: 0 }}>
-            Overblik over klubbens mailingliste-konfiguration. Der sendes endnu ingen mails fra systemet.
-          </p>
-        </div>
+      <AdminPageHeader
+        title="Mailinglister"
+        description="Overblik over klubbens mailingliste-konfiguration."
+      />
+
+      <div className="admin-workspace pt-6">
 
         <div className="admin-metric-grid">
           <div className="admin-card admin-metric-card">

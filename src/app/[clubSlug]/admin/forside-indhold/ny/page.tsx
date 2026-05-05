@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../../components/admin/AdminShell";
+import { AdminPageHeader } from "../../../../../components/admin/AdminPagePrimitives";
 import HomepageContentForm from "../HomepageContentForm";
 
 interface PageProps {
@@ -33,10 +34,10 @@ export default async function Page({ params }: PageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0, color: '#fff' }}>Opret nyt forsideindhold</h1>
-        <p style={{ color: 'rgba(238, 245, 255, 0.6)', marginTop: '4px' }}>Udfyld felterne for at oprette et nyt opslag eller besked på forsiden.</p>
-      </div>
+      <AdminPageHeader
+        title="Opret nyt forsideindhold"
+        description="Opret et nyt opslag eller en besked til forsiden."
+      />
 
       <HomepageContentForm clubSlug={clubSlug} />
     </AdminShell>
