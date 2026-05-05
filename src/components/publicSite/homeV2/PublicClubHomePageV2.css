@@ -1665,3 +1665,66 @@
     white-space: normal;
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/* Homepage latest-online row stabilization                                   */
+/* Avoids relying on Tailwind utility classes for row spacing/sizing.          */
+/* -------------------------------------------------------------------------- */
+
+.home-v2-root .home-v2-online-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.home-v2-root .home-v2-online-row {
+  display: grid;
+  grid-template-columns: 40px auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--home-text);
+}
+
+.home-v2-root .home-v2-online-row .home-v2-online-avatar,
+.home-v2-root .home-v2-online-row img {
+  width: 40px !important;
+  height: 40px !important;
+  max-width: 40px !important;
+  max-height: 40px !important;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.home-v2-root .home-v2-online-time {
+  color: var(--home-text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.home-v2-root .home-v2-online-name {
+  overflow: hidden;
+  color: var(--home-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .home-v2-root .home-v2-online-row {
+    grid-template-columns: 36px auto minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .home-v2-root .home-v2-online-row .home-v2-online-avatar,
+  .home-v2-root .home-v2-online-row img {
+    width: 36px !important;
+    height: 36px !important;
+    max-width: 36px !important;
+    max-height: 36px !important;
+  }
+}
