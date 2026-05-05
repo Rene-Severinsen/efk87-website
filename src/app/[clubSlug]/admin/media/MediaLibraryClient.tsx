@@ -96,20 +96,20 @@ export default function MediaLibraryClient({
       <form
         ref={formRef}
         onSubmit={handleUpload}
-        className="rounded-3xl border border-white/10 bg-[#121b2e]/80 p-6 shadow-2xl backdrop-blur-md"
+        className="admin-card"
       >
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="admin-section-title">
             Upload billede
           </h2>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="admin-muted">
             Tilladte filtyper: JPG, PNG, WebP, HEIC og HEIF. Upload maks 25 MB. Billedet gemmes optimeret som WebP.
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
           <div className="space-y-2">
-            <label htmlFor="file" className="block text-sm font-medium text-slate-300">
+            <label htmlFor="file" className="admin-form-label">
               Billede
             </label>
             <input
@@ -118,43 +118,43 @@ export default function MediaLibraryClient({
               type="file"
               accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif"
               required
-              className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-slate-300 file:mr-4 file:rounded-lg file:border-0 file:bg-sky-600 file:px-3 file:py-2 file:text-sm file:font-bold file:text-white"
+              className="admin-file-input"
             />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="title" className="block text-sm font-medium text-slate-300">
+            <label htmlFor="title" className="admin-form-label">
               Titel
             </label>
             <input
               id="title"
               name="title"
               placeholder="Fx Adgangsvej til pladsen"
-              className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+              className="admin-input"
             />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="altText" className="block text-sm font-medium text-slate-300">
+            <label htmlFor="altText" className="admin-form-label">
               Beskrivelse / alt-tekst
             </label>
             <input
               id="altText"
               name="altText"
               placeholder="Kort beskrivelse af billedet"
-              className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+              className="admin-input"
             />
           </div>
         </div>
 
         {uploadStatus === "success" ? (
-          <div className="mt-5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm font-medium text-emerald-400">
+          <div className="admin-alert admin-alert-success mt-5">
             Billedet er uploadet.
           </div>
         ) : null}
 
         {uploadStatus === "error" && error ? (
-          <div className="mt-5 rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm font-medium text-rose-400">
+          <div className="admin-alert admin-alert-danger mt-5">
             {error}
           </div>
         ) : null}
@@ -163,7 +163,7 @@ export default function MediaLibraryClient({
           <button
             type="submit"
             disabled={isUploading}
-            className="rounded-xl bg-sky-600 px-8 py-3 font-bold text-white shadow-lg shadow-sky-900/20 transition-all hover:bg-sky-500 disabled:bg-slate-700 disabled:shadow-none"
+            className="admin-btn admin-btn-primary"
           >
             {isUploading ? "Uploader..." : "Upload billede"}
           </button>
@@ -173,10 +173,10 @@ export default function MediaLibraryClient({
       <section>
         <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="admin-section-title">
               Billeder
             </h2>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="admin-muted">
               {assets.length} aktive billeder i biblioteket.
             </p>
           </div>
@@ -189,18 +189,18 @@ export default function MediaLibraryClient({
                 key={asset.id}
                 type="button"
                 onClick={() => setSelectedAsset(asset)}
-                className="group overflow-hidden rounded-2xl border border-white/10 bg-[#121b2e]/80 text-left shadow-lg transition hover:border-sky-500/50 hover:bg-[#17233a]"
+                className="admin-media-asset-card group"
               >
-                <div className="relative aspect-square bg-[#0f172a]">
+                <div className="admin-media-asset-thumb">
                   <img
                     src={asset.publicUrl}
                     alt={asset.altText || asset.title || asset.originalName}
                     className="h-full w-full object-cover transition duration-200 group-hover:scale-105"
                   />
 
-                  <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 transition group-hover:opacity-100">
+                  <div className="admin-media-asset-overlay">
                     <div className="w-full p-3">
-                      <p className="text-xs font-bold text-white">
+                      <p className="text-xs font-bold">
                         Åbn detaljer
                       </p>
                     </div>
@@ -208,10 +208,10 @@ export default function MediaLibraryClient({
                 </div>
 
                 <div className="space-y-1 p-3">
-                  <h3 className="truncate text-sm font-bold text-white">
+                  <h3 className="truncate text-sm font-bold">
                     {asset.title || asset.originalName}
                   </h3>
-                  <p className="truncate text-xs text-slate-400">
+                  <p className="admin-soft truncate text-xs">
                     {formatFileSize(asset.sizeBytes)}
                   </p>
                 </div>
@@ -219,7 +219,7 @@ export default function MediaLibraryClient({
             ))}
           </div>
         ) : (
-          <div className="rounded-3xl border border-white/10 bg-[#121b2e]/80 p-8 text-center text-slate-400">
+          <div className="admin-card admin-muted p-8 text-center">
             Der er endnu ikke uploadet billeder.
           </div>
         )}
@@ -227,16 +227,16 @@ export default function MediaLibraryClient({
 
       {selectedAsset ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+          className="admin-media-modal-backdrop"
           role="dialog"
           aria-modal="true"
           onClick={() => setSelectedAsset(null)}
         >
           <div
-            className="grid max-h-[92vh] w-full max-w-6xl grid-cols-1 overflow-hidden rounded-3xl border border-white/10 bg-[#0b1120] shadow-2xl lg:grid-cols-[1.25fr_0.75fr]"
+            className="admin-media-modal"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="flex min-h-[320px] items-center justify-center bg-black">
+            <div className="admin-media-modal-image-pane">
               <img
                 src={selectedAsset.publicUrl}
                 alt={selectedAsset.altText || selectedAsset.title || selectedAsset.originalName}
@@ -247,10 +247,10 @@ export default function MediaLibraryClient({
             <div className="flex max-h-[92vh] flex-col overflow-y-auto p-6">
               <div className="mb-6 flex items-start justify-between gap-4">
                 <div className="min-w-0">
-                  <h2 className="truncate text-2xl font-bold text-white">
+                  <h2 className="truncate text-2xl font-bold">
                     {selectedAsset.title || selectedAsset.originalName}
                   </h2>
-                  <p className="mt-1 truncate text-sm text-slate-400">
+                  <p className="admin-muted mt-1 truncate text-sm">
                     {selectedAsset.originalName}
                   </p>
                 </div>
@@ -258,57 +258,57 @@ export default function MediaLibraryClient({
                 <button
                   type="button"
                   onClick={() => setSelectedAsset(null)}
-                  className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm font-bold text-white transition hover:bg-white/15"
+                  className="admin-btn"
                 >
                   Luk
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 text-sm text-slate-400">
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                  <span className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="admin-meta-box">
+                  <span className="admin-meta-label">
                     Type
                   </span>
-                  <span className="mt-1 block font-semibold text-slate-200">
+                  <span className="admin-meta-value">
                     {selectedAsset.mimeType}
                   </span>
                 </div>
 
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                  <span className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <div className="admin-meta-box">
+                  <span className="admin-meta-label">
                     Størrelse
                   </span>
-                  <span className="mt-1 block font-semibold text-slate-200">
+                  <span className="admin-meta-value">
                     {formatFileSize(selectedAsset.sizeBytes)}
                   </span>
                 </div>
 
-                <div className="col-span-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                  <span className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <div className="admin-meta-box col-span-2">
+                  <span className="admin-meta-label">
                     Uploadet
                   </span>
-                  <span className="mt-1 block font-semibold text-slate-200">
+                  <span className="admin-meta-value">
                     {formatDate(selectedAsset.createdAt)}
                   </span>
                 </div>
 
                 {selectedAsset.altText ? (
-                  <div className="col-span-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                    <span className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  <div className="admin-meta-box col-span-2">
+                    <span className="admin-meta-label">
                       Beskrivelse
                     </span>
-                    <span className="mt-1 block text-slate-200">
+                    <span className="admin-meta-value">
                       {selectedAsset.altText}
                     </span>
                   </div>
                 ) : null}
               </div>
 
-              <div className="mt-5 rounded-2xl border border-white/10 bg-[#0f172a] p-4">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="admin-code-box mt-5">
+                <p className="admin-meta-label mb-2">
                   Public URL
                 </p>
-                <code className="block break-all text-xs text-slate-300">
+                <code className="admin-code-text">
                   {selectedAsset.publicUrl}
                 </code>
               </div>
@@ -317,7 +317,7 @@ export default function MediaLibraryClient({
                 <button
                   type="button"
                   onClick={() => copyUrl(selectedAsset.publicUrl)}
-                  className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/15"
+                  className="admin-btn"
                 >
                   {copiedUrl === selectedAsset.publicUrl ? "Kopieret" : "Kopiér URL"}
                 </button>
@@ -326,7 +326,7 @@ export default function MediaLibraryClient({
                   href={selectedAsset.publicUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/15"
+                  className="admin-btn"
                 >
                   Åbn
                 </a>
@@ -335,7 +335,7 @@ export default function MediaLibraryClient({
                   type="button"
                   disabled={isPending}
                   onClick={() => handleDelete(selectedAsset.id)}
-                  className="rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-2 text-sm font-bold text-rose-300 transition hover:bg-rose-500/20 disabled:opacity-50"
+                  className="admin-btn admin-btn-danger"
                 >
                   Fjern
                 </button>
