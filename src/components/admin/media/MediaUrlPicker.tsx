@@ -62,8 +62,8 @@ export default function MediaUrlPicker({
     : "mt-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]";
 
   const previewMediaWrapClass = compact
-    ? "flex h-28 items-center justify-center bg-[#0f172a]"
-    : "aspect-[16/9] bg-[#0f172a]";
+    ? "flex h-24 items-center justify-center bg-[#0f172a]"
+    : "aspect-[16/9] max-h-[360px] bg-[#0f172a]";
 
   const previewImageClass =
     previewFit === "contain"

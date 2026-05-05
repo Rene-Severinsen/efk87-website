@@ -118,7 +118,7 @@ function TextInput({
       <input
         name={name}
         defaultValue={defaultValue}
-        className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-sky-400"
+        className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-3 py-2.5 text-sm text-white outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
       />
     </label>
   );
@@ -140,9 +140,35 @@ function TextArea({
         name={name}
         defaultValue={defaultValue}
         rows={3}
-        className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-sky-400"
+        className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-3 py-2.5 text-sm text-white outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
       />
     </label>
+  );
+}
+
+function SectionCard({
+  title,
+  description,
+  children,
+  wide = false,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+  wide?: boolean;
+}) {
+  return (
+    <section className={`rounded-2xl border border-white/10 bg-white/[0.03] p-5 ${wide ? "lg:col-span-2" : ""}`}>
+      <div className="mb-5">
+        <h3 className="text-lg font-extrabold text-white">{title}</h3>
+        {description ? (
+          <p className="mt-1 text-sm leading-6 text-slate-400">{description}</p>
+        ) : null}
+      </div>
+      <div className="grid gap-4">
+        {children}
+      </div>
+    </section>
   );
 }
 
@@ -213,112 +239,141 @@ export default function PublicHomepageSettingsForm({
   }
 
   return (
-    <form action={handleSubmit} className="grid gap-8">
+    <form action={handleSubmit} className="grid gap-6">
       <div>
-        <h2 className="mb-2 text-2xl font-extrabold text-white">Public forside</h2>
-        <p className="text-sm text-slate-400">
-          Vedligehold faste tekster og links på den offentlige landingpage.
+        <h2 className="text-2xl font-extrabold text-white">Public forside</h2>
+        <p className="mt-1 text-sm leading-6 text-slate-400">
+          Vedligehold de faste public-forside elementer. Forsideopslag håndteres stadig separat under Forsideindhold.
         </p>
       </div>
 
-      <section className="grid gap-4">
-        <h3 className="text-lg font-bold text-white">Hero</h3>
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <SectionCard
+          title="Hero"
+          description="Øverste visuelle område på public forsiden."
+          wide
+        >
+          <TextInput
+            name="publicHeroTitle"
+            label="Hero titel"
+            defaultValue={fieldValue(initialValues, "publicHeroTitle")}
+          />
 
-        <TextInput
-          name="publicHeroTitle"
-          label="Hero titel"
-          defaultValue={fieldValue(initialValues, "publicHeroTitle")}
-        />
-        <MediaUrlPicker
-          name="publicHeroImageUrl"
-          label="Hero billede"
-          value={initialValues?.publicHeroImageUrl ?? ""}
-          assets={mediaAssets}
-          placeholder="Vælg hero billede fra Media"
-          previewFit="cover"
-        />
+          <TextArea
+            name="publicHeroSubtitle"
+            label="Hero tekst"
+            defaultValue={fieldValue(initialValues, "publicHeroSubtitle")}
+          />
 
-        <TextInput
-          name="publicHeroImageAltText"
-          label="Hero billede alt-tekst"
-          defaultValue={fieldValue(initialValues, "publicHeroImageAltText")}
-        />
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
+            <MediaUrlPicker
+              name="publicHeroImageUrl"
+              label="Hero billede"
+              value={initialValues?.publicHeroImageUrl ?? ""}
+              assets={mediaAssets}
+              placeholder="Vælg hero billede fra Media"
+              previewFit="cover"
+              compact
+            />
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <TextInput name="publicHeroPrimaryCtaLabel" label="Primær CTA label" defaultValue={fieldValue(initialValues, "publicHeroPrimaryCtaLabel")} />
-          <TextInput name="publicHeroPrimaryCtaHref" label="Primær CTA link" defaultValue={fieldValue(initialValues, "publicHeroPrimaryCtaHref")} />
-          <TextInput name="publicHeroSecondaryCtaLabel" label="CTA 2 label" defaultValue={fieldValue(initialValues, "publicHeroSecondaryCtaLabel")} />
-          <TextInput name="publicHeroSecondaryCtaHref" label="CTA 2 link" defaultValue={fieldValue(initialValues, "publicHeroSecondaryCtaHref")} />
-          <TextInput name="publicHeroTertiaryCtaLabel" label="CTA 3 label" defaultValue={fieldValue(initialValues, "publicHeroTertiaryCtaLabel")} />
-          <TextInput name="publicHeroTertiaryCtaHref" label="CTA 3 link" defaultValue={fieldValue(initialValues, "publicHeroTertiaryCtaHref")} />
-          <TextInput name="publicHeroQuaternaryCtaLabel" label="CTA 4 label" defaultValue={fieldValue(initialValues, "publicHeroQuaternaryCtaLabel")} />
-          <TextInput name="publicHeroQuaternaryCtaHref" label="CTA 4 link" defaultValue={fieldValue(initialValues, "publicHeroQuaternaryCtaHref")} />
-        </div>
-      </section>
+            <TextInput
+              name="publicHeroImageAltText"
+              label="Alt-tekst"
+              defaultValue={fieldValue(initialValues, "publicHeroImageAltText")}
+            />
+          </div>
+        </SectionCard>
 
-      <section className="grid gap-4">
-        <h3 className="text-lg font-bold text-white">Introsektion</h3>
+        <SectionCard
+          title="Hero knapper"
+          description="De fire knapper i hero-sektionen."
+        >
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <TextInput name="publicHeroPrimaryCtaLabel" label="Primær label" defaultValue={fieldValue(initialValues, "publicHeroPrimaryCtaLabel")} />
+            <TextInput name="publicHeroPrimaryCtaHref" label="Primær link" defaultValue={fieldValue(initialValues, "publicHeroPrimaryCtaHref")} />
+            <TextInput name="publicHeroSecondaryCtaLabel" label="CTA 2 label" defaultValue={fieldValue(initialValues, "publicHeroSecondaryCtaLabel")} />
+            <TextInput name="publicHeroSecondaryCtaHref" label="CTA 2 link" defaultValue={fieldValue(initialValues, "publicHeroSecondaryCtaHref")} />
+            <TextInput name="publicHeroTertiaryCtaLabel" label="CTA 3 label" defaultValue={fieldValue(initialValues, "publicHeroTertiaryCtaLabel")} />
+            <TextInput name="publicHeroTertiaryCtaHref" label="CTA 3 link" defaultValue={fieldValue(initialValues, "publicHeroTertiaryCtaHref")} />
+            <TextInput name="publicHeroQuaternaryCtaLabel" label="CTA 4 label" defaultValue={fieldValue(initialValues, "publicHeroQuaternaryCtaLabel")} />
+            <TextInput name="publicHeroQuaternaryCtaHref" label="CTA 4 link" defaultValue={fieldValue(initialValues, "publicHeroQuaternaryCtaHref")} />
+          </div>
+        </SectionCard>
 
-        <TextInput
-          name="publicIntroTitle"
-          label="Sektionstitel"
-          defaultValue={fieldValue(initialValues, "publicIntroTitle")}
-        />
+        <SectionCard
+          title="Introsektion"
+          description="Overskrift og link over de tre intro-kort."
+        >
+          <TextInput
+            name="publicIntroTitle"
+            label="Sektionstitel"
+            defaultValue={fieldValue(initialValues, "publicIntroTitle")}
+          />
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <TextInput name="publicIntroLinkLabel" label="Toplink label" defaultValue={fieldValue(initialValues, "publicIntroLinkLabel")} />
-          <TextInput name="publicIntroLinkHref" label="Toplink href" defaultValue={fieldValue(initialValues, "publicIntroLinkHref")} />
-        </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <TextInput name="publicIntroLinkLabel" label="Toplink label" defaultValue={fieldValue(initialValues, "publicIntroLinkLabel")} />
+            <TextInput name="publicIntroLinkHref" label="Toplink href" defaultValue={fieldValue(initialValues, "publicIntroLinkHref")} />
+          </div>
+        </SectionCard>
 
-        <IntroCardFields
-          cardNumber={1}
-          iconKey="publicIntroCard1Icon"
-          titleKey="publicIntroCard1Title"
-          textKey="publicIntroCard1Text"
-          hrefKey="publicIntroCard1Href"
-          initialValues={initialValues}
-        />
+        <SectionCard
+          title="Intro-kort"
+          description="De tre små kort på public forsiden."
+          wide
+        >
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+            <IntroCardFields
+              cardNumber={1}
+              iconKey="publicIntroCard1Icon"
+              titleKey="publicIntroCard1Title"
+              textKey="publicIntroCard1Text"
+              hrefKey="publicIntroCard1Href"
+              initialValues={initialValues}
+            />
 
-        <IntroCardFields
-          cardNumber={2}
-          iconKey="publicIntroCard2Icon"
-          titleKey="publicIntroCard2Title"
-          textKey="publicIntroCard2Text"
-          hrefKey="publicIntroCard2Href"
-          initialValues={initialValues}
-        />
+            <IntroCardFields
+              cardNumber={2}
+              iconKey="publicIntroCard2Icon"
+              titleKey="publicIntroCard2Title"
+              textKey="publicIntroCard2Text"
+              hrefKey="publicIntroCard2Href"
+              initialValues={initialValues}
+            />
 
-        <IntroCardFields
-          cardNumber={3}
-          iconKey="publicIntroCard3Icon"
-          titleKey="publicIntroCard3Title"
-          textKey="publicIntroCard3Text"
-          hrefKey="publicIntroCard3Href"
-          initialValues={initialValues}
-        />
-      </section>
+            <IntroCardFields
+              cardNumber={3}
+              iconKey="publicIntroCard3Icon"
+              titleKey="publicIntroCard3Title"
+              textKey="publicIntroCard3Text"
+              hrefKey="publicIntroCard3Href"
+              initialValues={initialValues}
+            />
+          </div>
+        </SectionCard>
 
-      <section className="grid gap-4">
-        <h3 className="text-lg font-bold text-white">CTA-sektion</h3>
+        <SectionCard
+          title="CTA-sektion"
+          description="Sektionen nederst på public forsiden før galleri/footer."
+          wide
+        >
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <TextInput name="publicCtaSectionTitle" label="Sektionstitel" defaultValue={fieldValue(initialValues, "publicCtaSectionTitle")} />
+            <TextInput name="publicCtaSectionLinkLabel" label="Toplink label" defaultValue={fieldValue(initialValues, "publicCtaSectionLinkLabel")} />
+            <TextInput name="publicCtaSectionLinkHref" label="Toplink href" defaultValue={fieldValue(initialValues, "publicCtaSectionLinkHref")} />
+            <TextInput name="publicCtaBoxIcon" label="Boks ikon" defaultValue={fieldValue(initialValues, "publicCtaBoxIcon")} />
+            <TextInput name="publicCtaBoxTitle" label="Boks titel" defaultValue={fieldValue(initialValues, "publicCtaBoxTitle")} />
+          </div>
 
-        <TextInput name="publicCtaSectionTitle" label="Sektionstitel" defaultValue={fieldValue(initialValues, "publicCtaSectionTitle")} />
+          <TextArea name="publicCtaBoxText" label="Boks tekst" defaultValue={fieldValue(initialValues, "publicCtaBoxText")} />
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <TextInput name="publicCtaSectionLinkLabel" label="Toplink label" defaultValue={fieldValue(initialValues, "publicCtaSectionLinkLabel")} />
-          <TextInput name="publicCtaSectionLinkHref" label="Toplink href" defaultValue={fieldValue(initialValues, "publicCtaSectionLinkHref")} />
-        </div>
-
-        <TextInput name="publicCtaBoxIcon" label="Boks ikon" defaultValue={fieldValue(initialValues, "publicCtaBoxIcon")} />
-        <TextInput name="publicCtaBoxTitle" label="Boks titel" defaultValue={fieldValue(initialValues, "publicCtaBoxTitle")} />
-        <TextArea name="publicCtaBoxText" label="Boks tekst" defaultValue={fieldValue(initialValues, "publicCtaBoxText")} />
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <TextInput name="publicCtaPrimaryLabel" label="Primær knap label" defaultValue={fieldValue(initialValues, "publicCtaPrimaryLabel")} />
-          <TextInput name="publicCtaPrimaryHref" label="Primær knap link" defaultValue={fieldValue(initialValues, "publicCtaPrimaryHref")} />
-          <TextInput name="publicCtaSecondaryLabel" label="Sekundær knap label" defaultValue={fieldValue(initialValues, "publicCtaSecondaryLabel")} />
-          <TextInput name="publicCtaSecondaryHref" label="Sekundær knap link" defaultValue={fieldValue(initialValues, "publicCtaSecondaryHref")} />
-        </div>
-      </section>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <TextInput name="publicCtaPrimaryLabel" label="Primær knap label" defaultValue={fieldValue(initialValues, "publicCtaPrimaryLabel")} />
+            <TextInput name="publicCtaPrimaryHref" label="Primær knap link" defaultValue={fieldValue(initialValues, "publicCtaPrimaryHref")} />
+            <TextInput name="publicCtaSecondaryLabel" label="Sekundær knap label" defaultValue={fieldValue(initialValues, "publicCtaSecondaryLabel")} />
+            <TextInput name="publicCtaSecondaryHref" label="Sekundær knap link" defaultValue={fieldValue(initialValues, "publicCtaSecondaryHref")} />
+          </div>
+        </SectionCard>
+      </div>
 
       {status ? (
         <div className="rounded-xl border border-sky-400/30 bg-sky-400/10 p-3 text-sm font-bold text-sky-100">
@@ -326,12 +381,14 @@ export default function PublicHomepageSettingsForm({
         </div>
       ) : null}
 
-      <button
-        type="submit"
-        className="rounded-xl bg-sky-600 px-5 py-3 text-sm font-extrabold text-white hover:bg-sky-500"
-      >
-        Gem public forside
-      </button>
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          className="rounded-xl bg-sky-600 px-6 py-3 text-sm font-extrabold text-white shadow-lg shadow-sky-900/20 transition hover:bg-sky-500"
+        >
+          Gem public forside
+        </button>
+      </div>
     </form>
   );
 }
