@@ -24,14 +24,11 @@ export const ThemedFooter: React.FC<ThemedFooterProps> = ({
     Boolean(footer?.phone) ||
     Boolean(footer?.cvr);
 
-  const sponsorCtaHref = footer?.email
-    ? `mailto:${footer.email}?subject=Sponsorat%20i%20${encodeURIComponent(clubName)}`
-    : null;
-
   return (
     <footer className="efk-public-footer">
       <div className="efk-public-footer__grid">
         <section className="efk-public-footer__section efk-public-footer__identity">
+          <p className="efk-public-footer__eyebrow">Klubsite</p>
           <h3>{clubName}</h3>
           {footer?.description ? (
             <p>{footer.description}</p>
@@ -41,7 +38,8 @@ export const ThemedFooter: React.FC<ThemedFooterProps> = ({
         </section>
 
         <section className="efk-public-footer__section">
-          <h3>Kontakt</h3>
+          <p className="efk-public-footer__eyebrow">Kontakt</p>
+          <h3>Find os</h3>
 
           {hasContact ? (
             <div className="efk-public-footer__text">
@@ -76,18 +74,12 @@ export const ThemedFooter: React.FC<ThemedFooterProps> = ({
           )}
         </section>
 
-        <section className="efk-public-footer__section efk-public-footer__sponsor-section">
-          <div className="efk-public-footer__section-head">
-            <h3>Sponsorer</h3>
-            {sponsorCtaHref ? (
-              <a className="efk-public-footer__cta" href={sponsorCtaHref}>
-                Bliv sponsor
-              </a>
-            ) : null}
-          </div>
+        {sponsors.length > 0 ? (
+          <section className="efk-public-footer__section efk-public-footer__sponsor-section">
+            <p className="efk-public-footer__eyebrow">Partnere</p>
+            <h3>Sponsorer & samarbejdspartnere</h3>
 
-          {sponsors.length > 0 ? (
-            <div className="efk-public-footer__sponsors" aria-label="Sponsorer">
+            <div className="efk-public-footer__sponsors" aria-label="Sponsorer og samarbejdspartnere">
               {sponsors.map((sponsor) => (
                 <span key={sponsor.id} className="efk-public-footer__sponsor">
                   {sponsor.href ? (
@@ -100,12 +92,8 @@ export const ThemedFooter: React.FC<ThemedFooterProps> = ({
                 </span>
               ))}
             </div>
-          ) : (
-            <p className="efk-public-footer__text">
-              Sponsorområdet kan vedligeholdes i admin.
-            </p>
-          )}
-        </section>
+          </section>
+        ) : null}
       </div>
     </footer>
   );

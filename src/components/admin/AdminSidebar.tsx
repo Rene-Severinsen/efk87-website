@@ -142,6 +142,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             >
               Galleri
             </a>
+          <a
+                href={`/${clubSlug}/admin/footer`}
+                className={`admin-sidebar-item ${pathname?.startsWith(`/${clubSlug}/admin/footer`) ? "active" : ""}`}
+            >
+              Footer
+            </a>
           </div>
 
           <div className="admin-sidebar-group">
