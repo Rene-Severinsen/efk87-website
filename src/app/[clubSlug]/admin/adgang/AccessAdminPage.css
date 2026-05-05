@@ -1,17 +1,3 @@
-.access-admin-shell {
-  min-height: 100vh;
-  display: flex;
-  background: #f5f7fb;
-  color: #172033;
-}
-
-.access-admin-main {
-  flex: 1;
-  min-width: 0;
-  padding: 32px;
-  overflow-x: hidden;
-}
-
 .access-admin-container {
   width: 100%;
   max-width: 1440px;
@@ -23,7 +9,7 @@
 
 .access-admin-kicker {
   margin: 0 0 10px;
-  color: #0284c7;
+  color: var(--admin-primary);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.18em;
@@ -36,49 +22,62 @@
   gap: 16px;
 }
 
+.access-admin-card,
+.access-admin-panel {
+  border: 1px solid var(--admin-card-border);
+  background: var(--admin-card-bg);
+  box-shadow: var(--admin-shadow);
+}
+
 .access-admin-card {
-  border: 1px solid rgba(23, 32, 51, 0.08);
-  background: #ffffff;
   border-radius: 22px;
   padding: 18px;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+}
+
+.access-admin-card h2,
+.access-admin-panel-header h2,
+.access-admin-module-title,
+.access-admin-area-item h3 {
+  color: var(--admin-text);
 }
 
 .access-admin-card h2 {
   margin: 0;
-  color: #0f172a;
   font-size: 16px;
+}
+
+.access-admin-card p,
+.access-admin-panel-header p,
+.access-admin-table td,
+.access-admin-module-description,
+.access-admin-note,
+.access-admin-area-item p {
+  color: var(--admin-text-muted);
 }
 
 .access-admin-card p {
   margin: 8px 0 0;
-  color: #334155;
   font-size: 14px;
   line-height: 1.55;
 }
 
 .access-admin-panel {
-  border: 1px solid rgba(23, 32, 51, 0.08);
-  background: #ffffff;
   border-radius: 28px;
   overflow: hidden;
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
 }
 
 .access-admin-panel-header {
   padding: 20px 22px;
-  border-bottom: 1px solid rgba(23, 32, 51, 0.08);
+  border-bottom: 1px solid var(--admin-card-border);
 }
 
 .access-admin-panel-header h2 {
   margin: 0;
-  color: #0f172a;
   font-size: 20px;
 }
 
 .access-admin-panel-header p {
   margin: 6px 0 0;
-  color: #334155;
   font-size: 14px;
   line-height: 1.5;
 }
@@ -98,31 +97,28 @@
 
 .access-admin-table th {
   padding: 14px 16px;
-  background: #f8fafc;
-  color: #334155;
+  background: var(--admin-surface-soft);
+  color: var(--admin-text-muted);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  border-bottom: 1px solid rgba(23, 32, 51, 0.08);
+  border-bottom: 1px solid var(--admin-card-border);
 }
 
 .access-admin-table td {
   padding: 16px;
-  color: #334155;
-  border-bottom: 1px solid rgba(23, 32, 51, 0.07);
+  border-bottom: 1px solid var(--admin-line);
   vertical-align: top;
 }
 
 .access-admin-module-title {
-  color: #0f172a;
   font-weight: 800;
 }
 
 .access-admin-module-description {
   max-width: 440px;
   margin-top: 5px;
-  color: #334155;
   font-size: 12px;
   line-height: 1.5;
 }
@@ -143,23 +139,23 @@
 }
 
 .access-admin-check {
-  background: #dcfce7;
-  color: #166534;
-  border: 1px solid #bbf7d0;
+  background: var(--admin-success-bg);
+  color: var(--admin-success-text);
+  border: 1px solid var(--admin-success-border);
 }
 
 .access-admin-empty {
-  background: #f1f5f9;
-  color: #334155;
-  border: 1px solid #e2e8f0;
+  background: var(--admin-surface-soft);
+  color: var(--admin-text-muted);
+  border: 1px solid var(--admin-card-border);
 }
 
 .access-admin-pill {
   display: inline-flex;
   border-radius: 999px;
-  background: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
+  background: var(--admin-info-bg);
+  color: var(--admin-info-text);
+  border: 1px solid var(--admin-info-border);
   padding: 6px 10px;
   font-size: 12px;
   font-weight: 800;
@@ -168,7 +164,6 @@
 
 .access-admin-note {
   max-width: 360px;
-  color: #334155;
   font-size: 12px;
   line-height: 1.5;
 }
@@ -187,8 +182,8 @@
 }
 
 .access-admin-area-item {
-  border: 1px solid rgba(23, 32, 51, 0.08);
-  background: #f8fafc;
+  border: 1px solid var(--admin-card-border);
+  background: var(--admin-surface-soft);
   border-radius: 18px;
   padding: 14px;
 }
@@ -201,13 +196,11 @@
 
 .access-admin-area-item h3 {
   margin: 0;
-  color: #0f172a;
   font-size: 15px;
 }
 
 .access-admin-area-item p {
   margin: 6px 0 0;
-  color: #334155;
   font-size: 13px;
   line-height: 1.5;
 }
@@ -217,25 +210,14 @@
   .access-admin-area-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .access-admin-main {
-    padding: 24px;
-  }
 }
 
 @media (max-width: 760px) {
-  .access-admin-shell {
-    display: block;
-  }
-
-  .access-admin-main {
-    padding: 18px;
-  }
-
   .access-admin-audience-grid,
   .access-admin-area-grid {
     grid-template-columns: 1fr;
   }
+
   .access-admin-area-item-top {
     flex-direction: column;
   }

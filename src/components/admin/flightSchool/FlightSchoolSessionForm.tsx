@@ -207,7 +207,7 @@ const FlightSchoolSessionForm: React.FC<FlightSchoolSessionFormProps> = ({
       <div className="admin-modal-panel max-w-5xl">
         <div className="admin-modal-header">
           <h3 className="admin-section-title flex items-center gap-2">
-            <CalendarIcon className="w-5 h-5 text-sky-400" />
+            <CalendarIcon className="w-5 h-5 admin-info-text" />
             {initialData ? "Rediger session" : "Opret ny session"}
           </h3>
           <button onClick={onClose} className="admin-icon-button">

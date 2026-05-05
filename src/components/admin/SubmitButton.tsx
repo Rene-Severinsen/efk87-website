@@ -4,7 +4,7 @@ import { useFormStatus } from "react-dom";
 
 export function SubmitButton({ 
   children, 
-  className = "bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg transition-colors font-medium disabled:opacity-50" 
+  className = "admin-btn admin-btn-success px-4 py-2 rounded-lg transition-colors font-medium disabled:opacity-50" 
 }: { 
   children: React.ReactNode; 
   className?: string;

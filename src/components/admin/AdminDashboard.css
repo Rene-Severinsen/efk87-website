@@ -2950,3 +2950,80 @@
   margin-top: 2px;
   accent-color: var(--admin-primary);
 }
+
+/* EFK87 admin leftover cleanup helpers */
+
+.admin-muted {
+  color: var(--admin-text-muted) !important;
+}
+
+.admin-strong {
+  color: var(--admin-text) !important;
+}
+
+.admin-info-text {
+  color: var(--admin-info-text) !important;
+}
+
+.admin-success-text {
+  color: var(--admin-success-text) !important;
+}
+
+.admin-surface-muted {
+  background: var(--admin-surface-soft) !important;
+}
+
+.admin-border {
+  border-color: var(--admin-card-border) !important;
+}
+
+.admin-muted-dot {
+  background: var(--admin-text-muted) !important;
+}
+
+.admin-accent-input {
+  accent-color: var(--admin-primary) !important;
+}
+
+.admin-alert {
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.admin-alert-danger {
+  background: var(--admin-danger-bg);
+  color: var(--admin-danger-text);
+  border: 1px solid var(--admin-danger-border);
+}
+
+.admin-alert-success {
+  background: var(--admin-success-bg);
+  color: var(--admin-success-text);
+  border: 1px solid var(--admin-success-border);
+}
+
+.admin-badge-neutral {
+  background: var(--admin-surface-soft);
+  color: var(--admin-text-muted);
+  border-color: var(--admin-card-border);
+}
+
+.admin-badge-draft,
+.admin-badge-error {
+  background: var(--admin-danger-bg);
+  color: var(--admin-danger-text);
+  border-color: var(--admin-danger-border);
+}
+
+.admin-btn-success {
+  background: var(--admin-success-bg);
+  color: var(--admin-success-text);
+  border-color: var(--admin-success-border);
+}
+
+.admin-btn-compact {
+  padding: 6px 10px;
+  font-size: 0.75rem;
+}

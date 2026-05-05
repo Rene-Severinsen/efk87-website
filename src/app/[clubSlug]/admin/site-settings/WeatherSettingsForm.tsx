@@ -42,12 +42,12 @@ export default function WeatherSettingsForm({
       <div className="space-y-4">
         <div>
           <h3 className="text-xl font-bold text-white mb-1">Vejr</h3>
-          <p className="text-slate-400 text-sm">Bruges til vejrudsigten i HERO-sektionen på forsiden.</p>
+          <p className="admin-muted text-sm">Bruges til vejrudsigten i HERO-sektionen på forsiden.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label htmlFor="latitude" className="block text-sm font-medium text-slate-300">
+            <label htmlFor="latitude" className="block text-sm font-medium admin-strong">
               Vejr latitude
             </label>
             <input
@@ -57,12 +57,12 @@ export default function WeatherSettingsForm({
               name="latitude"
               defaultValue={initialLatitude ?? ""}
               placeholder="f.eks. 55.7656649"
-              className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all"
+              className="w-full admin-surface-muted border admin-border rounded-xl px-4 py-3 text-white placeholder:admin-muted focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all"
             />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="longitude" className="block text-sm font-medium text-slate-300">
+            <label htmlFor="longitude" className="block text-sm font-medium admin-strong">
               Vejr longitude
             </label>
             <input
@@ -72,24 +72,24 @@ export default function WeatherSettingsForm({
               name="longitude"
               defaultValue={initialLongitude ?? ""}
               placeholder="f.eks. 12.3115583"
-              className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all"
+              className="w-full admin-surface-muted border admin-border rounded-xl px-4 py-3 text-white placeholder:admin-muted focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all"
             />
           </div>
         </div>
 
-        <p className="text-xs text-slate-500 italic">
+        <p className="text-xs admin-muted italic">
           EFK87: 55.7656649 / 12.3115583
         </p>
       </div>
 
       {error && (
-        <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400 text-sm font-medium">
+        <div className="p-4 admin-alert admin-alert-danger text-sm font-medium">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-sm font-medium">
+        <div className="p-4 admin-alert admin-alert-success text-sm font-medium">
           Indstillingerne er gemt!
         </div>
       )}
@@ -98,7 +98,7 @@ export default function WeatherSettingsForm({
         <button
           type="submit"
           disabled={loading}
-          className="px-8 py-3 rounded-xl bg-sky-600 hover:bg-sky-500 disabled:bg-slate-700 text-white font-bold transition-all shadow-lg shadow-sky-900/20 disabled:shadow-none flex items-center gap-2"
+          className="admin-btn admin-btn-primary"
         >
           {loading ? (
             <>

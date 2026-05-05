@@ -198,7 +198,7 @@ const FlightSchoolCalendarTab: React.FC<FlightSchoolCalendarTabProps> = ({
                                   <div key={slot.id} className={`admin-slot-card ${slot.isActive ? "" : "is-inactive"}`}>
                                     <div className="flex justify-between items-start mb-2">
                                       <div className="admin-strong flex items-center gap-2">
-                                        <Clock className="w-3 h-3 text-sky-400" />
+                                        <Clock className="w-3 h-3 admin-info-text" />
                                         {formatAdminTime(slot.startsAt).substring(0, 5)} 
                                         {slot.endsAt ? ` - ${formatAdminTime(slot.endsAt).substring(0, 5)}` : ""}
                                       </div>
@@ -214,7 +214,7 @@ const FlightSchoolCalendarTab: React.FC<FlightSchoolCalendarTabProps> = ({
                                         <ul className="space-y-1">
                                           {slot.bookings.filter((b) => b.status === "BOOKED").map((booking) => (
                                             <li key={booking.id} className="admin-muted text-xs flex items-center gap-2">
-                                              <CheckCircle className="w-3 h-3 text-emerald-500" />
+                                              <CheckCircle className="w-3 h-3 admin-success-text" />
                                               {booking.member.firstName} {booking.member.lastName}
                                             </li>
                                           ))}

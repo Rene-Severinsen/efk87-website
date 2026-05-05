@@ -12,7 +12,7 @@ const ArticleRichTextEditor = dynamic(
     {
         ssr: false,
         loading: () => (
-            <div className="rounded-2xl border bg-[#0f172a] p-6 text-sm">
+            <div className="rounded-2xl border admin-surface-muted p-6 text-sm">
                 Editor indlæses...
             </div>
         ),

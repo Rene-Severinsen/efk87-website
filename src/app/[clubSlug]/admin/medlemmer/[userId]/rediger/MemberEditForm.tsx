@@ -219,7 +219,7 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
             <Select label="Klubrolle" name="memberRoleType" options={roleOptions} defaultValue={member.memberRoleType} />
             <Select label="Status" name="memberStatus" options={statusOptions} defaultValue={member.memberStatus} />
             <div className="md:col-span-1">
-              <label className="block text-sm font-medium mb-2 text-slate-400 ml-1">Medlemsnummer</label>
+              <label className="block text-sm font-medium mb-2 admin-muted ml-1">Medlemsnummer</label>
               <div className="admin-readonly-field">
                 {member.memberNumber || 'Tildeles automatisk'}
               </div>
@@ -261,7 +261,7 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
             </div>
           </div>
 
-          <div className="backdrop-blur-md bg-[#121b2e]/80 border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+          <div className="backdrop-blur-md admin-card border admin-border rounded-3xl p-6 shadow-2xl relative overflow-hidden">
             <div className="admin-card-accent" />
             <h3 className="admin-member-section-title">
               <span className="admin-member-section-marker" />

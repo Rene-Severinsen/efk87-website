@@ -57,7 +57,7 @@ const ArticleRichTextEditor = ({ content, onChange }: ArticleRichTextEditorProps
   }
 
   return (
-    <div className="w-full border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600 resize-y overflow-auto min-h-[420px] max-h-[900px]">
+    <div className="admin-editor-shell resize-y overflow-auto min-h-[420px] max-h-[900px]">
       <BlockNoteView 
         editor={editor} 
         onChange={async () => {

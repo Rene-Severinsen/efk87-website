@@ -104,7 +104,7 @@ export default function FooterAdminForm({
       <section className="admin-card">
         <div className="mb-6">
           <h2 className="admin-section-title">Footer indhold</h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm admin-muted">
             Redigér klubtekst og kontaktoplysninger i footeren.
           </p>
         </div>
@@ -172,7 +172,7 @@ export default function FooterAdminForm({
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h2 className="admin-section-title">Sponsorer & samarbejdspartnere</h2>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm admin-muted">
               Vælg sponsorlogo fra Media. Logoet vises automatisk i footeren, hvis sponsoren er aktiv.
             </p>
           </div>
@@ -191,17 +191,17 @@ export default function FooterAdminForm({
           {rows.map((row, index) => (
             <article
               key={row.key}
-              className="flex min-h-full flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-4 shadow-lg shadow-black/10"
+              className="flex min-h-full flex-col rounded-2xl border admin-border bg-white/[0.03] p-4 shadow-lg shadow-black/10"
             >
               <input type="hidden" name="sponsorId" defaultValue={row.id} />
 
-              <div className="mb-4 border-b border-white/10 pb-3">
+              <div className="mb-4 border-b admin-border pb-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <h3 className="truncate text-base font-bold text-white">
                       {row.name || `Sponsor ${index + 1}`}
                     </h3>
-                    <p className="mt-1 text-xs text-slate-400">
+                    <p className="mt-1 text-xs admin-muted">
                       Logo, link og synlighed i footeren.
                     </p>
                   </div>
@@ -209,7 +209,7 @@ export default function FooterAdminForm({
                   <button
                     type="button"
                     onClick={() => removeSponsorRow(row.key)}
-                    className="text-xs font-bold text-slate-500 transition hover:text-rose-300"
+                    className="text-xs font-bold admin-muted transition hover:opacity-80"
                   >
                     Fjern
                   </button>
@@ -259,12 +259,12 @@ export default function FooterAdminForm({
                     />
                   </label>
 
-                  <label className="flex min-h-[46px] items-center gap-3 self-end rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm font-semibold text-slate-200">
+                  <label className="flex min-h-[46px] items-center gap-3 self-end rounded-xl border admin-border admin-surface-muted px-4 text-sm font-semibold admin-strong">
                     <input
                       type="checkbox"
                       name={`sponsorActive-${index}`}
                       defaultChecked={row.isActive}
-                      className="h-4 w-4 accent-sky-500"
+                      className="h-4 w-4 admin-accent-input"
                     />
                     Aktiv i footer
                   </label>

@@ -57,17 +57,17 @@ export default async function Page({ params }: PageProps) {
         <h2 className="text-xl font-bold text-white mb-4 px-2">Kategorier</h2>
         
         {categories.length === 0 ? (
-          <div className="p-12 text-center backdrop-blur-md bg-white/5 border border-white/10 rounded-3xl">
-            <p className="text-slate-400">Der er endnu ikke oprettet nogen forumkategorier.</p>
+          <div className="p-12 text-center backdrop-blur-md admin-surface-muted border admin-border rounded-3xl">
+            <p className="admin-muted">Der er endnu ikke oprettet nogen forumkategorier.</p>
           </div>
         ) : (
           <div className="grid gap-4">
             {categories.map((category) => (
               <div 
                 key={category.id}
-                className="group flex items-center gap-4 p-4 backdrop-blur-md bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all"
+                className="group flex items-center gap-4 p-4 backdrop-blur-md admin-surface-muted hover:opacity-90 border admin-border rounded-2xl transition-all"
               >
-                <div className="flex-shrink-0 cursor-grab text-slate-600 hover:text-slate-400 transition-colors">
+                <div className="flex-shrink-0 cursor-grab admin-muted hover:admin-muted transition-colors">
                   <GripVertical className="w-5 h-5" />
                 </div>
                 
@@ -80,7 +80,7 @@ export default async function Page({ params }: PageProps) {
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-slate-400 line-clamp-1">
+                  <p className="text-sm admin-muted line-clamp-1">
                     /{category.slug} • {category.description || "Ingen beskrivelse"}
                   </p>
                 </div>
@@ -88,19 +88,19 @@ export default async function Page({ params }: PageProps) {
                 <div className="flex items-center gap-4">
                   <div className="text-right hidden sm:block">
                     <div className="text-sm font-bold text-white">{category._count.threads}</div>
-                    <div className="text-[10px] text-slate-500 uppercase font-bold tracking-tight">Tråde</div>
+                    <div className="text-[10px] admin-muted uppercase font-bold tracking-tight">Tråde</div>
                   </div>
                   
                   <Link
                     href={`/${clubSlug}/admin/forum/kategorier/${category.id}/rediger`}
-                    className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all"
+                    className="p-2 rounded-lg admin-surface-muted hover:opacity-90 admin-muted hover:text-white transition-all"
                   >
                     <Settings className="w-5 h-5" />
                   </Link>
                   
                   <Link
                     href={`/${clubSlug}/forum/${category.slug}`}
-                    className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all"
+                    className="p-2 rounded-lg admin-surface-muted hover:opacity-90 admin-muted hover:text-white transition-all"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </Link>
