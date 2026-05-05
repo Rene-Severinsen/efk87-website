@@ -3,6 +3,7 @@ import { requireClubBySlug, TenancyError } from "../../../lib/tenancy/tenantServ
 import { requireClubAdminForClub } from "../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../components/admin/AdminShell";
 import AdminDashboard from "../../../components/admin/AdminDashboard";
+import { getAdminDashboardOverview } from "../../../lib/admin/adminDashboardService";
 
 interface AdminPageProps {
   params: Promise<{
@@ -25,6 +26,7 @@ export default async function AdminPage({ params }: AdminPageProps) {
 
   // Guard: requires authenticated admin/owner with active membership
   const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin`);
+  const dashboard = await getAdminDashboardOverview(club.id);
 
   return (
     <AdminShell
@@ -34,7 +36,7 @@ export default async function AdminPage({ params }: AdminPageProps) {
       userRole={viewer.clubRole}
       userEmail={viewer.email}
     >
-      <AdminDashboard clubSlug={clubSlug} clubName={club.name} />
+      <AdminDashboard clubSlug={clubSlug} clubName={club.name} dashboard={dashboard} />
     </AdminShell>
   );
 }
