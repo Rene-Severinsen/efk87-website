@@ -53,7 +53,7 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
         </div>
         <h2 className="text-2xl font-bold text-[var(--public-text)] mb-4">Tak for din indmeldelse</h2>
         <p className="public-muted-text">
-          Vi har modtaget din indmeldelse. Vi kontakter dig, når den er gennemgået.
+          Vi har modtaget din indmeldelse. Du modtager nu mail med en faktura med betalingsoplysninger. Når betalingen er registreret, aktiveres medlemskabet automatisk.
         </p>
         <button 
           onClick={() => window.location.reload()} 
