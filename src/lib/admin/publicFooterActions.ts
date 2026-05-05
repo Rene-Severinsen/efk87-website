@@ -29,7 +29,8 @@ function cleanUrl(value: FormDataEntryValue | null): string | null {
   if (
     text.startsWith("https://") ||
     text.startsWith("http://") ||
-    text.startsWith("mailto:")
+    text.startsWith("mailto:") ||
+    text.startsWith("/")
   ) {
     return text;
   }
@@ -71,12 +72,16 @@ export async function updatePublicFooterAction(
     const sponsorIds = formData.getAll("sponsorId");
     const sponsorNames = formData.getAll("sponsorName");
     const sponsorHrefs = formData.getAll("sponsorHref");
+    const sponsorLogoUrls = formData.getAll("sponsorLogoUrl");
+    const sponsorLogoAltTexts = formData.getAll("sponsorLogoAltText");
     const sponsorSortOrders = formData.getAll("sponsorSortOrder");
 
     const rowCount = Math.max(
       sponsorIds.length,
       sponsorNames.length,
       sponsorHrefs.length,
+      sponsorLogoUrls.length,
+      sponsorLogoAltTexts.length,
       sponsorSortOrders.length,
     );
 
@@ -84,6 +89,8 @@ export async function updatePublicFooterAction(
       id: string | null;
       name: string;
       href: string | null;
+      logoUrl: string | null;
+      logoAltText: string | null;
       sortOrder: number;
       isActive: boolean;
     }[] = [];
@@ -99,6 +106,8 @@ export async function updatePublicFooterAction(
         id: cleanText(sponsorIds[index] ?? null),
         name,
         href: cleanUrl(sponsorHrefs[index] ?? null),
+        logoUrl: cleanUrl(sponsorLogoUrls[index] ?? null),
+        logoAltText: cleanText(sponsorLogoAltTexts[index] ?? null),
         sortOrder: parseSortOrder(sponsorSortOrders[index] ?? null, (index + 1) * 10),
         isActive: formData.get(`sponsorActive-${index}`) === "on",
       });
@@ -156,6 +165,8 @@ export async function updatePublicFooterAction(
             data: {
               name: sponsor.name,
               href: sponsor.href,
+              logoUrl: sponsor.logoUrl,
+              logoAltText: sponsor.logoAltText,
               sortOrder: sponsor.sortOrder,
               isActive: sponsor.isActive,
             },
@@ -169,6 +180,8 @@ export async function updatePublicFooterAction(
             clubId: club.id,
             name: sponsor.name,
             href: sponsor.href,
+            logoUrl: sponsor.logoUrl,
+            logoAltText: sponsor.logoAltText,
             sortOrder: sponsor.sortOrder,
             isActive: sponsor.isActive,
           },

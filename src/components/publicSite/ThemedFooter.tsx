@@ -80,17 +80,29 @@ export const ThemedFooter: React.FC<ThemedFooterProps> = ({
             <h3>Sponsorer & samarbejdspartnere</h3>
 
             <div className="efk-public-footer__sponsors" aria-label="Sponsorer og samarbejdspartnere">
-              {sponsors.map((sponsor) => (
-                <span key={sponsor.id} className="efk-public-footer__sponsor">
-                  {sponsor.href ? (
-                    <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
-                      {sponsor.name}
-                    </a>
-                  ) : (
-                    sponsor.name
-                  )}
-                </span>
-              ))}
+              {sponsors.map((sponsor) => {
+                const sponsorContent = sponsor.logoUrl ? (
+                  <img
+                    src={sponsor.logoUrl}
+                    alt={sponsor.logoAltText || sponsor.name}
+                    className="efk-public-footer__sponsor-logo"
+                  />
+                ) : (
+                  <span className="efk-public-footer__sponsor-name">{sponsor.name}</span>
+                );
+
+                return (
+                  <span key={sponsor.id} className="efk-public-footer__sponsor">
+                    {sponsor.href ? (
+                      <a href={sponsor.href} target="_blank" rel="noopener noreferrer" aria-label={sponsor.name}>
+                        {sponsorContent}
+                      </a>
+                    ) : (
+                      sponsorContent
+                    )}
+                  </span>
+                );
+              })}
             </div>
           </section>
         ) : null}

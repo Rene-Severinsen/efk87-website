@@ -3,6 +3,7 @@ import AdminShell from "../../../../components/admin/AdminShell";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import prisma from "../../../../lib/db/prisma";
+import { listClubMediaAssets } from "../../../../lib/media/mediaStorageService";
 import FooterAdminForm from "./FooterAdminForm";
 
 interface PageProps {
@@ -32,7 +33,7 @@ export default async function Page({ params }: PageProps) {
     `/${clubSlug}/admin/footer`,
   );
 
-  const [footer, sponsors] = await Promise.all([
+  const [footer, sponsors, mediaAssets] = await Promise.all([
     prisma.publicClubFooter.findUnique({
       where: {
         clubId: club.id,
@@ -51,6 +52,7 @@ export default async function Page({ params }: PageProps) {
         },
       ],
     }),
+    listClubMediaAssets(club.id),
   ]);
 
   return (
@@ -78,6 +80,7 @@ export default async function Page({ params }: PageProps) {
           clubSlug={clubSlug}
           footer={footer}
           sponsors={sponsors}
+          mediaAssets={mediaAssets}
         />
       </div>
     </AdminShell>

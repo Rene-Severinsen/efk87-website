@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import type { PublicClubFooter, PublicSponsor } from "../../../../generated/prisma";
+import MediaUrlPicker from "../../../../components/admin/media/MediaUrlPicker";
+import { ClubMediaAssetDTO } from "../../../../lib/media/mediaTypes";
 import { updatePublicFooterAction } from "../../../../lib/admin/publicFooterActions";
 
 interface FooterAdminFormProps {
   clubSlug: string;
   footer: PublicClubFooter | null;
   sponsors: PublicSponsor[];
+  mediaAssets: ClubMediaAssetDTO[];
 }
 
 interface SponsorRow {
@@ -15,22 +18,28 @@ interface SponsorRow {
   id: string;
   name: string;
   href: string;
+  logoUrl: string;
+  logoAltText: string;
   sortOrder: number;
   isActive: boolean;
 }
 
+function createEmptySponsorRow(index: number): SponsorRow {
+  return {
+    key: `new-${Date.now()}-${index}`,
+    id: "",
+    name: "",
+    href: "",
+    logoUrl: "",
+    logoAltText: "",
+    sortOrder: (index + 1) * 10,
+    isActive: true,
+  };
+}
+
 function buildSponsorRows(sponsors: PublicSponsor[]): SponsorRow[] {
   if (sponsors.length === 0) {
-    return [
-      {
-        key: "new-1",
-        id: "",
-        name: "",
-        href: "",
-        sortOrder: 10,
-        isActive: true,
-      },
-    ];
+    return [createEmptySponsorRow(0)];
   }
 
   return sponsors.map((sponsor, index) => ({
@@ -38,6 +47,8 @@ function buildSponsorRows(sponsors: PublicSponsor[]): SponsorRow[] {
     id: sponsor.id,
     name: sponsor.name,
     href: sponsor.href ?? "",
+    logoUrl: sponsor.logoUrl ?? "",
+    logoAltText: sponsor.logoAltText ?? "",
     sortOrder: sponsor.sortOrder || (index + 1) * 10,
     isActive: sponsor.isActive,
   }));
@@ -47,6 +58,7 @@ export default function FooterAdminForm({
   clubSlug,
   footer,
   sponsors,
+  mediaAssets,
 }: FooterAdminFormProps) {
   const [rows, setRows] = useState<SponsorRow[]>(() => buildSponsorRows(sponsors));
   const [isSaving, setIsSaving] = useState(false);
@@ -75,14 +87,7 @@ export default function FooterAdminForm({
   function addSponsorRow() {
     setRows((currentRows) => [
       ...currentRows,
-      {
-        key: `new-${Date.now()}`,
-        id: "",
-        name: "",
-        href: "",
-        sortOrder: (currentRows.length + 1) * 10,
-        isActive: true,
-      },
+      createEmptySponsorRow(currentRows.length),
     ]);
   }
 
@@ -90,20 +95,7 @@ export default function FooterAdminForm({
     setRows((currentRows) => {
       const nextRows = currentRows.filter((row) => row.key !== key);
 
-      if (nextRows.length > 0) {
-        return nextRows;
-      }
-
-      return [
-        {
-          key: `new-${Date.now()}`,
-          id: "",
-          name: "",
-          href: "",
-          sortOrder: 10,
-          isActive: true,
-        },
-      ];
+      return nextRows.length > 0 ? nextRows : [createEmptySponsorRow(0)];
     });
   }
 
@@ -181,71 +173,114 @@ export default function FooterAdminForm({
           <div>
             <h2 className="admin-section-title">Sponsorer & samarbejdspartnere</h2>
             <p className="text-sm text-slate-400">
-              Sponsorer vises i footeren, hvis de er aktive. Logoer tilføjes senere, når modellen er besluttet.
+              Vælg sponsorlogo fra Media. Logoet vises automatisk i footeren, hvis sponsoren er aktiv.
             </p>
           </div>
 
-          <button type="button" onClick={addSponsorRow} className="admin-btn admin-btn-primary">
-            Tilføj sponsor
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <a href={`/${clubSlug}/admin/media`} className="admin-btn admin-btn-ghost">
+              Åbn media
+            </a>
+            <button type="button" onClick={addSponsorRow} className="admin-btn admin-btn-primary">
+              Tilføj sponsor
+            </button>
+          </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-4">
           {rows.map((row, index) => (
-            <div
+            <article
               key={row.key}
-              className="grid grid-cols-1 gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 xl:grid-cols-[1fr_1.3fr_120px_110px_90px]"
+              className="flex min-h-full flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-4 shadow-lg shadow-black/10"
             >
               <input type="hidden" name="sponsorId" defaultValue={row.id} />
 
-              <label>
-                <span className="admin-form-label">Navn</span>
-                <input
-                  name="sponsorName"
-                  defaultValue={row.name}
-                  className="admin-input"
-                  placeholder="Sponsorens navn"
-                />
-              </label>
+              <div className="mb-4 border-b border-white/10 pb-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h3 className="truncate text-base font-bold text-white">
+                      {row.name || `Sponsor ${index + 1}`}
+                    </h3>
+                    <p className="mt-1 text-xs text-slate-400">
+                      Logo, link og synlighed i footeren.
+                    </p>
+                  </div>
 
-              <label>
-                <span className="admin-form-label">Link</span>
-                <input
-                  name="sponsorHref"
-                  defaultValue={row.href}
-                  className="admin-input"
-                  placeholder="https://..."
-                />
-              </label>
+                  <button
+                    type="button"
+                    onClick={() => removeSponsorRow(row.key)}
+                    className="text-xs font-bold text-slate-500 transition hover:text-rose-300"
+                  >
+                    Fjern
+                  </button>
+                </div>
+              </div>
 
-              <label>
-                <span className="admin-form-label">Sortering</span>
-                <input
-                  name="sponsorSortOrder"
-                  type="number"
-                  defaultValue={row.sortOrder}
-                  className="admin-input"
+              <div className="flex flex-1 flex-col gap-4">
+                <MediaUrlPicker
+                  name="sponsorLogoUrl"
+                  label="Sponsorlogo"
+                  value={row.logoUrl}
+                  assets={mediaAssets}
+                  placeholder="Vælg billede fra Media"
+                  hideUrlInput
+                  previewFit="contain"
+                  compact
                 />
-              </label>
 
-              <label className="flex min-h-[42px] items-center gap-3 self-end rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm font-semibold text-slate-200">
-                <input
-                  type="checkbox"
-                  name={`sponsorActive-${index}`}
-                  defaultChecked={row.isActive}
-                  className="h-4 w-4 accent-sky-500"
-                />
-                Aktiv
-              </label>
+                <label>
+                  <span className="admin-form-label">Navn</span>
+                  <input
+                    name="sponsorName"
+                    defaultValue={row.name}
+                    className="admin-input"
+                    placeholder="Sponsorens navn"
+                  />
+                </label>
 
-              <button
-                type="button"
-                onClick={() => removeSponsorRow(row.key)}
-                className="admin-btn admin-btn-ghost self-end"
-              >
-                Fjern
-              </button>
-            </div>
+                <label>
+                  <span className="admin-form-label">Link</span>
+                  <input
+                    name="sponsorHref"
+                    defaultValue={row.href}
+                    className="admin-input"
+                    placeholder="https://..."
+                  />
+                </label>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-[110px_1fr]">
+                  <label>
+                    <span className="admin-form-label">Sortering</span>
+                    <input
+                      name="sponsorSortOrder"
+                      type="number"
+                      defaultValue={row.sortOrder}
+                      className="admin-input"
+                    />
+                  </label>
+
+                  <label className="flex min-h-[46px] items-center gap-3 self-end rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm font-semibold text-slate-200">
+                    <input
+                      type="checkbox"
+                      name={`sponsorActive-${index}`}
+                      defaultChecked={row.isActive}
+                      className="h-4 w-4 accent-sky-500"
+                    />
+                    Aktiv i footer
+                  </label>
+                </div>
+
+                <label>
+                  <span className="admin-form-label">Logo alt-tekst</span>
+                  <input
+                    name="sponsorLogoAltText"
+                    defaultValue={row.logoAltText}
+                    className="admin-input"
+                    placeholder="Valgfri — bruges til tilgængelighed"
+                  />
+                </label>
+              </div>
+            </article>
           ))}
         </div>
       </section>

@@ -71,14 +71,16 @@ model PublicClubFooter {
 }
 
 model PublicSponsor {
-  id        String   @id @default(cuid())
-  clubId    String
-  name      String
-  href      String?
-  sortOrder Int      @default(0)
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  clubId      String
+  name        String
+  href        String?
+  logoUrl     String?
+  logoAltText String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   club Club @relation(fields: [clubId], references: [id])
 

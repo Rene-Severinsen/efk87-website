@@ -9,6 +9,9 @@ interface MediaUrlPickerProps {
   value: string | null;
   assets: ClubMediaAssetDTO[];
   placeholder?: string;
+  hideUrlInput?: boolean;
+  previewFit?: "cover" | "contain";
+  compact?: boolean;
 }
 
 function formatFileSize(sizeBytes: number): string {
@@ -24,6 +27,9 @@ export default function MediaUrlPicker({
   value,
   assets,
   placeholder = "Vælg billede fra Media eller indsæt URL",
+  hideUrlInput = false,
+  previewFit = "cover",
+  compact = false,
 }: MediaUrlPickerProps) {
   const [selectedUrl, setSelectedUrl] = useState(value ?? "");
   const [isOpen, setIsOpen] = useState(false);
@@ -43,8 +49,31 @@ export default function MediaUrlPicker({
     setIsOpen(false);
   }
 
+  const chooseButtonClass = compact
+    ? "w-full rounded-xl border border-sky-500/40 bg-sky-600 px-4 py-2.5 text-left text-xs font-bold text-white shadow-lg shadow-sky-900/20 transition hover:bg-sky-500"
+    : "w-full rounded-xl border border-sky-500/40 bg-sky-600 px-4 py-3 text-left text-sm font-bold text-white shadow-lg shadow-sky-900/20 transition hover:bg-sky-500";
+
+  const inputClass = compact
+    ? "w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+    : "w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white placeholder:text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/50";
+
+  const previewShellClass = compact
+    ? "mt-2 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]"
+    : "mt-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]";
+
+  const previewMediaWrapClass = compact
+    ? "flex h-28 items-center justify-center bg-[#0f172a]"
+    : "aspect-[16/9] bg-[#0f172a]";
+
+  const previewImageClass =
+    previewFit === "contain"
+      ? compact
+        ? "h-full w-full object-contain p-3"
+        : "h-full w-full object-contain p-4"
+      : "h-full w-full object-cover";
+
   return (
-    <div className="space-y-3">
+    <div className={compact ? "space-y-2" : "space-y-3"}>
       <label htmlFor={name} className="block text-sm font-medium text-slate-300">
         {label}
       </label>
@@ -52,72 +81,79 @@ export default function MediaUrlPicker({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="w-full rounded-xl border border-sky-500/40 bg-sky-600 px-4 py-3 text-left text-sm font-bold text-white shadow-lg shadow-sky-900/20 transition hover:bg-sky-500"
+        className={chooseButtonClass}
       >
         Vælg billede fra Media
       </button>
 
-      <input
-        id={name}
-        name={name}
-        value={selectedUrl}
-        onClick={() => setIsOpen(true)}
-        onChange={(event) => setSelectedUrl(event.target.value)}
-        placeholder={placeholder}
-        className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white placeholder:text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/50"
-      />
+      {!hideUrlInput ? (
+        <input
+          id={name}
+          name={name}
+          value={selectedUrl}
+          onClick={() => setIsOpen(true)}
+          onChange={(event) => setSelectedUrl(event.target.value)}
+          placeholder={placeholder}
+          className={inputClass}
+        />
+      ) : (
+        <input id={name} name={name} value={selectedUrl} onChange={() => {}} type="hidden" />
+      )}
 
-      <div className="flex flex-wrap gap-2">
-        {selectedUrl ? (
-          <>
-            <a
-              href={selectedUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/15"
-            >
-              Åbn
-            </a>
+      {selectedUrl ? (
+        <div className={compact ? "flex flex-wrap gap-2" : "flex flex-wrap gap-2"}>
+          <a
+            href={selectedUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={
+              compact
+                ? "rounded-lg border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-white/15"
+                : "rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/15"
+            }
+          >
+            Åbn
+          </a>
 
-            <button
-              type="button"
-              onClick={clearSelection}
-              className="rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-2 text-sm font-bold text-rose-300 transition hover:bg-rose-500/20"
-            >
-              Ryd
-            </button>
-          </>
-        ) : null}
-      </div>
+          <button
+            type="button"
+            onClick={clearSelection}
+            className={
+              compact
+                ? "rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-xs font-bold text-rose-300 transition hover:bg-rose-500/20"
+                : "rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-2 text-sm font-bold text-rose-300 transition hover:bg-rose-500/20"
+            }
+          >
+            Ryd
+          </button>
+        </div>
+      ) : null}
 
       {selectedAsset ? (
-        <div className="mt-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-          <div className="aspect-[16/9] bg-[#0f172a]">
+        <div className={previewShellClass}>
+          <div className={previewMediaWrapClass}>
             <img
               src={selectedAsset.publicUrl}
               alt={selectedAsset.altText || selectedAsset.title || selectedAsset.originalName}
-              className="h-full w-full object-cover"
+              className={previewImageClass}
             />
           </div>
-          <div className="p-3">
-            <p className="truncate text-sm font-bold text-white">
+          <div className={compact ? "p-2.5" : "p-3"}>
+            <p className={compact ? "truncate text-xs font-bold text-white" : "truncate text-sm font-bold text-white"}>
               {selectedAsset.title || selectedAsset.originalName}
-            </p>
-            <p className="truncate text-xs text-slate-400">
-              {selectedAsset.publicUrl}
             </p>
           </div>
         </div>
       ) : selectedUrl ? (
-        <div className="mt-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-          <div className="aspect-[16/9] bg-[#0f172a]">
+        <div className={previewShellClass}>
+          <div className={previewMediaWrapClass}>
             <img
               src={selectedUrl}
               alt=""
-              className="h-full w-full object-cover"
+              className={previewImageClass}
             />
           </div>
-          <div className="p-3">
+          <div className={compact ? "p-2.5" : "p-3"}>
             <p className="truncate text-xs text-slate-400">
               Manuel URL / ekstern URL
             </p>
@@ -138,9 +174,7 @@ export default function MediaUrlPicker({
           >
             <div className="flex items-center justify-between border-b border-white/10 p-5">
               <div>
-                <h2 className="text-xl font-bold text-white">
-                  Vælg billede
-                </h2>
+                <h2 className="text-xl font-bold text-white">Vælg billede</h2>
                 <p className="mt-1 text-sm text-slate-400">
                   {assets.length} aktive billeder i Media Library.
                 </p>
