@@ -66,6 +66,33 @@ export async function getHomepageMarqueeCalendarEntries(
 /**
  * Returns a single published calendar entry detail.
  */
+
+/**
+ * Returns all published calendar entries visible to the current public/member context.
+ * Used by the public calendar overview page.
+ */
+export async function getPublicCalendarEntriesOverview(
+  clubId: string,
+  viewer?: { isMember?: boolean; isAdmin?: boolean } | null
+): Promise<PublicCalendarEntry[]> {
+  const visibleStates = viewer?.isMember || viewer?.isAdmin
+    ? [PublicSurfaceVisibility.PUBLIC, PublicSurfaceVisibility.MEMBERS_ONLY]
+    : [PublicSurfaceVisibility.PUBLIC];
+
+  const entries = await prisma.clubCalendarEntry.findMany({
+    where: {
+      clubId,
+      isPublished: true,
+      visibility: { in: visibleStates },
+    },
+    orderBy: {
+      startsAt: "asc",
+    },
+  });
+
+  return entries.map(mapToPublicEntry);
+}
+
 export async function getPublicCalendarEntryDetail(
   clubId: string,
   entryId: string,

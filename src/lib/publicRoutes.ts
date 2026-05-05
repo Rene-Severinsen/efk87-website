@@ -33,6 +33,7 @@ export const publicRoutes = {
   logout: (clubSlug: string) => `/${clubSlug}/logout`,
 
   // Specific dynamic routes
+  calendar: (clubSlug: string) => `/${clubSlug}/kalender`,
   calendarEntry: (clubSlug: string, entryId: string | number) => `/${clubSlug}/kalender/${entryId}`,
   forumCategory: (clubSlug: string, categorySlug: string) => `/${clubSlug}/forum/${categorySlug}`,
   forumThread: (clubSlug: string, categorySlug: string, threadSlug: string) => `/${clubSlug}/forum/${categorySlug}/${threadSlug}`,

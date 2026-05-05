@@ -14,6 +14,25 @@ interface PageProps {
   }>;
 }
 
+function formatDate(date: Date) {
+  return date.toLocaleDateString("da-DK", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function formatTime(date: Date) {
+  if (date.getHours() === 0 && date.getMinutes() === 0) {
+    return "";
+  }
+
+  return date.toLocaleTimeString("da-DK", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export default async function CalendarDetailPage({ params }: PageProps) {
   const { clubSlug, entryId } = await params;
   const context = await resolveClubContext(clubSlug);
@@ -27,24 +46,13 @@ export default async function CalendarDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('da-DK', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-  };
-
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('da-DK', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const timeDisplay = entry.startsAt.getHours() === 0 && entry.startsAt.getMinutes() === 0 
-    ? "" 
-    : `, kl. ${formatTime(entry.startsAt)}`;
+  const startTime = formatTime(entry.startsAt);
+  const endTime = entry.endsAt ? formatTime(entry.endsAt) : "";
+  const timeDisplay = startTime
+    ? endTime
+      ? `${startTime}–${endTime}`
+      : startTime
+    : "Heldagsindslag";
 
   return (
     <ThemedClubPageShell
@@ -58,47 +66,60 @@ export default async function CalendarDetailPage({ params }: PageProps) {
       navigationItems={navigationItems}
       actionItems={actionItems}
       title={entry.title}
-      eyebrow={`Kalender · ${formatDate(entry.startsAt)}${timeDisplay}`}
+      eyebrow={`Kalender · ${formatDate(entry.startsAt)}${startTime ? `, kl. ${startTime}` : ""}`}
       currentPath={publicRoutes.calendarEntry(clubSlug, entryId)}
-      maxWidth="1120px"
+      maxWidth="960px"
     >
-      <div className="max-w-[800px] mx-auto">
-        <ThemedSectionCard className="p-5 sm:p-8 md:p-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 pb-8 border-b border-[var(--club-line)]">
+      <div className="space-y-6">
+        <ThemedSectionCard className="p-5 sm:p-8 md:p-10">
+          <div className="grid grid-cols-1 gap-5 border-b border-[var(--public-card-border)] pb-6 sm:grid-cols-2">
             <div>
-              <div className="text-[var(--club-muted)] text-sm mb-1">Dato & Tid</div>
-              <div className="text-[var(--club-text)] font-medium">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--public-primary)]">
+                Dato
+              </p>
+              <p className="mt-2 text-lg font-bold text-[var(--public-text)]">
                 {formatDate(entry.startsAt)}
-                {timeDisplay}
-                {entry.endsAt && ` – ${formatTime(entry.endsAt)}`}
-              </div>
+              </p>
             </div>
-            {entry.location && (
-              <div>
-                <div className="text-[var(--club-muted)] text-sm mb-1">Lokation</div>
-                <div className="text-[var(--club-text)] font-medium">{entry.location}</div>
+
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--public-primary)]">
+                Tid
+              </p>
+              <p className="mt-2 text-lg font-bold text-[var(--public-text)]">
+                {timeDisplay}
+              </p>
+            </div>
+
+            {entry.location ? (
+              <div className="sm:col-span-2">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--public-primary)]">
+                  Lokation
+                </p>
+                <p className="mt-2 text-lg font-bold text-[var(--public-text)]">
+                  {entry.location}
+                </p>
               </div>
-            )}
+            ) : null}
           </div>
 
           {entry.descriptionHtml ? (
-            <div 
-              className="calendar-detail-prose text-[var(--club-text)] text-base sm:text-lg leading-relaxed" 
+            <div
+              className="calendar-detail-prose mt-8 text-base leading-relaxed text-[var(--public-text)] sm:text-lg"
               dangerouslySetInnerHTML={{ __html: entry.descriptionHtml }}
             />
           ) : (
-            <p className="text-[var(--club-muted)] italic">Ingen yderligere beskrivelse.</p>
+            <p className="mt-8 text-base italic text-[var(--public-text-muted)]">
+              Ingen yderligere beskrivelse.
+            </p>
           )}
 
-          <div className="mt-12 pt-8 border-t border-[var(--club-line)]">
-            <Link 
-              href={publicRoutes.home(clubSlug)}
-              className="inline-flex items-center text-[var(--club-accent)] hover:underline font-medium"
+          <div className="mt-10 border-t border-[var(--public-card-border)] pt-6">
+            <Link
+              href={publicRoutes.calendar(clubSlug)}
+              className="inline-flex items-center rounded-full border border-[var(--public-card-border)] bg-[var(--public-surface)] px-4 py-2 text-sm font-bold text-[var(--public-primary)] no-underline transition hover:border-[var(--public-primary)] hover:bg-[var(--public-primary-soft)]"
             >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Tilbage til forsiden
+              ← Tilbage til kalenderen
             </Link>
           </div>
         </ThemedSectionCard>
