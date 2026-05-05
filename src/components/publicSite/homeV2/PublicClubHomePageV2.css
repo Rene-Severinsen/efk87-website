@@ -1728,3 +1728,12 @@
     max-height: 36px !important;
   }
 }
+
+/* Gallery toggle: active button must stay readable on primary background */
+.home-v2-root .home-v2-gallery-toggle .home-v2-gallery-toggle-active {
+  color: var(--home-text-on-primary) !important;
+}
+
+.home-v2-root .home-v2-gallery-toggle .home-v2-gallery-toggle-active:hover {
+  color: var(--home-text-on-primary) !important;
+}
