@@ -56,6 +56,7 @@ export interface HomepageGalleryAlbumDTO {
 export interface HomepageGalleryPreviewDTO {
   latestImages: HomepageGalleryImageDTO[];
   latestAlbums: HomepageGalleryAlbumDTO[];
+  publicHomepageAlbums: HomepageGalleryAlbumDTO[];
 }
 
 function getVisibilityFilter(viewer?: { isMember: boolean }): PublicSurfaceVisibility[] {
@@ -184,7 +185,7 @@ export async function getHomepageGalleryPreview(
 ): Promise<HomepageGalleryPreviewDTO> {
   const visibility = getVisibilityFilter(viewer);
 
-  const [latestImages, latestAlbums] = await Promise.all([
+  const [latestImages, latestAlbums, publicHomepageAlbums] = await Promise.all([
     prisma.galleryImage.findMany({
       where: {
         clubId,
@@ -243,6 +244,38 @@ export async function getHomepageGalleryPreview(
         },
       },
     }),
+
+    prisma.galleryAlbum.findMany({
+      where: {
+        clubId,
+        status: GalleryAlbumStatus.PUBLISHED,
+        visibility: PublicSurfaceVisibility.PUBLIC,
+        showOnPublicHomepage: true,
+      },
+      orderBy: [
+        { homepageSortOrder: "asc" },
+        { updatedAt: "desc" },
+        { title: "asc" },
+      ],
+      take: 3,
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        description: true,
+        coverImageUrl: true,
+        updatedAt: true,
+        _count: {
+          select: {
+            images: {
+              where: {
+                status: GalleryImageStatus.ACTIVE,
+              },
+            },
+          },
+        },
+      },
+    }),
   ]);
 
   return {
@@ -257,6 +290,15 @@ export async function getHomepageGalleryPreview(
       albumTitle: image.album.title,
     })),
     latestAlbums: latestAlbums.map((album) => ({
+      id: album.id,
+      slug: album.slug,
+      title: album.title,
+      description: album.description,
+      coverImageUrl: album.coverImageUrl,
+      updatedAt: album.updatedAt,
+      imageCount: album._count.images,
+    })),
+    publicHomepageAlbums: publicHomepageAlbums.map((album) => ({
       id: album.id,
       slug: album.slug,
       title: album.title,

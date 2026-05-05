@@ -337,6 +337,8 @@ model GalleryAlbum {
   status        GalleryAlbumStatus
   visibility    PublicSurfaceVisibility @default(PUBLIC)
   sortOrder     Int                @default(0)
+  showOnPublicHomepage Boolean           @default(false)
+  homepageSortOrder    Int               @default(0)
   legacySource  String?
   legacyId      String?
   publishedAt   DateTime?
@@ -351,6 +353,8 @@ model GalleryAlbum {
 
   @@unique([clubId, slug])
   @@index([clubId, status, visibility])
+  @@index([clubId, status, visibility, showOnPublicHomepage])
+  @@index([clubId, showOnPublicHomepage, homepageSortOrder])
   @@index([clubId, legacySource, legacyId])
 }
 

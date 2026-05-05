@@ -148,6 +148,46 @@ export default async function AdminGalleryDetailPage({ params, searchParams }: P
               />
             </div>
 
+            <div>
+              <label style={{ display: "block", fontWeight: 700, marginBottom: "8px" }}>Public forside</label>
+              <label
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  minHeight: "42px",
+                  padding: "10px 12px",
+                  borderRadius: "8px",
+                  border: "1px solid #d9d9d9",
+                  background: "rgba(255,255,255,0.04)",
+                  cursor: "pointer",
+                }}
+              >
+                <input
+                  name="showOnPublicHomepage"
+                  type="checkbox"
+                  value="true"
+                  defaultChecked={album.showOnPublicHomepage}
+                  style={{ width: "18px", height: "18px" }}
+                />
+                <span>Vis som udvalgt galleri på public forside</span>
+              </label>
+              <p style={{ marginTop: "6px", color: "#94a3b8", fontSize: "0.8rem" }}>
+                Public forsiden viser maks. 3 valgte, publicerede og offentlige albums.
+              </p>
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontWeight: 700, marginBottom: "8px" }}>Forside sortering</label>
+              <input
+                name="homepageSortOrder"
+                type="number"
+                min="0"
+                defaultValue={album.homepageSortOrder}
+                style={{ width: "100%", padding: "10px 12px", borderRadius: "8px", border: "1px solid #d9d9d9" }}
+              />
+            </div>
+
             <div style={{ gridColumn: "1 / -1" }}>
               <label style={{ display: "block", fontWeight: 700, marginBottom: "8px" }}>Beskrivelse</label>
               <textarea

@@ -14,6 +14,8 @@ export interface AdminGalleryOverviewDTO {
     coverImageUrl: string | null;
     status: GalleryAlbumStatus;
     visibility: PublicSurfaceVisibility;
+    showOnPublicHomepage: boolean;
+    homepageSortOrder: number;
     imageCount: number;
     legacySource: string | null;
     legacyId: string | null;
@@ -36,6 +38,8 @@ export interface AdminGalleryDetailDTO {
   description: string | null;
   status: GalleryAlbumStatus;
   visibility: PublicSurfaceVisibility;
+  showOnPublicHomepage: boolean;
+  homepageSortOrder: number;
   coverImageUrl: string | null;
   createdByName: string | null;
   createdByEmail: string | null;
@@ -92,6 +96,8 @@ export async function getAdminGalleryOverview(clubId: string): Promise<AdminGall
       coverImageUrl: album.coverImageUrl,
       status: album.status,
       visibility: album.visibility,
+      showOnPublicHomepage: album.showOnPublicHomepage,
+      homepageSortOrder: album.homepageSortOrder,
       imageCount: album._count.images,
       legacySource: album.legacySource,
       legacyId: album.legacyId,
@@ -151,6 +157,8 @@ export async function getAdminGalleryDetail(
     description: album.description,
     status: album.status,
     visibility: album.visibility,
+    showOnPublicHomepage: album.showOnPublicHomepage,
+    homepageSortOrder: album.homepageSortOrder,
     coverImageUrl: album.coverImageUrl,
     createdByName: album.createdByName,
     createdByEmail: album.createdByEmail,

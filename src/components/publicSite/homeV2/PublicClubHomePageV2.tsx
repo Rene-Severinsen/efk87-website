@@ -111,6 +111,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
   const safeGalleryPreview = galleryPreview ?? {
     latestImages: [],
     latestAlbums: [],
+    publicHomepageAlbums: [],
   };
 
   const clubDisplayName = club.settings?.displayName || club.name;
@@ -314,7 +315,9 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               </article>
             ) : null}
 
-            <HomeGalleryToggle clubSlug={club.slug} galleryPreview={safeGalleryPreview} />
+            {isMemberDashboard ? (
+              <HomeGalleryToggle clubSlug={club.slug} galleryPreview={safeGalleryPreview} />
+            ) : null}
           </div>
 
           <div className="home-v2-stack">
@@ -547,7 +550,39 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             </article>
             )}
 
-            {/*<article className="home-v2-card home-v2-section-card">*/}
+            {!isMemberDashboard && safeGalleryPreview.publicHomepageAlbums.length > 0 ? (
+              <article className="home-v2-card home-v2-section-card home-v2-public-gallery-promos">
+                <div className="home-v2-section-head">
+                  <h2>Udvalgte glimt fra klubben</h2>
+                  <Link className="home-v2-link-soft" href={publicRoutes.gallery(club.slug)}>Åbn galleri</Link>
+                </div>
+
+                <div className="home-v2-public-gallery-grid">
+                  {safeGalleryPreview.publicHomepageAlbums.map((album) => (
+                    <Link
+                      key={album.id}
+                      href={publicRoutes.galleryAlbum(club.slug, album.slug)}
+                      className="home-v2-public-gallery-card"
+                    >
+                      <div className="home-v2-public-gallery-image">
+                        {album.coverImageUrl ? (
+                          <img src={album.coverImageUrl} alt={album.title} />
+                        ) : (
+                          <div className="home-v2-public-gallery-placeholder">Galleri</div>
+                        )}
+                      </div>
+                      <div className="home-v2-public-gallery-copy">
+                        <h3>{album.title}</h3>
+                        {album.description ? <p>{album.description}</p> : null}
+                        <span>{album.imageCount} billeder</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </article>
+            ) : null}
+
+                        {/*<article className="home-v2-card home-v2-section-card">*/}
             {/*  <div className="home-v2-section-head">*/}
             {/*    <h2>Hurtige genveje</h2>*/}
             {/*  </div>*/}

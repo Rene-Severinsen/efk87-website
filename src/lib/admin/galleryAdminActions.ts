@@ -17,12 +17,18 @@ const galleryUpdateSchema = z.object({
   description: z.string().trim().optional(),
   status: z.nativeEnum(GalleryAlbumStatus),
   visibility: z.nativeEnum(PublicSurfaceVisibility),
+  showOnPublicHomepage: z.boolean(),
+  homepageSortOrder: z.coerce.number().int().min(0).max(9999),
 });
 
 function getText(formData: FormData, key: string): string {
   const value = formData.get(key);
 
   return typeof value === "string" ? value : "";
+}
+
+function getCheckbox(formData: FormData, key: string): boolean {
+  return formData.get(key) === "true";
 }
 
 function revalidateGalleryPaths(clubSlug: string, albumId?: string) {
@@ -53,6 +59,8 @@ export async function updateAdminGalleryAction(
     description: getText(formData, "description"),
     status: getText(formData, "status"),
     visibility: getText(formData, "visibility"),
+    showOnPublicHomepage: getCheckbox(formData, "showOnPublicHomepage"),
+    homepageSortOrder: getText(formData, "homepageSortOrder") || "0",
   });
 
   if (!parsed.success) {
@@ -69,6 +77,8 @@ export async function updateAdminGalleryAction(
       description: parsed.data.description || null,
       status: parsed.data.status,
       visibility: parsed.data.visibility,
+      showOnPublicHomepage: parsed.data.showOnPublicHomepage,
+      homepageSortOrder: parsed.data.homepageSortOrder,
     },
   });
 

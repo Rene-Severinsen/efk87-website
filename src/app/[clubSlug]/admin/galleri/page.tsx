@@ -207,6 +207,24 @@ export default async function Page({ params, searchParams }: PageProps) {
                     >
                       {visibilityLabel(album.visibility)}
                     </div>
+
+                    {album.showOnPublicHomepage ? (
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: "10px",
+                          left: "10px",
+                          borderRadius: "999px",
+                          background: "rgba(16,185,129,0.9)",
+                          color: "white",
+                          fontSize: "0.7rem",
+                          fontWeight: 800,
+                          padding: "5px 9px",
+                        }}
+                      >
+                        Forside · {album.homepageSortOrder}
+                      </div>
+                    ) : null}
                   </div>
 
                   <div style={{ padding: "16px", display: "grid", gap: "12px" }}>
