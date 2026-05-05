@@ -134,7 +134,6 @@ export default async function Page({ params, searchParams }: PageProps) {
     { ...MEMBER_ADMIN_FILTERS.student, value: stats.student },
     { ...MEMBER_ADMIN_FILTERS.instructor, value: stats.instructors },
     { ...MEMBER_ADMIN_FILTERS.resigned, value: stats.resigned },
-    { ...MEMBER_ADMIN_FILTERS.creation, value: stats.creation },
   ];
 
   return (
@@ -263,8 +262,7 @@ export default async function Page({ params, searchParams }: PageProps) {
                             isActive && "ACT",
                             isNew && "NEW",
                             isResigned && "RES",
-                            m.userId ? "HAS_USER" : "NO_USER",
-                            m.applicationId ? "IS_APP" : "NOT_APP"
+                            m.userId ? "HAS_USER" : "NO_USER"
                           ].filter(Boolean).join(", ")}
                         </td>
                       </tr>
@@ -349,7 +347,7 @@ export default async function Page({ params, searchParams }: PageProps) {
                             Rediger
                           </Link>
                         ) : (
-                          <span className="text-xs text-slate-500 italic px-4 py-2">Ansøgning</span>
+                          <span className="text-xs text-slate-500 italic px-4 py-2">—</span>
                         )}
                       </td>
                     </tr>

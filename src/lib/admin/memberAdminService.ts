@@ -14,13 +14,11 @@ import {
 
 /**
  * Normalized read model for the member administration list.
- * This DTO allows the UI to display both active members (ClubMemberProfile)
- * and pending applications (PublicMemberApplication) safely in the same table.
+ * Admin Medlemmer viser kun rigtige ClubMemberProfile records.
  */
 export interface AdminMemberOverviewDTO {
-  id: string; // Internal unique ID (userId or applicationId)
-  userId: string | null;
-  applicationId: string | null;
+  id: string;
+  userId: string;
   displayName: string | null;
   email: string | null;
   firstName: string | null;
@@ -82,10 +80,6 @@ export async function getAdminMemberRows(clubId: string): Promise<AdminMemberOve
     },
   });
 
-  const applications = await prisma.publicMemberApplication.findMany({
-    where: { clubId },
-  });
-
   const certificateCounts = await prisma.clubMemberCertificate.groupBy({
     by: ["userId"],
     where: { clubId },
@@ -99,7 +93,6 @@ export async function getAdminMemberRows(clubId: string): Promise<AdminMemberOve
   const profileDTOs: AdminMemberOverviewDTO[] = profiles.map((m) => ({
     id: m.userId,
     userId: m.userId,
-    applicationId: null,
     displayName: getMemberDisplayName(m, m.user),
     email: m.user.email,
     firstName: m.firstName,
@@ -116,27 +109,7 @@ export async function getAdminMemberRows(clubId: string): Promise<AdminMemberOve
     updatedAt: m.updatedAt,
   }));
 
-  const applicationDTOs: AdminMemberOverviewDTO[] = applications.map((a) => ({
-    id: a.id,
-    userId: null,
-    applicationId: a.id,
-    displayName: `${a.firstName} ${a.lastName}`,
-    email: a.email,
-    firstName: a.firstName,
-    lastName: a.lastName,
-    mobilePhone: a.mobilePhone,
-    memberNumber: a.memberNumber,
-    mdkNumber: a.mdkNumber,
-    membershipType: a.membershipType,
-    memberRoleType: null,
-    schoolStatus: a.schoolStatus,
-    memberStatus: a.status,
-    isInstructor: false,
-    certificateCount: 0,
-    updatedAt: a.updatedAt,
-  }));
-
-  return [...profileDTOs, ...applicationDTOs];
+  return profileDTOs;
 }
 
 export async function getAdminMemberByUserId(clubId: string, userId: string) {
