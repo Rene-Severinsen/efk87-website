@@ -21,6 +21,7 @@ import { publicRoutes } from '../../../lib/publicRoutes';
 import HomepageContentBoxes from './HomepageContentBoxes';
 import Avatar from '../../shared/Avatar';
 import HomeGalleryToggle from './HomeGalleryToggle';
+import { ThemedFooter } from '../ThemedFooter';
 import { HomepageGalleryPreviewDTO } from '../../../lib/gallery/galleryService';
 
 type ThreadWithRelations = ClubForumThread & {
@@ -495,67 +496,10 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           </div>
         </section>
 
-        <footer className="home-v2-card home-v2-footer">
-          <div>
-            <h3>{clubShortName}</h3>
-            {footerData?.footer ? (
-              <>
-                {footerData.footer.description && (
-                  <p className="home-v2-small" style={{marginTop: '10px'}}>
-                    {footerData.footer.description}
-                  </p>
-                )}
-                {footerData.sponsors.length > 0 && (
-                  <div className="home-v2-sponsors">
-                    {footerData.sponsors.map(sponsor => (
-                      <span key={sponsor.id} className="home-v2-sponsor">
-                        {sponsor.href ? (
-                          <a href={sponsor.href} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
-                            {sponsor.name}
-                          </a>
-                        ) : (
-                          sponsor.name
-                        )}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </>
-            ) : null}
-          </div>
-          <div>
-            <h3>Kontakt</h3>
-            {footerData?.footer ? (
-              <>
-                {(footerData.footer.addressLine1 || footerData.footer.addressLine2) && (
-                  <p className="home-v2-small" style={{marginTop: '10px'}}>
-                    {footerData.footer.addressLine1}{footerData.footer.addressLine1 && footerData.footer.addressLine2 && ', '}
-                    {footerData.footer.addressLine2}
-                  </p>
-                )}
-                <p className="home-v2-small" style={{marginTop: '10px'}}>
-                  {footerData.footer.email && <>{footerData.footer.email}<br/></>}
-                  {footerData.footer.phone && <>{footerData.footer.phone}<br/></>}
-                  {footerData.footer.cvr && <>CVR {footerData.footer.cvr}</>}
-                </p>
-              </>
-            ) : (
-              <p className="home-v2-small" style={{marginTop: '10px'}}>
-                {clubDisplayName}
-                {club.settings?.publicEmail && <><br/>{club.settings.publicEmail}</>}
-              </p>
-            )}
-          </div>
-          <div>
-            <h3>Links</h3>
-            <p className="home-v2-small" style={{marginTop: '10px'}}>
-              <Link href={publicRoutes.forum(club.slug)} style={{ color: 'inherit', textDecoration: 'none' }}>Forum</Link><br/>
-              <Link href={publicRoutes.gallery(club.slug)} style={{ color: 'inherit', textDecoration: 'none' }}>Galleri</Link><br/>
-              <Link href={publicRoutes.flightSchool(club.slug)} style={{ color: 'inherit', textDecoration: 'none' }}>Flyveskole</Link><br/>
-              <Link href={publicRoutes.about(club.slug)} style={{ color: 'inherit', textDecoration: 'none' }}>Om {clubShortName}</Link>
-            </p>
-          </div>
-        </footer>
+        <ThemedFooter
+          clubName={clubShortName}
+          footerData={footerData}
+        />
       </div>
     </div>
   );
