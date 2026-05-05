@@ -39,12 +39,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               Forside
             </a>
             <a
-                href={`/${clubSlug}/admin/handlinger-i-dag`}
-                className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/handlinger-i-dag` ? "active" : ""}`}
-            >
-              Handlinger i dag
-            </a>
-            <a
                 href={`/${clubSlug}/admin/systemstatus`}
                 className={`admin-sidebar-item ${pathname === `/${clubSlug}/admin/systemstatus` ? "active" : ""}`}
             >

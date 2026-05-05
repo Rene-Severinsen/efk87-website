@@ -211,9 +211,8 @@ export default function AdminDashboard({
       >
         <div style={{ display: "grid", gap: "24px" }}>
           <DashboardCard
-            title="Handlinger i dag"
-            description="Dagens aktivitet på tværs af drift og medlemssite."
-            href={`/${clubSlug}/admin/handlinger-i-dag`}
+            title="Dagens aktivitet"
+            description="Aktivitet i dag på tværs af flyvemeldinger, flyveskole og forsidetilmeldinger."
           >
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "12px" }}>
               <KpiCard label="Jeg flyver" value={dashboard.today.flightIntents} href={`/${clubSlug}/admin/flyvemeldinger`} />
