@@ -22,7 +22,7 @@ function TextInput({
 }) {
   return (
     <div className="space-y-2">
-      <label htmlFor={name} className="block text-sm font-medium text-slate-300">
+      <label htmlFor={name} className="admin-form-label">
         {label}
       </label>
       <input
@@ -30,7 +30,7 @@ function TextInput({
         name={name}
         defaultValue={value}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white placeholder:text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+        className="admin-input"
       />
     </div>
   );
@@ -49,7 +49,7 @@ function TextArea({
 }) {
   return (
     <div className="space-y-2">
-      <label htmlFor={name} className="block text-sm font-medium text-slate-300">
+      <label htmlFor={name} className="admin-form-label">
         {label}
       </label>
       <textarea
@@ -57,7 +57,7 @@ function TextArea({
         name={name}
         defaultValue={value}
         rows={rows}
-        className="w-full resize-y rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white placeholder:text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+        className="admin-textarea"
       />
     </div>
   );
@@ -92,12 +92,12 @@ export default function FinancePageAdminForm({
 
   return (
     <form action={handleSubmit} className="space-y-8">
-      <div className="rounded-3xl border border-white/10 bg-[#121b2e]/80 p-6 shadow-2xl backdrop-blur-md">
+      <div className="admin-card">
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="admin-section-title">
             Udgiftsbilag og refusion
           </h2>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="admin-muted">
             Teksterne vises på den offentlige Økonomi-side.
           </p>
         </div>
@@ -148,13 +148,13 @@ export default function FinancePageAdminForm({
       </div>
 
       {status === "success" ? (
-        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm font-medium text-emerald-400">
+        <div className="admin-alert admin-alert-success">
           Økonomi-indholdet er gemt.
         </div>
       ) : null}
 
       {status === "error" && error ? (
-        <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm font-medium text-rose-400">
+        <div className="admin-alert admin-alert-danger">
           {error}
         </div>
       ) : null}
@@ -163,7 +163,7 @@ export default function FinancePageAdminForm({
         <button
           type="submit"
           disabled={isSaving}
-          className="rounded-xl bg-sky-600 px-8 py-3 font-bold text-white shadow-lg shadow-sky-900/20 transition-all hover:bg-sky-500 disabled:bg-slate-700 disabled:shadow-none"
+          className="admin-btn admin-btn-primary"
         >
           {isSaving ? "Gemmer..." : "Gem økonomi"}
         </button>
