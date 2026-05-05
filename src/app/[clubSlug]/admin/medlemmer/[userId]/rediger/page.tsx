@@ -49,8 +49,8 @@ export default async function Page({ params }: PageProps) {
         description="Opdater stamdata og indstillinger for medlemmet."
       />
 
-      <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
-        <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="admin-page-content">
+        <div className="max-w-6xl mx-auto">
           <MemberEditForm 
             clubSlug={clubSlug} 
             member={member} 

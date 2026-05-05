@@ -15,7 +15,7 @@ import {
 } from "@/lib/admin/members/memberAdminFilters";
 import { MEMBERSHIP_TYPE_LABELS, SCHOOL_STATUS_LABELS, MEMBER_STATUS_LABELS, ROLE_TYPE_LABELS } from "@/lib/members/memberConstants";
 import { ClubMemberMembershipType, ClubMemberSchoolStatus, ClubMemberStatus, ClubMemberRoleType } from "@/generated/prisma";
-import { AdminPageHeader, AdminStatTile, AdminStatTileGrid } from "@/components/admin/AdminPagePrimitives";
+import { AdminPageHeader, AdminPageSection, AdminStatTile, AdminStatTileGrid } from "@/components/admin/AdminPagePrimitives";
 
 interface PageProps {
   params: Promise<{
@@ -30,10 +30,9 @@ interface PageProps {
 }
 
 const GlassCard = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
-  <div className={`backdrop-blur-md bg-[#121b2e]/80 border border-white/10 rounded-3xl shadow-2xl relative overflow-hidden ${className}`}>
-    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500/50 to-emerald-500/50 opacity-30" />
+  <AdminPageSection className={`admin-table-card ${className}`}>
     {children}
-  </div>
+  </AdminPageSection>
 );
 
 const SortableHeader = ({ label, sortKey, currentSort, currentDirection, clubSlug, currentFilter, className = "" }: { label: string, sortKey: string, currentSort: string, currentDirection: string, clubSlug: string, currentFilter?: string, className?: string }) => {
@@ -48,10 +47,10 @@ const SortableHeader = ({ label, sortKey, currentSort, currentDirection, clubSlu
   const href = `/${clubSlug}/admin/medlemmer?${searchParams.toString()}`;
   
   return (
-    <th className={`px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider ${className}`}>
-      <Link href={href} className="inline-flex items-center gap-1.5 hover:text-white transition-colors group">
+    <th className={`admin-sort-header ${className}`}>
+      <Link href={href} className="admin-sort-link group">
         {label}
-        <span className={`transition-all duration-200 ${isActive ? 'text-sky-500 scale-110' : 'text-slate-600 opacity-0 group-hover:opacity-100'}`}>
+        <span className={`admin-sort-icon ${isActive ? "is-active" : ""}`}>
           {isActive ? (currentDirection === 'asc' ? (
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 15l7-7 7 7" /></svg>
           ) : (
@@ -145,8 +144,8 @@ export default async function Page({ params, searchParams }: PageProps) {
         }}
       />
 
-      <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
-        <div className="max-w-[1600px] mx-auto pt-6">
+      <div className="admin-page-content">
+        <div className="max-w-[1600px] mx-auto">
           <AdminStatTileGrid columns="nine">
             {tiles.map((tile) => {
               const isActive = filter === tile.key;
@@ -175,22 +174,22 @@ export default async function Page({ params, searchParams }: PageProps) {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 px-1">
             <div className="flex items-center gap-3">
               {filter ? (
-                <div className="flex items-center gap-2 bg-sky-500/10 px-3 py-1.5 rounded-xl border border-sky-500/20">
-                  <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Filter:</span>
-                  <span className={`text-sm font-black ${activeFilterDef?.colorClass || 'text-white'}`}>
+                <div className="admin-filter-pill">
+                  <span className="admin-meta-label">Filter:</span>
+                  <span className="admin-strong text-sm">
                     {activeFilterDef?.label || filter}
                   </span>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
-                  <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">Viser:</span>
-                  <span className="text-sm font-black text-slate-300">Alle medlemmer</span>
+                <div className="admin-filter-pill">
+                  <span className="admin-meta-label">Viser:</span>
+                  <span className="admin-strong text-sm">Alle medlemmer</span>
                 </div>
               )}
               {filter && (
                 <Link
                   href={`/${clubSlug}/admin/medlemmer?sort=${sort}&direction=${direction}`}
-                  className="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 underline decoration-slate-700 underline-offset-4 hover:decoration-sky-500"
+                  className="admin-link text-xs flex items-center gap-1.5"
                 >
                   Nulstil
                 </Link>
@@ -201,20 +200,20 @@ export default async function Page({ params, searchParams }: PageProps) {
           </div>
 
           {isDebug && (
-            <div className="mb-8 p-4 bg-black/50 border border-amber-500/50 rounded-xl font-mono text-xs overflow-auto max-h-[400px]">
-              <h3 className="text-amber-500 font-bold mb-2">DEBUG: Member Diagnostics</h3>
+            <div className="admin-debug-panel">
+              <h3 className="admin-kicker mb-2">DEBUG: Member Diagnostics</h3>
               <div className="mb-4">
                 <p>Filter: {filter || 'none'}</p>
                 <p>Sort: {sort} ({direction})</p>
                 <p>Rows: {members.length}</p>
                 <details>
-                  <summary className="cursor-pointer text-sky-400">KPI Stats JSON</summary>
+                  <summary className="admin-link cursor-pointer">KPI Stats JSON</summary>
                   <pre>{JSON.stringify(stats, null, 2)}</pre>
                 </details>
               </div>
               <table className="w-full text-left">
                 <thead>
-                  <tr className="border-b border-white/20">
+                  <tr className="admin-debug-row">
                     <th className="p-1">Name</th>
                     <th className="p-1">Status (Raw)</th>
                     <th className="p-1">Type (Raw)</th>
@@ -236,7 +235,7 @@ export default async function Page({ params, searchParams }: PageProps) {
                     const isResigned = partial.memberStatus === ClubMemberStatus.RESIGNED;
                     
                     return (
-                      <tr key={m.id} className="border-b border-white/10">
+                      <tr key={m.id} className="admin-debug-row">
                         <td className="p-1">{m.displayName}</td>
                         <td className="p-1">{m.memberStatus}</td>
                         <td className="p-1">{m.membershipType}</td>
@@ -260,9 +259,9 @@ export default async function Page({ params, searchParams }: PageProps) {
 
           <GlassCard>
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="admin-table">
                 <thead>
-                  <tr className="border-b border-white/10">
+                  <tr className="admin-debug-row">
                     <SortableHeader label="Navn / Info" sortKey="name" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
                     <SortableHeader label="Medlemsnr." sortKey="memberNumber" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
                     <SortableHeader label="MDK" sortKey="mdkNumber" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
@@ -272,67 +271,61 @@ export default async function Page({ params, searchParams }: PageProps) {
                     <SortableHeader label="Instruktør" sortKey="instructorStatus" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
                     <SortableHeader label="Status" sortKey="memberStatus" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
                     <SortableHeader label="Cert." sortKey="certificateCount" currentSort={sort} currentDirection={direction} clubSlug={clubSlug} currentFilter={filter} />
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Handling</th>
+                    <th className="admin-sort-header text-right">Handling</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody >
                   {members.map((member) => (
-                    <tr key={member.id} className="hover:bg-white/[0.02] transition-colors group">
+                    <tr key={member.id} className="group">
                       <td className="px-6 py-4">
-                        <div className="font-bold text-white group-hover:text-sky-400 transition-colors">{member.displayName}</div>
-                        <div className="text-sm text-slate-500">{member.email || member.mobilePhone || "Intet medlemsinfo"}</div>
+                        <div className="admin-strong">{member.displayName}</div>
+                        <div className="admin-muted text-sm">{member.email || member.mobilePhone || "Intet medlemsinfo"}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-slate-300 font-mono text-sm">{member.memberNumber || '—'}</div>
+                        <div className="admin-strong font-mono text-sm">{member.memberNumber || '—'}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-xs text-slate-500 font-mono">{member.mdkNumber || '—'}</div>
+                        <div className="admin-muted font-mono text-xs">{member.mdkNumber || '—'}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-slate-300 text-sm font-medium">{getMembershipLabel(member.membershipType)}</div>
+                        <div className="admin-strong text-sm font-medium">{getMembershipLabel(member.membershipType)}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-xs text-slate-500">{getRoleLabel(member.memberRoleType)}</div>
+                        <div className="admin-muted text-xs">{getRoleLabel(member.memberRoleType)}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className={`text-sm font-medium ${member.schoolStatus === 'APPROVED' ? 'text-emerald-400' : member.schoolStatus === 'STUDENT' ? 'text-amber-400' : 'text-slate-400'}`}>
+                        <div className="admin-strong text-sm font-medium">
                           {getSchoolStatusLabel(member.schoolStatus)}
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         {member.isInstructor ? (
-                          <span className="text-[10px] font-bold bg-violet-500/20 text-violet-400 px-2 py-0.5 rounded-full uppercase tracking-tighter border border-violet-500/30">Instruktør</span>
+                          <span className="admin-badge admin-badge-violet">Instruktør</span>
                         ) : (
-                          <span className="text-slate-600">—</span>
+                          <span className="admin-soft">—</span>
                         )}
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${
-                          member.memberStatus === 'ACTIVE' 
-                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
-                            : member.memberStatus === 'NEW' 
-                              ? 'bg-sky-500/10 text-sky-400 border-sky-500/20' 
-                              : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
-                        }`}>
+                        <span className={`admin-badge ${member.memberStatus === "ACTIVE" ? "admin-badge-success" : member.memberStatus === "NEW" ? "admin-badge-info" : "admin-badge-danger"}`}>
                           {getStatusLabel(member.memberStatus)}
                         </span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-1.5">
-                          <span className={`w-2 h-2 rounded-full ${member.certificateCount > 0 ? 'bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.5)]' : 'bg-slate-700'}`} />
-                          <span className="text-slate-300 font-medium">{member.certificateCount}</span>
+                          <span className={`admin-cert-dot ${member.certificateCount > 0 ? "is-active" : ""}`} />
+                          <span className="admin-strong font-medium">{member.certificateCount}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-right">
                         {member.userId ? (
                           <Link 
                             href={`/${clubSlug}/admin/medlemmer/${member.userId}/rediger`}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 transition-all text-sm font-semibold"
+                            className="admin-btn"
                           >
                             Rediger
                           </Link>
                         ) : (
-                          <span className="text-xs text-slate-500 italic px-4 py-2">—</span>
+                          <span className="admin-form-help italic px-4 py-2">—</span>
                         )}
                       </td>
                     </tr>
