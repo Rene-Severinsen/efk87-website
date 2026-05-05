@@ -170,8 +170,8 @@ export default function MediaLibraryClient({
         </div>
       </form>
 
-      <section>
-        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <section className="admin-card admin-media-library-panel">
+        <div className="admin-media-library-header">
           <div>
             <h2 className="admin-section-title">
               Billeder
@@ -183,7 +183,7 @@ export default function MediaLibraryClient({
         </div>
 
         {assets.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8">
+          <div className="admin-media-library-grid">
             {assets.map((asset) => (
               <button
                 key={asset.id}
@@ -199,19 +199,19 @@ export default function MediaLibraryClient({
                   />
 
                   <div className="admin-media-asset-overlay">
-                    <div className="w-full p-3">
-                      <p className="text-xs font-bold">
+                    <div className="admin-media-asset-overlay-content">
+                      <p className="admin-media-asset-overlay-text">
                         Åbn detaljer
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-1 p-3">
-                  <h3 className="truncate text-sm font-bold">
+                <div className="admin-media-asset-card-body">
+                  <h3 className="admin-media-asset-card-title">
                     {asset.title || asset.originalName}
                   </h3>
-                  <p className="admin-soft truncate text-xs">
+                  <p className="admin-media-asset-card-meta">
                     {formatFileSize(asset.sizeBytes)}
                   </p>
                 </div>
@@ -240,17 +240,17 @@ export default function MediaLibraryClient({
               <img
                 src={selectedAsset.publicUrl}
                 alt={selectedAsset.altText || selectedAsset.title || selectedAsset.originalName}
-                className="max-h-[92vh] w-full object-contain"
+                className="admin-media-modal-image"
               />
             </div>
 
-            <div className="flex max-h-[92vh] flex-col overflow-y-auto p-6">
-              <div className="mb-6 flex items-start justify-between gap-4">
-                <div className="min-w-0">
-                  <h2 className="truncate text-2xl font-bold">
+            <div className="admin-media-modal-panel">
+              <div className="admin-media-modal-header">
+                <div className="admin-media-modal-titleblock">
+                  <h2 className="admin-media-modal-title">
                     {selectedAsset.title || selectedAsset.originalName}
                   </h2>
-                  <p className="admin-muted mt-1 truncate text-sm">
+                  <p className="admin-media-modal-subtitle">
                     {selectedAsset.originalName}
                   </p>
                 </div>
@@ -264,7 +264,7 @@ export default function MediaLibraryClient({
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="admin-media-detail-grid">
                 <div className="admin-meta-box">
                   <span className="admin-meta-label">
                     Type
@@ -304,7 +304,7 @@ export default function MediaLibraryClient({
                 ) : null}
               </div>
 
-              <div className="admin-code-box mt-5">
+              <div className="admin-code-box admin-media-url-box">
                 <p className="admin-meta-label mb-2">
                   Public URL
                 </p>
@@ -313,7 +313,7 @@ export default function MediaLibraryClient({
                 </code>
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-2">
+              <div className="admin-media-modal-actions">
                 <button
                   type="button"
                   onClick={() => copyUrl(selectedAsset.publicUrl)}
