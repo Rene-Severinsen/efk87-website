@@ -2184,3 +2184,16 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* EFK87 admin placeholder primitives */
+
+.admin-placeholder-list {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--admin-text);
+  line-height: 1.8;
+}
+
+.admin-placeholder-list li::marker {
+  color: var(--admin-primary);
+}
