@@ -173,6 +173,7 @@ export async function getMemberDirectoryForClub(clubId: string): Promise<MemberD
   const profiles = await prisma.clubMemberProfile.findMany({
     where: {
       clubId,
+      memberStatus: "ACTIVE",
     },
     include: {
       user: {
