@@ -21,29 +21,26 @@ const AdminShell: React.FC<AdminShellProps> = ({
 }) => {
   return (
     <div className="admin-shell">
-      <AdminSidebar 
-        clubSlug={clubSlug} 
+      <AdminSidebar
+        clubSlug={clubSlug}
         userName={userName}
         userRole={userRole}
         userEmail={userEmail}
       />
+
       <main className="admin-main-content">
         <header className="admin-topbar">
           <div className="admin-topbar-title">
             {clubName} Admin
           </div>
+
           <div className="admin-topbar-actions">
             <a href={`/${clubSlug}`} className="admin-btn admin-btn-ghost">
-              Se medlemssite
+              Åbn hjemmeside
             </a>
-            <a href={`/${clubSlug}`} className="admin-btn admin-btn-ghost">
-              Åbn public site
-            </a>
-            <button className="admin-btn admin-btn-primary">
-              Opret ny artikel
-            </button>
           </div>
         </header>
+
         <div className="admin-workspace">
           {children}
         </div>

@@ -15,6 +15,7 @@ import {
 } from "@/lib/admin/members/memberAdminFilters";
 import { MEMBERSHIP_TYPE_LABELS, SCHOOL_STATUS_LABELS, MEMBER_STATUS_LABELS, ROLE_TYPE_LABELS } from "@/lib/members/memberConstants";
 import { ClubMemberMembershipType, ClubMemberSchoolStatus, ClubMemberStatus, ClubMemberRoleType } from "@/generated/prisma";
+import { AdminPageHeader, AdminStatTile, AdminStatTileGrid } from "@/components/admin/AdminPagePrimitives";
 
 interface PageProps {
   params: Promise<{
@@ -162,7 +163,7 @@ export default async function Page({ params, searchParams }: PageProps) {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-4 mb-8">
+          <AdminStatTileGrid columns="nine">
             {tiles.map((tile) => {
               const isActive = filter === tile.key;
               const newFilter = isActive ? undefined : tile.key;
@@ -175,17 +176,17 @@ export default async function Page({ params, searchParams }: PageProps) {
               const href = `/${clubSlug}/admin/medlemmer${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
               
               return (
-                <StatCard 
+                <AdminStatTile
                   key={tile.key}
-                  label={tile.label} 
-                  value={tile.value} 
-                  colorClass={tile.colorClass}
-                  isActive={isActive}
+                  label={tile.label}
+                  value={tile.value}
                   href={href}
+                  active={isActive}
+                  tone={tile.key === "resigned" ? "rose" : tile.key === "instructor" ? "violet" : tile.key === "student" ? "amber" : tile.key === "active" || tile.key === "approved" ? "green" : "blue"}
                 />
               );
             })}
-          </div>
+          </AdminStatTileGrid>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 px-1">
             <div className="flex items-center gap-3">

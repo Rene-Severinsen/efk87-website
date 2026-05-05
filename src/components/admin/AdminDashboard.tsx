@@ -42,11 +42,11 @@ function DashboardCard({
         }}
       >
         <div>
-          <h2 style={{ color: "white", fontSize: "1.1rem", fontWeight: 850, margin: 0 }}>
+          <h2 style={{ color: "var(--admin-text)", fontSize: "1.1rem", fontWeight: 850, margin: 0 }}>
             {title}
           </h2>
           {description ? (
-            <p style={{ color: "#94a3b8", fontSize: "0.85rem", marginTop: "4px" }}>
+            <p style={{ color: "var(--admin-text-muted)", fontSize: "0.85rem", marginTop: "4px" }}>
               {description}
             </p>
           ) : null}
@@ -79,22 +79,22 @@ function KpiCard({
     blue: {
       bg: "rgba(14, 165, 233, 0.12)",
       border: "rgba(14, 165, 233, 0.28)",
-      color: "#7dd3fc",
+      color: "var(--admin-accent-strong)",
     },
     green: {
       bg: "rgba(16, 185, 129, 0.12)",
       border: "rgba(16, 185, 129, 0.28)",
-      color: "#86efac",
+      color: "var(--admin-text)",
     },
     amber: {
       bg: "rgba(245, 158, 11, 0.12)",
       border: "rgba(245, 158, 11, 0.28)",
-      color: "#fcd34d",
+      color: "var(--admin-text)",
     },
     slate: {
       bg: "rgba(148, 163, 184, 0.10)",
       border: "rgba(148, 163, 184, 0.18)",
-      color: "#cbd5e1",
+      color: "var(--admin-text-muted)",
     },
   }[tone];
 
@@ -114,7 +114,7 @@ function KpiCard({
       <div style={{ color: toneMap.color, fontSize: "2rem", fontWeight: 900, lineHeight: 1 }}>
         {value}
       </div>
-      <div style={{ color: "#cbd5e1", fontSize: "0.86rem", fontWeight: 750 }}>
+      <div style={{ color: "var(--admin-text-muted)", fontSize: "0.86rem", fontWeight: 750 }}>
         {label}
       </div>
     </Link>
@@ -129,7 +129,7 @@ function EmptyState({ text }: { text: string }) {
         borderRadius: "16px",
         background: "rgba(255,255,255,0.03)",
         border: "1px solid rgba(255,255,255,0.08)",
-        color: "#94a3b8",
+        color: "var(--admin-text-muted)",
         fontSize: "0.9rem",
       }}
     >
@@ -157,13 +157,13 @@ export default function AdminDashboard({
             "linear-gradient(135deg, rgba(14,165,233,0.16), rgba(15,23,42,0.78))",
         }}
       >
-        <div style={{ color: "#7dd3fc", fontSize: "0.75rem", fontWeight: 900, letterSpacing: "0.16em", textTransform: "uppercase" }}>
+        <div style={{ color: "var(--admin-accent-strong)", fontSize: "0.75rem", fontWeight: 900, letterSpacing: "0.16em", textTransform: "uppercase" }}>
           Overblik
         </div>
-        <h1 style={{ color: "white", fontSize: "2rem", fontWeight: 900, marginTop: "8px", marginBottom: "8px" }}>
+        <h1 style={{ color: "var(--admin-text)", fontSize: "2rem", fontWeight: 900, marginTop: "8px", marginBottom: "8px" }}>
           {clubName} Admin
         </h1>
-        <p style={{ color: "#cbd5e1", maxWidth: "760px", lineHeight: 1.6 }}>
+        <p style={{ color: "var(--admin-text-muted)", maxWidth: "760px", lineHeight: 1.6 }}>
           Driftsblik på medlemmer, forum, public site, flyveskole og dagens aktivitet.
         </p>
       </header>
@@ -256,7 +256,7 @@ export default function AdminDashboard({
                       border: "1px solid rgba(255,255,255,0.08)",
                       background: "rgba(255,255,255,0.03)",
                       textDecoration: "none",
-                      color: "white",
+                      color: "var(--admin-text)",
                     }}
                   >
                     <div style={{ minWidth: 0 }}>
@@ -267,12 +267,12 @@ export default function AdminDashboard({
                           {thread.title}
                         </span>
                       </div>
-                      <div style={{ marginTop: "4px", color: "#94a3b8", fontSize: "0.82rem" }}>
+                      <div style={{ marginTop: "4px", color: "var(--admin-text-muted)", fontSize: "0.82rem" }}>
                         {thread.categoryTitle} · {thread.replyCount} svar · {thread.authorName || "Ukendt"} · {formatDateTime(thread.lastActivityAt)}
                       </div>
                     </div>
 
-                    <span style={{ color: "#7dd3fc", fontSize: "0.8rem", fontWeight: 850 }}>
+                    <span style={{ color: "var(--admin-accent-strong)", fontSize: "0.8rem", fontWeight: 850 }}>
                       Åbn
                     </span>
                   </Link>
@@ -302,8 +302,8 @@ export default function AdminDashboard({
                       background: "rgba(255,255,255,0.03)",
                     }}
                   >
-                    <div style={{ color: "white", fontWeight: 800 }}>{signup.userName || "Ukendt bruger"}</div>
-                    <div style={{ marginTop: "4px", color: "#94a3b8", fontSize: "0.82rem" }}>
+                    <div style={{ color: "var(--admin-text)", fontWeight: 800 }}>{signup.userName || "Ukendt bruger"}</div>
+                    <div style={{ marginTop: "4px", color: "var(--admin-text-muted)", fontSize: "0.82rem" }}>
                       {signup.contentTitle} · Antal {signup.quantity} · {formatDateTime(signup.createdAt)}
                     </div>
                   </div>
