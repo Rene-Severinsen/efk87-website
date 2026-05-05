@@ -135,53 +135,46 @@ export default async function Page({ params }: PageProps) {
       />
 
       <div className="admin-page-content">
-        <div className="mx-auto max-w-[1180px]">
+        <div className="grid gap-8">
+            <SettingsCard
+              id="offentligt-tema"
+              title="Offentligt tema"
+              description="Vælg om public site skal vises med lyst eller mørkt tema. Light premium er standard."
+            >
+              <PublicThemeSettingsForm
+                clubId={club.id}
+                clubSlug={clubSlug}
+                initialThemeMode={settings?.publicThemeMode ?? "light"}
+              />
+            </SettingsCard>
 
-          <div className="grid gap-8">
-            
+            <SettingsCard
+              id="public-forside"
+              title="Public forside"
+              description="Vedligehold hero, knapper, introsektion og public CTA-band på forsiden."
+            >
+              <PublicHomepageSettingsForm
+                clubId={club.id}
+                clubSlug={clubSlug}
+                initialValues={settings}
+                mediaAssets={mediaAssets}
+              />
+            </SettingsCard>
 
-            <div className="grid gap-8">
-              <SettingsCard
-                id="offentligt-tema"
-                title="Offentligt tema"
-                description="Vælg om public site skal vises med lyst eller mørkt tema. Light premium er standard."
-              >
-                <PublicThemeSettingsForm
-                  clubId={club.id}
-                  clubSlug={clubSlug}
-                  initialThemeMode={settings?.publicThemeMode ?? "light"}
-                />
-              </SettingsCard>
-
-              <SettingsCard
-                id="public-forside"
-                title="Public forside"
-                description="Vedligehold hero, knapper, introsektion og public CTA-band på forsiden."
-              >
-                <PublicHomepageSettingsForm
-                  clubId={club.id}
-                  clubSlug={clubSlug}
-                  initialValues={settings}
-                  mediaAssets={mediaAssets}
-                />
-              </SettingsCard>
-
-              <SettingsCard
-                id="vejr"
-                title="Vejr"
-                description="Koordinater bruges til vejrudsigten i hero-sektionen på forsiden."
-              >
-                <WeatherSettingsForm
-                  clubId={club.id}
-                  clubSlug={clubSlug}
-                  initialLatitude={settings?.weatherLatitude ?? null}
-                  initialLongitude={settings?.weatherLongitude ?? null}
-                />
-              </SettingsCard>
-            </div>
+            <SettingsCard
+              id="vejr"
+              title="Vejr"
+              description="Koordinater bruges til vejrudsigten i hero-sektionen på forsiden."
+            >
+              <WeatherSettingsForm
+                clubId={club.id}
+                clubSlug={clubSlug}
+                initialLatitude={settings?.weatherLatitude ?? null}
+                initialLongitude={settings?.weatherLongitude ?? null}
+              />
+            </SettingsCard>
           </div>
         </div>
-      </div>
     </AdminShell>
   );
 }
