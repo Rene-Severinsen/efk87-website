@@ -12,7 +12,7 @@ const ArticleRichTextEditor = dynamic(
     {
         ssr: false,
         loading: () => (
-            <div className="rounded-2xl border border-white/10 bg-[#0f172a] p-6 text-sm text-slate-400">
+            <div className="rounded-2xl border bg-[#0f172a] p-6 text-sm">
                 Editor indlæses...
             </div>
         ),
@@ -38,7 +38,7 @@ function TextInput({
 }) {
     return (
         <div className="space-y-2">
-            <label htmlFor={name} className="block text-sm font-medium text-slate-300">
+            <label htmlFor={name} className="admin-form-label">
                 {label}
             </label>
             <input
@@ -46,7 +46,7 @@ function TextInput({
                 name={name}
                 defaultValue={value ?? ""}
                 placeholder={placeholder}
-                className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white placeholder:text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+                className="admin-input"
             />
         </div>
     );
@@ -87,12 +87,12 @@ export default function RulesPageAdminForm({
 
     return (
         <form action={handleSubmit} className="space-y-8">
-            <div className="rounded-3xl border border-white/10 bg-[#121b2e]/80 p-6 shadow-2xl backdrop-blur-md">
+            <div className="admin-card">
                 <div className="mb-6">
-                    <h2 className="text-xl font-bold text-white">
+                    <h2 className="admin-section-title">
                         Sektion 1 — Klubregler og flyvezone
                     </h2>
-                    <p className="mt-1 text-sm text-slate-400">
+                    <p className="admin-muted">
                         Bruges på public-siden som tydelige links til PDF og flyvezone.
                     </p>
                 </div>
@@ -115,12 +115,12 @@ export default function RulesPageAdminForm({
                 </div>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-[#121b2e]/80 p-6 shadow-2xl backdrop-blur-md">
+            <div className="admin-card">
                 <div className="mb-6">
-                    <h2 className="text-xl font-bold text-white">
+                    <h2 className="admin-section-title">
                         Sektion 2 — Lovtekst
                     </h2>
-                    <p className="mt-1 text-sm text-slate-400">
+                    <p className="admin-muted">
                         Skriv relevant tekst om lovgivning, myndighedskrav og ansvar.
                     </p>
                 </div>
@@ -132,12 +132,12 @@ export default function RulesPageAdminForm({
                 />
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-[#121b2e]/80 p-6 shadow-2xl backdrop-blur-md">
+            <div className="admin-card">
                 <div className="mb-6">
-                    <h2 className="text-xl font-bold text-white">
+                    <h2 className="admin-section-title">
                         Sektion 3 — Praktiske retningslinjer
                     </h2>
-                    <p className="mt-1 text-sm text-slate-400">
+                    <p className="admin-muted">
                         Skriv praktiske regler for støjhensyn, gæster, sikkerhed, færdsel og brug af pladsen.
                     </p>
                 </div>
@@ -150,13 +150,13 @@ export default function RulesPageAdminForm({
             </div>
 
             {status === "success" ? (
-                <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm font-medium text-emerald-400">
+                <div className="admin-alert admin-alert-success">
                     Regler og bestemmelser er gemt.
                 </div>
             ) : null}
 
             {status === "error" && error ? (
-                <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm font-medium text-rose-400">
+                <div className="admin-alert admin-alert-danger">
                     {error}
                 </div>
             ) : null}
@@ -165,7 +165,7 @@ export default function RulesPageAdminForm({
                 <button
                     type="submit"
                     disabled={isSaving}
-                    className="rounded-xl bg-sky-600 px-8 py-3 font-bold text-white shadow-lg shadow-sky-900/20 transition-all hover:bg-sky-500 disabled:bg-slate-700 disabled:shadow-none"
+                    className="admin-btn admin-btn-primary"
                 >
                     {isSaving ? "Gemmer..." : "Gem regler"}
                 </button>
