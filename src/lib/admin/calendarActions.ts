@@ -50,10 +50,18 @@ export async function createCalendarEntryAction(clubSlug: string, formData: Form
   const isPublished = formData.get("isPublished") === "true";
   const visibility = parsePublicSurfaceVisibility(formData.get("visibility"));
   const forceShowInMarquee = formData.get("forceShowInMarquee") === "true";
+  const repeatWeekly = formData.get("repeatWeekly") === "true";
+  const repeatCountValue = Number(formData.get("repeatCount") || "1");
 
   if (!title || !dateStr) {
     throw new Error("Titel og dato er påkrævet");
   }
+
+  if (repeatWeekly && (!Number.isInteger(repeatCountValue) || repeatCountValue < 1 || repeatCountValue > 104)) {
+    throw new Error("Antal forekomster skal være mellem 1 og 104");
+  }
+
+  const occurrenceCount = repeatWeekly ? repeatCountValue : 1;
 
   const startsAt = new Date(dateStr);
   if (startTime) {
@@ -70,21 +78,34 @@ export async function createCalendarEntryAction(clubSlug: string, formData: Form
 
   const descriptionHtml = rawDescription ? sanitizeHtml(rawDescription, SANITIZE_OPTIONS) : null;
 
-  await prisma.clubCalendarEntry.create({
-    data: {
+  const entries = Array.from({ length: occurrenceCount }, (_, index) => {
+    const occurrenceStartsAt = new Date(startsAt);
+    occurrenceStartsAt.setDate(startsAt.getDate() + index * 7);
+
+    const occurrenceEndsAt = endsAt ? new Date(endsAt) : null;
+    if (occurrenceEndsAt) {
+      occurrenceEndsAt.setDate(occurrenceEndsAt.getDate() + index * 7);
+    }
+
+    return {
       clubId: club.id,
       title,
       descriptionHtml,
-      startsAt,
-      endsAt,
+      startsAt: occurrenceStartsAt,
+      endsAt: occurrenceEndsAt,
       location,
       isPublished,
       visibility,
       forceShowInMarquee,
-    },
+    };
+  });
+
+  await prisma.clubCalendarEntry.createMany({
+    data: entries,
   });
 
   revalidatePath(`/${clubSlug}/admin/kalender`);
+  revalidatePath(`/${clubSlug}/kalender`);
   revalidatePath(`/${clubSlug}`);
   redirect(`/${clubSlug}/admin/kalender`);
 }

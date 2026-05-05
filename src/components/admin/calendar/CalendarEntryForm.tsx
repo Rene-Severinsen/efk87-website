@@ -30,6 +30,7 @@ export default function CalendarEntryForm({
 }: CalendarEntryFormProps) {
   const [isPending, setIsPending] = React.useState(false);
   const [descriptionHtml, setDescriptionHtml] = React.useState(initialData?.descriptionHtml || "");
+  const isCreateMode = !initialData;
 
   const formatDateForInput = (date?: Date | null) => {
     if (!date) return "";
@@ -73,7 +74,7 @@ export default function CalendarEntryForm({
                 type="text"
                 required
                 defaultValue={initialData?.title}
-                placeholder="F.eks. Byggemøde"
+                placeholder="F.eks. Klubaften"
                 className="admin-input"
               />
             </div>
@@ -181,6 +182,48 @@ export default function CalendarEntryForm({
             </label>
           </div>
         </GlassCard>
+
+        {isCreateMode ? (
+          <GlassCard className="p-8">
+            <div className="space-y-5">
+              <div>
+                <h2 className="admin-section-title">Gentagelse</h2>
+                <p className="admin-form-help">
+                  Bruges til faste klubaktiviteter, fx klubaften hver torsdag.
+                </p>
+              </div>
+
+              <label className="admin-checkbox-card">
+                <input
+                  name="repeatWeekly"
+                  type="checkbox"
+                  value="true"
+                />
+                <div>
+                  <span className="admin-strong block">Gentag ugentligt</span>
+                  <span className="admin-form-help block">
+                    Opretter separate kalenderindslag med 7 dage mellem hver.
+                  </span>
+                </div>
+              </label>
+
+              <div>
+                <label className="admin-form-label">Antal forekomster</label>
+                <input
+                  name="repeatCount"
+                  type="number"
+                  min="1"
+                  max="104"
+                  defaultValue="52"
+                  className="admin-input"
+                />
+                <p className="admin-form-help">
+                  Maks 104. Hvis gentagelse ikke er markeret, oprettes kun ét indslag.
+                </p>
+              </div>
+            </div>
+          </GlassCard>
+        ) : null}
 
         <div className="flex flex-col gap-4">
           <button

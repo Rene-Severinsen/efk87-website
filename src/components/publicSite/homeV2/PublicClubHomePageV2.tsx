@@ -323,9 +323,11 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
               return (
                 <React.Fragment key={`${entry.id}-${idx}`}>
                   <Link href={publicRoutes.calendarEntry(club.slug, entry.id)} className="home-v2-marquee-item">
-                    <span className="home-v2-marquee-date">{dateDisplay}</span>
+                    <span className="home-v2-marquee-date">
+                      {dateDisplay}
+                      {hasTime ? ` · ${timeDisplay}` : ""}
+                    </span>
                     <span className="home-v2-marquee-title">{entry.title}</span>
-                    {hasTime && <span className="home-v2-marquee-time">{timeDisplay}</span>}
                   </Link>
                   <span className="home-v2-marquee-separator">
                      <div className="home-v2-marquee-logo-mark">{clubShortName}</div>
