@@ -71,20 +71,20 @@ export default function BrandingSettingsClient({
       <form
         ref={formRef}
         onSubmit={handleSubmit}
-        className="rounded-3xl border border-white/10 bg-[#121b2e]/80 p-6 shadow-2xl backdrop-blur-md"
+        className="admin-card"
       >
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-xl font-bold">
             Logo og favicon
           </h2>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="admin-muted">
             Upload logo én gang. Systemet danner selv favicon og Apple icon. Der bruges ingen fallback.
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           <div className="space-y-2">
-            <label htmlFor="logoFile" className="block text-sm font-medium text-slate-300">
+            <label htmlFor="logoFile" className="admin-form-label">
               Logo
             </label>
             <input
@@ -92,15 +92,15 @@ export default function BrandingSettingsClient({
               name="logoFile"
               type="file"
               accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/gif,.jpg,.jpeg,.png,.webp,.heic,.heif,.gif"
-              className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-slate-300 file:mr-4 file:rounded-lg file:border-0 file:bg-sky-600 file:px-3 file:py-2 file:text-sm file:font-bold file:text-white"
+              className="admin-file-input"
             />
-            <p className="text-xs text-slate-500">
+            <p className="admin-form-help">
               JPG, PNG, WebP, HEIC, HEIF eller GIF. Maks 25 MB.
             </p>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="logoAltText" className="block text-sm font-medium text-slate-300">
+            <label htmlFor="logoAltText" className="admin-form-label">
               Logo alt-tekst
             </label>
             <input
@@ -108,19 +108,19 @@ export default function BrandingSettingsClient({
               name="logoAltText"
               defaultValue={branding.logoAltText ?? ""}
               placeholder="Fx EFK87 logo"
-              className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-4 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+              className="admin-input"
             />
           </div>
         </div>
 
         {status === "success" ? (
-          <div className="mt-5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm font-medium text-emerald-400">
+          <div className="admin-alert admin-alert-success mt-5">
             Branding er gemt.
           </div>
         ) : null}
 
         {status === "error" && error ? (
-          <div className="mt-5 rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm font-medium text-rose-400">
+          <div className="admin-alert admin-alert-danger mt-5">
             {error}
           </div>
         ) : null}
@@ -129,21 +129,21 @@ export default function BrandingSettingsClient({
           <button
             type="submit"
             disabled={isSaving}
-            className="rounded-xl bg-sky-600 px-8 py-3 font-bold text-white shadow-lg shadow-sky-900/20 transition-all hover:bg-sky-500 disabled:bg-slate-700 disabled:shadow-none"
+            className="admin-btn admin-btn-primary"
           >
             {isSaving ? "Gemmer..." : "Gem branding"}
           </button>
         </div>
       </form>
 
-      <section className="rounded-3xl border border-white/10 bg-[#121b2e]/80 p-6 shadow-2xl backdrop-blur-md">
-        <h2 className="mb-5 text-xl font-bold text-white">
+      <section className="admin-card">
+        <h2 className="mb-5 text-xl font-bold">
           Aktuel branding
         </h2>
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-[#0f172a] p-5">
-            <p className="mb-3 text-sm font-bold text-slate-300">
+          <div className="admin-meta-box">
+            <p className="admin-meta-label mb-3">
               Logo
             </p>
 
@@ -156,19 +156,19 @@ export default function BrandingSettingsClient({
                     className="max-h-24 max-w-full object-contain"
                   />
                 </div>
-                <code className="mt-3 block break-all text-xs text-slate-400">
+                <code className="admin-code-text mt-3">
                   {branding.logoUrl}
                 </code>
               </>
             ) : (
-              <p className="text-sm text-slate-500">
+              <p className="admin-muted text-sm">
                 Logo er ikke sat.
               </p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-[#0f172a] p-5">
-            <p className="mb-3 text-sm font-bold text-slate-300">
+          <div className="admin-meta-box">
+            <p className="admin-meta-label mb-3">
               Favicon
             </p>
 
@@ -181,19 +181,19 @@ export default function BrandingSettingsClient({
                     className="h-12 w-12 object-contain"
                   />
                 </div>
-                <code className="mt-3 block break-all text-xs text-slate-400">
+                <code className="admin-code-text mt-3">
                   {branding.faviconUrl}
                 </code>
               </>
             ) : (
-              <p className="text-sm text-slate-500">
+              <p className="admin-muted text-sm">
                 Favicon er ikke dannet endnu.
               </p>
             )}
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-[#0f172a] p-5">
-            <p className="mb-3 text-sm font-bold text-slate-300">
+          <div className="admin-meta-box">
+            <p className="admin-meta-label mb-3">
               Apple icon
             </p>
 
@@ -206,12 +206,12 @@ export default function BrandingSettingsClient({
                     className="h-20 w-20 object-contain"
                   />
                 </div>
-                <code className="mt-3 block break-all text-xs text-slate-400">
+                <code className="admin-code-text mt-3">
                   {branding.appleIconUrl}
                 </code>
               </>
             ) : (
-              <p className="text-sm text-slate-500">
+              <p className="admin-muted text-sm">
                 Apple icon er ikke dannet endnu.
               </p>
             )}
