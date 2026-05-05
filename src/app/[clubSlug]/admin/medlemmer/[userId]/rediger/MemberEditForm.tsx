@@ -202,7 +202,13 @@ export function MemberEditForm({ clubSlug, member, updateAction }: MemberEditFor
             <Field label="Fornavn" name="firstName" defaultValue={member.firstName} error={state?.fieldErrors?.firstName} />
             <Field label="Efternavn" name="lastName" defaultValue={member.lastName} error={state?.fieldErrors?.lastName} />
             <Field label="Fødselsdato" name="birthDate" type="date" defaultValue={formatDate(member.birthDate)} />
-            <Field label="Indmeldt dato" name="joinedAt" type="date" defaultValue={formatDate(member.joinedAt)} />
+            <div className="md:col-span-1">
+              <label className="admin-form-label">Indmeldt dato</label>
+              <div className="admin-readonly-field">
+                {member.joinedAt ? formatDate(member.joinedAt) : "Sættes ved første aktivering"}
+              </div>
+              <p className="admin-form-help">Systemstyret og ændres ikke ved almindelige statusændringer.</p>
+            </div>
           </Section>
 
           <Section title="Kontaktoplysninger">

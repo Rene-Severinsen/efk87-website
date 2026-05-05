@@ -84,8 +84,6 @@ export async function updateAdminMemberProfileAction(
   }
 
   const birthDate = getDate("birthDate");
-  const joinedAt = getDate("joinedAt");
-  
   const membershipType = formData.get("membershipType") as ClubMemberMembershipType;
   const memberRoleType = formData.get("memberRoleType") as ClubMemberRoleType;
   const schoolStatus = formData.get("schoolStatus") as ClubMemberSchoolStatus;
@@ -121,6 +119,32 @@ export async function updateAdminMemberProfileAction(
         });
       }
 
+      const existingProfile = await tx.clubMemberProfile.findUnique({
+        where: {
+          clubId_userId: {
+            clubId: club.id,
+            userId,
+          },
+        },
+        select: {
+          memberStatus: true,
+          joinedAt: true,
+        },
+      });
+
+      if (!existingProfile) {
+        throw new Error("MEMBER_PROFILE_NOT_FOUND");
+      }
+
+      const shouldSetJoinedAtOnFirstActivation =
+        existingProfile.memberStatus === ClubMemberStatus.NEW &&
+        memberStatus === ClubMemberStatus.ACTIVE &&
+        existingProfile.joinedAt === null;
+
+      const effectiveJoinedAt = shouldSetJoinedAtOnFirstActivation
+        ? new Date()
+        : existingProfile.joinedAt;
+
       // Update Profile
       await tx.clubMemberProfile.update({
         where: {
@@ -144,7 +168,7 @@ export async function updateAdminMemberProfileAction(
           memberStatus,
           isInstructor,
           birthDate,
-          joinedAt,
+          joinedAt: effectiveJoinedAt,
         },
       });
 

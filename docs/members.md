@@ -94,3 +94,21 @@ The homepage features a "Nye medlemmer" card to welcome recent additions to the 
 - **Status NEW**: The `memberStatus = NEW` is NOT used for this highlight; it is strictly based on `joinedAt`.
 - **Privacy**: Only display name and joined date are shown publicly.
 - **Logo**: A logo placeholder is prepared for future media integration.
+
+## Indmeldt dato / joinedAt
+
+`joinedAt` er medlemmets første reelle optagelsesdato i klubben.
+
+Regel:
+
+- `joinedAt` er systemstyret i normal admin-redigering.
+- Feltet vises read-only i admin.
+- `joinedAt` sættes automatisk første gang et medlem skifter fra `NEW` / “Under oprettelse” til `ACTIVE` / “Aktiv”, hvis `joinedAt` er tom.
+- Hvis `joinedAt` allerede er sat, må systemet ikke ændre værdien automatisk.
+- Almindelige statusændringer må ikke ændre `joinedAt`.
+- Skift til `RESIGNED` / “Udmeldt” må ikke nulstille eller ændre `joinedAt`.
+- Skift fra `RESIGNED` tilbage til `ACTIVE` må ikke automatisk ændre `joinedAt`; eventuel genindmeldelse kræver senere særskilt historik-/periodehåndtering eller manuel forretningsbeslutning.
+- Public “nye medlemmer” viser kun medlemmer med `memberStatus = ACTIVE` og `joinedAt` inden for highlight-perioden.
+
+Formålet er at undgå, at tekniske statusændringer overskriver medlemmets oprindelige optagelsesdato.
+

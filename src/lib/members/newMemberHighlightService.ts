@@ -27,9 +27,7 @@ export async function getNewMemberHighlights(clubId: string): Promise<NewMemberH
       joinedAt: {
         gte: cutoffDate,
       },
-      memberStatus: {
-        not: ClubMemberStatus.RESIGNED,
-      },
+      memberStatus: ClubMemberStatus.ACTIVE,
     },
     include: {
       user: true,
