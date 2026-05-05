@@ -2197,3 +2197,41 @@
 .admin-placeholder-list li::marker {
   color: var(--admin-primary);
 }
+
+/* EFK87 admin site settings primitives */
+
+.admin-card-accent {
+  height: 4px;
+  background: linear-gradient(90deg, var(--admin-primary), var(--admin-success-border));
+  opacity: 0.55;
+}
+
+.admin-card-header {
+  border-bottom: 1px solid var(--admin-card-border);
+  padding: 24px 28px;
+}
+
+.admin-kicker {
+  color: var(--admin-primary-hover);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.admin-settings-nav-item {
+  display: block;
+  border: 1px solid var(--admin-card-border);
+  border-radius: 18px;
+  background: var(--admin-surface-soft);
+  padding: 12px 16px;
+  color: var(--admin-text);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: border-color 0.16s ease, background 0.16s ease;
+}
+
+.admin-settings-nav-item:hover {
+  border-color: var(--admin-primary);
+  background: var(--admin-primary-soft);
+}

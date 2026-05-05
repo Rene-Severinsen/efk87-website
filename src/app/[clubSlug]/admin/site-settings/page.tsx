@@ -29,15 +29,15 @@ function SettingsCard({
   return (
     <section
       id={id}
-      className="scroll-mt-6 overflow-hidden rounded-3xl border border-white/10 bg-[#121b2e]/80 shadow-2xl backdrop-blur-md"
+      className="admin-card scroll-mt-6 overflow-hidden"
     >
-      <div className="h-1 bg-gradient-to-r from-sky-500/50 to-emerald-500/50 opacity-40" />
+      <div className="admin-card-accent" />
 
-      <div className="border-b border-white/10 px-7 py-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-white">
+      <div className="admin-card-header">
+        <h2 className="admin-section-title">
           {title}
         </h2>
-        <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-400">
+        <p className="admin-muted mt-1 max-w-3xl text-sm leading-6">
           {description}
         </p>
       </div>
@@ -73,12 +73,12 @@ function SettingsNav({
   ];
 
   return (
-    <aside className="sticky top-6 hidden h-fit rounded-3xl border border-white/10 bg-[#121b2e]/80 p-4 shadow-2xl backdrop-blur-md xl:block">
+    <aside className="admin-card sticky top-6 hidden h-fit p-4 xl:block">
       <div className="mb-4 px-2">
-        <div className="text-xs font-black uppercase tracking-[0.18em] text-sky-300">
+        <div className="admin-kicker">
           Indstillinger
         </div>
-        <p className="mt-1 text-xs leading-5 text-slate-500">
+        <p className="admin-soft mt-1 text-xs leading-5">
           Klubopsætning for public site.
         </p>
       </div>
@@ -88,10 +88,10 @@ function SettingsNav({
           <a
             key={item.href}
             href={`/${clubSlug}/admin/site-settings${item.href}`}
-            className="rounded-2xl border border-white/5 bg-white/[0.03] px-4 py-3 text-sm transition hover:border-sky-500/40 hover:bg-white/[0.06]"
+            className="admin-settings-nav-item"
           >
-            <div className="font-extrabold text-white">{item.title}</div>
-            <div className="mt-0.5 text-xs text-slate-500">{item.description}</div>
+            <div className="admin-strong">{item.title}</div>
+            <div className="admin-soft mt-0.5 text-xs">{item.description}</div>
           </a>
         ))}
       </nav>
@@ -134,8 +134,8 @@ export default async function Page({ params }: PageProps) {
         description="Konfiguration af klub-indstillinger, public forside, tema og vejr."
       />
 
-      <div className="-m-6 min-h-screen bg-[#0b1220] p-6">
-        <div className="mx-auto max-w-[1180px] pt-6">
+      <div className="admin-page-content">
+        <div className="mx-auto max-w-[1180px]">
 
           <div className="grid gap-8">
             

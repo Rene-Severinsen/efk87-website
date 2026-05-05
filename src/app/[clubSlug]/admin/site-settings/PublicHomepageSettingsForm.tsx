@@ -114,11 +114,11 @@ function TextInput({
 }) {
   return (
     <label className="grid gap-2">
-      <span className="text-sm font-bold text-slate-200">{label}</span>
+      <span className="admin-form-label">{label}</span>
       <input
         name={name}
         defaultValue={defaultValue}
-        className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-3 py-2.5 text-sm text-white outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
+        className="admin-input"
       />
     </label>
   );
@@ -135,12 +135,12 @@ function TextArea({
 }) {
   return (
     <label className="grid gap-2">
-      <span className="text-sm font-bold text-slate-200">{label}</span>
+      <span className="admin-form-label">{label}</span>
       <textarea
         name={name}
         defaultValue={defaultValue}
         rows={3}
-        className="w-full rounded-xl border border-white/10 bg-[#0f172a] px-3 py-2.5 text-sm text-white outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20"
+        className="admin-input"
       />
     </label>
   );
@@ -158,11 +158,11 @@ function SectionCard({
   wide?: boolean;
 }) {
   return (
-    <section className={`rounded-2xl border border-white/10 bg-white/[0.03] p-5 ${wide ? "lg:col-span-2" : ""}`}>
+    <section className={`admin-card ${wide ? "lg:col-span-2" : ""}`}>
       <div className="mb-5">
-        <h3 className="text-lg font-extrabold text-white">{title}</h3>
+        <h3 className="admin-section-title">{title}</h3>
         {description ? (
-          <p className="mt-1 text-sm leading-6 text-slate-400">{description}</p>
+          <p className="admin-muted mt-1 text-sm leading-6">{description}</p>
         ) : null}
       </div>
       <div className="grid gap-4">
@@ -188,8 +188,8 @@ function IntroCardFields({
   initialValues: PublicHomepageSettingsValues | null;
 }) {
   return (
-    <div className="grid gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-      <h4 className="font-bold text-slate-200">Kort {cardNumber}</h4>
+    <div className="admin-card grid gap-4 p-4">
+      <h4 className="admin-strong">Kort {cardNumber}</h4>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-[90px_1fr_1fr]">
         <TextInput
@@ -241,8 +241,8 @@ export default function PublicHomepageSettingsForm({
   return (
     <form action={handleSubmit} className="grid gap-6">
       <div>
-        <h2 className="text-2xl font-extrabold text-white">Public forside</h2>
-        <p className="mt-1 text-sm leading-6 text-slate-400">
+        <h2 className="admin-section-title">Public forside</h2>
+        <p className="admin-muted mt-1 text-sm leading-6">
           Vedligehold de faste public-forside elementer. Forsideopslag håndteres stadig separat under Forsideindhold.
         </p>
       </div>
@@ -376,7 +376,7 @@ export default function PublicHomepageSettingsForm({
       </div>
 
       {status ? (
-        <div className="rounded-xl border border-sky-400/30 bg-sky-400/10 p-3 text-sm font-bold text-sky-100">
+        <div className="admin-alert admin-alert-success">
           {status}
         </div>
       ) : null}
@@ -384,7 +384,7 @@ export default function PublicHomepageSettingsForm({
       <div className="flex justify-end">
         <button
           type="submit"
-          className="rounded-xl bg-sky-600 px-6 py-3 text-sm font-extrabold text-white shadow-lg shadow-sky-900/20 transition hover:bg-sky-500"
+          className="admin-btn admin-btn-primary"
         >
           Gem public forside
         </button>
