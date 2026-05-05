@@ -2917,3 +2917,36 @@
   position: static;
   margin-top: 0;
 }
+
+/* EFK87 admin calendar primitives */
+
+.admin-editor-shell {
+  overflow: hidden;
+  border: 1px solid var(--admin-card-border);
+  border-radius: 18px;
+  background: var(--admin-surface-soft);
+}
+
+.admin-checkbox-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  cursor: pointer;
+  border: 1px solid var(--admin-card-border);
+  border-radius: 16px;
+  background: var(--admin-surface-soft);
+  padding: 14px;
+  transition: border-color 0.16s ease, background 0.16s ease;
+}
+
+.admin-checkbox-card:hover {
+  border-color: var(--admin-primary);
+  background: var(--admin-primary-soft);
+}
+
+.admin-checkbox-card input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: var(--admin-primary);
+}

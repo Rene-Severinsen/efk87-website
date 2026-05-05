@@ -50,8 +50,8 @@ export default async function EditCalendarEntryPage({ params }: PageProps) {
         description="Opdater detaljerne for kalenderindslaget."
       />
 
-      <div className="min-h-screen bg-[#0b1220] -m-6 p-6">
-        <div className="max-w-[1200px] mx-auto pt-6">
+      <div className="admin-page-content">
+        <div className="max-w-[1200px] mx-auto">
           <CalendarEntryForm 
             clubSlug={clubSlug}
             initialData={entry}
