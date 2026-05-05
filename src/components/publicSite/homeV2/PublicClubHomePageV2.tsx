@@ -50,6 +50,18 @@ type ThreadWithRelations = ClubForumThread & {
 
 import { normalizePublicThemeMode } from '../../../lib/publicSite/publicThemeService';
 
+function resolveClubHref(clubSlug: string, href: string): string {
+  if (href.startsWith("http://") || href.startsWith("https://")) {
+    return href;
+  }
+
+  if (href.startsWith("/")) {
+    return `/${clubSlug}${href}`;
+  }
+
+  return `/${clubSlug}/${href}`;
+}
+
 interface PublicClubHomePageV2Props {
   club: {
     id: string;
@@ -64,6 +76,41 @@ interface PublicClubHomePageV2Props {
       logoAltText: string | null;
       faviconUrl?: string | null;
       appleIconUrl?: string | null;
+      publicHeroTitle?: string | null;
+      publicHeroSubtitle?: string | null;
+      publicHeroPrimaryCtaLabel?: string | null;
+      publicHeroPrimaryCtaHref?: string | null;
+      publicHeroSecondaryCtaLabel?: string | null;
+      publicHeroSecondaryCtaHref?: string | null;
+      publicHeroTertiaryCtaLabel?: string | null;
+      publicHeroTertiaryCtaHref?: string | null;
+      publicHeroQuaternaryCtaLabel?: string | null;
+      publicHeroQuaternaryCtaHref?: string | null;
+      publicIntroTitle?: string | null;
+      publicIntroLinkLabel?: string | null;
+      publicIntroLinkHref?: string | null;
+      publicIntroCard1Icon?: string | null;
+      publicIntroCard1Title?: string | null;
+      publicIntroCard1Text?: string | null;
+      publicIntroCard1Href?: string | null;
+      publicIntroCard2Icon?: string | null;
+      publicIntroCard2Title?: string | null;
+      publicIntroCard2Text?: string | null;
+      publicIntroCard2Href?: string | null;
+      publicIntroCard3Icon?: string | null;
+      publicIntroCard3Title?: string | null;
+      publicIntroCard3Text?: string | null;
+      publicIntroCard3Href?: string | null;
+      publicCtaSectionTitle?: string | null;
+      publicCtaSectionLinkLabel?: string | null;
+      publicCtaSectionLinkHref?: string | null;
+      publicCtaBoxIcon?: string | null;
+      publicCtaBoxTitle?: string | null;
+      publicCtaBoxText?: string | null;
+      publicCtaPrimaryLabel?: string | null;
+      publicCtaPrimaryHref?: string | null;
+      publicCtaSecondaryLabel?: string | null;
+      publicCtaSecondaryHref?: string | null;
     } | null;
   };
   viewer: ServerViewerContext;
@@ -121,10 +168,54 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
   const isMemberDashboard = surface === "member";
   const heroTitle = isMemberDashboard
     ? `Hej ${firstName}.${todayFlyingCount > 0 ? ' Der er liv på pladsen i dag.' : ''}`
-    : `Velkommen til ${clubDisplayName}`;
+    : club.settings?.publicHeroTitle || `Velkommen til ${clubDisplayName}`;
   const heroCopy = isMemberDashboard
     ? `${todayFlightIntents.length} medlemmer har allerede meldt “jeg flyver”.`
-    : "Modelsvæveflyvning, fællesskab og flyveskole i en aktiv klub med plads til både nye og erfarne piloter.";
+    : club.settings?.publicHeroSubtitle || "Modelsvæveflyvning, fællesskab og flyveskole i en aktiv klub med plads til både nye og erfarne piloter.";
+
+  const publicHeroActions = [
+    {
+      label: club.settings?.publicHeroPrimaryCtaLabel || "Bliv medlem",
+      href: club.settings?.publicHeroPrimaryCtaHref || "/bliv-medlem",
+      primary: true,
+    },
+    {
+      label: club.settings?.publicHeroSecondaryCtaLabel || "Flyveskole",
+      href: club.settings?.publicHeroSecondaryCtaHref || "/flyveskole",
+      primary: false,
+    },
+    {
+      label: club.settings?.publicHeroTertiaryCtaLabel || "Se galleri",
+      href: club.settings?.publicHeroTertiaryCtaHref || "/galleri",
+      primary: false,
+    },
+    {
+      label: club.settings?.publicHeroQuaternaryCtaLabel || "Om klubben",
+      href: club.settings?.publicHeroQuaternaryCtaHref || "/about",
+      primary: false,
+    },
+  ];
+
+  const publicIntroCards = [
+    {
+      icon: club.settings?.publicIntroCard1Icon || "🎓",
+      title: club.settings?.publicIntroCard1Title || "Flyveskole",
+      text: club.settings?.publicIntroCard1Text || "Kom trygt i gang med instruktører, struktur og hjælp fra første dag.",
+      href: club.settings?.publicIntroCard1Href || "/flyveskole",
+    },
+    {
+      icon: club.settings?.publicIntroCard2Icon || "📸",
+      title: club.settings?.publicIntroCard2Title || "Fællesskab",
+      text: club.settings?.publicIntroCard2Text || "Se billeder og aktiviteter fra et klubmiljø med plads til både nye og erfarne piloter.",
+      href: club.settings?.publicIntroCard2Href || "/galleri",
+    },
+    {
+      icon: club.settings?.publicIntroCard3Icon || "📍",
+      title: club.settings?.publicIntroCard3Title || "Flyvepladsen",
+      text: club.settings?.publicIntroCard3Text || "Find praktisk information om pladsen, klubhuset og hvordan du besøger os.",
+      href: club.settings?.publicIntroCard3Href || "/om/her-bor-vi",
+    },
+  ];
 
   const publicThemeMode = normalizePublicThemeMode(club.settings?.publicThemeMode);
 
@@ -170,10 +261,15 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                 </>
               ) : (
                 <>
-                  <Link className="home-v2-pill home-v2-primary" href={publicRoutes.becomeMember(club.slug)}>Bliv medlem</Link>
-                  <Link className="home-v2-pill" href={publicRoutes.flightSchool(club.slug)}>Flyveskole</Link>
-                  <Link className="home-v2-pill" href={publicRoutes.gallery(club.slug)}>Se galleri</Link>
-                  <Link className="home-v2-pill" href={publicRoutes.about(club.slug)}>Om klubben</Link>
+                  {publicHeroActions.map((action) => (
+                    <Link
+                      key={`${action.label}-${action.href}`}
+                      className={action.primary ? "home-v2-pill home-v2-primary" : "home-v2-pill"}
+                      href={resolveClubHref(club.slug, action.href)}
+                    >
+                      {action.label}
+                    </Link>
+                  ))}
                 </>
               )}
             </div>
@@ -283,34 +379,29 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             {!isMemberDashboard ? (
               <article className="home-v2-card home-v2-section-card home-v2-public-intro">
                 <div className="home-v2-section-head">
-                  <h2>En klub for dig, der vil flyve rigtigt</h2>
-                  <Link className="home-v2-link-soft" href={publicRoutes.about(club.slug)}>Læs om klubben</Link>
+                  <h2>{club.settings?.publicIntroTitle || "En klub for dig, der vil flyve rigtigt"}</h2>
+                  <Link
+                    className="home-v2-link-soft"
+                    href={resolveClubHref(club.slug, club.settings?.publicIntroLinkHref || "/about")}
+                  >
+                    {club.settings?.publicIntroLinkLabel || "Læs om klubben"}
+                  </Link>
                 </div>
 
                 <div className="home-v2-public-intro-grid">
-                  <Link className="home-v2-public-intro-card" href={publicRoutes.flightSchool(club.slug)}>
-                    <div className="home-v2-row-icon">🎓</div>
-                    <div>
-                      <h3>Flyveskole</h3>
-                      <p>Kom trygt i gang med instruktører, struktur og hjælp fra første dag.</p>
-                    </div>
-                  </Link>
-
-                  <Link className="home-v2-public-intro-card" href={publicRoutes.gallery(club.slug)}>
-                    <div className="home-v2-row-icon">📸</div>
-                    <div>
-                      <h3>Fællesskab</h3>
-                      <p>Se billeder og aktiviteter fra et klubmiljø med plads til både nye og erfarne piloter.</p>
-                    </div>
-                  </Link>
-
-                  <Link className="home-v2-public-intro-card" href={publicRoutes.whereWeLive(club.slug)}>
-                    <div className="home-v2-row-icon">📍</div>
-                    <div>
-                      <h3>Flyvepladsen</h3>
-                      <p>Find praktisk information om pladsen, klubhuset og hvordan du besøger os.</p>
-                    </div>
-                  </Link>
+                  {publicIntroCards.map((card) => (
+                    <Link
+                      key={`${card.title}-${card.href}`}
+                      className="home-v2-public-intro-card"
+                      href={resolveClubHref(club.slug, card.href)}
+                    >
+                      <div className="home-v2-row-icon">{card.icon}</div>
+                      <div>
+                        <h3>{card.title}</h3>
+                        <p>{card.text}</p>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               </article>
             ) : null}
@@ -527,22 +618,22 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             ) : (
             <article className="home-v2-card home-v2-section-card home-v2-public-cta-band">
               <div className="home-v2-section-head">
-                <h2>Kom i gang med modelflyvning</h2>
-                <Link className="home-v2-link-soft" href={publicRoutes.flightSchool(club.slug)}>Læs om flyveskolen</Link>
+                <h2>{club.settings?.publicCtaSectionTitle || "Kom i gang med modelflyvning"}</h2>
+                <Link className="home-v2-link-soft" href={resolveClubHref(club.slug, club.settings?.publicCtaSectionLinkHref || "/flyveskole")}>{club.settings?.publicCtaSectionLinkLabel || "Læs om flyveskolen"}</Link>
               </div>
               <div className="home-v2-griffin home-v2-public-cta-panel">
-                <div className="home-v2-row-icon">✈️</div>
+                <div className="home-v2-row-icon">{club.settings?.publicCtaBoxIcon || "✈️"}</div>
                 <div>
-                  <h3>Ny i sporten?</h3>
+                  <h3>{club.settings?.publicCtaBoxTitle || "Ny i sporten?"}</h3>
                   <p className="home-v2-row-sub">
-                    EFK87 har flyveskole, instruktører og et klubmiljø hvor nye medlemmer kan komme trygt i gang.
+                    {club.settings?.publicCtaBoxText || "EFK87 har flyveskole, instruktører og et klubmiljø hvor nye medlemmer kan komme trygt i gang."}
                   </p>
                   <div className="home-v2-activity-actions">
-                    <Link className="home-v2-activity-cta home-v2-activity-cta-primary" href={publicRoutes.becomeMember(club.slug)}>
-                      Bliv medlem
+                    <Link className="home-v2-activity-cta home-v2-activity-cta-primary" href={resolveClubHref(club.slug, club.settings?.publicCtaPrimaryHref || "/bliv-medlem")}>
+                      {club.settings?.publicCtaPrimaryLabel || "Bliv medlem"}
                     </Link>
-                    <Link className="home-v2-activity-cta home-v2-activity-cta-secondary" href={publicRoutes.flightSchool(club.slug)}>
-                      Se flyveskole
+                    <Link className="home-v2-activity-cta home-v2-activity-cta-secondary" href={resolveClubHref(club.slug, club.settings?.publicCtaSecondaryHref || "/flyveskole")}>
+                      {club.settings?.publicCtaSecondaryLabel || "Se flyveskole"}
                     </Link>
                   </div>
                 </div>

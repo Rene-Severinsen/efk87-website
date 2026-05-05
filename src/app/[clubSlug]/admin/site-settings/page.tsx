@@ -4,6 +4,7 @@ import { requireClubAdminForClub } from "@/lib/auth/adminAccessGuards";
 import AdminShell from "@/components/admin/AdminShell";
 import WeatherSettingsForm from "./WeatherSettingsForm";
 import PublicThemeSettingsForm from "./PublicThemeSettingsForm";
+import PublicHomepageSettingsForm from "./PublicHomepageSettingsForm";
 import { getClubSettings } from "@/lib/admin/siteSettingsService";
 
 interface PageProps {
@@ -55,6 +56,14 @@ export default async function Page({ params }: PageProps) {
               clubId={club.id}
               clubSlug={clubSlug}
               initialThemeMode={settings?.publicThemeMode ?? "light"}
+            />
+          </GlassCard>
+
+          <GlassCard className="p-8 mb-8">
+            <PublicHomepageSettingsForm
+              clubId={club.id}
+              clubSlug={clubSlug}
+              initialValues={settings}
             />
           </GlassCard>
 

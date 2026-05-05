@@ -480,6 +480,45 @@ model ClubSettings {
   publicThemeMode String  @default("light")
   weatherLatitude Float?
   weatherLongitude Float?
+
+  publicHeroTitle                 String?
+  publicHeroSubtitle              String?
+  publicHeroPrimaryCtaLabel       String?
+  publicHeroPrimaryCtaHref        String?
+  publicHeroSecondaryCtaLabel     String?
+  publicHeroSecondaryCtaHref      String?
+  publicHeroTertiaryCtaLabel      String?
+  publicHeroTertiaryCtaHref       String?
+  publicHeroQuaternaryCtaLabel    String?
+  publicHeroQuaternaryCtaHref     String?
+
+  publicIntroTitle                String?
+  publicIntroLinkLabel            String?
+  publicIntroLinkHref             String?
+  publicIntroCard1Icon            String?
+  publicIntroCard1Title           String?
+  publicIntroCard1Text            String?
+  publicIntroCard1Href            String?
+  publicIntroCard2Icon            String?
+  publicIntroCard2Title           String?
+  publicIntroCard2Text            String?
+  publicIntroCard2Href            String?
+  publicIntroCard3Icon            String?
+  publicIntroCard3Title           String?
+  publicIntroCard3Text            String?
+  publicIntroCard3Href            String?
+
+  publicCtaSectionTitle           String?
+  publicCtaSectionLinkLabel       String?
+  publicCtaSectionLinkHref        String?
+  publicCtaBoxIcon                String?
+  publicCtaBoxTitle               String?
+  publicCtaBoxText                String?
+  publicCtaPrimaryLabel           String?
+  publicCtaPrimaryHref            String?
+  publicCtaSecondaryLabel         String?
+  publicCtaSecondaryHref          String?
+
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
