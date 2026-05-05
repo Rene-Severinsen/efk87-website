@@ -454,11 +454,11 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
                   />
                 </div>
                 <div>
-                  <h3>{todayFlightIntents.length > 0 ? 'Gribben basker – der er aktivitet i dag' : 'Gribben sover – ingen har meldt deres ankomst endnu'}</h3>
+                  <h3>{todayFlightIntents.length > 0 ? 'Gribben basker – der er aktivitet i dag' : 'Ingen har meldt "jeg flyver" endnu'}</h3>
                   <p className="home-v2-row-sub">
                     {todayFlightIntents.length > 0
                         ? `Der er i øjeblikket ${todayFlightIntents.length} medlemmer der har meldt deres ankomst til pladsen i dag.`
-                        : 'Bliv den første til at melde din ankomst til pladsen i dag.'}
+                        : 'Bliv den første i dag.'}
                   </p>
                   <div className="home-v2-activity-actions">
                     <Link
