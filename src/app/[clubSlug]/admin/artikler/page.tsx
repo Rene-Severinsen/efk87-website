@@ -2,7 +2,12 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../components/admin/AdminShell";
-import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
+import {
+  AdminPageHeader,
+  AdminPageSection,
+  AdminStatTile,
+  AdminStatTileGrid,
+} from "../../../../components/admin/AdminPagePrimitives";
 import { getAdminArticleOverview } from "../../../../lib/admin/articleAdminService";
 import Link from "next/link";
 import { PublicSurfaceVisibility } from "../../../../generated/prisma";
@@ -28,6 +33,19 @@ function statusLabel(status: string): string {
       return "Arkiveret";
     default:
       return status;
+  }
+}
+
+function statusBadgeClass(status: string): string {
+  switch (status) {
+    case "PUBLISHED":
+      return "admin-badge admin-badge-info";
+    case "DRAFT":
+      return "admin-badge admin-badge-warning";
+    case "ARCHIVED":
+      return "admin-badge admin-badge-archived";
+    default:
+      return "admin-badge admin-badge-muted";
   }
 }
 
@@ -63,81 +81,71 @@ export default async function Page({ params }: PageProps) {
     >
       <AdminPageHeader
         title="Artikler"
-        description="Administrer klubbens nyheder og historier."
+        description="Administrer klubbens nyheder, historier og publiceret indhold."
         action={{
           label: "Opret artikel",
-          href: `/${clubSlug}/admin/artikler/ny`
+          href: `/${clubSlug}/admin/artikler/ny`,
         }}
       />
 
-      <div className="admin-stats-grid pt-6" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '24px' }}>
-        <div className="admin-card" style={{ padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '8px' }}>Publicerede</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{kpis.published}</div>
-        </div>
-        <div className="admin-card" style={{ padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '8px' }}>Kladder</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{kpis.drafts}</div>
-        </div>
-        <div className="admin-card" style={{ padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '8px' }}>Fremhævet</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{kpis.featured}</div>
-        </div>
-        <div className="admin-card" style={{ padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          <div style={{ fontSize: '0.875rem', color: '#666', marginBottom: '8px' }}>Arkiverede</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{kpis.archived}</div>
-        </div>
-      </div>
+      <div className="admin-page-content">
+        <AdminStatTileGrid columns="four">
+          <AdminStatTile label="Publicerede" value={kpis.published} tone="blue" />
+          <AdminStatTile label="Kladder" value={kpis.drafts} tone="amber" />
+          <AdminStatTile label="Fremhævet" value={kpis.featured} tone="green" />
+          <AdminStatTile label="Arkiverede" value={kpis.archived} tone="slate" />
+        </AdminStatTileGrid>
 
-      <div className="admin-card" style={{ background: '#fff', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-          <thead>
-            <tr style={{ background: '#fafafa', borderBottom: '1px solid #f0f0f0' }}>
-              <th style={{ padding: '12px 16px', fontWeight: '600' }}>Titel</th>
-              <th style={{ padding: '12px 16px', fontWeight: '600' }}>Status</th>
-              <th style={{ padding: '12px 16px', fontWeight: '600' }}>Synlighed</th>
-              <th style={{ padding: '12px 16px', fontWeight: '600' }}>Publiceret</th>
-              <th style={{ padding: '12px 16px', fontWeight: '600' }}>Opdateret</th>
-              <th style={{ padding: '12px 16px', fontWeight: '600', textAlign: 'right' }}>Handling</th>
-            </tr>
-          </thead>
-          <tbody>
-            {articles.length > 0 ? articles.map((article) => (
-              <tr key={article.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
-                <td style={{ padding: '12px 16px' }}>
-                  <div style={{ fontWeight: '500' }}>{article.title}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#999' }}>{article.slug}</div>
-                </td>
-                <td style={{ padding: '12px 16px' }}>
-                  <span style={{ 
-                    padding: '2px 8px', 
-                    borderRadius: '4px', 
-                    fontSize: '0.75rem', 
-                    fontWeight: '600',
-                    background: article.status === 'PUBLISHED' ? '#e6f7ff' : article.status === 'DRAFT' ? '#fff7e6' : '#f5f5f5',
-                    color: article.status === 'PUBLISHED' ? '#1890ff' : article.status === 'DRAFT' ? '#fa8c16' : '#8c8c8c'
-                  }}>
-                    {statusLabel(article.status)}
-                  </span>
-                </td>
-                <td style={{ padding: '12px 16px' }}>{visibilityLabel(article.visibility)}</td>
-                <td style={{ padding: '12px 16px' }}>{article.publishedAt ? new Date(article.publishedAt).toLocaleDateString('da-DK') : '-'}</td>
-                <td style={{ padding: '12px 16px' }}>{new Date(article.updatedAt).toLocaleDateString('da-DK')}</td>
-                <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                  <Link href={`/${clubSlug}/admin/artikler/${article.id}/rediger`} style={{ color: '#1890ff', fontSize: '0.875rem' }}>
-                    Rediger
-                  </Link>
-                </td>
-              </tr>
-            )) : (
-              <tr>
-                <td colSpan={6} style={{ padding: '32px', textAlign: 'center', color: '#999' }}>
-                  Ingen artikler fundet.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <div style={{ height: "24px" }} />
+
+        <AdminPageSection className="admin-table-card">
+          <div className="admin-table-container">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Titel</th>
+                  <th>Status</th>
+                  <th>Synlighed</th>
+                  <th>Publiceret</th>
+                  <th>Opdateret</th>
+                  <th style={{ textAlign: "right" }}>Handling</th>
+                </tr>
+              </thead>
+              <tbody>
+                {articles.length > 0 ? articles.map((article) => (
+                  <tr key={article.id}>
+                    <td>
+                      <div className="admin-strong">{article.title}</div>
+                      <div className="admin-table-meta">{article.slug}</div>
+                    </td>
+                    <td>
+                      <span className={statusBadgeClass(article.status)}>
+                        {statusLabel(article.status)}
+                      </span>
+                    </td>
+                    <td>{visibilityLabel(article.visibility)}</td>
+                    <td>{article.publishedAt ? new Date(article.publishedAt).toLocaleDateString("da-DK") : "—"}</td>
+                    <td>{new Date(article.updatedAt).toLocaleDateString("da-DK")}</td>
+                    <td style={{ textAlign: "right" }}>
+                      <Link
+                        href={`/${clubSlug}/admin/artikler/${article.id}/rediger`}
+                        className="admin-link"
+                      >
+                        Rediger
+                      </Link>
+                    </td>
+                  </tr>
+                )) : (
+                  <tr>
+                    <td colSpan={6} className="admin-empty-cell">
+                      Ingen artikler fundet.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </AdminPageSection>
       </div>
     </AdminShell>
   );

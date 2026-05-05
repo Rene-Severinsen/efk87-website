@@ -1919,3 +1919,98 @@
   background: #ffe4e6 !important;
   color: #9f1239 !important;
 }
+
+/* EFK87 admin semantic color cleanup primitives */
+
+.admin-shell .admin-page-content {
+  padding-top: 24px;
+}
+
+.admin-shell .admin-page-section {
+  padding: 24px;
+}
+
+.admin-shell .admin-page-section--flush {
+  padding: 0;
+  overflow: hidden;
+}
+
+.admin-shell .admin-table-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.admin-shell .admin-muted {
+  color: var(--admin-text-muted) !important;
+}
+
+.admin-shell .admin-soft {
+  color: var(--admin-text-soft) !important;
+}
+
+.admin-shell .admin-strong {
+  color: var(--admin-text) !important;
+  font-weight: 800;
+}
+
+.admin-shell .admin-link {
+  color: var(--admin-primary-hover) !important;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.admin-shell .admin-link:hover {
+  color: var(--admin-primary) !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.admin-shell .admin-badge-muted {
+  background: var(--admin-surface-soft);
+  color: var(--admin-text-muted);
+  border: 1px solid var(--admin-card-border);
+}
+
+.admin-shell .admin-badge-draft,
+.admin-shell .admin-badge-warning {
+  background: var(--admin-warning-bg);
+  color: var(--admin-warning-text);
+  border: 1px solid var(--admin-warning-border);
+}
+
+.admin-shell .admin-badge-archived {
+  background: var(--admin-surface-soft);
+  color: var(--admin-text-muted);
+  border: 1px solid var(--admin-card-border);
+}
+
+.admin-shell .admin-badge-danger,
+.admin-shell .admin-badge-error {
+  background: var(--admin-danger-bg);
+  color: var(--admin-danger-text);
+  border: 1px solid var(--admin-danger-border);
+}
+
+.admin-shell .admin-badge-success {
+  background: var(--admin-success-bg);
+  color: var(--admin-success-text);
+  border: 1px solid var(--admin-success-border);
+}
+
+.admin-shell .admin-badge-info {
+  background: var(--admin-info-bg);
+  color: var(--admin-info-text);
+  border: 1px solid var(--admin-info-border);
+}
+
+.admin-shell .admin-table-meta {
+  margin-top: 4px;
+  color: var(--admin-text-muted);
+  font-size: 0.75rem;
+}
+
+.admin-shell .admin-empty-cell {
+  padding: 32px;
+  text-align: center;
+  color: var(--admin-text-muted);
+}
