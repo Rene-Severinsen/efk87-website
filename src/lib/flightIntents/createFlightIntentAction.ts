@@ -11,6 +11,16 @@ import {
   ClubFlightIntentVisibility 
 } from "../../generated/prisma";
 
+function parseLocalDateInput(value: string): Date {
+  const [year, month, day] = value.split("-").map(Number);
+
+  if (!year || !month || !day) {
+    throw new Error("Invalid flightDate");
+  }
+
+  return new Date(year, month - 1, day, 0, 0, 0, 0);
+}
+
 export async function createFlightIntentAction(formData: FormData) {
   "use server";
 
@@ -34,8 +44,7 @@ export async function createFlightIntentAction(formData: FormData) {
   if (!activityTypeStr) throw new Error("Missing activityType");
   if (message && message.length > 240) throw new Error("Message too long");
 
-  const flightDate = new Date(flightDateStr);
-  flightDate.setHours(0, 0, 0, 0);
+  const flightDate = parseLocalDateInput(flightDateStr);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);

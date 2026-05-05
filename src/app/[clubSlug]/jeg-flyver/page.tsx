@@ -26,6 +26,14 @@ interface JegFlyverPageProps {
 /**
  * "Jeg flyver" submission page for members.
  */
+function formatLocalDateForInput(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
 export default async function JegFlyverPage({ params, searchParams }: JegFlyverPageProps) {
   const { clubSlug } = await params;
   const { created, cancelled, duplicate } = await searchParams;
@@ -38,7 +46,7 @@ export default async function JegFlyverPage({ params, searchParams }: JegFlyverP
   const recentIntents = await getMemberRecentFlightIntents(club.id, viewer);
 
   const today = new Date();
-  const todayStr = today.toISOString().split("T")[0];
+  const todayStr = formatLocalDateForInput(today);
 
   // Check if member already has an active entry for today
   const hasActiveToday = await getActiveFlightIntentForMemberDate(club.id, viewer.userId!, today);
