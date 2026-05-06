@@ -5,6 +5,7 @@ import { MemberActivityStats } from '../../../lib/memberActivity/memberActivityS
 import { ServerViewerContext } from '../../../lib/auth/viewer';
 import { PublicNavigationItem } from '../../../lib/publicSite/publicNavigation';
 import { NewMemberHighlightData } from '../../../lib/members/newMemberHighlightService';
+import { BirthdayHighlightData } from '../../../lib/members/birthdayHighlightService';
 import NewMembersHighlightCard from '../../club/NewMembersHighlightCard';
 import Link from 'next/link';
 import { ThemedTopBar } from '../ThemedTopBar';
@@ -121,6 +122,7 @@ interface PublicClubHomePageV2Props {
   navigationItems: PublicNavigationItem[];
   actionItems: PublicNavigationItem[];
   newMemberHighlights: NewMemberHighlightData;
+  birthdayHighlights?: BirthdayHighlightData;
   calendarMarquee: PublicCalendarEntry[];
   latestForumActivity: ThreadWithRelations[];
   homepageContents: HomepageContentWithSignups[];
@@ -152,10 +154,15 @@ interface PublicClubHomePageV2Props {
  * PublicClubHomePageV2 - Active premium homepage component.
  * Renders public homepage with tenant data.
  */
-export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, calendarMarquee, latestForumActivity, homepageContents, flightSchoolHomepage, galleryPreview, weather, footerData, surface = "public", currentPath }: PublicClubHomePageV2Props) {
+export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents, memberActivity, navigationItems, actionItems, newMemberHighlights, birthdayHighlights, calendarMarquee, latestForumActivity, homepageContents, flightSchoolHomepage, galleryPreview, weather, footerData, surface = "public", currentPath }: PublicClubHomePageV2Props) {
   const homeLogoUrl = club.settings?.logoUrl ?? null;
   const homeLogoAltText =
     club.settings?.logoAltText || club.settings?.displayName || club.name;
+
+  const todaysBirthdayHighlights = birthdayHighlights ?? {
+    visible: false,
+    members: [],
+  };
 
   const safeGalleryPreview = galleryPreview ?? {
     latestImages: [],
@@ -274,7 +281,7 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             <div className="home-v2-inline-actions">
               {isMemberDashboard ? (
                 <>
-                  <Link className="home-v2-pill home-v2-primary" href={publicRoutes.jegFlyver(club.slug)}>Jeg flyver</Link>
+<Link className="home-v2-pill home-v2-primary" href={publicRoutes.jegFlyver(club.slug)}>Jeg flyver</Link>
                   <Link className="home-v2-pill" href={publicRoutes.home(club.slug) + '/kalender'}>Åbn kalender</Link>
                   <Link className="home-v2-pill" href={publicRoutes.flightSchoolCalendar(club.slug)}>Skolekalender</Link>
                   <Link className="home-v2-pill" href={publicRoutes.galleryNew(club.slug)}>Upload billeder</Link>
@@ -439,6 +446,32 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
 
             {isMemberDashboard ? (
             <>
+            {todaysBirthdayHighlights.visible ? (
+              <article className="home-v2-card home-v2-section-card">
+                <div className="home-v2-section-head">
+                  <h2>🎂 Fødselsdage</h2>
+                </div>
+
+                {todaysBirthdayHighlights.members.length === 1 ? (
+                  <p className="home-v2-row-sub">
+                    I dag har {todaysBirthdayHighlights.members[0].displayName} fødselsdag
+                  </p>
+                ) : (
+                  <div className="home-v2-quick-list">
+                    <p className="home-v2-row-sub">
+                      I dag har {todaysBirthdayHighlights.members.length} medlemmer fødselsdag:
+                    </p>
+
+                    {todaysBirthdayHighlights.members.map((member) => (
+                      <p key={member.id} className="home-v2-row-sub">
+                        {member.displayName}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </article>
+            ) : null}
+
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
                 <h2>Aktivitet på pladsen</h2>

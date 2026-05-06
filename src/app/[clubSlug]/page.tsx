@@ -18,6 +18,7 @@ import {
   getVisiblePublicActions,
 } from "../../lib/publicSite/publicNavigation";
 import { getNewMemberHighlights } from "../../lib/members/newMemberHighlightService";
+import { getTodayBirthdayHighlights } from "../../lib/members/birthdayHighlightService";
 import { getHomepageMarqueeCalendarEntries } from "../../lib/publicSite/publicCalendarService";
 import { getLatestForumActivity } from "../../lib/forum/forumService";
 import { getPublicClubSettings } from "../../lib/publicSite/publicClubSettingsService";
@@ -85,6 +86,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const navigationItems = getVisiblePublicNavigation(clubSlug, viewer);
   const actionItems = getVisiblePublicActions(clubSlug, viewer);
   const newMemberHighlights = await getNewMemberHighlights(club.id);
+  const birthdayHighlights = await getTodayBirthdayHighlights(club.id);
   const calendarMarquee = await getHomepageMarqueeCalendarEntries(club.id, viewer);
   const latestForumActivity = await getLatestForumActivity(club.id);
   const homepageContents = await getActiveHomepageContentForClub(club.id, viewer);
@@ -114,6 +116,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
           navigationItems={navigationItems}
           actionItems={actionItems}
           newMemberHighlights={newMemberHighlights}
+          birthdayHighlights={birthdayHighlights}
           calendarMarquee={calendarMarquee}
           latestForumActivity={latestForumActivity}
           homepageContents={homepageContents}
