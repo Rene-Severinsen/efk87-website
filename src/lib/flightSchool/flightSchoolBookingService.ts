@@ -625,25 +625,42 @@ export async function bookSlot(clubId: string, memberProfileId: string, slotId: 
  * Cancel a member's own booking (Requirement 30).
  */
 export async function cancelOwnBooking(bookingId: string, memberProfileId: string) {
-  const booking = await prisma.flightSchoolBooking.findUniqueOrThrow({
-    where: { id: bookingId }
-  });
+  const updatedBooking = await prisma.$transaction(async (tx) => {
+    const booking = await tx.flightSchoolBooking.findUniqueOrThrow({
+      where: { id: bookingId },
+    });
 
-  if (booking.memberProfileId !== memberProfileId) {
-    throw new Error("Not authorized to cancel this booking");
-  }
-
-  const updatedBooking = await prisma.flightSchoolBooking.update({
-    where: { id: bookingId },
-    data: {
-      status: FlightSchoolBookingStatus.CANCELLED,
-      cancelledAt: new Date(),
-      cancelledById: memberProfileId
+    if (booking.memberProfileId !== memberProfileId) {
+      throw new Error("Not authorized to cancel this booking");
     }
+
+    if (booking.status === FlightSchoolBookingStatus.CANCELLED) {
+      return booking;
+    }
+
+    await tx.flightSchoolBooking.deleteMany({
+      where: {
+        flightSchoolTimeSlotId: booking.flightSchoolTimeSlotId,
+        memberProfileId: booking.memberProfileId,
+        status: FlightSchoolBookingStatus.CANCELLED,
+        id: {
+          not: booking.id,
+        },
+      },
+    });
+
+    return tx.flightSchoolBooking.update({
+      where: { id: bookingId },
+      data: {
+        status: FlightSchoolBookingStatus.CANCELLED,
+        cancelledAt: new Date(),
+        cancelledById: memberProfileId,
+      },
+    });
   });
 
   // 31. TODO: Add notification service seam here for later instructor notification
-  // Example: await notifyInstructorOfBookingCancellation(booking.id);
+  // Example: await notifyInstructorOfBookingCancellation(updatedBooking.id);
 
   return updatedBooking;
 }
