@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { requireClubBySlug, TenancyError } from "../../../../lib/tenancy/tenantService";
 import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards";
 import AdminShell from "../../../../components/admin/AdminShell";
-import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitives";
+import { AdminPageHeader, AdminPageSection } from "../../../../components/admin/AdminPagePrimitives";
 import { getForumCategories } from "../../../../lib/forum/forumService";
 import Link from "next/link";
 import { 
@@ -53,62 +53,67 @@ export default async function Page({ params }: PageProps) {
         }}
       />
 
-      <div className="mt-8 space-y-4">
-        <h2 className="text-xl font-bold text-white mb-4 px-2">Kategorier</h2>
-        
-        {categories.length === 0 ? (
-          <div className="p-12 text-center backdrop-blur-md admin-surface-muted border admin-border rounded-3xl">
-            <p className="admin-muted">Der er endnu ikke oprettet nogen forumkategorier.</p>
-          </div>
-        ) : (
-          <div className="grid gap-4">
-            {categories.map((category) => (
-              <div 
-                key={category.id}
-                className="group flex items-center gap-4 p-4 backdrop-blur-md admin-surface-muted hover:opacity-90 border admin-border rounded-2xl transition-all"
-              >
-                <div className="flex-shrink-0 cursor-grab admin-muted hover:admin-muted transition-colors">
-                  <GripVertical className="w-5 h-5" />
-                </div>
-                
-                <div className="flex-grow">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold text-white">{category.title}</h3>
-                    {!category.isActive && (
-                      <span className="admin-badge admin-badge-danger">
-                        Inaktiv
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm admin-muted line-clamp-1">
-                    /{category.slug} • {category.description || "Ingen beskrivelse"}
-                  </p>
-                </div>
+      <div className="admin-page-content">
+        <AdminPageSection>
+          <h2 className="admin-section-title">Kategorier</h2>
 
-                <div className="flex items-center gap-4">
-                  <div className="text-right hidden sm:block">
-                    <div className="text-sm font-bold text-white">{category._count.threads}</div>
-                    <div className="text-[10px] admin-muted uppercase font-bold tracking-tight">Tråde</div>
+          {categories.length === 0 ? (
+            <div className="admin-empty-state">
+              <MessageCircle className="admin-empty-icon h-8 w-8" />
+              <p className="admin-muted">Der er endnu ikke oprettet nogen forumkategorier.</p>
+            </div>
+          ) : (
+            <div className="grid gap-4">
+              {categories.map((category) => (
+                <div
+                  key={category.id}
+                  className="admin-list-card flex items-center gap-4"
+                >
+                  <div className="admin-muted flex-shrink-0 cursor-grab">
+                    <GripVertical className="h-5 w-5" />
                   </div>
-                  
-                  <Link
-                    href={`/${clubSlug}/admin/forum/kategorier/${category.id}/rediger`}
-                    className="p-2 rounded-lg admin-surface-muted hover:opacity-90 admin-muted hover:text-white transition-all"
-                  >
-                    <Settings className="w-5 h-5" />
-                  </Link>
-                  
-                  <Link
-                    href={`/${clubSlug}/forum/${category.slug}`}
-                    className="p-2 rounded-lg admin-surface-muted hover:opacity-90 admin-muted hover:text-white transition-all"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </Link>
+
+                  <div className="min-w-0 flex-grow">
+                    <div className="flex items-center gap-2">
+                      <h3 className="admin-strong">{category.title}</h3>
+                      {!category.isActive && (
+                        <span className="admin-badge admin-badge-danger">
+                          Inaktiv
+                        </span>
+                      )}
+                    </div>
+                    <p className="admin-muted line-clamp-1 text-sm">
+                      /{category.slug} • {category.description || "Ingen beskrivelse"}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <div className="hidden text-right sm:block">
+                      <div className="admin-strong text-sm">{category._count.threads}</div>
+                      <div className="admin-muted text-[10px] font-bold uppercase tracking-tight">Tråde</div>
+                    </div>
+
+                    <Link
+                      href={`/${clubSlug}/admin/forum/kategorier/${category.id}/rediger`}
+                      className="admin-icon-button"
+                      title="Rediger kategori"
+                    >
+                      <Settings className="h-5 w-5" />
+                    </Link>
+
+                    <Link
+                      href={`/${clubSlug}/forum/${category.slug}`}
+                      className="admin-icon-button"
+                      title="Åbn kategori"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </AdminPageSection>
       </div>
     </AdminShell>
   );
