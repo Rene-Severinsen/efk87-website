@@ -4,6 +4,7 @@ import { ThemedSectionCard } from "../../../components/publicSite/ThemedBuilding
 import { publicRoutes } from "../../../lib/publicRoutes";
 import { getMemberDirectoryForClub } from "../../../lib/members/memberProfileService";
 import MembersDirectory from "./MembersDirectory";
+import { requireActiveMemberForClub } from "../../../lib/auth/accessGuards";
 
 interface MembersPageProps {
   params: Promise<{
@@ -24,6 +25,8 @@ export default async function MembersPage({ params }: MembersPageProps) {
     actionItems,
     publicSettings,
   } = await resolvePublicPageForClub(clubSlug, pageSlug);
+
+  await requireActiveMemberForClub(club.id, clubSlug, publicRoutes.members(clubSlug));
 
   const members = await getMemberDirectoryForClub(club.id);
 

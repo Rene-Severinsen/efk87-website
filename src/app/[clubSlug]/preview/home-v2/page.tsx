@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { requireClubBySlug } from "../../../../lib/tenancy/tenantService";
-import { getServerViewerForClub, toViewerVisibilityContext } from "../../../../lib/auth/viewer";
+import { toViewerVisibilityContext } from "../../../../lib/auth/viewer";
+import { requireActiveMemberForClub } from "../../../../lib/auth/accessGuards";
 import { getClubTheme } from "../../../../lib/publicSite/publicThemeService";
 import { getTodayFlightIntents } from "../../../../lib/publicSite/publicFlightIntentService";
 import { getMemberActivityStats } from "../../../../lib/memberActivity/memberActivityService";
@@ -29,14 +30,8 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
     notFound();
   }
 
-  // Require active member or development mode
-  const viewer = await getServerViewerForClub(club.id);
-  const isDev = process.env.NODE_ENV === "development";
-  
-  if (!viewer.isMember && !isDev) {
-    // If not a member and not in dev, we don't want to show the preview.
-    notFound();
-  }
+  // Require active member.
+  const viewer = await requireActiveMemberForClub(club.id, clubSlug, `/${clubSlug}/preview/home-v2`);
 
   // Fetch real data
   const visibilityContext = toViewerVisibilityContext(viewer);
