@@ -523,3 +523,100 @@ body {
   color: rgb(255 255 255) !important;
 }
 
+/* Public form submit state and trust badges */
+.public-form-shell {
+  position: relative;
+}
+
+.public-form-busy-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  border-radius: var(--public-radius, 1.5rem);
+  background: color-mix(in srgb, var(--public-card, #ffffff) 72%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.public-form-busy-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  max-width: min(100%, 360px);
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--public-card-border);
+  border-radius: 1.25rem;
+  color: var(--public-text);
+  background: var(--public-card);
+  box-shadow: var(--public-shadow, 0 18px 45px rgba(15, 23, 42, 0.14));
+}
+
+.public-form-busy-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  flex: 0 0 3rem;
+  border-radius: 999px;
+  color: var(--public-primary);
+  background: var(--public-primary-soft);
+  border: 1px solid color-mix(in srgb, var(--public-primary) 24%, var(--public-card-border));
+  animation: public-form-busy-spin 1.2s linear infinite;
+}
+
+.public-form-busy-logo-image {
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  border-radius: 999px;
+}
+
+.public-form-busy-title {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.public-form-busy-text {
+  margin: 0.15rem 0 0;
+  color: var(--public-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.public-turnstile-trust-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 3rem;
+  opacity: 0.72;
+}
+
+.public-turnstile-badge {
+  display: block;
+  width: auto;
+  max-width: 170px;
+  height: auto;
+  max-height: 44px;
+  object-fit: contain;
+}
+
+@keyframes public-form-busy-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-form-busy-logo {
+    animation: none;
+  }
+}

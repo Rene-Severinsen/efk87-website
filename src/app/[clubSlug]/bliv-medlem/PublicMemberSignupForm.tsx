@@ -1,12 +1,35 @@
 "use client";
 
-import { useState, useActionState } from "react";
+import Script from "next/script";
+import { useEffect, useRef, useState, useActionState } from "react";
 import { ClubMemberMembershipType } from "@/generated/prisma";
 import { submitPublicMemberSignupAction, PublicMemberSignupState } from "@/lib/publicSite/publicMemberSignupActions";
 import { ThemedSectionCard } from "@/components/publicSite/ThemedBuildingBlocks";
 
 interface PublicMemberSignupFormProps {
   clubSlug: string;
+}
+
+interface TurnstileGlobal {
+  render: (
+    element: HTMLElement,
+    options: {
+      sitekey: string;
+      size: "invisible";
+      execution: "execute";
+      callback: (token: string) => void;
+      "error-callback": () => void;
+      "expired-callback": () => void;
+    }
+  ) => string;
+  execute: (widgetId: string) => void;
+  reset: (widgetId: string) => void;
+}
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileGlobal;
+  }
 }
 
 const initialState: PublicMemberSignupState = {};
@@ -17,8 +40,14 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
     initialState
   );
 
-  const [membershipType, setMembershipType] = useState<string>("");
-  const [birthDate, setBirthDate] = useState<string>("");
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
+  const turnstileContainerRef = useRef<HTMLDivElement | null>(null);
+  const turnstileWidgetIdRef = useRef<string | null>(null);
+  const pendingFormRef = useRef<HTMLFormElement | null>(null);
+
+  const [membershipType, setMembershipType] = useState<string>(state.values?.membershipType ?? "");
+  const [birthDate, setBirthDate] = useState<string>(state.values?.birthDate ?? "");
+  const [isSubmittingProtectedForm, setIsSubmittingProtectedForm] = useState(false);
   const [localFieldErrors, setLocalFieldErrors] = useState<Record<string, string>>({});
 
   const setLocalFieldError = (field: string, message: string | null) => {
@@ -111,6 +140,94 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
   };
 
   const ageError = getAgeError();
+  const showFormBusy = isPending || isSubmittingProtectedForm;
+
+  const resetTurnstileToken = () => {
+    const formElement = pendingFormRef.current;
+    const tokenInput = formElement?.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]');
+
+    if (tokenInput) {
+      tokenInput.value = "";
+    }
+
+    pendingFormRef.current = null;
+    setIsSubmittingProtectedForm(false);
+
+    if (turnstileWidgetIdRef.current && window.turnstile) {
+      window.turnstile.reset(turnstileWidgetIdRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (!isPending) {
+      resetTurnstileToken();
+      setIsSubmittingProtectedForm(false);
+    }
+  }, [isPending, state]);
+
+  const renderTurnstile = () => {
+    if (!turnstileSiteKey || !turnstileContainerRef.current || !window.turnstile) {
+      return;
+    }
+
+    if (turnstileWidgetIdRef.current) {
+      return;
+    }
+
+    turnstileWidgetIdRef.current = window.turnstile.render(turnstileContainerRef.current, {
+      sitekey: turnstileSiteKey,
+      size: "invisible",
+      execution: "execute",
+      callback: (token: string) => {
+        const formElement = pendingFormRef.current;
+        if (!formElement) return;
+
+        const tokenInput = formElement.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]');
+        if (tokenInput) {
+          tokenInput.value = token;
+        }
+
+        formElement.requestSubmit();
+      },
+      "error-callback": () => {
+        pendingFormRef.current = null;
+        alert("Vi kunne ikke verificere formularen. Prøv igen.");
+      },
+      "expired-callback": () => {
+        if (turnstileWidgetIdRef.current && window.turnstile) {
+          window.turnstile.reset(turnstileWidgetIdRef.current);
+        }
+      },
+    });
+  };
+
+  const handleTurnstileSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const formElement = event.currentTarget;
+    const tokenInput = formElement.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]');
+
+    if (tokenInput?.value) {
+      return;
+    }
+
+    event.preventDefault();
+    setIsSubmittingProtectedForm(true);
+
+    if (!turnstileSiteKey) {
+      setIsSubmittingProtectedForm(false);
+      alert("Formularbeskyttelse mangler konfiguration.");
+      return;
+    }
+
+    if (!window.turnstile || !turnstileWidgetIdRef.current) {
+      setIsSubmittingProtectedForm(false);
+      alert("Formularbeskyttelse er ikke klar endnu. Prøv igen om et øjeblik.");
+      return;
+    }
+
+    pendingFormRef.current = formElement;
+    window.turnstile.reset(turnstileWidgetIdRef.current);
+    window.turnstile.execute(turnstileWidgetIdRef.current);
+  };
 
   if (state.success) {
     return (
@@ -137,8 +254,18 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
   }
 
   return (
-    <ThemedSectionCard>
-      <form action={action} className="space-y-6">
+    <div className="public-form-shell">
+      <ThemedSectionCard>
+      <Script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+        async
+        defer
+        onLoad={renderTurnstile}
+      />
+
+      <form action={action} onSubmit={handleTurnstileSubmit} className="space-y-6">
+        <input type="hidden" name="cf-turnstile-response" value="" />
+        <div ref={turnstileContainerRef} />
         {state.error && (
           <div className="public-alert public-alert-danger">
             {state.error}
@@ -156,6 +283,7 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
               name="firstName"
               id="firstName"
               required
+              defaultValue={state.values?.firstName ?? ""}
               className="public-input"
             />
             {state.fieldErrors?.firstName && (
@@ -173,6 +301,7 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
               name="lastName"
               id="lastName"
               required
+              defaultValue={state.values?.lastName ?? ""}
               className="public-input"
             />
             {state.fieldErrors?.lastName && (
@@ -191,6 +320,7 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
             name="address"
             id="address"
             required
+            defaultValue={state.values?.address ?? ""}
             className="public-input"
           />
           {state.fieldErrors?.address && (
@@ -209,6 +339,7 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
               name="postalCode"
               id="postalCode"
               required
+              defaultValue={state.values?.postalCode ?? ""}
               inputMode="numeric"
               autoComplete="postal-code"
               maxLength={4}
@@ -232,6 +363,7 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
               name="city"
               id="city"
               required
+              defaultValue={state.values?.city ?? ""}
               className="public-input"
             />
             {state.fieldErrors?.city && (
@@ -251,6 +383,7 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
                 name="email"
                 id="email"
                 required
+                defaultValue={state.values?.email ?? ""}
                 autoComplete="email"
                 onBlur={(event) => validateEmailOnBlur(event.target.value)}
                 className="public-input"
@@ -272,6 +405,7 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
                 name="mobilePhone"
                 id="mobilePhone"
                 required
+                defaultValue={state.values?.mobilePhone ?? ""}
                 inputMode="numeric"
                 onBlur={(event) => validateMobilePhoneOnBlur(event.target.value)}
                 className="public-input"
@@ -313,6 +447,7 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
               type="text"
               name="mdkNumber"
               id="mdkNumber"
+              defaultValue={state.values?.mdkNumber ?? ""}
               inputMode="numeric"
               maxLength={4}
               required={membershipType === ClubMemberMembershipType.SENIOR || membershipType === ClubMemberMembershipType.JUNIOR}
@@ -359,13 +494,40 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
         <div className="pt-6">
           <button
             type="submit"
-            disabled={isPending || !!ageError || Object.keys(localFieldErrors).length > 0}
+            disabled={showFormBusy || !!ageError || Object.keys(localFieldErrors).length > 0}
             className="public-primary-button w-full"
           >
-            {isPending ? "Sender indmeldelse..." : "Indsend indmeldelse"}
+            {showFormBusy ? "Sender indmeldelse..." : "Indsend indmeldelse"}
           </button>
+
+          <div className="public-turnstile-trust-row" aria-label="Cloudflare formularbeskyttelse">
+            <img
+              src="/images/brand/cloudflare/BDES-5287_ProtectedByCloudflareBadge_web_badges_3.png"
+              alt="Protected by Cloudflare"
+              className="public-turnstile-badge"
+            />
+          </div>
         </div>
       </form>
+
+      {showFormBusy ? (
+        <div className="public-form-busy-overlay" role="status" aria-live="polite">
+          <div className="public-form-busy-box">
+            <div className="public-form-busy-logo" aria-hidden="true">
+              <img
+                src={`/uploads/${clubSlug}/branding/apple-touch-icon.png`}
+                alt=""
+                className="public-form-busy-logo-image"
+              />
+            </div>
+            <div>
+              <p className="public-form-busy-title">Sender indmeldelse…</p>
+              <p className="public-form-busy-text">Vent venligst et øjeblik.</p>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </ThemedSectionCard>
+    </div>
   );
 }

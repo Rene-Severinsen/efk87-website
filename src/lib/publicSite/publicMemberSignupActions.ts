@@ -11,11 +11,26 @@ import {
   MembershipStatus,
 } from "@/generated/prisma";
 import { getNextMemberNumber } from "@/lib/members/memberNumberService";
+import { validateTurnstileToken } from "@/lib/publicSite/turnstileValidation";
+
+export type PublicMemberSignupValues = {
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  postalCode?: string;
+  city?: string;
+  mobilePhone?: string;
+  email?: string;
+  birthDate?: string;
+  membershipType?: string;
+  mdkNumber?: string;
+};
 
 export type PublicMemberSignupState = {
   success?: boolean;
   error?: string;
   fieldErrors?: Record<string, string>;
+  values?: PublicMemberSignupValues;
 };
 
 export async function submitPublicMemberSignupAction(
@@ -42,6 +57,20 @@ export async function submitPublicMemberSignupAction(
   const birthDateStr = formData.get("birthDate")?.toString() || "";
   const membershipTypeStr = formData.get("membershipType")?.toString() || "";
   const mdkNumber = formData.get("mdkNumber")?.toString().trim() || "";
+  const turnstileToken = formData.get("cf-turnstile-response")?.toString() || "";
+
+  const values: PublicMemberSignupValues = {
+    firstName,
+    lastName,
+    address: addressLine,
+    postalCode,
+    city,
+    mobilePhone,
+    email,
+    birthDate: birthDateStr,
+    membershipType: membershipTypeStr,
+    mdkNumber,
+  };
 
   const fieldErrors: Record<string, string> = {};
 
@@ -68,17 +97,17 @@ export async function submitPublicMemberSignupAction(
   if (!membershipTypeStr) fieldErrors.membershipType = "Medlemskab er påkrævet";
 
   if (Object.keys(fieldErrors).length > 0) {
-    return { fieldErrors };
+    return { fieldErrors, values };
   }
 
   const birthDate = new Date(birthDateStr);
   if (Number.isNaN(birthDate.getTime())) {
-    return { fieldErrors: { birthDate: "Ugyldig fødselsdato" } };
+    return { fieldErrors: { birthDate: "Ugyldig fødselsdato" }, values };
   }
 
   const membershipType = membershipTypeStr as ClubMemberMembershipType;
   if (!Object.values(ClubMemberMembershipType).includes(membershipType)) {
-    return { error: "Ugyldig medlemskabstype" };
+    return { error: "Ugyldig medlemskabstype", values };
   }
 
   if (
@@ -86,12 +115,30 @@ export async function submitPublicMemberSignupAction(
       membershipType === ClubMemberMembershipType.JUNIOR) &&
     !mdkNumber
   ) {
-    return { fieldErrors: { mdkNumber: "MDK nr. er påkrævet for Senior og Junior" } };
+    return { fieldErrors: { mdkNumber: "MDK nr. er påkrævet for Senior og Junior" }, values };
   }
 
   if (mdkNumber && !/^\d{4}$/.test(mdkNumber)) {
-    return { fieldErrors: { mdkNumber: "MDK nr. skal være 4 cifre." } };
+    return { fieldErrors: { mdkNumber: "MDK nr. skal være 4 cifre." }, values };
   }
+
+  if (!turnstileToken || !(await validateTurnstileToken(turnstileToken))) {
+    return { error: "Vi kunne ikke verificere formularen. Prøv igen.", values };
+  }
+
+const currentYear = new Date().getFullYear();
+  const birthYear = birthDate.getFullYear();
+  const ageInCalendarYear = currentYear - birthYear;
+
+  if (membershipType === ClubMemberMembershipType.SENIOR && ageInCalendarYear < 18) {
+    return { fieldErrors: { membershipType: "Ud fra fødselsåret skal medlemskabet være Junior." }, values };
+  }
+
+  if (membershipType === ClubMemberMembershipType.JUNIOR && ageInCalendarYear >= 18) {
+    return { fieldErrors: { membershipType: "Ud fra fødselsåret skal medlemskabet være Senior." }, values };
+  }
+
+  const duplicateMessages: string[] = [];
 
   if (mdkNumber) {
     const existingMdkProfile = await prisma.clubMemberProfile.findFirst({
@@ -105,24 +152,8 @@ export async function submitPublicMemberSignupAction(
     });
 
     if (existingMdkProfile) {
-      return {
-        fieldErrors: {
-          mdkNumber: "Dette MDK nr. er allerede registreret i klubben.",
-        },
-      };
+      duplicateMessages.push("Dette MDK nr. er allerede registreret i klubben.");
     }
-  }
-
-  const currentYear = new Date().getFullYear();
-  const birthYear = birthDate.getFullYear();
-  const ageInCalendarYear = currentYear - birthYear;
-
-  if (membershipType === ClubMemberMembershipType.SENIOR && ageInCalendarYear < 18) {
-    return { fieldErrors: { membershipType: "Ud fra fødselsåret skal medlemskabet være Junior." } };
-  }
-
-  if (membershipType === ClubMemberMembershipType.JUNIOR && ageInCalendarYear >= 18) {
-    return { fieldErrors: { membershipType: "Ud fra fødselsåret skal medlemskabet være Senior." } };
   }
 
   const existingProfile = await prisma.clubMemberProfile.findFirst({
@@ -147,15 +178,16 @@ export async function submitPublicMemberSignupAction(
 
   if (existingProfile) {
     if (existingProfile.user.email === email) {
-      return {
-        error:
-          "Der findes allerede et medlem med samme e-mailadresse. Kontakt klubben, hvis du er i tvivl.",
-      };
+      duplicateMessages.push("Der findes allerede et medlem med samme e-mailadresse.");
+    } else {
+      duplicateMessages.push("Der findes allerede et medlem med tilsvarende oplysninger.");
     }
+  }
 
+  if (duplicateMessages.length > 0) {
     return {
-      error:
-        "Der findes allerede et medlem med tilsvarende oplysninger. Kontakt klubben, hvis du er i tvivl.",
+      error: `${duplicateMessages.join(" ")} Kontakt klubben, hvis du er i tvivl.`,
+      values,
     };
   }
 
@@ -220,6 +252,7 @@ export async function submitPublicMemberSignupAction(
     return {
       error:
         "Der skete en fejl ved gemning af din indmeldelse. Prøv venligst igen senere.",
+      values,
     };
   }
 }
