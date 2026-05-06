@@ -116,7 +116,7 @@ export default function FlightSchoolCalendarClient({
                   <button
                     onClick={() => handleCancel(slot.bookingId!, slot.id)}
                     disabled={!!loadingSlotId}
-                    className="w-full py-2 px-4 rounded-lg bg-[var(--public-danger-soft)] hover:bg-[var(--public-danger)] hover:text-[var(--public-text-on-primary)] text-[var(--public-danger)] text-sm font-semibold transition-colors disabled:opacity-50"
+                    className="w-full rounded-lg border border-[var(--public-danger)] bg-[var(--public-danger)] px-4 py-2 text-sm font-semibold text-[var(--public-text-on-primary)] shadow-sm transition-[filter,opacity] hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isLoading ? "Annullerer..." : "Afmeld"}
                   </button>
@@ -124,7 +124,7 @@ export default function FlightSchoolCalendarClient({
                   <button
                     onClick={() => handleBook(slot.id)}
                     disabled={!!loadingSlotId}
-                    className="w-full py-2 px-4 rounded-lg bg-[var(--public-success-soft)] hover:bg-[var(--public-success)] hover:text-[var(--public-text-on-primary)] text-[var(--public-success)] text-sm font-semibold transition-colors disabled:opacity-50"
+                    className="w-full rounded-lg bg-[var(--public-success)] px-4 py-2 text-sm font-semibold text-[var(--public-text-on-primary)] transition-colors hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isLoading ? "Booker..." : "Book tid"}
                   </button>

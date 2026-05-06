@@ -61,8 +61,8 @@ const Avatar = ({
           style={{ objectPosition: objectPosition || "center" }}
         />
       ) : (
-        <div className="avatar-fallback grid h-full w-full place-items-center bg-slate-200 text-slate-900">
-          <span className="avatar-fallback-initials block w-full text-center font-black leading-none">
+        <div className="avatar-fallback">
+          <span className="avatar-fallback-initials">
             {initials}
           </span>
         </div>

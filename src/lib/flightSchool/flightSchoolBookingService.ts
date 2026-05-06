@@ -408,7 +408,17 @@ export async function deleteOrCancelFlightSchoolSession(clubId: string, sessionI
     // No onDelete: Cascade there. So we must delete slots manually if we want to be safe and avoid orphans or FK errors.
     
     return await prisma.$transaction(async (tx) => {
-      // Delete slots first to avoid FK constraints
+      // Delete historical bookings first to avoid FK constraints.
+      // Cancelled sessions may still have CANCELLED booking rows attached to slots.
+      await tx.flightSchoolBooking.deleteMany({
+        where: {
+          timeSlot: {
+            flightSchoolSessionId: sessionId,
+          },
+        },
+      });
+
+      // Delete slots before deleting the session.
       await tx.flightSchoolTimeSlot.deleteMany({
         where: { flightSchoolSessionId: sessionId },
       });

@@ -3746,3 +3746,53 @@
 }
 
 /* END admin avatar final centering */
+
+/* Admin list card avatar fallback */
+.admin-list-card .avatar-fallback {
+  background: var(--admin-surface-strong);
+  color: var(--admin-text);
+  border: 1px solid var(--admin-border);
+}
+
+.admin-list-card .avatar-fallback-initials {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Admin avatar fallback */
+.admin-dashboard .avatar-fallback,
+.admin-card .avatar-fallback,
+.admin-list-card .avatar-fallback {
+  background: var(--admin-surface-strong);
+  color: var(--admin-text);
+  border: 1px solid var(--admin-border);
+}
+
+.admin-dashboard .avatar-fallback-initials,
+.admin-card .avatar-fallback-initials,
+.admin-list-card .avatar-fallback-initials {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Admin avatar fallback final tokens */
+.admin-dashboard .avatar-fallback,
+.admin-card .avatar-fallback,
+.admin-list-card .avatar-fallback {
+  background: var(--admin-surface-strong);
+  color: var(--admin-text);
+  border-color: var(--admin-border);
+}
+
+.admin-dashboard .avatar-fallback-initials,
+.admin-card .avatar-fallback-initials,
+.admin-list-card .avatar-fallback-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}

@@ -28,24 +28,31 @@ const InstructorsPanel: React.FC<InstructorsPanelProps> = ({ instructors }) => {
         <p className="admin-form-help italic">Ingen aktive instruktører fundet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {instructors.map((instructor) => (
-            <div
-              key={instructor.id}
-              className="admin-list-card flex items-center gap-3"
-            >
-              <Avatar 
-                imageUrl={instructor.profileImageUrl} 
-                name={`${instructor.firstName} ${instructor.lastName}`} 
-                size="md"
-              />
-              <div>
-                <div className="admin-strong font-medium">
-                  {instructor.firstName} {instructor.lastName}
+          {instructors.map((instructor) => {
+            const displayName = [instructor.firstName, instructor.lastName]
+              .filter(Boolean)
+              .join(" ")
+              .trim();
+
+            return (
+              <div
+                key={instructor.id}
+                className="admin-list-card flex items-center gap-3"
+              >
+                <Avatar
+                  imageUrl={instructor.profileImageUrl}
+                  name={displayName || "Instruktør"}
+                  size="md"
+                />
+                <div>
+                  <div className="admin-strong font-medium">
+                    {displayName || "Instruktør"}
+                  </div>
+                  <div className="admin-muted text-xs">Instruktør</div>
                 </div>
-                <div className="admin-muted text-xs">Instruktør</div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
