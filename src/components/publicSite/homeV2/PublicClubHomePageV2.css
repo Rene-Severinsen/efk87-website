@@ -1782,7 +1782,7 @@
   min-height: 430px;
 }
 
-.home-v2-root[data-surface="public"] .home-v2-layout {
+.home-v2-root[data-surface="public"] .home-v2-layout--public-presence {
   grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.75fr);
   align-items: start;
 }
@@ -1844,7 +1844,7 @@
 }
 
 @media (max-width: 1180px) {
-  .home-v2-root[data-surface="public"] .home-v2-layout {
+  .home-v2-root[data-surface="public"] .home-v2-layout--public-presence {
     grid-template-columns: 1fr;
   }
 
@@ -1950,7 +1950,7 @@
   border-radius: 22px;
 }
 
-.home-v2-root[data-surface="public"] .home-v2-layout {
+.home-v2-root[data-surface="public"] .home-v2-layout--public-presence {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
@@ -2172,7 +2172,7 @@
   max-width: 980px;
 }
 
-.home-v2-root[data-surface="public"] .home-v2-layout {
+.home-v2-root[data-surface="public"] .home-v2-layout--public-presence {
   grid-template-columns: 1fr;
 }
 
@@ -2406,7 +2406,6 @@
   z-index: 2;
 }
 
-
 /* Member dashboard flight activity card stacking */
 .home-v2-root[data-surface="member"] .home-v2-griffin > div:last-child {
   min-width: 0;
@@ -2431,4 +2430,55 @@
   justify-content: center;
   padding: 12px 18px;
   white-space: nowrap;
+}
+
+/* Final public homepage layout and spacing
+   Structure:
+   1) presence split = Forside-indhold + Jeg flyver
+   2) all following public sections = one-column stack with equal spacing
+*/
+.home-v2-root[data-surface="public"] .home-v2-layout--public-presence {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr) !important;
+  gap: 20px;
+  margin-top: 20px;
+  align-items: start;
+}
+
+.home-v2-root[data-surface="public"] .home-v2-layout:not(.home-v2-layout--public-presence) {
+  display: block;
+  margin-top: 24px;
+}
+
+.home-v2-root[data-surface="public"] .home-v2-layout:not(.home-v2-layout--public-presence) > .home-v2-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.home-v2-root[data-surface="public"] .home-v2-layout:not(.home-v2-layout--public-presence) .home-v2-public-intro,
+.home-v2-root[data-surface="public"] .home-v2-layout:not(.home-v2-layout--public-presence) .home-v2-public-cta-band,
+.home-v2-root[data-surface="public"] .home-v2-layout:not(.home-v2-layout--public-presence) .home-v2-public-gallery-promos {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.home-v2-root[data-surface="public"] .home-v2-public-cta-band {
+  background: var(--home-card);
+  border: 1px solid var(--home-card-border);
+}
+
+@media (max-width: 1099px) {
+  .home-v2-root[data-surface="public"] .home-v2-layout--public-presence {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Final public stack-to-stack spacing */
+.home-v2-root[data-surface="public"]
+  .home-v2-layout:not(.home-v2-layout--public-presence)
+  > .home-v2-stack
+  + .home-v2-stack {
+  margin-top: 24px;
 }

@@ -63,6 +63,7 @@ function resolveClubHref(clubSlug: string, href: string): string {
   return `/${clubSlug}/${href}`;
 }
 
+
 interface PublicClubHomePageV2Props {
   club: {
     id: string;
@@ -350,14 +351,73 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
             </div>
           </article>
         </section>
+        {!isMemberDashboard ? (
+          <section className="home-v2-layout home-v2-layout--public-presence">
+            <div className="home-v2-stack">
+              <HomepageContentBoxes
+                  clubSlug={club.slug}
+                  contents={homepageContents}
+                  viewer={viewer}
+              />
+            </div>
+
+            <div className="home-v2-stack">
+              <article className="home-v2-card home-v2-section-card">
+                <div className="home-v2-section-head">
+                  <h2>Aktivitet på pladsen</h2>
+                  <Link className="home-v2-link-soft" href={publicRoutes.jegFlyverList(club.slug)}>
+                    Se alle flyvemeldinger
+                  </Link>
+                </div>
+
+                <div className="home-v2-griffin">
+                  <div className="home-v2-griffin-emoji">
+                    <img
+                      src={todayFlightIntents.length > 0 ? `/images/clubs/${club.slug}/vi_flyver.gif` : `/images/clubs/${club.slug}/vi_flyver_ikke.gif`}
+                      alt={todayFlightIntents.length > 0 ? "Der er aktivitet på pladsen" : "Ingen aktivitet meldt endnu"}
+                      style={{ height: "100%", width: "auto", objectFit: "contain" }}
+                    />
+                  </div>
+
+                  <div>
+                    <h3>
+                      {todayFlightIntents.length > 0
+                        ? todayFlightIntents.length === 1
+                          ? "1 melding i dag"
+                          : `${todayFlightIntents.length} meldinger i dag`
+                        : 'Ingen har meldt "jeg flyver" endnu'}
+                    </h3>
+
+                    <p className="home-v2-row-sub">
+                      {todayFlightIntents.length > 0
+                        ? "Der er aktivitet på pladsen i dag."
+                        : "Her kan gæster se, når der sker noget på pladsen."}
+                    </p>
+
+                    <div className="home-v2-activity-actions">
+                      <Link
+                        href={publicRoutes.jegFlyverList(club.slug)}
+                        className="home-v2-activity-cta home-v2-activity-cta-secondary"
+                      >
+                        Se dagens indtjekninger
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+        ) : null}
 
         <section className="home-v2-layout">
           <div className="home-v2-stack">
-            <HomepageContentBoxes
-                clubSlug={club.slug}
-                contents={homepageContents}
-                viewer={viewer}
-            />
+            {isMemberDashboard ? (
+              <HomepageContentBoxes
+                  clubSlug={club.slug}
+                  contents={homepageContents}
+                  viewer={viewer}
+              />
+            ) : null}
             {isMemberDashboard ? (
             <article className="home-v2-card home-v2-section-card">
               <div className="home-v2-section-head">
@@ -441,8 +501,6 @@ export default function PublicClubHomePageV2({ club, viewer, todayFlightIntents,
           </div>
 
           <div className="home-v2-stack">
-
-
 
             {isMemberDashboard ? (
             <>
