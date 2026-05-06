@@ -11,10 +11,13 @@ const allowedImageMimeTypes = new Set([
   "image/webp",
   "image/heic",
   "image/heif",
+  "image/svg+xml",
 ]);
 
 const outputMimeType = "image/webp";
 const outputExtension = ".webp";
+const svgMimeType = "image/svg+xml";
+const svgExtension = ".svg";
 const maxUploadSizeBytes = 25 * 1024 * 1024;
 const maxLongestEdgePx = 2400;
 const webpQuality = 85;
@@ -109,17 +112,20 @@ export async function uploadClubMediaAsset(
   input: UploadClubMediaInput,
 ): Promise<ClubMediaAssetDTO> {
   if (!allowedImageMimeTypes.has(input.file.type)) {
-    throw new Error("Kun JPG, PNG, WebP, HEIC og HEIF kan uploades.");
+    throw new Error("Kun JPG, PNG, WebP, HEIC, HEIF og SVG kan uploades.");
   }
 
   if (input.file.size > maxUploadSizeBytes) {
     throw new Error("Billedet er for stort. Maksimal uploadstørrelse er 25 MB.");
   }
 
-  const outputBuffer = await normalizeImageToWebp(input.file);
+  const isSvg = input.file.type === svgMimeType;
+  const outputBuffer = isSvg
+    ? Buffer.from(await input.file.arrayBuffer())
+    : await normalizeImageToWebp(input.file);
 
   const randomName = crypto.randomBytes(16).toString("hex");
-  const fileName = `${randomName}${outputExtension}`;
+  const fileName = `${randomName}${isSvg ? svgExtension : outputExtension}`;
 
   const publicRelativeDirectory = `uploads/${input.clubSlug}/media`;
   const storageKey = `${publicRelativeDirectory}/${fileName}`;
@@ -137,7 +143,7 @@ export async function uploadClubMediaAsset(
       altText: normalizeNullableText(input.altText),
       originalName: input.file.name,
       fileName,
-      mimeType: outputMimeType,
+      mimeType: isSvg ? svgMimeType : outputMimeType,
       sizeBytes: outputBuffer.length,
       storageProvider: "LOCAL",
       storageKey,

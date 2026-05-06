@@ -103,7 +103,7 @@ export default function MediaLibraryClient({
             Upload billede
           </h2>
           <p className="admin-muted">
-            Tilladte filtyper: JPG, PNG, WebP, HEIC og HEIF. Upload maks 25 MB. Billedet gemmes optimeret som WebP.
+            Tilladte filtyper: JPG, PNG, WebP, HEIC, HEIF og SVG. Upload maks 25 MB. Rasterbilleder gemmes optimeret som WebP. SVG gemmes som original SVG.
           </p>
         </div>
 
@@ -116,9 +116,9 @@ export default function MediaLibraryClient({
               id="file"
               name="file"
               type="file"
-              accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif"
+              className="admin-file-input admin-media-file-input"
+              accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/svg+xml,.jpg,.jpeg,.png,.webp,.heic,.heif,.svg"
               required
-              className="admin-file-input"
             />
           </div>
 
