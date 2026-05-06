@@ -39,3 +39,15 @@ This document describes the member activity tracking and display features.
 - Anonymous names are masked; only members/admins see real names.
 - No detailed pageview analytics or admin graphs are implemented for this feature.
 - **Admin Statistics**: First version uses `MemberDailyActivity` to show active members today and trends over the last 14 days in the admin panel. Not real-time.
+
+## Member-dashboard elementer
+
+Den loggede/member-forside samler daglig medlemsaktivitet i højre kolonne.
+
+Elementer:
+- Fødselsdage: vises kun hvis aktive medlemmer har fødselsdag i dag.
+- Aktivitet på pladsen / Jeg flyver: viser dagens flyvemeldinger.
+- Senest online: viser seneste medlemsaktivitet.
+- Eventuelle øvrige member-relevante kort skal placeres efter samme princip: kun relevant, kort og member-only.
+
+Fødselsdagskortet placeres over "Aktivitet på pladsen", så det er synligt på dagen. Kortet skjules helt, hvis der ikke er fødselsdage samme dag.

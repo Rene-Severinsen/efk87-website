@@ -222,3 +222,22 @@ Gallery archive/delete is a soft delete. It sets the album status to ARCHIVED; i
 
 <!-- END:docs-sync-2026-05-04-om-media-gallery:media-gallery-admin -->
 
+## Flyveskolebooking: afmelding og unique constraint
+
+Flyveskolebooking har en unik constraint på:
+
+```prisma
+@@unique([flightSchoolTimeSlotId, memberProfileId, status])
+```
+
+Ved afmelding ændres en aktiv booking fra `BOOKED` til `CANCELLED`. Hvis der allerede findes en tidligere `CANCELLED` booking for samme medlem og slot, kan det give Prisma `P2002`.
+
+Implementeret regel:
+- `cancelOwnBooking()` kører i transaction.
+- Hvis booking allerede er `CANCELLED`, returneres den uden ny ændring.
+- Før en `BOOKED` booking ændres til `CANCELLED`, slettes gamle `CANCELLED` dubletter for samme `flightSchoolTimeSlotId` og `memberProfileId`.
+- Schema ændres ikke.
+- Formålet er at gøre afmelding sikker/idempotent uden at indføre større bookinghistorik-model.
+
+Fremtidig udvidelse:
+- Hvis komplet historik over alle afmeldinger ønskes, bør bookinghistorik flyttes til separat audit/event-tabel i stedet for at gemme flere `CANCELLED` rækker med samme unique-key.

@@ -240,3 +240,21 @@ The homepage shows gallery activity through a toggle between:
 
 <!-- END:docs-sync-2026-05-04-om-media-gallery:om-media-gallery-public -->
 
+## Member-forside: Fødselsdage
+
+På den loggede/member-forside vises et fødselsdagskort, når aktive medlemmer har fødselsdag på den aktuelle dag.
+
+Regler:
+- Vises kun på member-forsiden.
+- Vises kun for medlemmer med `memberStatus = ACTIVE`.
+- Viser kun fødselsdage på den aktuelle dag.
+- Viser ikke kommende fødselsdage.
+- Viser ikke alder.
+- Skjules helt, hvis ingen aktive medlemmer har fødselsdag i dag.
+- Kortet placeres over "Aktivitet på pladsen" / "Jeg flyver" i højre kolonne.
+
+Tekstformat:
+- Ét medlem: `🎂 Fødselsdage / I dag har Claus Tønnesen fødselsdag`
+- Flere medlemmer: `🎂 Fødselsdage / I dag har 2 medlemmer fødselsdag:` efterfulgt af navneliste.
+
+Dato-match skal bruge lokal klub-/dansk dato-logik, ikke UTC/ISO-afledt dato.

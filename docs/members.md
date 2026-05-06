@@ -112,3 +112,16 @@ Regel:
 
 Formålet er at undgå, at tekniske statusændringer overskriver medlemmets oprindelige optagelsesdato.
 
+## Fødselsdato og fødselsdagsvisning
+
+Medlemmets `birthDate` bruges til member-only fødselsdagsvisning på den loggede forside.
+
+Regler:
+- Kun aktive medlemmer indgår: `memberStatus = ACTIVE`.
+- Fødselsdage vises kun på selve dagen.
+- Alder vises ikke.
+- Kommende fødselsdage vises ikke.
+- Under oprettelse og udmeldte medlemmer må ikke indgå.
+- Dato-match skal ske på måned/dag efter dansk lokal dato, ikke UTC.
+
+Formålet er klubfølelse uden at eksponere unødig personlig information.
