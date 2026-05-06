@@ -69,7 +69,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           }),
         ]
       : []),
-    ...((env.SMTP_HOST || env.AUTH_EMAIL_SERVER) && (env.MAIL_FROM || env.AUTH_EMAIL_FROM)
+    ...(env.AUTH_EMAIL_LOGIN_ENABLED && env.AUTH_EMAIL_SERVER && (env.MAIL_FROM || env.AUTH_EMAIL_FROM)
       ? [
           Email({
             server: env.AUTH_EMAIL_SERVER,
