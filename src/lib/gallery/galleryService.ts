@@ -116,6 +116,23 @@ export async function getPublishedGalleryAlbums(
   }));
 }
 
+export async function getPublishedGalleryAlbumAccessBySlug(
+  clubId: string,
+  slug: string,
+): Promise<{ id: string; visibility: PublicSurfaceVisibility } | null> {
+  return prisma.galleryAlbum.findFirst({
+    where: {
+      clubId,
+      slug,
+      status: GalleryAlbumStatus.PUBLISHED,
+    },
+    select: {
+      id: true,
+      visibility: true,
+    },
+  });
+}
+
 export async function getPublishedGalleryAlbumBySlug(
   clubId: string,
   slug: string,

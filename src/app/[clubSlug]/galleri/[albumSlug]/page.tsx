@@ -1,13 +1,17 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { resolvePublicPageForClub } from "../../../../lib/publicSite/publicPageRoute";
 import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPageShell";
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
-import { getPublishedGalleryAlbumBySlug } from "../../../../lib/gallery/galleryService";
+import {
+  getPublishedGalleryAlbumAccessBySlug,
+  getPublishedGalleryAlbumBySlug,
+} from "../../../../lib/gallery/galleryService";
 import { getServerViewerForClub } from "../../../../lib/auth/viewer";
 import { publicRoutes } from "../../../../lib/publicRoutes";
 import GalleryLightbox from "../../../../components/gallery/GalleryLightbox";
 import GalleryAddImagesForm from "../../../../components/gallery/GalleryAddImagesForm";
+import { PublicSurfaceVisibility } from "../../../../generated/prisma";
 
 interface PageProps {
   params: Promise<{
@@ -23,6 +27,17 @@ export default async function AlbumDetailPage({ params }: PageProps) {
     await resolvePublicPageForClub(clubSlug, "galleri");
 
   const viewer = await getServerViewerForClub(club.id);
+  const albumAccess = await getPublishedGalleryAlbumAccessBySlug(club.id, albumSlug);
+
+  if (!albumAccess) {
+    notFound();
+  }
+
+  if (albumAccess.visibility === PublicSurfaceVisibility.MEMBERS_ONLY && !viewer.isMember) {
+    const callbackUrl = publicRoutes.galleryAlbum(clubSlug, albumSlug);
+    redirect(`${publicRoutes.login(clubSlug)}?callbackUrl=${encodeURIComponent(callbackUrl)}&reason=member-required`);
+  }
+
   const album = await getPublishedGalleryAlbumBySlug(club.id, albumSlug, {
     isMember: viewer.isMember,
   });
