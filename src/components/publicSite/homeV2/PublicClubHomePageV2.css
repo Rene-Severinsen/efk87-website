@@ -472,7 +472,6 @@
 }
 
 .home-v2-participant-name,
-.home-v2-content-body,
 .home-v2-row-title,
 .home-v2-gallery-label,
 .new-member-item .member-name,
@@ -2481,4 +2480,30 @@
   > .home-v2-stack
   + .home-v2-stack {
   margin-top: 24px;
+}
+
+/* Homepage content rich text typography */
+.home-v2-content-body {
+  color: var(--home-text);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.65;
+  white-space: normal;
+}
+
+.home-v2-content-body p,
+.home-v2-content-body li {
+  font-weight: 400;
+}
+
+.home-v2-content-body strong,
+.home-v2-content-body b {
+  font-weight: 800;
+}
+
+.home-v2-content-body h1,
+.home-v2-content-body h2,
+.home-v2-content-body h3,
+.home-v2-content-body h4 {
+  font-weight: 800;
 }
