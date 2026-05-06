@@ -48,14 +48,22 @@ export async function submitPublicMemberSignupAction(
   if (!firstName) fieldErrors.firstName = "Fornavn er påkrævet";
   if (!lastName) fieldErrors.lastName = "Efternavn er påkrævet";
   if (!addressLine) fieldErrors.address = "Adresse er påkrævet";
-  if (!postalCode) fieldErrors.postalCode = "Postnummer er påkrævet";
+  if (!postalCode) {
+    fieldErrors.postalCode = "Postnummer er påkrævet";
+  } else if (!/^\d{4}$/.test(postalCode)) {
+    fieldErrors.postalCode = "Postnummer skal være 4 cifre.";
+  }
   if (!city) fieldErrors.city = "By er påkrævet";
   if (!email) {
     fieldErrors.email = "E-mail er påkrævet";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     fieldErrors.email = "Indtast en gyldig e-mailadresse.";
   }
-  if (!mobilePhone) fieldErrors.mobilePhone = "Mobilnummer er påkrævet";
+  if (!mobilePhone) {
+    fieldErrors.mobilePhone = "Mobilnummer er påkrævet";
+  } else if (!/^\d+$/.test(mobilePhone)) {
+    fieldErrors.mobilePhone = "Mobilnummer må kun indeholde tal.";
+  }
   if (!birthDateStr) fieldErrors.birthDate = "Fødselsdato er påkrævet";
   if (!membershipTypeStr) fieldErrors.membershipType = "Medlemskab er påkrævet";
 
@@ -79,6 +87,30 @@ export async function submitPublicMemberSignupAction(
     !mdkNumber
   ) {
     return { fieldErrors: { mdkNumber: "MDK nr. er påkrævet for Senior og Junior" } };
+  }
+
+  if (mdkNumber && !/^\d{4}$/.test(mdkNumber)) {
+    return { fieldErrors: { mdkNumber: "MDK nr. skal være 4 cifre." } };
+  }
+
+  if (mdkNumber) {
+    const existingMdkProfile = await prisma.clubMemberProfile.findFirst({
+      where: {
+        clubId: club.id,
+        mdkNumber,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (existingMdkProfile) {
+      return {
+        fieldErrors: {
+          mdkNumber: "Dette MDK nr. er allerede registreret i klubben.",
+        },
+      };
+    }
   }
 
   const currentYear = new Date().getFullYear();

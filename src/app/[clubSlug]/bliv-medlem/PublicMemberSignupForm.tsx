@@ -19,6 +19,77 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
 
   const [membershipType, setMembershipType] = useState<string>("");
   const [birthDate, setBirthDate] = useState<string>("");
+  const [localFieldErrors, setLocalFieldErrors] = useState<Record<string, string>>({});
+
+  const setLocalFieldError = (field: string, message: string | null) => {
+    setLocalFieldErrors((current) => {
+      const next = { ...current };
+
+      if (message) {
+        next[field] = message;
+      } else {
+        delete next[field];
+      }
+
+      return next;
+    });
+  };
+
+  const validatePostalCodeOnBlur = (value: string) => {
+    const trimmed = value.trim();
+
+    if (!trimmed) {
+      setLocalFieldError("postalCode", null);
+      return;
+    }
+
+    setLocalFieldError(
+      "postalCode",
+      /^\d{4}$/.test(trimmed) ? null : "Postnummer skal være 4 cifre."
+    );
+  };
+
+  const validateMdkNumberOnBlur = (value: string) => {
+    const trimmed = value.trim();
+
+    if (!trimmed) {
+      setLocalFieldError("mdkNumber", null);
+      return;
+    }
+
+    setLocalFieldError(
+      "mdkNumber",
+      /^\d{4}$/.test(trimmed) ? null : "MDK nr. skal være 4 cifre."
+    );
+  };
+
+  const validateEmailOnBlur = (value: string) => {
+    const trimmed = value.trim();
+
+    if (!trimmed) {
+      setLocalFieldError("email", null);
+      return;
+    }
+
+    setLocalFieldError(
+      "email",
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed) ? null : "Indtast en gyldig e-mailadresse."
+    );
+  };
+
+  const validateMobilePhoneOnBlur = (value: string) => {
+    const trimmed = value.trim();
+
+    if (!trimmed) {
+      setLocalFieldError("mobilePhone", null);
+      return;
+    }
+
+    setLocalFieldError(
+      "mobilePhone",
+      /^\d+$/.test(trimmed) ? null : "Mobilnummer må kun indeholde tal."
+    );
+  };
 
   // Local validation for membership type vs age
   const getAgeError = () => {
@@ -138,10 +209,16 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
               name="postalCode"
               id="postalCode"
               required
+              inputMode="numeric"
+              autoComplete="postal-code"
+              maxLength={4}
+              onBlur={(event) => validatePostalCodeOnBlur(event.target.value)}
               className="public-input"
             />
-            {state.fieldErrors?.postalCode && (
-              <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.postalCode}</p>
+            {(localFieldErrors.postalCode || state.fieldErrors?.postalCode) && (
+              <p className="mt-1 text-xs text-[var(--public-danger)]">
+                {localFieldErrors.postalCode || state.fieldErrors?.postalCode}
+              </p>
             )}
           </div>
 
@@ -175,10 +252,13 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
                 id="email"
                 required
                 autoComplete="email"
+                onBlur={(event) => validateEmailOnBlur(event.target.value)}
                 className="public-input"
             />
-            {state.fieldErrors?.email && (
-                <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.email}</p>
+            {(localFieldErrors.email || state.fieldErrors?.email) && (
+                <p className="mt-1 text-xs text-[var(--public-danger)]">
+                  {localFieldErrors.email || state.fieldErrors?.email}
+                </p>
             )}
           </div>
 
@@ -192,10 +272,14 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
                 name="mobilePhone"
                 id="mobilePhone"
                 required
+                inputMode="numeric"
+                onBlur={(event) => validateMobilePhoneOnBlur(event.target.value)}
                 className="public-input"
             />
-            {state.fieldErrors?.mobilePhone && (
-                <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.mobilePhone}</p>
+            {(localFieldErrors.mobilePhone || state.fieldErrors?.mobilePhone) && (
+                <p className="mt-1 text-xs text-[var(--public-danger)]">
+                  {localFieldErrors.mobilePhone || state.fieldErrors?.mobilePhone}
+                </p>
             )}
           </div>
         </div>
@@ -229,14 +313,19 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
               type="text"
               name="mdkNumber"
               id="mdkNumber"
+              inputMode="numeric"
+              maxLength={4}
               required={membershipType === ClubMemberMembershipType.SENIOR || membershipType === ClubMemberMembershipType.JUNIOR}
+              onBlur={(event) => validateMdkNumberOnBlur(event.target.value)}
               className="public-input"
             />
             <p className="public-help-text mt-1" style={{ fontSize: '10px' }}>
               MDK nr. er påkrævet for Senior og Junior. Passivt medlemskab kan oprettes uden MDK nr.
             </p>
-            {state.fieldErrors?.mdkNumber && (
-              <p className="mt-1 text-xs text-[var(--public-danger)]">{state.fieldErrors.mdkNumber}</p>
+            {(localFieldErrors.mdkNumber || state.fieldErrors?.mdkNumber) && (
+              <p className="mt-1 text-xs text-[var(--public-danger)]">
+                {localFieldErrors.mdkNumber || state.fieldErrors?.mdkNumber}
+              </p>
             )}
           </div>
         </div>
@@ -270,7 +359,7 @@ export default function PublicMemberSignupForm({ clubSlug }: PublicMemberSignupF
         <div className="pt-6">
           <button
             type="submit"
-            disabled={isPending || !!ageError}
+            disabled={isPending || !!ageError || Object.keys(localFieldErrors).length > 0}
             className="public-primary-button w-full"
           >
             {isPending ? "Sender indmeldelse..." : "Indsend indmeldelse"}
