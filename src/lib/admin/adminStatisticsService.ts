@@ -1,4 +1,5 @@
 import prisma from "../db/prisma";
+import { ClubMemberStatus } from "../../generated/prisma";
 import { startOfDay, endOfDay, subDays, startOfYear } from "date-fns";
 
 export interface AdminStatisticsOverview {
@@ -143,10 +144,10 @@ export async function getAdminStatisticsOverview(clubId: string): Promise<AdminS
   const uniqueFlightIntentUsersThisYear = uniqueUsersYear.length;
 
   // 4. Club
-  const activeMemberCount = await prisma.clubMembership.count({
+  const activeMemberCount = await prisma.clubMemberProfile.count({
     where: {
       clubId,
-      status: "ACTIVE",
+      memberStatus: ClubMemberStatus.ACTIVE,
     },
   });
 
