@@ -147,18 +147,6 @@ export default function LoginForm({
                   </button>
 
                   <div className="public-auth-secondary-actions">
-                    <button
-                        type="button"
-                        onClick={() => {
-                          setError(null);
-                          setSuccess(null);
-                          setMode("magic-link");
-                        }}
-                        className="public-link"
-                    >
-                      Send loginlink i stedet
-                    </button>
-
                     <Link
                         href={publicRoutes.forgotPassword(clubSlug)}
                         className="public-link"
