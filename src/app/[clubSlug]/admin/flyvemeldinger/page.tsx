@@ -91,11 +91,10 @@ export default async function FlyvemeldingerPage({ params, searchParams }: Flyve
           </AdminPageSection>
         ) : null}
 
-        <AdminStatTileGrid columns="four">
+        <AdminStatTileGrid columns="auto">
           <AdminStatTile label="Aktive i dag" value={todayActive.length} tone="green" />
           <AdminStatTile label="Aflyste i dag" value={todayCancelled.length} tone="rose" />
           <AdminStatTile label="Seneste 25" value={recent.length} tone="blue" />
-          <AdminStatTile label="Moderation" value="Klar" tone="slate" />
         </AdminStatTileGrid>
 
         <section style={{ marginBottom: "2.5rem" }}>

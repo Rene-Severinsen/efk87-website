@@ -90,7 +90,7 @@ export async function updateArticleAction(clubSlug: string, articleId: string, f
   const excerpt = formData.get("excerpt") as string;
   const rawBody = formData.get("body") as string;
   const heroImageUrl = formData.get("heroImageUrl") as string;
-  const authorName = formData.get("authorName") as string;
+  const authorName = viewer.name || viewer.email || "Admin";
   const status = formData.get("status") as ArticleStatus;
   const visibility = formData.get("visibility") as PublicSurfaceVisibility;
   const isFeatured = formData.get("isFeatured") === "true";
