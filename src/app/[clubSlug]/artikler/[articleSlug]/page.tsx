@@ -5,6 +5,7 @@ import ThemedClubPageShell from "../../../../components/publicSite/ThemedClubPag
 import { getPublishedArticleBySlug } from "../../../../lib/articles/articleService";
 import { ThemedSectionCard } from "../../../../components/publicSite/ThemedBuildingBlocks";
 import { publicRoutes } from "../../../../lib/publicRoutes";
+import PublicPrintButton from "../../../../components/publicSite/PublicPrintButton";
 
 interface PageProps {
   params: Promise<{
@@ -59,14 +60,36 @@ export default async function ArticleDetailPage({ params }: PageProps) {
           currentPath={publicRoutes.article(clubSlug, articleSlug)}
           maxWidth="1120px"
       >
-        {article.heroImageUrl && (
-            <div
-                className="mb-8 h-[220px] rounded-3xl border border-[var(--public-card-border)] bg-cover bg-center bg-no-repeat shadow-[var(--public-shadow)] sm:h-[320px] md:h-[420px]"
-                style={{
-                  backgroundImage: `url(${article.heroImageUrl})`,
-                }}
-            />
-        )}
+        <div className="mb-6 flex flex-wrap items-center gap-3 print:hidden">
+          <a
+            href={publicRoutes.articles(clubSlug)}
+            className="public-secondary-button inline-flex w-fit items-center gap-2"
+          >
+            ← Tilbage til artikler
+          </a>
+
+          <PublicPrintButton label="Udskriv artikel" />
+        </div>
+
+        <article className="article-print-root">
+          <div className="article-print-title-block">
+            <div className="article-print-meta">
+              {publishedDate ? `Artikel · ${publishedDate}` : "Artikel"}
+            </div>
+            <h1>{article.title}</h1>
+            {article.excerpt ? <p>{article.excerpt}</p> : null}
+          </div>
+
+          {article.heroImageUrl && (
+            <figure className="article-print-hero mb-8 overflow-hidden rounded-3xl border border-[var(--public-card-border)] shadow-[var(--public-shadow)]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={article.heroImageUrl}
+                alt={article.title}
+                className="h-full w-full object-cover"
+              />
+            </figure>
+          )}
 
         <div className="mx-auto max-w-[1040px]">
           <ThemedSectionCard className="p-6 sm:p-8 md:p-12">
@@ -94,6 +117,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
             )}
           </ThemedSectionCard>
         </div>
+        </article>
       </ThemedClubPageShell>
   );
 }

@@ -116,9 +116,6 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
               <CheckCircle size={24} style={{ color: 'var(--public-success)' }} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600 }}>Du er tilmeldt!</div>
-                {content.signupMode === HomepageContentSignupMode.QUANTITY && (
-                  <div style={{ fontSize: '14px', color: 'var(--public-text-soft)' }}>Antal: {mySignup.quantity}</div>
-                )}
               </div>
               <div className="home-v2-signup-actions">
                 {content.signupMode === HomepageContentSignupMode.QUANTITY && (
@@ -216,6 +213,11 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
                     <div className="home-v2-participant-info">
                       <div className="home-v2-participant-name">
                         {formatMemberName(signup.user)}
+                        {content.signupMode === HomepageContentSignupMode.QUANTITY ? (
+                          <span className="home-v2-participant-name-quantity">
+                            {" · Antal: "}{signup.quantity}
+                          </span>
+                        ) : null}
                       </div>
                       {signup.note && (
                         <div className="home-v2-participant-note">
@@ -224,9 +226,6 @@ function ContentBox({ clubSlug, content, viewer }: { clubSlug: string, content: 
                       )}
                     </div>
                     <div className="home-v2-participant-meta">
-                      {content.signupMode === HomepageContentSignupMode.QUANTITY && (
-                        <span style={{ fontWeight: 600 }}>{signup.quantity}</span>
-                      )}
                       <span style={{ fontSize: '11px', opacity: 0.6 }}>
                         {new Date(signup.createdAt).toLocaleDateString('da-DK', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
                       </span>

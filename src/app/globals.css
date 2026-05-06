@@ -658,3 +658,105 @@ body {
   letter-spacing: -0.02em;
   text-align: center;
 }
+
+/* Article print layout */
+.article-print-title-block {
+  display: none;
+}
+
+.article-print-hero {
+  height: 220px;
+}
+
+@media (min-width: 640px) {
+  .article-print-hero {
+    height: 320px;
+  }
+}
+
+@media (min-width: 768px) {
+  .article-print-hero {
+    height: 420px;
+  }
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .article-print-root,
+  .article-print-root * {
+    visibility: visible !important;
+  }
+
+  .article-print-root {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
+  .article-print-title-block {
+    display: block !important;
+    margin: 0 0 18px !important;
+    padding: 0 !important;
+  }
+
+  .article-print-title-block h1 {
+    margin: 0 0 8px !important;
+    font-size: 28px !important;
+    line-height: 1.15 !important;
+    color: #111827 !important;
+  }
+
+  .article-print-title-block p {
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    color: #374151 !important;
+  }
+
+  .article-print-meta {
+    margin-bottom: 8px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #4b5563 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  .article-print-hero {
+    height: auto !important;
+    margin: 0 0 18px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    break-inside: avoid !important;
+  }
+
+  .article-print-hero img {
+    display: block !important;
+    width: 100% !important;
+    max-height: 260px !important;
+    object-fit: cover !important;
+  }
+
+  .article-print-root .themed-section-card,
+  .article-print-root section,
+  .article-print-root article,
+  .article-print-root div {
+    box-shadow: none !important;
+  }
+
+  .article-print-root .article-detail-prose {
+    color: #111827 !important;
+  }
+}

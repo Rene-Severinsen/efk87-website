@@ -34,13 +34,13 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
 
 export async function createArticleAction(clubSlug: string, formData: FormData) {
   const club = await requireClubBySlug(clubSlug);
-  await requireClubAdminForClub(club.id, clubSlug);
+  const viewer = await requireClubAdminForClub(club.id, clubSlug);
 
   const title = formData.get("title") as string;
   const excerpt = formData.get("excerpt") as string;
   const rawBody = formData.get("body") as string;
   const heroImageUrl = formData.get("heroImageUrl") as string;
-  const authorName = formData.get("authorName") as string;
+  const authorName = viewer.name || viewer.email || "Admin";
   const status = formData.get("status") as ArticleStatus;
   const visibility = formData.get("visibility") as PublicSurfaceVisibility;
   const isFeatured = formData.get("isFeatured") === "true";
@@ -84,7 +84,7 @@ export async function createArticleAction(clubSlug: string, formData: FormData) 
 
 export async function updateArticleAction(clubSlug: string, articleId: string, formData: FormData) {
   const club = await requireClubBySlug(clubSlug);
-  await requireClubAdminForClub(club.id, clubSlug);
+  const viewer = await requireClubAdminForClub(club.id, clubSlug);
 
   const title = formData.get("title") as string;
   const excerpt = formData.get("excerpt") as string;

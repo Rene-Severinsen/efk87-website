@@ -6,6 +6,7 @@ import { ArticleStatus, PublicSurfaceVisibility, ArticleTag, Article } from "../
 import Link from "next/link";
 import { ClubMediaAssetDTO } from "../../../lib/media/mediaTypes";
 import MediaUrlPicker from "../media/MediaUrlPicker";
+import ArticleTagPicker from "./ArticleTagPicker";
 
 const ArticleRichTextEditor = dynamic(() => import("./ArticleRichTextEditor"), {
   ssr: false,
@@ -219,61 +220,11 @@ export default function ArticleForm({
                 marginBottom: "8px",
               }}
             >
-              Tags
-            </label>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "4px",
-                maxHeight: "150px",
-                overflowY: "auto",
-                padding: "8px",
-                border: "1px solid var(--admin-card-border)",
-                borderRadius: "4px",
-              }}
-            >
-              {tags.map((tag) => (
-                <label
-                  key={tag.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    fontSize: "0.875rem",
-                  }}
-                >
-                  <input
-                    name="tagIds"
-                    type="checkbox"
-                    value={tag.id}
-                    defaultChecked={initialData?.tags?.some((articleTag) => articleTag.tagId === tag.id)}
-                  />
-                  {tag.name}
-                </label>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="admin-card p-6"
-        >
-          <div style={{ marginBottom: "16px" }}>
-            <label
-              style={{
-                display: "block",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-                marginBottom: "8px",
-              }}
-            >
               Forfatter (Navn)
             </label>
             <input
-              name="authorName"
               type="text"
-              defaultValue={initialData?.authorName ?? undefined}
+              value={initialData?.authorName || "Sættes automatisk ved gem"}
               readOnly
               className="admin-input cursor-not-allowed opacity-70"
             />
@@ -329,6 +280,29 @@ export default function ArticleForm({
             Tilbage til artikler
           </Link>
         </div>
+
+        <div
+          className="admin-card p-6"
+        >
+          <div style={{ marginBottom: "16px" }}>
+            <label
+              style={{
+                display: "block",
+                fontSize: "0.875rem",
+                fontWeight: "600",
+                marginBottom: "8px",
+              }}
+            >
+              Tags
+            </label>
+
+            <ArticleTagPicker
+              tags={tags}
+              selectedTagIds={initialData?.tags?.map((articleTag) => articleTag.tagId) ?? []}
+            />
+          </div>
+        </div>
+
       </div>
     </form>
   );

@@ -96,6 +96,12 @@ export default async function Page({ params }: PageProps) {
           <AdminStatTile label="Arkiverede" value={kpis.archived} tone="slate" />
         </AdminStatTileGrid>
 
+        <div className="admin-row-actions">
+          <Link href={`/${clubSlug}/admin/artikler/tags`} className="admin-btn admin-btn-secondary">
+            Vedligehold tags
+          </Link>
+        </div>
+
         <div style={{ height: "24px" }} />
 
         <AdminPageSection className="admin-table-card">
