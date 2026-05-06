@@ -6,6 +6,7 @@ import { AdminPageHeader } from "../../../../components/admin/AdminPagePrimitive
 import { getAdminStatisticsOverview } from "../../../../lib/admin/adminStatisticsService";
 import "../../../../components/admin/AdminDashboard.css";
 import { AdminStatTile, AdminStatTileGrid } from "@/components/admin/AdminPagePrimitives";
+import { AdminActivityChart } from "@/components/admin/AdminActivityChart";
 
 interface AdminStatistikPageProps {
   params: Promise<{
@@ -55,61 +56,7 @@ export default async function AdminStatistikPage({ params }: AdminStatistikPageP
 
         <div className="admin-card" style={{ marginBottom: '24px' }}>
           <h2 className="admin-section-title">Aktivitetstrend (Sidste 14 dage)</h2>
-          <div className="admin-table-container">
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Dato</th>
-                  <th>Aktive medlemmer</th>
-                  <th>Flyvemeldinger</th>
-                  <th style={{ width: '40%' }}>Trend</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stats.dailySeries.map((day) => {
-                  const maxVal = Math.max(...stats.dailySeries.map(d => Math.max(d.uniqueActiveMembers, d.flightIntentCount)), 1);
-                  const memberWidth = (day.uniqueActiveMembers / maxVal) * 100;
-                  const intentWidth = (day.flightIntentCount / maxVal) * 100;
-                  
-                  return (
-                    <tr key={day.date}>
-                      <td>{day.date}</td>
-                      <td>{day.uniqueActiveMembers}</td>
-                      <td>{day.flightIntentCount}</td>
-                      <td>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                          <div style={{ 
-                            height: '8px', 
-                            width: `${memberWidth}%`, 
-                            backgroundColor: 'var(--admin-info-text)', 
-                            borderRadius: '4px',
-                            minWidth: day.uniqueActiveMembers > 0 ? '2px' : '0'
-                          }} title="Aktive medlemmer" />
-                          <div style={{ 
-                            height: '8px', 
-                            width: `${intentWidth}%`, 
-                            backgroundColor: 'var(--admin-success-text)', 
-                            borderRadius: '4px',
-                            minWidth: day.flightIntentCount > 0 ? '2px' : '0'
-                          }} title="Flyvemeldinger" />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          <div className="admin-muted mt-3 flex gap-4 text-xs">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span className="admin-chart-legend-dot admin-chart-legend-dot--info" />
-              Aktive medlemmer
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span className="admin-chart-legend-dot admin-chart-legend-dot--success" />
-              Flyvemeldinger
-            </div>
-          </div>
+          <AdminActivityChart data={stats.dailySeries} />
         </div>
 
         <div className="admin-dashboard-grid">
