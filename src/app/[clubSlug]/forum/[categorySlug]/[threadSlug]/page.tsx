@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { Clock, Lock } from "lucide-react";
 
 import { resolveClubContext } from "../../../../../lib/publicSite/publicPageRoute";
@@ -86,7 +87,16 @@ export default async function ThreadDetailPage({
               threadSlug
           )}
       >
-        <div className="mt-8 space-y-8">
+        <div className="mb-6">
+          <Link
+            href={publicRoutes.forumCategory(clubSlug, categorySlug)}
+            className="public-secondary-button inline-flex w-fit items-center gap-2"
+          >
+            ← Tilbage til kategorien
+          </Link>
+        </div>
+
+<div className="mt-8 space-y-8">
           <article className="overflow-hidden rounded-3xl border border-[var(--public-card-border)] bg-[var(--public-card)] shadow-[var(--public-shadow)]">
             <header className="border-b border-[var(--public-card-border)] bg-[var(--public-surface)] px-6 py-5 sm:px-8">
               <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
