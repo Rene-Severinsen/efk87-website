@@ -80,7 +80,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   }
 
   const viewer = await requireClubAdminForClub(club.id, clubSlug, `/${clubSlug}/admin/systemstatus`);
-  const sendTestEmailAction = sendSystemStatusTestEmailAction.bind(null, club.id, clubSlug);
+  const sendTestEmailAction = sendSystemStatusTestEmailAction.bind(null, club.id, clubSlug, club.name);
 
   return (
     <AdminShell

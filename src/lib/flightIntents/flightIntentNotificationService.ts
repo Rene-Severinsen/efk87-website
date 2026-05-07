@@ -97,11 +97,12 @@ export async function sendFlightIntentCreatedNotification(params: {
   });
 
   const result = await sendMail({
-    to: getDefaultMailRecipient(),
+    to: getDefaultMailRecipient(params.clubName),
     bcc: mailingList.emailAddress,
     subject: template.subject,
     text: template.text,
     html: template.html,
+    fromName: params.clubName,
   });
 
   if (!result.success) {

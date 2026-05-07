@@ -22,6 +22,7 @@ export interface SendMailOptions {
   html?: string;
   cc?: string;
   bcc?: string;
+  fromName?: string;
 }
 
 export interface MailSendResult {
@@ -29,15 +30,33 @@ export interface MailSendResult {
   message: string;
 }
 
-export function getDefaultMailRecipient(): string {
-  return resolveFromEmail();
+export function getDefaultMailRecipient(fromName?: string): string {
+  return resolveFromEmailForClub(fromName);
 }
 
 function resolveFromEmail(): string {
   if (env.MAIL_FROM) return env.MAIL_FROM;
   if (env.AUTH_EMAIL_FROM) return env.AUTH_EMAIL_FROM;
-  if (env.SMTP_USER) return `EFK87 Platform <${env.SMTP_USER}>`;
-  return "EFK87 Platform <no-reply@localhost>";
+  if (env.SMTP_USER) return `Klubben <${env.SMTP_USER}>`;
+  return "Klubben <no-reply@localhost>";
+}
+
+function extractEmailAddress(value: string): string {
+  const match = value.match(/<([^>]+)>/);
+  return match?.[1] ?? value;
+}
+
+function escapeMailboxName(value: string): string {
+  return value.replaceAll('"', "'");
+}
+
+function resolveFromEmailForClub(fromName?: string): string {
+  if (!fromName) {
+    return resolveFromEmail();
+  }
+
+  const baseEmail = extractEmailAddress(resolveFromEmail());
+  return `"${escapeMailboxName(fromName)}" <${baseEmail}>`;
 }
 
 /**
@@ -120,7 +139,7 @@ function getBaseUrl() {
 /**
  * Generic mail sender used by auth, password reset and controlled admin test flows.
  */
-export async function sendMail({ to, subject, text, html, cc, bcc }: SendMailOptions): Promise<MailSendResult> {
+export async function sendMail({ to, subject, text, html, cc, bcc, fromName }: SendMailOptions): Promise<MailSendResult> {
   if (!to) {
     return {
       success: false,
@@ -159,7 +178,7 @@ export async function sendMail({ to, subject, text, html, cc, bcc }: SendMailOpt
 
   try {
     const info = await transport.sendMail({
-      from: resolveFromEmail(),
+      from: resolveFromEmailForClub(fromName),
       to,
       cc,
       bcc,
@@ -193,11 +212,13 @@ export async function sendMail({ to, subject, text, html, cc, bcc }: SendMailOpt
 export async function sendSystemTestEmail(params: {
   to: string;
   clubSlug: string;
+  clubName: string;
   requestedBy: string;
 }): Promise<MailSendResult> {
   const status = getMailRuntimeStatus();
   const template = renderSystemTestMailTemplate({
     clubSlug: params.clubSlug,
+    clubName: params.clubName,
     requestedBy: params.requestedBy,
     provider: status.provider,
     smtpHost: status.host,
@@ -209,6 +230,7 @@ export async function sendSystemTestEmail(params: {
     subject: template.subject,
     text: template.text,
     html: template.html,
+    fromName: params.clubName,
   });
 }
 
@@ -228,6 +250,7 @@ export async function sendMagicLinkEmail(params: { identifier: string; url: stri
     subject: template.subject,
     text: template.text,
     html: template.html,
+    fromName: "EFK87",
   });
 }
 
@@ -247,5 +270,6 @@ export async function sendPasswordResetEmail(email: string, token: string, clubS
     subject: template.subject,
     text: template.text,
     html: template.html,
+    fromName: "EFK87",
   });
 }

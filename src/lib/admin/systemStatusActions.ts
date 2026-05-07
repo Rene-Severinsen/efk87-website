@@ -15,6 +15,7 @@ function isValidEmail(value: string): boolean {
 export async function sendSystemStatusTestEmailAction(
   clubId: string,
   clubSlug: string,
+  clubName: string,
   formData: FormData
 ): Promise<void> {
   const viewer = await requireClubAdminForClub(
@@ -32,6 +33,7 @@ export async function sendSystemStatusTestEmailAction(
   const result = await sendSystemTestEmail({
     to,
     clubSlug,
+    clubName,
     requestedBy: viewer.email || viewer.name || "Ukendt admin",
   });
 

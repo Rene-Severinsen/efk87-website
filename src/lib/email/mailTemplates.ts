@@ -8,6 +8,7 @@ interface MailLayoutParams {
   title: string;
   intro?: string;
   contentHtml: string;
+  clubName?: string;
   footerText?: string;
 }
 
@@ -24,7 +25,8 @@ function renderMailLayout({
   title,
   intro,
   contentHtml,
-  footerText = "Denne mail er sendt automatisk fra EFK87-platformen.",
+  clubName,
+  footerText = "Powered by JoinIT",
 }: MailLayoutParams): string {
   return `
     <div style="margin:0;padding:0;background:#f3f6fb;">
@@ -32,7 +34,7 @@ function renderMailLayout({
         <div style="background:#ffffff;border:1px solid #d8e0ec;border-radius:18px;overflow:hidden;box-shadow:0 14px 34px rgba(15,23,42,0.08);">
           <div style="padding:28px 30px 20px;border-bottom:1px solid #e5edf7;background:#f8fbff;">
             <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:8px;">
-              EFK87 Platform
+              ${escapeHtml(clubName ?? "Klubben")}
             </div>
             <h1 style="margin:0;font-size:24px;line-height:1.25;color:#0f172a;">${escapeHtml(title)}</h1>
             ${intro ? `<p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:#334155;">${escapeHtml(intro)}</p>` : ""}
@@ -137,6 +139,7 @@ ${params.clubName}`;
   const html = renderMailLayout({
     title: "Jeg flyver",
     intro: `${params.createdByName} har meldt, at der flyves i dag.`,
+    clubName: params.clubName,
     contentHtml: `
       ${renderKeyValueRows([
         { label: "Medlem", value: params.createdByName },
@@ -205,6 +208,7 @@ ${platformName}`;
   const html = renderMailLayout({
     title: `Log ind på ${platformName}`,
     intro: "Klik på knappen nedenfor for at logge ind på din konto.",
+    clubName: platformName,
     contentHtml: `
       <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:#334155;">
         Brug dette sikre login-link til at fortsætte.
@@ -261,6 +265,7 @@ ${platformName}`;
   const html = renderMailLayout({
     title: "Nulstil adgangskode",
     intro: `Du har anmodet om at nulstille din adgangskode til ${platformName}.`,
+    clubName: platformName,
     contentHtml: `
       <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:#334155;">
         Klik på knappen nedenfor for at vælge en ny adgangskode.
@@ -295,15 +300,17 @@ ${platformName}`;
 
 export function renderSystemTestMailTemplate(params: {
   clubSlug: string;
+  clubName: string;
   requestedBy: string;
   provider: string;
   smtpHost?: string;
   smtpPort?: number;
 }): RenderedMailTemplate {
-  const subject = "EFK87 platform mailtest";
+  const subject = `Mailtest for ${params.clubName}`;
 
   const rows = [
-    { label: "Klub/tenant", value: params.clubSlug },
+    { label: "Klub", value: params.clubName },
+    { label: "Tenant", value: params.clubSlug },
     { label: "Udløst af", value: params.requestedBy },
     { label: "Mail provider", value: params.provider },
     { label: "SMTP host", value: params.smtpHost ?? "ikke angivet" },
@@ -312,7 +319,7 @@ export function renderSystemTestMailTemplate(params: {
 
   const text = `Hej.
 
-Dette er en teknisk testmail fra EFK87-platformen.
+Dette er en teknisk testmail for ${params.clubName}.
 
 Klub/tenant: ${params.clubSlug}
 Udløst af: ${params.requestedBy}
@@ -323,11 +330,12 @@ SMTP port: ${params.smtpPort ?? "ikke angivet"}
 Hvis du modtager denne mail, virker den grundlæggende SMTP-afsendelse.
 
 Venlig hilsen
-EFK87 platform`;
+${params.clubName}`;
 
   const html = renderMailLayout({
-    title: "EFK87 platform mailtest",
-    intro: "Dette er en teknisk testmail fra EFK87-platformen.",
+    title: `Mailtest for ${params.clubName}`,
+    intro: `Dette er en teknisk testmail for ${params.clubName}.`,
+    clubName: params.clubName,
     contentHtml: `
       ${renderKeyValueRows(rows)}
       <p style="margin:18px 0 0;font-size:15px;line-height:1.6;color:#334155;">
