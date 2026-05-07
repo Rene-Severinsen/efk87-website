@@ -4,6 +4,7 @@ import { requireClubAdminForClub } from "../../../../lib/auth/adminAccessGuards"
 import AdminShell from "../../../../components/admin/AdminShell";
 import { AdminPageHeader, AdminPageSection, AdminStatTile, AdminStatTileGrid } from "../../../../components/admin/AdminPagePrimitives";
 import { getMailRuntimeStatus } from "../../../../lib/email/mailService";
+import { getMailTemplateRegistry, type MailTemplateStatus } from "../../../../lib/email/mailTemplateRegistry";
 import { sendSystemStatusTestEmailAction } from "../../../../lib/admin/systemStatusActions";
 
 interface PageProps {
@@ -48,10 +49,24 @@ function getMailTestMessage(status?: string): { tone: "success" | "warning" | "d
   }
 }
 
+function getTemplateStatusBadgeClass(status: MailTemplateStatus): string {
+  switch (status) {
+    case "active":
+      return "admin-badge admin-badge-success";
+    case "ready":
+      return "admin-badge admin-badge-neutral";
+    case "disabled":
+      return "admin-badge admin-badge-warning";
+    default:
+      return "admin-badge admin-badge-neutral";
+  }
+}
+
 export default async function Page({ params, searchParams }: PageProps) {
   const { clubSlug } = await params;
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const mailStatus = getMailRuntimeStatus();
+  const mailTemplateRegistry = getMailTemplateRegistry();
   const mailTestMessage = getMailTestMessage(resolvedSearchParams.mailTest);
 
   let club;
@@ -148,6 +163,47 @@ export default async function Page({ params, searchParams }: PageProps) {
               </button>
             </div>
           </form>
+        </AdminPageSection>
+
+        <AdminPageSection>
+          <div className="mb-5">
+            <h2 className="admin-section-title">Mail templates</h2>
+            <p className="admin-muted m-0 text-sm leading-6">
+              Oversigt over registrerede mailtemplates og deres aktuelle flowstatus. Redigering kommer senere i platform admin.
+            </p>
+          </div>
+
+          <div className="admin-table-container">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Template</th>
+                  <th>Formål</th>
+                  <th>Status</th>
+                  <th>Funktion</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody>
+                {mailTemplateRegistry.map((template) => (
+                  <tr key={template.key}>
+                    <td>
+                      <div className="font-semibold">{template.name}</div>
+                      <div className="admin-muted text-xs">{template.key}</div>
+                    </td>
+                    <td>{template.purpose}</td>
+                    <td>
+                      <span className={getTemplateStatusBadgeClass(template.status)}>
+                        {template.statusLabel}
+                      </span>
+                    </td>
+                    <td><code>{template.templateFunction}</code></td>
+                    <td className="admin-muted">{template.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </AdminPageSection>
 
         <AdminPageSection>

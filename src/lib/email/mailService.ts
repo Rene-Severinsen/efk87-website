@@ -20,11 +20,17 @@ export interface SendMailOptions {
   subject: string;
   text: string;
   html?: string;
+  cc?: string;
+  bcc?: string;
 }
 
 export interface MailSendResult {
   success: boolean;
   message: string;
+}
+
+export function getDefaultMailRecipient(): string {
+  return resolveFromEmail();
 }
 
 function resolveFromEmail(): string {
@@ -114,7 +120,7 @@ function getBaseUrl() {
 /**
  * Generic mail sender used by auth, password reset and controlled admin test flows.
  */
-export async function sendMail({ to, subject, text, html }: SendMailOptions): Promise<MailSendResult> {
+export async function sendMail({ to, subject, text, html, cc, bcc }: SendMailOptions): Promise<MailSendResult> {
   if (!to) {
     return {
       success: false,
@@ -126,6 +132,8 @@ export async function sendMail({ to, subject, text, html }: SendMailOptions): Pr
     console.log("-----------------------------------------");
     console.log(`[DEV EMAIL] To: ${to}`);
     console.log(`[DEV EMAIL] Subject: ${subject}`);
+    if (cc) console.log(`[DEV EMAIL] Cc: ${cc}`);
+    if (bcc) console.log(`[DEV EMAIL] Bcc: ${bcc}`);
     console.log(`[DEV EMAIL] Body (text):\n${text}`);
     if (html) {
       console.log(`[DEV EMAIL] Body (html):\n${html.substring(0, 100)}...`);
@@ -153,6 +161,8 @@ export async function sendMail({ to, subject, text, html }: SendMailOptions): Pr
     const info = await transport.sendMail({
       from: resolveFromEmail(),
       to,
+      cc,
+      bcc,
       subject,
       text,
       html,

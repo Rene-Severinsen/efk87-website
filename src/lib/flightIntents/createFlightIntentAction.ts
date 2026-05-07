@@ -4,6 +4,7 @@ import { requireClubBySlug } from "../tenancy/tenantService";
 import { requireActiveMemberForClub } from "../auth/accessGuards";
 import { getActiveFlightIntentForMemberDate } from "./memberFlightIntentService";
 import { publicRoutes } from "../publicRoutes";
+import { sendFlightIntentCreatedNotification } from "./flightIntentNotificationService";
 import { 
   ClubFlightIntentType, 
   ClubFlightIntentStatus, 
@@ -81,7 +82,7 @@ export async function createFlightIntentAction(formData: FormData) {
   const expiresAt = new Date(flightDate);
   expiresAt.setHours(23, 59, 59, 999);
 
-  await prisma.clubFlightIntent.create({
+  const createdIntent = await prisma.clubFlightIntent.create({
     data: {
       clubId: club.id,
       userId: viewer.userId,
@@ -97,7 +98,21 @@ export async function createFlightIntentAction(formData: FormData) {
     },
   });
 
-  // Future: lookup getFlightIntentMailingListForClub(club.id) and enqueue notification after successful create.
+  try {
+    await sendFlightIntentCreatedNotification({
+      clubId: club.id,
+      clubSlug,
+      clubName: club.name,
+      createdIntent,
+    });
+  } catch (error) {
+    console.error("[FlightIntent] Created successfully, but notification mail failed.", {
+      clubId: club.id,
+      clubSlug,
+      flightIntentId: createdIntent.id,
+      error,
+    });
+  }
 
   redirect(publicRoutes.jegFlyver(clubSlug) + "?created=1");
 }

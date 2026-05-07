@@ -60,7 +60,7 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
         {flightIntents.length > 0 ? (
           <div className="list flex flex-col gap-3">
             {flightIntents.map((intent) => (
-              <div className="row-item flex items-center gap-3 p-3 rounded-xl bg-[var(--public-surface)] border border-[var(--public-card-border)]" key={intent.id}>
+              <div className="row-item flex items-start gap-3 p-3 rounded-xl bg-[var(--public-surface)] border border-[var(--public-card-border)]" key={intent.id}>
                 <div className="relative shrink-0">
                   <Avatar 
                     name={intent.displayName} 
@@ -72,16 +72,16 @@ export default async function JegFlyverListePage({ params }: JegFlyverListePageP
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="row-item-header flex justify-between items-center gap-2">
+                  <div className="row-item-header flex items-start justify-between gap-2">
                     <div className="row-title font-semibold text-sm sm:text-base truncate text-[var(--public-text)]">
                       {intent.displayName}
                     </div>
-                    <span className="status-badge info text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-[var(--public-primary)]/20 text-[var(--public-primary)] font-medium">
+                    <span className="status-badge info shrink-0 text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-[var(--public-primary)]/20 text-[var(--public-primary)] font-medium">
                       {formatTime(intent.createdAt)}
                     </span>
                   </div>
                   {intent.message && (
-                    <div className="row-sub mt-1 text-xs sm:text-sm italic text-[var(--public-text-muted)] truncate">
+                    <div className="row-sub mt-1 text-xs sm:text-sm italic leading-relaxed text-[var(--public-text-muted)] break-words">
                       “{intent.message}”
                     </div>
                   )}

@@ -70,6 +70,119 @@ function renderKeyValueRows(rows: Array<{ label: string; value: string }>): stri
   `;
 }
 
+export function renderFlightIntentCreatedMailTemplate(params: {
+  clubName: string;
+  createdByName: string;
+  flightDateLabel: string;
+  plannedTimeLabel: string;
+  message: string | null;
+  listUrl: string;
+  todayIntents: Array<{
+    displayName: string;
+    plannedTimeLabel: string;
+    message: string | null;
+  }>;
+}): RenderedMailTemplate {
+  const subject = `Jeg flyver: ${params.createdByName} flyver`;
+
+  const todayListText = params.todayIntents.length > 0
+    ? params.todayIntents
+        .map((intent) => {
+          const messagePart = intent.message ? ` — ${intent.message}` : "";
+          return `- ${intent.displayName}, ${intent.plannedTimeLabel}${messagePart}`;
+        })
+        .join("\n")
+    : "- Ingen aktive flyvemeldinger fundet.";
+
+  const text = `Hej.
+
+${params.createdByName} har meldt: Jeg flyver.
+
+Dato: ${params.flightDateLabel}
+Tidspunkt: ${params.plannedTimeLabel}
+${params.message ? `Besked: ${params.message}\n` : ""}
+Dagens aktive 'Jeg flyver'-meldinger:
+${todayListText}
+
+Denne mail er sendt, fordi et medlem har oprettet en aktiv "Jeg flyver"-melding.
+
+Venlig hilsen
+${params.clubName}`;
+
+  const createdMessageHtml = params.message
+    ? `
+      <div style="margin-top:14px;padding:14px 16px;border-radius:14px;background:#f8fafc;border:1px solid #e5edf7;">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#64748b;margin-bottom:6px;">Besked</div>
+        <p style="margin:0;font-size:15px;line-height:1.6;color:#334155;">${escapeHtml(params.message)}</p>
+      </div>
+    `
+    : "";
+
+  const todayRowsHtml = params.todayIntents.length > 0
+    ? params.todayIntents
+        .map((intent) => `
+          <tr>
+            <td style="width:30%;padding:12px;border-bottom:1px solid #e5edf7;font-size:14px;color:#111827;font-weight:700;vertical-align:top;">${escapeHtml(intent.displayName)}</td>
+            <td style="width:5%;padding:12px 8px;border-bottom:1px solid #e5edf7;font-size:14px;color:#334155;white-space:nowrap;vertical-align:top;">${escapeHtml(intent.plannedTimeLabel)}</td>
+            <td style="width:65%;padding:12px;border-bottom:1px solid #e5edf7;font-size:14px;color:#334155;vertical-align:top;word-break:break-word;">${intent.message ? escapeHtml(intent.message) : "—"}</td>
+          </tr>
+        `)
+        .join("")
+    : `
+          <tr>
+            <td colspan="3" style="padding:12px;border-bottom:1px solid #e5edf7;font-size:14px;color:#64748b;">Ingen aktive flyvemeldinger fundet.</td>
+          </tr>
+        `;
+
+  const html = renderMailLayout({
+    title: "Jeg flyver",
+    intro: `${params.createdByName} har meldt, at der flyves i dag.`,
+    contentHtml: `
+      ${renderKeyValueRows([
+        { label: "Medlem", value: params.createdByName },
+        { label: "Dato", value: params.flightDateLabel },
+        { label: "Tidspunkt", value: params.plannedTimeLabel },
+      ])}
+
+      ${createdMessageHtml}
+
+      <h2 style="margin:28px 0 10px;font-size:18px;line-height:1.3;color:#0f172a;">Dagens aktive 'Jeg flyver'-meldinger</h2>
+      <p style="margin:0 0 14px;font-size:14px;line-height:1.6;color:#475569;">
+        Her er den aktuelle liste over medlemmer, der har meldt flyvning.
+      </p>
+
+      <table style="border-collapse:collapse;width:100%;margin:0;border:1px solid #e5edf7;border-radius:12px;overflow:hidden;">
+        <thead>
+          <tr>
+            <th style="width:30%;text-align:left;padding:12px;background:#f8fafc;border-bottom:1px solid #e5edf7;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;">Medlem</th>
+            <th style="width:5%;text-align:left;padding:12px 8px;background:#f8fafc;border-bottom:1px solid #e5edf7;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;white-space:nowrap;">Tid</th>
+            <th style="width:65%;text-align:left;padding:12px;background:#f8fafc;border-bottom:1px solid #e5edf7;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;">Besked</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${todayRowsHtml}
+        </tbody>
+      </table>
+
+      <div style="margin:24px 0 0;">
+        <a href="${escapeHtml(params.listUrl)}" style="display:inline-block;background:#0f4c81;color:#ffffff;padding:12px 20px;border-radius:999px;text-decoration:none;font-size:14px;font-weight:700;">
+          Se dagens liste
+        </a>
+      </div>
+
+      <p style="margin:22px 0 0;font-size:13px;line-height:1.6;color:#64748b;">
+        Denne mail er sendt, fordi et medlem har oprettet en aktiv "Jeg flyver"-melding.
+      </p>
+    `,
+  });
+
+  return {
+    subject,
+    text,
+    html,
+  };
+}
+
 export function renderMagicLinkMailTemplate(params: {
   loginUrl: string;
   clubName?: string;
